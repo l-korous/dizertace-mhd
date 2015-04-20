@@ -1,0 +1,137 @@
+\RequirePackage{fix-cm}
+%
+%\documentclass{svjour3}                     % onecolumn (standard format)
+%\documentclass[smallcondensed]{svjour3}     % onecolumn (ditto)
+\documentclass[smallextended]{svjour3}       % onecolumn (second format)
+%\documentclass[twocolumn]{svjour3}          % twocolumn
+%
+\smartqed  % flush right qed marks, e.g. at end of proof
+%
+\usepackage{graphicx}
+\renewcommand{\subsectionmark}[1]{\markright{#1}{}}
+%
+% \usepackage{mathptmx}      % use Times fonts if available on your TeX system
+%
+% insert here the call for the packages your document requires
+%\usepackage{latexsym}
+% etc.
+%
+% please place your own definitions here and don't use \def but
+% \newcommand{}{}
+%
+% Insert the name of "your journal" with
+% \journalname{myjournal}
+%
+\usepackage{amssymb,amsmath}
+\usepackage{float}
+\frenchspacing
+\pagenumbering{arabic}
+\oddsidemargin  0.3in	% levy okraj stranky; pripocte se 1 inch
+\evensidemargin 0.2in	% pravy okraj stranky; pripocte se 1 inch
+\textwidth      5.8in	% sirka textu
+\headheight     0.0in	% vyska hlavicky
+\topmargin      0.2in	% horni okraj
+\textheight     8.5in	% vyska textu
+\begin{document}
+
+\title{MHD}
+
+
+%% use optional labels to link authors explicitly to addresses:
+\author{Luk\' a\v s Korous}
+
+\institute{L. Korous \at
+Department of Theory of Electrical Engineering, Faculty of Electrical Engineering, University of West Bohemia\\
+\email{korous@rice.zcu.cz} }
+
+\maketitle
+
+\section{Equations}
+
+	\subsection{Magnetic field}
+	
+		\subsubsection{Steadystate}
+		Initial:
+		\begin{equation}
+			\nabla \times \left(\nabla \times A \right) - \gamma \mu \mathbf{v} \times \left( \nabla \times A \right) = \mu J_{ext}
+		\end{equation}
+		$\rightarrow$ Omitting velocity:
+		\begin{equation}
+			\nabla \times \left(\nabla \times A \right) = \mu J_{ext}
+		\end{equation}
+		$\rightarrow$ 2D:
+		\begin{equation}
+			-\Delta A_z = \mu J_{ext}
+		\end{equation}
+		$\rightarrow$ Weak (u = Az):
+		\begin{equation}
+			\int_{\Omega}\nabla u \cdot \nabla v - \int_{\partial \Omega} \left(\nabla u \cdot \mathbf{n}\right)\ v = \int_{\Omega} \mu J_{ext} \ v
+		\end{equation}
+		
+	
+		\subsubsection{Harmonic field}
+		Initial:
+		\begin{equation}
+			\nabla \times \left(\nabla \times \underline A \right) + j \omega \gamma \mu \underline A - \gamma \mu \mathbf{v} \times \left( \nabla \times \underline A \right) = \mu J_{ext}
+		\end{equation}
+		 $\rightarrow$ Omitting velocity:
+		\begin{equation}
+			\nabla \times \left(\nabla \times \underline A \right) + j \omega \gamma \mu \underline A  = \mu J_{ext}
+		\end{equation}
+		$\rightarrow$ 2D:
+		\begin{equation}
+			-\Delta \underline A_z + j \omega \gamma \mu \underline A_z  = \mu J_{ext}
+		\end{equation}
+		$\rightarrow$ Weak formulation $(u_1 = {\underline A_z}_r, u_2 = {\underline A_z}_i)$:
+		\begin{eqnarray}
+			\int_{\Omega}\nabla u_1 \cdot \nabla v_1 - \int_{\partial \Omega} \left(\nabla u_1 \cdot \mathbf{n}\right)\ v_1 - \int_{\Omega} \omega \gamma \mu u_2 & = & \int_{\Omega} \mu J_{ext, r} \ v\\
+			\int_{\Omega}\nabla u_2 \cdot \nabla v_2 - \int_{\partial \Omega} \left(\nabla u_2 \cdot \mathbf{n}\right)\ v_2 + \int_{\Omega} \omega \gamma \mu u_1 & = & \int_{\Omega} \mu J_{ext, i} \ v
+		\end{eqnarray}
+		
+		\subsection{Flow field}
+		Initial:
+		\begin{eqnarray}
+			\rho \left(\mathbf{v} \cdot \nabla\right)\mathbf{v} + \nabla p - \mu \Delta \mathbf{v} & = & f_{Lorentz}\\
+			\nabla \cdot \mathbf{v} & = & 0
+		\end{eqnarray}
+		$\rightarrow$ $f_{Lorentz} = \mathbf{J} \times \mathbf{B}$:
+		\begin{eqnarray}
+			\rho \left(\mathbf{v} \cdot \nabla\right)\mathbf{v} + \nabla p - \mu \Delta \mathbf{v} & = & \mathbf{J} \times \mathbf{B}\\
+			\nabla \cdot \mathbf{v} & = & 0
+		\end{eqnarray}
+		$\rightarrow$ $\mathbf{J} = \frac{1}{\mu_0} \ \nabla \times \mathbf{B}$:
+		\begin{eqnarray}
+			\rho \left(\mathbf{v} \cdot \nabla\right)\mathbf{v} + \nabla p - \mu \Delta \mathbf{v} & = & \frac{1}{\mu_0} \ \left(\nabla \times \mathbf{B} \right) \times \mathbf{B}\\
+			\nabla \cdot \mathbf{v} & = & 0
+		\end{eqnarray}
+			\subsubsection{Steady magnetic field}
+		$\rightarrow$ $2D\ \  \& \ \ \mathbf{B} = \left( \frac{\partial A_z}{\partial y}, -\frac{\partial A_z}{\partial x}, 0 \right)$\ \\
+		$\rightarrow$ $\left(\nabla \times \mathbf{B} \right) = \left(0, 0, -\Delta A_z\right)$\ \\
+		$\rightarrow$ $\left(\nabla \times \mathbf{B} \right) \times \mathbf{B} = \left(-\Delta A_z \frac{\partial A_z}{\partial x}, -\Delta A_z \frac{\partial A_z}{\partial y}, 0\right)$\ \\
+		\begin{eqnarray}
+			\rho \left(\mathbf{v} \cdot \nabla\right)v_x + \frac{\partial p}{\partial x} - \mu \Delta v_x & = & -\frac{1}{\mu_0} \ \Delta A_z \frac{\partial A_z}{\partial x}\\
+			\rho \left(\mathbf{v} \cdot \nabla\right)v_y + \frac{\partial p}{\partial y}  - \mu \Delta v_y & = & -\frac{1}{\mu_0} \ \Delta A_z \frac{\partial A_z}{\partial y}\\
+			\nabla \cdot \mathbf{v} & = & 0
+		\end{eqnarray}
+		$\rightarrow$ Weak formulation $(u_1 = v_x, u_2 = v_y, u_3 = p)$:\ \\
+		\begin{eqnarray}
+			\int_{\Omega} \rho u_1\ \frac{\partial u_1}{\partial x}\ v_1 + u_2 \frac{\partial u_1}{\partial y}\ v_1 + \int_{\Omega}\frac{\partial u_3}{\partial x}\ v_1 - \int_{\Omega}\mu \nabla u_1 \cdot \nabla v_1 & = & -\int_{\Omega}\frac{1}{\mu_0} \ \Delta A_z \frac{\partial A_z}{\partial x} v_1\\
+			\int_{\Omega} \rho u_1\ \frac{\partial u_2}{\partial x}\ v_2 + u_2 \frac{\partial u_2}{\partial y}\ v_2 + \int_{\Omega}\frac{\partial u_3}{\partial y}\ v_2 - \int_{\Omega}\mu \nabla u_2 \cdot \nabla v_2 & = & -\int_{\Omega}\frac{1}{\mu_0} \ \Delta A_z \frac{\partial A_z}{\partial y} v_2\\
+			\int_{\Omega}\left(\frac{\partial u_1}{\partial x} + \frac{\partial u_2}{\partial y}\right) v_3 & = & 0
+		\end{eqnarray}
+		$\rightarrow$ Linear problem (omiting convection):\ \\
+		\begin{eqnarray}
+			\int_{\Omega}\frac{\partial u_3}{\partial x}\ v_1 - \int_{\Omega}\mu \nabla u_1 \cdot \nabla v_1 & = & -\int_{\Omega}\frac{1}{\mu_0} \ \Delta A_z \frac{\partial A_z}{\partial x} v_1\\
+			\int_{\Omega}\frac{\partial u_3}{\partial y}\ v_2 - \int_{\Omega}\mu \nabla u_2 \cdot \nabla v_2 & = & -\int_{\Omega}\frac{1}{\mu_0} \ \Delta A_z \frac{\partial A_z}{\partial y} v_2\\
+			\int_{\Omega}\left(\frac{\partial u_1}{\partial x} + \frac{\partial u_2}{\partial y}\right) v_3 & = & 0
+		\end{eqnarray}
+		$\rightarrow$ Nonlinear problem (Newton):\ \\
+		TODO
+		
+		\subsubsection{Harmonic magnetic field}
+		\begin{itemize}
+			\item (???) Rovnice pro $J_{ext}$
+			\item (???) Vztah $\mathbf{B} =? \left( \frac{\partial A_z}{\partial y}, -\frac{\partial A_z}{\partial x}, 0 \right)$ pro fazor $\underline A_z$
+		\end{itemize}
+		
+\end{document}
