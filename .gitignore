@@ -1,127 +1,120 @@
-## Core latex/pdflatex auxiliary files:
-*.aux
-*.lof
+hermes
+*.o
+*.a
+moc_*
+qrc_*
+qtc-*
+Makefile*
+*~
+include/*
+lib/*
+configure-stamp
+*.anh
 *.log
-*.lot
-*.fls
-*.out
-*.toc
-
-## Intermediate documents:
-*.dvi
-*-converted-to.*
-# these rules might exclude image files for figures etc.
-# *.ps
-# *.eps
-*.pdf
-
-## Bibliography auxiliary files (bibtex/biblatex/biber):
-*.bbl
-*.bcf
-*.blg
-*-blx.aux
-*-blx.bib
-*.brf
-*.run.xml
-
-## Build tool auxiliary files:
-*.fdb_latexmk
-*.tcp
-*.synctex
-*.synctex.gz
-*.synctex.gz(busy)
-*.pdfsync
-
-## Auxiliary and intermediate files from other packages:
-
-# algorithms
-*.alg
-*.loa
-
-# achemso
-acs-*.bib
-
-# amsthm
-*.thm
-
-# beamer
-*.nav
-*.snm
-*.vrb
-
-#(e)ledmac/(e)ledpar
-*.end
-*.[1-9]
-*.[1-9][0-9]
-*.[1-9][0-9][0-9]
-*.[1-9]R
-*.[1-9][0-9]R
-*.[1-9][0-9][0-9]R
-*.eledsec[1-9]
-*.eledsec[1-9]R
-*.eledsec[1-9][0-9]
-*.eledsec[1-9][0-9]R
-*.eledsec[1-9][0-9][0-9]
-*.eledsec[1-9][0-9][0-9]R
-
-# glossaries
-*.acn
-*.acr
-*.glg
-*.glo
-*.gls
-
-# gnuplottex
-*-gnuplottex-*
-
-# hyperref
-*.brf
-
-# knitr
-*-concordance.tex
-*.tikz
-*-tikzDictionary
-
-# listings
-*.lol
-
-# makeidx
-*.idx
-*.ilg
-*.ind
-*.ist
-
-# minitoc
-*.maf
-*.mtc
-*.mtc0
-
-# minted
-_minted*
-*.pyg
-
-# morewrites
-*.mw
-
-# nomencl
-*.nlo
-
-# sagetex
-*.sagetex.sage
-*.sagetex.py
-*.sagetex.scmd
-
-# sympy
-*.sout
-*.sympy
-sympy-plots-for-*.tex/
-
-# todonotes
-*.tdo
-
-# xindy
-*.xdy
-
-# WinEdt
+*.debhelper
+agros2d.substvars
+agros2d
+agros2d.pro.user
+agros2d-remote
+agros2d-remote.pro.user
+agros_pythonlab
+debian/files
+resources_source/doc/build
+resources/help
+setup
+install
+*.res
+*.qhc
+*.qch
+*.qm
+*.pyc
+data/data
+doc/doxygen
+*.ans
+*.user
+*.exe
+pthreadGC2.dll
+mingwm10.dll
+src/python/agros2d.c
+resources_source/python/agros2d.c
+src/hermes2d/weakform/*
+src/hermes2d/weakform_factory.h
+data/scripts/test/jac.txt
+data/scripts/test/test_acoustic_planar.py.orig
+jac.txt
+resources/couplings/.project
+resources_source/python/agros2d.cpp
+src/mainwindow.cpp.BACKUP.9065.cpp
+src/mainwindow.cpp.BASE.9065.cpp
+src/mainwindow.cpp.LOCAL.9065.cpp
+src/mainwindow.cpp.REMOTE.9065.cpp
+tmp
+*.obj
+*.dll
+*.tlog
+*.ipch
+*.filters
+*.vcxproj
+*.manifest
+*.lastbuildstate
+*.lib
+*.pdb
+*.ilk
+*.exp
+*.opensdf
+*.sdf
+*.sln
+*.suo
+agros2d_generator
+agros2d_pythonlab
+agros2d_solver
+agros2d_remote
+agros2d_pythonlab
+libs/
+plugins/
+resources_source/python/pythonlab.cpp
+git_fetch.sh
+data/save
+DLLs
+tcl
+*.poly
+*.ele
+*.geo
+*.node
+*.edge
+*.gen
+.project
+resources_source/doc/source/modules/rf_te/
+resources_source/doc/source/modules/rf_tm/
+resources_source/resources.rc
+*.depend
+*.stamp
+*.cache
+*.cmake
+*.mesh
+*.msh
+*.sol
 *.bak
-*.sav
+*.spc
+CMakeFiles
+CMakeCache.txt
+*.unsuccessfulbuild
+*_automoc.cpp
+*.cbp
+util/config.h
+agros2d-library/__/
+pythonlab-library/__/
+CMake.vars
+*.ts
+3rdparty/netgen/agros2d_3dparty_netgen
+3rdparty/gmsh/Common/GmshConfig.h
+3rdparty/gmsh/Common/GmshConfig.h
+3rdparty/gmsh/Common/GmshVersion.h
+3rdparty/gmsh/DartConfiguration.tcl
+3rdparty/matio/matioConfig.h
+3rdparty/netgen/config_netgen.h
+*.opt
+data/
+cmake_options.texi
+resources/python/jedi/evaluate/compiled/
+agros_grid
