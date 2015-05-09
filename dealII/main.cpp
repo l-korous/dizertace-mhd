@@ -1,27 +1,6 @@
-/* ---------------------------------------------------------------------
-*
-* Copyright (C) 2012 - 2014 by the deal.II authors
-*
-* This file is part of the deal.II library.
-*
-* The deal.II library is free software; you can use it, redistribute
-* it, and/or modify it under the terms of the GNU Lesser General
-* Public License as published by the Free Software Foundation; either
-* version 2.1 of the License, or (at your option) any later version.
-* The full text of the license can be found in the file LICENSE at
-* the top level of the deal.II distribution.
-*
-* ---------------------------------------------------------------------
+const int INIT_REF_NUM = 5;
+const double REYNOLDS = 300.;
 
-*
-* Author: Sven Wetterauer, University of Heidelberg, 2012
-*/
-
-
-// @sect3{Include files}
-
-// The first few files have already been covered in previous examples and will
-// thus not be further commented on.
 #include <deal.II/base/quadrature_lib.h>
 #include <deal.II/base/function.h>
 #include <deal.II/base/logstream.h>
@@ -61,52 +40,16 @@
 
 #include <fstream>
 #include <iostream>
-
-// We will use adaptive mesh refinement between Newton iterations. To do so,
-// we need to be able to work with a solution on the new mesh, although it was
-// computed on the old one. The SolutionTransfer class transfers the solution
-// from the old to the new mesh:
-
 #include <deal.II/numerics/solution_transfer.h>
-
-// We then open a namespace for this program and import everything from the
-// dealii namespace into it, as in previous programs:
 namespace Step15
 {
   using namespace dealii;
-
-
-  // @sect3{The <code>CustomSolver</code> class template}
-
-  // The class template is basically the same as in step-6.  Three additions
-  // are made:
-  // - There are two solution vectors, one for the Newton update
-  //   $\delta u^n$, and one for the current iterate $u^n$.
-  // - The <code>setup_system</code> function takes an argument that denotes whether
-  //   this is the first time it is called or not. The difference is that the
-  //   first time around we need to distribute the degrees of freedom and set the
-  //   solution vector for $u^n$ to the correct size. The following times, the
-  //   function is called after we have already done these steps as part of
-  //   refining the mesh in <code>refine_mesh</code>.
-  // - We then also need new functions: <code>set_boundary_values()</code>
-  //   takes care of setting the boundary values on the solution vector
-  //   correctly, as discussed at the end of the
-  //   introduction. <code>compute_residual()</code> is a function that computes
-  //   the norm of the nonlinear (discrete) residual. We use this function to
-  //   monitor convergence of the Newton iteration. The function takes a step
-  //   length $\alpha^n$ as argument to compute the residual of $u^n + \alpha^n
-  //   \; \delta u^n$. This is something one typically needs for step length
-  //   control, although we will not use this feature here. Finally,
-  //   <code>determine_step_length()</code> computes the step length $\alpha^n$
-  //   in each Newton iteration. As discussed in the introduction, we here use a
-  //   fixed step length and leave implementing a better strategy as an
-  //   exercise.
 
   template <int dim>
   class CustomSolver
   {
   public:
-    CustomSolver(int eqCount = 1, int degree = 2);
+    CustomSolver(int degree = 2);
     ~CustomSolver();
 
     void run();
@@ -117,7 +60,6 @@ namespace Step15
     void solve();
     void refine_mesh();
     void set_boundary_values();
-    double compute_residual(const double alpha) const;
 
     Triangulation<dim>   triangulation;
     hp::DoFHandler<dim>      dof_handler;
@@ -137,58 +79,57 @@ namespace Step15
 
     dealii::SparseDirectUMFPACK direct_CustomSolver;
 
-    int eqCount;
     int degree;
   };
-
-  // @sect3{Boundary condition}
-
-  // The boundary condition is implemented just like in step-4.  It is chosen
-  // as $g(x,y)=\sin(2 \pi (x+y))$:
 
   template <int dim>
   class BoundaryValues : public Function < dim >
   {
   public:
-    BoundaryValues() : Function<dim>() {}
+    BoundaryValues(int eqCount) : Function<dim>(eqCount) {}
 
     virtual double value(const Point<dim>   &p,
       const unsigned int  component = 0) const;
   };
 
-
   template <int dim>
   double BoundaryValues<dim>::value(const Point<dim> &p,
-    const unsigned int /*component*/) const
+    const unsigned int component) const
   {
-    return std::sin(2 * numbers::PI * (p[0] + p[1]));
+    if (component == 0)
+    {
+      if (p[0] < 1e-8 && p[1] < 0.5)
+      {
+        return (p[1] * (p[1] - 0.5));
+      }
+      else
+        return 0.0;
+    }
+    else
+      return 0;
   }
-
-  // @sect3{The <code>CustomSolver</code> class implementation}
-
-  // @sect4{CustomSolver::CustomSolver}
-
-  // The constructor and destructor of the class are the same as in the first
-  // few tutorials.
 
   template <int dim>
-  CustomSolver<dim>::CustomSolver(int eqCount, int degree)
-    : eqCount(eqCount), degree(degree), dof_handler(triangulation)
+  CustomSolver<dim>::CustomSolver(int degree)
+    : degree(degree), dof_handler(triangulation)
   {
-    for (int i = 0; i < eqCount; i++)
-    {
-      std::vector<const dealii::FiniteElement<dim> *> fes;
-      std::vector<unsigned int> multiplicities;
-      fes.push_back(new dealii::FE_Q<dim>(degree));
-      multiplicities.push_back(1);
-      feCollection.push_back(dealii::FESystem<dim, dim>(fes, multiplicities));
-    }
+    std::vector<const dealii::FiniteElement<dim> *> fes;
+    std::vector<unsigned int> multiplicities;
+    // Velocity
+    fes.push_back(new dealii::FE_Q<dim>(degree));
+    multiplicities.push_back(dim);
+
+    // Pressure
+    fes.push_back(new dealii::FE_Q<dim>(degree - 1));
+    multiplicities.push_back(1);
+    feCollection.push_back(dealii::FESystem<dim, dim>(fes, multiplicities));
 
     mappingCollection.push_back(dealii::MappingQ<dim>(1, true));
-    qCollection.push_back(dealii::QGauss<dim>(2 * degree));
+
+    // TODO
+    // optimize
+    qCollection.push_back(dealii::QGauss<dim>(3 * degree));
   }
-
-
 
   template <int dim>
   CustomSolver<dim>::~CustomSolver()
@@ -207,7 +148,6 @@ namespace Step15
   // distributed degrees of freedom (plus compute constraints) and set the
   // solution vector to zero or whether this has happened elsewhere already
   // (specifically, in <code>refine_mesh()</code>).
-
   template <int dim>
   void CustomSolver<dim>::setup_system(const bool initial_step)
   {
@@ -222,7 +162,6 @@ namespace Step15
       hanging_node_constraints.close();
     }
 
-
     // The remaining parts of the function are the same as in step-6.
     newton_update.reinit(dof_handler.n_dofs());
     system_rhs.reinit(dof_handler.n_dofs());
@@ -234,19 +173,6 @@ namespace Step15
     system_matrix.reinit(sparsity_pattern);
   }
 
-  // @sect4{CustomSolver::assemble_system}
-
-  // This function does the same as in the previous tutorials except that now,
-  // of course, the matrix and right hand side functions depend on the
-  // previous iteration's solution. As discussed in the introduction, we need
-  // to use zero boundary values for the Newton updates; we compute them at
-  // the end of this function.
-  //
-  // The top of the function contains the usual boilerplate code, setting up
-  // the objects that allow us to evaluate shape functions at quadrature
-  // points and temporary storage locations for the local matrices and
-  // vectors, as well as for the gradients of the previous solution at the
-  // quadrature points. We then start the loop over all cells:
   template <int dim>
   void CustomSolver<dim>::assemble_system()
   {
@@ -262,62 +188,129 @@ namespace Step15
     {
       hp_fe_values.reinit(cell);
       const dealii::FEValues<2> &fe_values = hp_fe_values.get_present_fe_values();
-      const unsigned int           dofs_per_cell = cell->get_fe().dofs_per_cell;
+      const unsigned int dofs_per_cell = cell->get_fe().dofs_per_cell;
       const unsigned int n_q_points = fe_values.n_quadrature_points;
-      std::cout << n_q_points << std::endl;
 
       FullMatrix<double>           cell_matrix(dofs_per_cell, dofs_per_cell);
       Vector<double>               cell_rhs(dofs_per_cell);
 
-      std::vector<Tensor<1, dim> > old_solution_gradients(n_q_points);
-
       std::vector<types::global_dof_index>    local_dof_indices(dofs_per_cell);
+      cell->get_dof_indices(local_dof_indices);
 
+      std::vector<dealii::Vector<double> > old_solution_values(n_q_points, dealii::Vector<double>(dim + 1));
+      std::vector<dealii::Tensor<1, dim> > old_velocity_values(n_q_points, dealii::Tensor<1, dim>(dim));
+      std::vector<std::vector<Tensor<1, dim> > > old_solution_gradients(n_q_points, std::vector<dealii::Tensor<1, dim> >(dim + 1));
+
+      fe_values.get_function_values(present_solution, old_solution_values);
+      // Only velocity values for simpler form expressions
+      for (int i = 0; i < old_solution_values.size(); i++)
+      {
+        for (int j = 0; j < dim; j++)
+          old_velocity_values[i][j] = old_solution_values[i][j];
+      }
       fe_values.get_function_gradients(present_solution, old_solution_gradients);
 
-      // With this, we can then do the integration loop over all quadrature
-      // points and shape functions.  Having just computed the gradients of
-      // the old solution in the quadrature points, we are able to compute
-      // the coefficients $a_{n}$ in these points.  The assembly of the
-      // system itself then looks similar to what we always do with the
-      // exception of the nonlinear terms, as does copying the results from
-      // the local objects into the global ones:
+      std::vector<int> components(dofs_per_cell);
+
+      for (unsigned int i = 0; i < dofs_per_cell; ++i)
+        components[i] = cell->get_fe().system_to_component_index(i).first;
+
       for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
       {
-        const double coeff
-          = 1.0;
-        /*
-        = 1.0 / std::sqrt(1 +
-        old_solution_gradients[q_point] *
-        old_solution_gradients[q_point]);
-        */
         for (unsigned int i = 0; i < dofs_per_cell; ++i)
         {
           for (unsigned int j = 0; j < dofs_per_cell; ++j)
           {
-            cell_matrix(i, j) += (fe_values.shape_grad(i, q_point)
-              * coeff
-              * (fe_values.shape_grad(j, q_point)
-              /*
-              -
-              coeff * coeff
-              * (fe_values.shape_grad(j, q_point)
-              *
-              old_solution_gradients[q_point])
-              * old_solution_gradients[q_point]
-              */
-              )
-              * fe_values.JxW(q_point));
+            //std::cout << fe_values.shape_grad(i, q_point) << std::endl;
+            //std::cout << fe_values.shape_grad(j, q_point) << std::endl;
+            //double res = fe_values.shape_grad(i, q_point) * fe_values.shape_grad(j, q_point);
+            //std::cout << res << std::endl;
+
+            // Velocity forms
+            if (components[i] < dim && components[j] < dim)
+            {
+              if (components[i] == components[j])
+              {
+                // Diffusion
+                cell_matrix(i, j) += fe_values.shape_grad(i, q_point)
+                  * fe_values.shape_grad(j, q_point)
+                  * fe_values.JxW(q_point)
+                  / REYNOLDS;
+
+                // Advection - 1/2
+                // result += wt[i] * ((xvel_prev_newton->val[i] * u->dx[i] + yvel_prev_newton->val[i]
+                // *u->dy[i]) * v->val[i] ....
+                cell_matrix(i, j) += old_velocity_values[q_point]
+                  * fe_values.shape_grad(i, q_point)
+                  * fe_values.shape_value(j, q_point)
+                  * fe_values.JxW(q_point);
+
+                // Advection - 2/2
+                // ... + u->val[i] * v->val[i] * xvel_prev_newton->dx[i]);
+                cell_matrix(i, j) += old_solution_gradients[q_point][components[i]][components[i]]
+                  * fe_values.shape_value(i, q_point)
+                  * fe_values.shape_value(j, q_point)
+                  * fe_values.JxW(q_point);
+              }
+              // Nonsymmetrical terms
+              else
+              {
+                cell_matrix(i, j) += old_solution_gradients[q_point][components[i]][components[j]]
+                  * fe_values.shape_value(i, q_point)
+                  * fe_values.shape_value(j, q_point)
+                  * fe_values.JxW(q_point);
+              }
+            }
+            // Pressure forms
+            else
+            {
+              // First let us do the last pseudo-row.
+              // TODO
+              // This is just anti-symmetry => optimize
+              if (components[i] == dim && components[j] < dim)
+              {
+                cell_matrix(i, j) += fe_values.shape_value(i, q_point)
+                  * fe_values.shape_grad(j, q_point)[components[j]]
+                  * fe_values.JxW(q_point);
+              }
+              else if (components[j] == dim && components[i] < dim)
+              {
+                cell_matrix(i, j) -= fe_values.shape_value(j, q_point)
+                  * fe_values.shape_grad(i, q_point)[components[i]]
+                  * fe_values.JxW(q_point);
+              }
+            }
           }
 
-          cell_rhs(i) -= (fe_values.shape_grad(i, q_point)
-            * coeff
-            * old_solution_gradients[q_point]
-            * fe_values.JxW(q_point));
+          if (components[i] < dim)
+          {
+            // result += wt[i] * ((xvel_prev_newton->dx[i] * v->dx[i] + xvel_prev_newton->dy[i] * v->dy[i]) / Reynolds - (p_prev_newton->val[i] * v->dx[i]));
+            cell_rhs(i) += fe_values.shape_grad(i, q_point)
+              * old_solution_gradients[q_point][components[i]]
+              * fe_values.JxW(q_point)
+              / REYNOLDS;
+
+            cell_rhs(i) -= fe_values.shape_grad(i, q_point)[components[i]]
+              * old_solution_values[q_point][dim]
+              * fe_values.JxW(q_point);
+
+            // result += wt[i] * (xvel_prev_newton->val[i] * xvel_prev_newton->dx[i] + yvel_prev_newton->val[i] * xvel_prev_newton->dy[i]) * v->val[i];
+            cell_rhs(i) += fe_values.shape_value(i, q_point)
+              * old_solution_gradients[q_point][components[i]]
+              * old_velocity_values[q_point]
+              * fe_values.JxW(q_point);
+          }
+          else
+          {
+            // result += wt[i] * (xvel_prev_newton->dx[i] * v->val[i] + yvel_prev_newton->dy[i] * v->val[i]);
+            for (int vel_i = 0; vel_i < dim; vel_i++)
+              cell_rhs(i) += fe_values.shape_value(i, q_point)
+              * old_solution_gradients[q_point][vel_i][vel_i]
+              * fe_values.JxW(q_point);
+          }
         }
       }
 
-      cell->get_dof_indices(local_dof_indices);
       for (unsigned int i = 0; i < dofs_per_cell; ++i)
       {
         for (unsigned int j = 0; j < dofs_per_cell; ++j)
@@ -338,7 +331,7 @@ namespace Step15
     std::map<types::global_dof_index, double> boundary_values;
     VectorTools::interpolate_boundary_values(dof_handler,
       0,
-      ZeroFunction<dim>(),
+      ZeroFunction<dim>(dim + 1),
       boundary_values);
     MatrixTools::apply_boundary_values(boundary_values,
       system_matrix,
@@ -359,26 +352,16 @@ namespace Step15
 
     hanging_node_constraints.distribute(newton_update);
 
-    present_solution.add(newton_update);
+    present_solution.add(.1, newton_update);
   }
 
-
-  // @sect4{CustomSolver::set_boundary_values}
-
-  // The next function ensures that the solution vector's entries respect the
-  // boundary values for our problem.  Having refined the mesh (or just
-  // started computations), there might be new nodal points on the
-  // boundary. These have values that are simply interpolated from the
-  // previous mesh (or are just zero), instead of the correct boundary
-  // values. This is fixed up by setting all boundary nodes explicit to the
-  // right value:
   template <int dim>
   void CustomSolver<dim>::set_boundary_values()
   {
     std::map<types::global_dof_index, double> boundary_values;
     VectorTools::interpolate_boundary_values(dof_handler,
       0,
-      BoundaryValues<dim>(),
+      BoundaryValues<dim>(dim + 1),
       boundary_values);
     for (std::map<types::global_dof_index, double>::const_iterator
       p = boundary_values.begin();
@@ -386,140 +369,27 @@ namespace Step15
       present_solution(p->first) = p->second;
   }
 
-
-  // @sect4{CustomSolver::compute_residual}
-
-  // In order to monitor convergence, we need a way to compute the norm of the
-  // (discrete) residual, i.e., the norm of the vector
-  // $\left<F(u^n),\varphi_i\right>$ with $F(u)=-\nabla \cdot \left(
-  // \frac{1}{\sqrt{1+|\nabla u|^{2}}}\nabla u \right)$ as discussed in the
-  // introduction. It turns out that (although we don't use this feature in
-  // the current version of the program) one needs to compute the residual
-  // $\left<F(u^n+\alpha^n\;\delta u^n),\varphi_i\right>$ when determining
-  // optimal step lengths, and so this is what we implement here: the function
-  // takes the step length $\alpha^n$ as an argument. The original
-  // functionality is of course obtained by passing a zero as argument.
-  //
-  // In the function below, we first set up a vector for the residual, and
-  // then a vector for the evaluation point $u^n+\alpha^n\;\delta u^n$. This
-  // is followed by the same boilerplate code we use for all integration
-  // operations:
-  template <int dim>
-  double CustomSolver<dim>::compute_residual(const double alpha) const
-  {
-    Vector<double> residual(dof_handler.n_dofs());
-
-    Vector<double> evaluation_point(dof_handler.n_dofs());
-    evaluation_point = present_solution;
-    evaluation_point.add(alpha, newton_update);
-
-    dealii::hp::FEValues<dim> hp_fe_values(feCollection, qCollection, dealii::update_values | dealii::update_gradients | dealii::update_JxW_values);
-
-    typename dealii::hp::DoFHandler<dim>::active_cell_iterator
-      cell = dof_handler.begin_active(),
-      endc = dof_handler.end();
-    for (; cell != endc; ++cell)
-    {
-      hp_fe_values.reinit(cell);
-      const dealii::FEValues<2> &fe_values = hp_fe_values.get_present_fe_values();
-      const unsigned int           dofs_per_cell = cell->get_fe().dofs_per_cell;
-      const unsigned int n_q_points = fe_values.n_quadrature_points;
-
-      Vector<double>               cell_residual(dofs_per_cell);
-
-      std::vector<Tensor<1, dim> > gradients(n_q_points);
-
-      std::vector<types::global_dof_index>    local_dof_indices(dofs_per_cell);
-
-      // The actual computation is much as in
-      // <code>assemble_system()</code>. We first evaluate the gradients of
-      // $u^n+\alpha^n\,\delta u^n$ at the quadrature points, then compute
-      // the coefficient $a_n$, and then plug it all into the formula for
-      // the residual:
-      fe_values.get_function_gradients(evaluation_point,
-        gradients);
-
-      for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
-      {
-        const double coeff = 1.0;
-        /*
-        1 / std::sqrt(1 +
-        gradients[q_point] *
-        gradients[q_point]);
-        */
-
-        for (unsigned int i = 0; i < dofs_per_cell; ++i)
-          cell_residual(i) -= (fe_values.shape_grad(i, q_point)
-          * coeff
-          * gradients[q_point]
-          * fe_values.JxW(q_point));
-      }
-
-      cell->get_dof_indices(local_dof_indices);
-      for (unsigned int i = 0; i < dofs_per_cell; ++i)
-        residual(local_dof_indices[i]) += cell_residual(i);
-    }
-
-    // At the end of this function we also have to deal with the hanging node
-    // constraints and with the issue of boundary values. With regard to the
-    // latter, we have to set to zero the elements of the residual vector for
-    // all entries that correspond to degrees of freedom that sit at the
-    // boundary. The reason is that because the value of the solution there is
-    // fixed, they are of course no "real" degrees of freedom and so, strictly
-    // speaking, we shouldn't have assembled entries in the residual vector
-    // for them. However, as we always do, we want to do exactly the same
-    // thing on every cell and so we didn't not want to deal with the question
-    // of whether a particular degree of freedom sits at the boundary in the
-    // integration above. Rather, we will simply set to zero these entries
-    // after the fact. To this end, we first need to determine which degrees
-    // of freedom do in fact belong to the boundary and then loop over all of
-    // those and set the residual entry to zero. This happens in the following
-    // lines which we have already seen used in step-11:
-    hanging_node_constraints.condense(residual);
-
-    std::vector<bool> boundary_dofs(dof_handler.n_dofs());
-    DoFTools::extract_boundary_dofs(dof_handler,
-      ComponentMask(),
-      boundary_dofs);
-    for (unsigned int i = 0; i < dof_handler.n_dofs(); ++i)
-      if (boundary_dofs[i] == true)
-        residual(i) = 0;
-
-    // At the end of the function, we return the norm of the residual:
-    return residual.l2_norm();
-  }
-
-
-  // @sect4{CustomSolver::run}
-
-  // In the run function, we build the first grid and then have the top-level
-  // logic for the Newton iteration. The function has two variables, one that
-  // indicates whether this is the first time we solve for a Newton update and
-  // one that indicates the refinement level of the mesh:
   template <int dim>
   void CustomSolver<dim>::run()
   {
-    unsigned int refinement = 0;
-
     // Mesh
     GridGenerator::hyper_cube(triangulation);
-    triangulation.refine_global(2);
+    triangulation.refine_global(INIT_REF_NUM);
 
     // The Newton iteration starts next.
     double previous_res = 0;
     setup_system(true);
     set_boundary_values();
-    std::cout << "  Initial residual: "
-      << compute_residual(0)
-      << std::endl;
 
-    for (unsigned int inner_iteration = 0; inner_iteration < 5; ++inner_iteration)
+    for (unsigned int inner_iteration = 0; inner_iteration < 10; ++inner_iteration)
     {
       assemble_system();
+      //system_rhs.print(std::cout);
+      // system_matrix.print(std::cout);
       previous_res = system_rhs.l2_norm();
       solve();
       std::cout << "  Residual: "
-        << compute_residual(0)
+        << previous_res
         << std::endl;
     }
 
@@ -532,18 +402,12 @@ namespace Step15
     data_out.add_data_vector(present_solution, "solution");
     data_out.add_data_vector(newton_update, "update");
     data_out.build_patches();
-    const std::string filename = "solution-" +
-      Utilities::int_to_string(refinement, 2) +
-      ".vtk";
+    const std::string filename = "solution.vtk";
     std::ofstream output(filename.c_str());
     data_out.write_vtk(output);
   }
 }
 
-// @sect4{The main function}
-
-// Finally the main function. This follows the scheme of all other main
-// functions:
 int main()
 {
   try
@@ -553,7 +417,7 @@ int main()
 
     deallog.depth_console(0);
 
-    CustomSolver<2> laplace_problem_2d;
+    CustomSolver<2> laplace_problem_2d(2);
     laplace_problem_2d.run();
   }
   catch (std::exception &exc)
