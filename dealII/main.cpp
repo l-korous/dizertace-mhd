@@ -1,7 +1,7 @@
-const int INIT_REF_NUM = 5;
+const int INIT_REF_NUM = 4;
 const double REYNOLDS = 5.;
-const double NEWTON_DAMPING = 0.8;
-const int NEWTON_ITERATIONS = 10;
+const double NEWTON_DAMPING = 0.9;
+const int NEWTON_ITERATIONS = 3;
 const double INLET_AMPLITUDE = .01;
 
 #include <deal.II/base/quadrature_lib.h>
@@ -52,7 +52,7 @@ namespace Step15
   class CustomSolver
   {
   public:
-    CustomSolver(int degree = 2);
+    CustomSolver(int polynomial_degree = 2);
     ~CustomSolver();
 
     void run();
@@ -69,7 +69,7 @@ namespace Step15
 
     dealii::hp::FECollection<dim> feCollection;
     dealii::hp::MappingCollection<dim> mappingCollection;
-    dealii::hp::QCollection<2> qCollection;
+    dealii::hp::QCollection<dim> qCollection;
 
     ConstraintMatrix     hanging_node_constraints;
 
@@ -103,7 +103,7 @@ namespace Step15
     {
       if (p(0) < 1e-8 && p(1) < 0.5)
       {
-        return INLET_AMPLITUDE * (p(1) * (0.5 - p(1))) / (0.25 * 0.25);
+        return INLET_AMPLITUDE * (p(1) * (0.5 - p(1))) * (p(2) * (1.0 - p(2))) / (0.25 * 0.25);
       }
       else
         return 0.0;
@@ -134,7 +134,7 @@ namespace Step15
     mappingCollection.push_back(dealii::MappingQ<dim>(1, true));
 
     // TODO
-    // optimize
+    // optimize, but the problem is the most consuming product is 2 * value, 1 * derivative which is basically this.
     qCollection.push_back(dealii::QGauss<dim>(3 * degree));
   }
 
@@ -194,7 +194,7 @@ namespace Step15
     for (; cell != endc; ++cell)
     {
       hp_fe_values.reinit(cell);
-      const dealii::FEValues<2> &fe_values = hp_fe_values.get_present_fe_values();
+      const dealii::FEValues<dim> &fe_values = hp_fe_values.get_present_fe_values();
       const unsigned int dofs_per_cell = cell->get_fe().dofs_per_cell;
       const unsigned int n_q_points = fe_values.n_quadrature_points;
 
@@ -426,7 +426,7 @@ int main()
 
     deallog.depth_console(0);
 
-    CustomSolver<2> laplace_problem_2d(2);
+    CustomSolver<3> laplace_problem_2d;
     laplace_problem_2d.run();
   }
   catch (std::exception &exc)
