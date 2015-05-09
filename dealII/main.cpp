@@ -1,5 +1,8 @@
 const int INIT_REF_NUM = 5;
-const double REYNOLDS = 300.;
+const double REYNOLDS = 5.;
+const double NEWTON_DAMPING = 0.8;
+const int NEWTON_ITERATIONS = 10;
+const double INLET_AMPLITUDE = .01;
 
 #include <deal.II/base/quadrature_lib.h>
 #include <deal.II/base/function.h>
@@ -98,12 +101,16 @@ namespace Step15
   {
     if (component == 0)
     {
-      if (p[0] < 1e-8 && p[1] < 0.5)
+      if (p(0) < 1e-8 && p(1) < 0.5)
       {
-        return (p[1] * (p[1] - 0.5));
+        return INLET_AMPLITUDE * (p(1) * (0.5 - p(1))) / (0.25 * 0.25);
       }
       else
         return 0.0;
+    }
+    else if (component == dim)
+    {
+      return 0.;// 1. - p(0);
     }
     else
       return 0;
@@ -241,8 +248,8 @@ namespace Step15
                 // result += wt[i] * ((xvel_prev_newton->val[i] * u->dx[i] + yvel_prev_newton->val[i]
                 // *u->dy[i]) * v->val[i] ....
                 cell_matrix(i, j) += old_velocity_values[q_point]
-                  * fe_values.shape_grad(i, q_point)
-                  * fe_values.shape_value(j, q_point)
+                  * fe_values.shape_grad(j, q_point)
+                  * fe_values.shape_value(i, q_point)
                   * fe_values.JxW(q_point);
 
                 // Advection - 2/2
@@ -285,17 +292,17 @@ namespace Step15
           if (components[i] < dim)
           {
             // result += wt[i] * ((xvel_prev_newton->dx[i] * v->dx[i] + xvel_prev_newton->dy[i] * v->dy[i]) / Reynolds - (p_prev_newton->val[i] * v->dx[i]));
-            cell_rhs(i) += fe_values.shape_grad(i, q_point)
+            cell_rhs(i) -= fe_values.shape_grad(i, q_point)
               * old_solution_gradients[q_point][components[i]]
               * fe_values.JxW(q_point)
               / REYNOLDS;
 
-            cell_rhs(i) -= fe_values.shape_grad(i, q_point)[components[i]]
+            cell_rhs(i) += fe_values.shape_grad(i, q_point)[components[i]]
               * old_solution_values[q_point][dim]
               * fe_values.JxW(q_point);
 
             // result += wt[i] * (xvel_prev_newton->val[i] * xvel_prev_newton->dx[i] + yvel_prev_newton->val[i] * xvel_prev_newton->dy[i]) * v->val[i];
-            cell_rhs(i) += fe_values.shape_value(i, q_point)
+            cell_rhs(i) -= fe_values.shape_value(i, q_point)
               * old_solution_gradients[q_point][components[i]]
               * old_velocity_values[q_point]
               * fe_values.JxW(q_point);
@@ -304,9 +311,11 @@ namespace Step15
           {
             // result += wt[i] * (xvel_prev_newton->dx[i] * v->val[i] + yvel_prev_newton->dy[i] * v->val[i]);
             for (int vel_i = 0; vel_i < dim; vel_i++)
-              cell_rhs(i) += fe_values.shape_value(i, q_point)
-              * old_solution_gradients[q_point][vel_i][vel_i]
-              * fe_values.JxW(q_point);
+            {
+              cell_rhs(i) -= fe_values.shape_value(i, q_point)
+                * old_solution_gradients[q_point][vel_i][vel_i]
+                * fe_values.JxW(q_point);
+            }
           }
         }
       }
@@ -352,7 +361,7 @@ namespace Step15
 
     hanging_node_constraints.distribute(newton_update);
 
-    present_solution.add(.1, newton_update);
+    present_solution.add(NEWTON_DAMPING, newton_update);
   }
 
   template <int dim>
@@ -381,10 +390,10 @@ namespace Step15
     setup_system(true);
     set_boundary_values();
 
-    for (unsigned int inner_iteration = 0; inner_iteration < 10; ++inner_iteration)
+    for (unsigned int inner_iteration = 0; inner_iteration < NEWTON_ITERATIONS; ++inner_iteration)
     {
       assemble_system();
-      //system_rhs.print(std::cout);
+      // system_rhs.print(std::cout);
       // system_matrix.print(std::cout);
       previous_res = system_rhs.l2_norm();
       solve();
