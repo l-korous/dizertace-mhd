@@ -1,4 +1,4 @@
-const int INIT_REF_NUM = 4;
+const int INIT_REF_NUM = 3;
 const double REYNOLDS = 5.;
 const double NEWTON_DAMPING = 0.9;
 const int NEWTON_ITERATIONS = 3;
