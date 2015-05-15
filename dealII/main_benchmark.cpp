@@ -1,16 +1,15 @@
-#define DIM 3
+#define DIM 2
 
 const int INIT_REF_NUM = 3;
 const double REYNOLDS = 5.;
-const double NEWTON_DAMPING = 0.9;
-const int NEWTON_ITERATIONS = 6;
+const double NEWTON_DAMPING = 0.5;
+const int NEWTON_ITERATIONS = 10;
 const double INLET_AMPLITUDE = 1.0;
 
-const int BOUNDARY_WALL = 0;
-const int BOUNDARY_INLET = 1;
-const int BOUNDARY_OUTLET = 2;
-
-const bool INLET_FIXED = false;
+const int BOUNDARY_WALL = 1;
+const int BOUNDARY_BALL = 4;
+const int BOUNDARY_INLET = 2;
+const int BOUNDARY_OUTLET = 3;
 
 #include <deal.II/base/quadrature_lib.h>
 #include <deal.II/base/function.h>
@@ -27,6 +26,7 @@ const bool INLET_FIXED = false;
 
 #include <deal.II/grid/tria.h>
 #include <deal.II/grid/grid_generator.h>
+#include <deal.II/grid/grid_in.h>
 #include <deal.II/grid/tria_accessor.h>
 #include <deal.II/lac/sparse_direct.h>
 #include <deal.II/grid/tria_iterator.h>
@@ -108,9 +108,9 @@ namespace Step15
     template <>
     double BoundaryValuesInlet<2>::value(const Point<2> &p, const unsigned int component) const
     {
-        if (component == 1)
+        if (component == 0)
         {
-            return INLET_AMPLITUDE * (p(0) * (1.0 - p(0)));
+            return INLET_AMPLITUDE * (p(1) * (4.1 - p(1)));
         }
         else
             return 0;
@@ -121,8 +121,7 @@ namespace Step15
     {
         if (component == 1)
         {
-            //return INLET_AMPLITUDE * (p(0) * (1.0 - p(0))) * (p(2) * (1.0 - p(2)));
-            return 0.;
+            return INLET_AMPLITUDE * (p(0) * (1.0 - p(0))) * (p(2) * (1.0 - p(2)));
         }
         else
             return 0;
@@ -338,10 +337,6 @@ namespace Step15
                             * old_solution_gradients[q_point][components[i]]
                             * old_velocity_values[q_point]
                             * fe_values.JxW(q_point);
-
-                        // Force - upward
-                        if (components[i] == 1)
-                            cell_rhs(i) += fe_values.shape_value(i, q_point) * fe_values.JxW(q_point);
                     }
                     else
                     {
@@ -420,13 +415,11 @@ namespace Step15
         std::map<types::global_dof_index, double> boundary_values_inlet;
 
         VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_WALL, ZeroFunction<dim>(dim + 1), boundary_values_wall, velocities_mask);
+        VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_BALL, ZeroFunction<dim>(dim + 1), boundary_values_wall, velocities_mask);
         MatrixTools::apply_boundary_values(boundary_values_wall, system_matrix, newton_update, system_rhs);
 
-        if (INLET_FIXED)
-        {
-            VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_INLET, ZeroFunction<dim>(dim + 1), boundary_values_inlet, velocities_mask);
-            MatrixTools::apply_boundary_values(boundary_values_inlet, system_matrix, newton_update, system_rhs);
-        }
+        VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_INLET, ZeroFunction<dim>(dim + 1), boundary_values_inlet, velocities_mask);
+        MatrixTools::apply_boundary_values(boundary_values_inlet, system_matrix, newton_update, system_rhs);
     }
 
     // @sect4{CustomSolver::solve}
@@ -455,24 +448,32 @@ namespace Step15
         ComponentMask velocities_mask = this->feCollection.component_mask(velocities);
 
         VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_WALL, BoundaryValuesWall<dim>(), boundary_values_wall, velocities_mask);
+        VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_BALL, BoundaryValuesWall<dim>(), boundary_values_wall, velocities_mask);
         for (std::map<types::global_dof_index, double>::const_iterator p = boundary_values_wall.begin(); p != boundary_values_wall.end(); ++p)
             present_solution(p->first) = p->second;
 
-        if (INLET_FIXED)
-        {
-            VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_INLET, BoundaryValuesInlet<dim>(), boundary_values_inlet, velocities_mask);
-            for (std::map<types::global_dof_index, double>::const_iterator p = boundary_values_inlet.begin(); p != boundary_values_inlet.end(); ++p)
-                present_solution(p->first) = p->second;
-        }
+        VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_INLET, BoundaryValuesInlet<dim>(), boundary_values_inlet, velocities_mask);
+        for (std::map<types::global_dof_index, double>::const_iterator p = boundary_values_inlet.begin(); p != boundary_values_inlet.end(); ++p)
+            present_solution(p->first) = p->second;
     }
 
     template <int dim>
     void CustomSolver<dim>::run()
     {
         // Mesh
-        GridGenerator::hyper_cube(triangulation);
+        //GridGenerator::hyper_cube(triangulation);
+
+        GridIn<dim> grid_in;
+        grid_in.attach_triangulation(triangulation);
+        {
+            std::string filename = "nsbench2.inp";
+            std::ifstream file(filename.c_str());
+            grid_in.read_ucd(file);
+        }
+
         triangulation.refine_global(INIT_REF_NUM);
 
+        /*
         typename Triangulation<dim>::cell_iterator
             cell = triangulation.begin(),
             endc = triangulation.end();
@@ -487,6 +488,7 @@ namespace Step15
                     cell->face(face_number)->set_boundary_indicator(BOUNDARY_OUTLET);
             }
         }
+        */
 
         // The Newton iteration starts next.
         double previous_res = 0;
