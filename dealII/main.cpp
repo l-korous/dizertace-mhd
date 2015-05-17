@@ -67,6 +67,11 @@ const int COMPONENT_COUNT = 2 * DIM + 1;
 #include <fstream>
 #include <iostream>
 #include <deal.II/numerics/solution_transfer.h>
+
+#include <deal.II/base/work_stream.h>
+#include <deal.II/base/multithread_info.h>
+#include "tbb/tbb.h"
+
 namespace Step15
 {
     using namespace dealii;
@@ -83,6 +88,37 @@ namespace Step15
     private:
         void setup_system(const bool initial_step);
         void assemble_system();
+
+        class AssemblyScratchData
+        {
+        public:
+            AssemblyScratchData(const dealii::hp::FECollection<dim> &feCollection,
+                const dealii::hp::MappingCollection<dim> &mappingCollection,
+                const dealii::hp::QCollection<dim> &quadratureFormulas);
+            AssemblyScratchData(const AssemblyScratchData &scratch_data);
+
+            dealii::hp::FEValues<dim> hp_fe_values;
+        };
+
+        class AssemblyCopyData
+        {
+        public:
+            AssemblyCopyData();
+
+            bool isAssembled;
+
+            dealii::FullMatrix<double> cell_matrix;
+            dealii::Vector<double> cell_rhs;
+
+            std::vector<dealii::types::global_dof_index> local_dof_indices;
+        };
+
+        void localAssembleSystem(const typename dealii::hp::DoFHandler<dim>::active_cell_iterator &iter,
+            AssemblyScratchData &scratch_data,
+            AssemblyCopyData &copy_data);
+
+        void copyLocalToGlobal(const AssemblyCopyData &copy_data);
+
         void solve();
         void refine_mesh();
         void set_boundary_values();
@@ -281,292 +317,334 @@ namespace Step15
             cell = dof_handler.begin_active(),
             endc = dof_handler.end();
 
-        int cell_number = 0;
-        for (; cell != endc; ++cell)
+        dealii::WorkStream::run(cell, endc,
+            *this,
+            &CustomSolver<dim>::localAssembleSystem,
+            &CustomSolver<dim>::copyLocalToGlobal,
+            AssemblyScratchData(this->feCollection, this->mappingCollection, this->qCollection),
+            AssemblyCopyData());
+    }
+
+
+    template <int dim>
+    CustomSolver<dim>::AssemblyScratchData::AssemblyScratchData(const dealii::hp::FECollection<dim> &feCollection,
+        const dealii::hp::MappingCollection<dim> &mappingCollection,
+        const dealii::hp::QCollection<dim> &quadratureFormulas)
+        :
+        hp_fe_values(mappingCollection,        feCollection,        quadratureFormulas,
+        dealii::update_values | dealii::update_gradients | dealii::update_quadrature_points | dealii::update_JxW_values)        
+    {}
+
+    template <int dim>
+    CustomSolver<dim>::AssemblyScratchData::AssemblyScratchData(const AssemblyScratchData &scratch_data)
+        :
+        hp_fe_values(scratch_data.hp_fe_values.get_mapping_collection(),
+        scratch_data.hp_fe_values.get_fe_collection(),
+        scratch_data.hp_fe_values.get_quadrature_collection(),
+        dealii::update_values | dealii::update_gradients | dealii::update_quadrature_points | dealii::update_JxW_values)
+    {}
+
+    template <int dim>
+    CustomSolver<dim>::AssemblyCopyData::AssemblyCopyData()
+        : isAssembled(false), cell_matrix(0), cell_rhs(0)
+    {}
+
+    template <int dim>
+    void CustomSolver<dim>::localAssembleSystem(const typename dealii::hp::DoFHandler<dim>::active_cell_iterator &cell,
+        AssemblyScratchData &scratch_data,
+        AssemblyCopyData &copy_data)
+    {
+        // std::cout << " assembling cell number " << cell_number++ << std::endl;
+
+        scratch_data.hp_fe_values.reinit(cell);
+        const dealii::FEValues<dim> &fe_values = scratch_data.hp_fe_values.get_present_fe_values();
+        const unsigned int dofs_per_cell = cell->get_fe().dofs_per_cell;
+        const unsigned int n_q_points = fe_values.n_quadrature_points;
+
+        copy_data.cell_matrix.reinit(dofs_per_cell, dofs_per_cell);
+        copy_data.cell_matrix = 0;
+        copy_data.cell_rhs.reinit(dofs_per_cell);
+        copy_data.cell_rhs = 0;
+
+        std::vector<types::global_dof_index>    local_dof_indices(dofs_per_cell);
+        cell->get_dof_indices(local_dof_indices);
+
+        std::vector<dealii::Vector<double> > old_solution_values(n_q_points, dealii::Vector<double>(COMPONENT_COUNT));
+        std::vector<dealii::Tensor<1, dim> > old_velocity_values(n_q_points, dealii::Tensor<1, dim>(COMPONENT_COUNT - 1));
+        std::vector<std::vector<dealii::Tensor<1, dim> > > old_solution_gradients(n_q_points, std::vector<dealii::Tensor<1, dim> >(COMPONENT_COUNT));
+
+        fe_values.get_function_values(present_solution, old_solution_values);
+        // Only velocity values for simpler form expressions
+        for (int i = 0; i < old_solution_values.size(); i++)
         {
-            std::cout << " assembling cell number " << cell_number++ << std::endl;
-
-            hp_fe_values.reinit(cell);
-            const dealii::FEValues<dim> &fe_values = hp_fe_values.get_present_fe_values();
-            const unsigned int dofs_per_cell = cell->get_fe().dofs_per_cell;
-            const unsigned int n_q_points = fe_values.n_quadrature_points;
-
-            FullMatrix<double>           cell_matrix(dofs_per_cell, dofs_per_cell);
-            Vector<double>               cell_rhs(dofs_per_cell);
-
-            std::vector<types::global_dof_index>    local_dof_indices(dofs_per_cell);
-            cell->get_dof_indices(local_dof_indices);
-
-            std::vector<dealii::Vector<double> > old_solution_values(n_q_points, dealii::Vector<double>(COMPONENT_COUNT));
-            std::vector<dealii::Tensor<1, dim> > old_velocity_values(n_q_points, dealii::Tensor<1, dim>(COMPONENT_COUNT - 1));
-            std::vector<std::vector<dealii::Tensor<1, dim> > > old_solution_gradients(n_q_points, std::vector<dealii::Tensor<1, dim> >(COMPONENT_COUNT));
-
-            fe_values.get_function_values(present_solution, old_solution_values);
-            // Only velocity values for simpler form expressions
-            for (int i = 0; i < old_solution_values.size(); i++)
-            {
-                for (int j = 0; j < dim; j++)
-                    old_velocity_values[i][j] = old_solution_values[i][j];
-            }
-            fe_values.get_function_gradients(present_solution, old_solution_gradients);
+            for (int j = 0; j < dim; j++)
+                old_velocity_values[i][j] = old_solution_values[i][j];
+        }
+        fe_values.get_function_gradients(present_solution, old_solution_gradients);
 
 
-            std::vector<dealii::Tensor<1, dim> > old_A_curl(n_q_points);
+        std::vector<dealii::Tensor<1, dim> > old_A_curl(n_q_points);
 
-            for (int i = 0; i < n_q_points; i++)
-                old_A_curl[i] = curl(old_solution_gradients[i][dim + 1], old_solution_gradients[i][dim + 2], old_solution_gradients[i][dim + 3]);
+        for (int i = 0; i < n_q_points; i++)
+            old_A_curl[i] = curl(old_solution_gradients[i][dim + 1], old_solution_gradients[i][dim + 2], old_solution_gradients[i][dim + 3]);
 
-            std::vector<int> components(dofs_per_cell);
+        std::vector<int> components(dofs_per_cell);
 
-            std::vector<std::vector<double> > shape_value(dofs_per_cell, std::vector<double>(n_q_points));
-            std::vector<double> JxW(n_q_points);
-            std::vector<std::vector<dealii::Tensor<1, dim> > > shape_grad(dofs_per_cell, std::vector<dealii::Tensor<1, dim> >(n_q_points));
+        std::vector<std::vector<double> > shape_value(dofs_per_cell, std::vector<double>(n_q_points));
+        std::vector<double> JxW(n_q_points);
+        std::vector<std::vector<dealii::Tensor<1, dim> > > shape_grad(dofs_per_cell, std::vector<dealii::Tensor<1, dim> >(n_q_points));
 
-            for (unsigned int i = 0; i < dofs_per_cell; ++i)
-            {
-                components[i] = cell->get_fe().system_to_component_index(i).first;
-                for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
-                {
-                    shape_value[i][q_point] = fe_values.shape_value(i, q_point);
-                    shape_grad[i][q_point] = fe_values.shape_grad(i, q_point);
-                }
-            }
-            for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
-                JxW[q_point] = fe_values.JxW(q_point);
-
+        for (unsigned int i = 0; i < dofs_per_cell; ++i)
+        {
+            components[i] = cell->get_fe().system_to_component_index(i).first;
             for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
             {
-                for (unsigned int i = 0; i < dofs_per_cell; ++i)
-                {
-                    for (unsigned int j = 0; j < dofs_per_cell; ++j)
-                    {
-                        // Velocity forms
-                        if (components[i] < dim && components[j] < dim)
-                        {
-                            if (components[i] == components[j])
-                            {
-                                // Diffusion
-                                cell_matrix(i, j) += shape_grad[i][q_point]
-                                    * shape_grad[j][q_point]
-                                    * JxW[q_point]
-                                    / REYNOLDS;
-
-                                // Advection - 1/2
-                                cell_matrix(i, j) += old_velocity_values[q_point]
-                                    * shape_grad[j][q_point]
-                                    * shape_value[i][q_point]
-                                    * JxW[q_point];
-
-                                // Advection - 2/2
-                                cell_matrix(i, j) += old_solution_gradients[q_point][components[i]][components[i]]
-                                    * shape_value[i][q_point]
-                                    * shape_value[j][q_point]
-                                    * JxW[q_point];
-
-                                // Forces from magnetic field
-                                // Force expression is J x B, but it is on the right hand side, so it has to have a negative sign in the matrix and positive one in rhs (residual)
-                                for (int other_component = 0; other_component < dim; other_component++)
-                                {
-                                    if (other_component != components[i])
-                                    {
-                                        cell_matrix(i, j) += SIGMA * old_A_curl[q_point][other_component] * old_A_curl[q_point][other_component]
-                                            * shape_value[i][q_point]
-                                            * shape_value[j][q_point]
-                                            * JxW[q_point];
-                                    }
-                                }
-                            }
-                            // Nonsymmetrical terms from N-S equations
-                            else
-                            {
-                                cell_matrix(i, j) += old_solution_gradients[q_point][components[i]][components[j]]
-                                    * shape_value[i][q_point]
-                                    * shape_value[j][q_point]
-                                    * JxW[q_point];
-
-                                // Forces from magnetic field
-                                cell_matrix(i, j) -= SIGMA * old_A_curl[q_point][components[i]] * old_A_curl[q_point][components[j]]
-                                    * shape_value[i][q_point]
-                                    * shape_value[j][q_point]
-                                    * JxW[q_point];
-                            }
-                        }
-                        // Pressure forms
-                        if (components[i] == dim || components[j] == dim)
-                        {
-                            // First let us do the last pseudo-row.
-                            // TODO
-                            // This is just anti-symmetry => optimize
-                            if (components[i] == dim && components[j] < dim)
-                            {
-                                cell_matrix(i, j) += shape_value[i][q_point]
-                                    * shape_grad[j][q_point][components[j]]
-                                    * JxW[q_point];
-                            }
-                            else if (components[j] == dim && components[i] < dim)
-                            {
-                                cell_matrix(i, j) -= shape_value[j][q_point]
-                                    * shape_grad[i][q_point][components[i]]
-                                    * JxW[q_point];
-                            }
-                        }
-                        // Magnetism forms - Laplace
-                        if (components[i] > dim || components[j] > dim)
-                        {
-                            if (components[i] == components[j])
-                            {
-                                cell_matrix(i, j) += shape_grad[i][q_point]
-                                    * shape_grad[j][q_point]
-                                    * JxW[q_point]
-                                    / (MU * MU_R);
-                            }
-                        }
-                    }
-
-                    // Velocity rhs
-                    if (components[i] < dim)
-                    {
-                        cell_rhs(i) -= shape_grad[i][q_point]
-                            * old_solution_gradients[q_point][components[i]]
-                            * JxW[q_point]
-                            / REYNOLDS;
-
-                        cell_rhs(i) += shape_grad[i][q_point][components[i]]
-                            * old_solution_values[q_point][dim]
-                            * JxW[q_point];
-
-                        cell_rhs(i) -= shape_value[i][q_point]
-                            * old_solution_gradients[q_point][components[i]]
-                            * old_velocity_values[q_point]
-                            * JxW[q_point];
-
-                        // Forces from magnetic field
-                        // Force expression is J x B, but it is on the right hand side, so it has to have a negative sign in the matrix and positive one in rhs (residual)
-                        for (unsigned int j = 0; j < dim; ++j)
-                        {
-                            if (j == components[i])
-                            {
-                                for (int other_component = 0; other_component < dim; other_component++)
-                                {
-                                    if (other_component != components[i])
-                                    {
-                                        cell_rhs(i) -= SIGMA * old_A_curl[q_point][other_component] * old_A_curl[q_point][other_component]
-                                            * shape_value[i][q_point]
-                                            * old_velocity_values[q_point][j]
-                                            * JxW[q_point];
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                cell_rhs(i) += SIGMA * old_A_curl[q_point][components[i]] * old_A_curl[q_point][components[j]]
-                                    * shape_value[i][q_point]
-                                    * old_velocity_values[q_point][j]
-                                    * JxW[q_point];
-                            }
-                        }
-                    }
-
-                    // Pressure rhs
-                    if (components[i] == dim)
-                    {
-                        for (int vel_i = 0; vel_i < dim; vel_i++)
-                        {
-                            cell_rhs(i) -= shape_value[i][q_point]
-                                * old_solution_gradients[q_point][vel_i][vel_i]
-                                * JxW[q_point];
-                        }
-                    }
-
-                    // Magnetism rhs
-                    if (components[i] > dim)
-                    {
-                        cell_rhs(i) -= shape_grad[i][q_point]
-                            * old_solution_gradients[q_point][components[i]]
-                            * JxW[q_point]
-                            / (MU * MU_R);
-                    }
-                }
+                shape_value[i][q_point] = fe_values.shape_value(i, q_point);
+                shape_grad[i][q_point] = fe_values.shape_grad(i, q_point);
             }
+        }
+        for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
+            JxW[q_point] = fe_values.JxW(q_point);
 
+        for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
+        {
             for (unsigned int i = 0; i < dofs_per_cell; ++i)
             {
                 for (unsigned int j = 0; j < dofs_per_cell; ++j)
                 {
-                    system_matrix.add(local_dof_indices[i],
-                        local_dof_indices[j],
-                        cell_matrix(i, j));
+                    // Velocity forms
+                    if (components[i] < dim && components[j] < dim)
+                    {
+                        if (components[i] == components[j])
+                        {
+                            // Diffusion
+                            copy_data.cell_matrix(i, j) += shape_grad[i][q_point]
+                                * shape_grad[j][q_point]
+                                * JxW[q_point]
+                                / REYNOLDS;
+
+                            // Advection - 1/2
+                            copy_data.cell_matrix(i, j) += old_velocity_values[q_point]
+                                * shape_grad[j][q_point]
+                                * shape_value[i][q_point]
+                                * JxW[q_point];
+
+                            // Advection - 2/2
+                            copy_data.cell_matrix(i, j) += old_solution_gradients[q_point][components[i]][components[i]]
+                                * shape_value[i][q_point]
+                                * shape_value[j][q_point]
+                                * JxW[q_point];
+
+                            // Forces from magnetic field
+                            // Force expression is J x B, but it is on the right hand side, so it has to have a negative sign in the matrix and positive one in rhs (residual)
+                            for (int other_component = 0; other_component < dim; other_component++)
+                            {
+                                if (other_component != components[i])
+                                {
+                                    copy_data.cell_matrix(i, j) += SIGMA * old_A_curl[q_point][other_component] * old_A_curl[q_point][other_component]
+                                        * shape_value[i][q_point]
+                                        * shape_value[j][q_point]
+                                        * JxW[q_point];
+                                }
+                            }
+                        }
+                        // Nonsymmetrical terms from N-S equations
+                        else
+                        {
+                            copy_data.cell_matrix(i, j) += old_solution_gradients[q_point][components[i]][components[j]]
+                                * shape_value[i][q_point]
+                                * shape_value[j][q_point]
+                                * JxW[q_point];
+
+                            // Forces from magnetic field
+                            copy_data.cell_matrix(i, j) -= SIGMA * old_A_curl[q_point][components[i]] * old_A_curl[q_point][components[j]]
+                                * shape_value[i][q_point]
+                                * shape_value[j][q_point]
+                                * JxW[q_point];
+                        }
+                    }
+                    // Pressure forms
+                    if (components[i] == dim || components[j] == dim)
+                    {
+                        // First let us do the last pseudo-row.
+                        // TODO
+                        // This is just anti-symmetry => optimize
+                        if (components[i] == dim && components[j] < dim)
+                        {
+                            copy_data.cell_matrix(i, j) += shape_value[i][q_point]
+                                * shape_grad[j][q_point][components[j]]
+                                * JxW[q_point];
+                        }
+                        else if (components[j] == dim && components[i] < dim)
+                        {
+                            copy_data.cell_matrix(i, j) -= shape_value[j][q_point]
+                                * shape_grad[i][q_point][components[i]]
+                                * JxW[q_point];
+                        }
+                    }
+                    // Magnetism forms - Laplace
+                    if (components[i] > dim || components[j] > dim)
+                    {
+                        if (components[i] == components[j])
+                        {
+                            copy_data.cell_matrix(i, j) += shape_grad[i][q_point]
+                                * shape_grad[j][q_point]
+                                * JxW[q_point]
+                                / (MU * MU_R);
+                        }
+                    }
                 }
-                system_rhs(local_dof_indices[i]) += cell_rhs(i);
+
+                // Velocity rhs
+                if (components[i] < dim)
+                {
+                    copy_data.cell_rhs(i) -= shape_grad[i][q_point]
+                        * old_solution_gradients[q_point][components[i]]
+                        * JxW[q_point]
+                        / REYNOLDS;
+
+                    copy_data.cell_rhs(i) += shape_grad[i][q_point][components[i]]
+                        * old_solution_values[q_point][dim]
+                        * JxW[q_point];
+
+                    copy_data.cell_rhs(i) -= shape_value[i][q_point]
+                        * old_solution_gradients[q_point][components[i]]
+                        * old_velocity_values[q_point]
+                        * JxW[q_point];
+
+                    // Forces from magnetic field
+                    // Force expression is J x B, but it is on the right hand side, so it has to have a negative sign in the matrix and positive one in rhs (residual)
+                    for (unsigned int j = 0; j < dim; ++j)
+                    {
+                        if (j == components[i])
+                        {
+                            for (int other_component = 0; other_component < dim; other_component++)
+                            {
+                                if (other_component != components[i])
+                                {
+                                    copy_data.cell_rhs(i) -= SIGMA * old_A_curl[q_point][other_component] * old_A_curl[q_point][other_component]
+                                        * shape_value[i][q_point]
+                                        * old_velocity_values[q_point][j]
+                                        * JxW[q_point];
+                                }
+                            }
+                        }
+                        else
+                        {
+                            copy_data.cell_rhs(i) += SIGMA * old_A_curl[q_point][components[i]] * old_A_curl[q_point][components[j]]
+                                * shape_value[i][q_point]
+                                * old_velocity_values[q_point][j]
+                                * JxW[q_point];
+                        }
+                    }
+                }
+
+                // Pressure rhs
+                if (components[i] == dim)
+                {
+                    for (int vel_i = 0; vel_i < dim; vel_i++)
+                    {
+                        copy_data.cell_rhs(i) -= shape_value[i][q_point]
+                            * old_solution_gradients[q_point][vel_i][vel_i]
+                            * JxW[q_point];
+                    }
+                }
+
+                // Magnetism rhs
+                if (components[i] > dim)
+                {
+                    copy_data.cell_rhs(i) -= shape_grad[i][q_point]
+                        * old_solution_gradients[q_point][components[i]]
+                        * JxW[q_point]
+                        / (MU * MU_R);
+                }
             }
+        }
 
-            /*
-            dealii::hp::FEFaceValues<dim> hp_fe_face_values(mappingCollection, feCollection, qCollectionFace, dealii::update_quadrature_points);
-
-            for (unsigned int face = 0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
-            {
-            if (cell->face(face)->user_index() > 0)
-            {
-            hp_fe_face_values.reinit(cell, face);
-
-            const dealii::FEFaceValues<dim> &fe_face_values = hp_fe_face_values.get_present_fe_values();
-            const unsigned int n_face_q_points = fe_face_values.n_quadrature_points;
-
-            std::vector<dealii::Vector<double> > old_solution_values_face(n_face_q_points, dealii::Vector<double>(COMPONENT_COUNT));
-            std::vector<std::vector<Tensor<1, dim> > > old_solution_gradients_face(n_face_q_points, std::vector<dealii::Tensor<1, dim> >(COMPONENT_COUNT));
-
-            fe_face_values.get_function_values(present_solution, old_solution_values_face);
-            fe_face_values.get_function_gradients(present_solution, old_solution_gradients_face);
-
-            for (unsigned int q_point = 0; q_point < n_face_q_points; ++q_point)
-            {
-            for (unsigned int i = 0; i < dofs_per_cell; ++i)
-            {
-            {
+        for (unsigned int i = 0; i < dofs_per_cell; ++i)
+        {
             for (unsigned int j = 0; j < dofs_per_cell; ++j)
             {
+                system_matrix.add(local_dof_indices[i],
+                    local_dof_indices[j],
+                    copy_data.cell_matrix(i, j));
             }
-            }
-            }
-            }
-            }
-            }
-            */
+            system_rhs(local_dof_indices[i]) += copy_data.cell_rhs(i);
         }
 
-        // Finally, we remove hanging nodes from the system and apply zero
-        // boundary values to the linear system that defines the Newton updates
-        // $\delta u^n$:
-        hanging_node_constraints.condense(system_matrix);
-        hanging_node_constraints.condense(system_rhs);
+        /*
+        dealii::hp::FEFaceValues<dim> hp_fe_face_values(mappingCollection, feCollection, qCollectionFace, dealii::update_quadrature_points);
 
-        ComponentMask all_but_pressure_mask(COMPONENT_COUNT, true);
-        all_but_pressure_mask.set(dim, false);
-
-        ComponentMask magnetic_field_mask(COMPONENT_COUNT, false);
-        for (int i = dim + 1; i < COMPONENT_COUNT; i++)
-            magnetic_field_mask.set(i, true);
-
-        std::map<types::global_dof_index, double> boundary_values_wall;
-        std::map<types::global_dof_index, double> boundary_values_inlet;
-        std::map<types::global_dof_index, double> boundary_values_outlet;
-
-        VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_WALL, ZeroFunction<dim>(COMPONENT_COUNT), boundary_values_wall, all_but_pressure_mask);
-        MatrixTools::apply_boundary_values(boundary_values_wall, system_matrix, newton_update, system_rhs);
-
-        if (INLET_VELOCITY_FIXED)
+        for (unsigned int face = 0; face < dealii::GeometryInfo<dim>::faces_per_cell; ++face)
         {
-            VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_INLET, ZeroFunction<dim>(COMPONENT_COUNT), boundary_values_inlet, all_but_pressure_mask);
-            MatrixTools::apply_boundary_values(boundary_values_inlet, system_matrix, newton_update, system_rhs);
-        }
-        else
+        if (cell->face(face)->user_index() > 0)
         {
-            VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_INLET, ZeroFunction<dim>(COMPONENT_COUNT), boundary_values_inlet, magnetic_field_mask);
-            MatrixTools::apply_boundary_values(boundary_values_inlet, system_matrix, newton_update, system_rhs);
-        }
+        hp_fe_face_values.reinit(cell, face);
 
-        VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_OUTLET, ZeroFunction<dim>(COMPONENT_COUNT), boundary_values_outlet, magnetic_field_mask);
-        MatrixTools::apply_boundary_values(boundary_values_outlet, system_matrix, newton_update, system_rhs);
+        const dealii::FEFaceValues<dim> &fe_face_values = hp_fe_face_values.get_present_fe_values();
+        const unsigned int n_face_q_points = fe_face_values.n_quadrature_points;
+
+        std::vector<dealii::Vector<double> > old_solution_values_face(n_face_q_points, dealii::Vector<double>(COMPONENT_COUNT));
+        std::vector<std::vector<Tensor<1, dim> > > old_solution_gradients_face(n_face_q_points, std::vector<dealii::Tensor<1, dim> >(COMPONENT_COUNT));
+
+        fe_face_values.get_function_values(present_solution, old_solution_values_face);
+        fe_face_values.get_function_gradients(present_solution, old_solution_gradients_face);
+
+        for (unsigned int q_point = 0; q_point < n_face_q_points; ++q_point)
+        {
+        for (unsigned int i = 0; i < dofs_per_cell; ++i)
+        {
+        {
+        for (unsigned int j = 0; j < dofs_per_cell; ++j)
+        {
+        }
+        }
+        }
+        }
+        }
+        }
+        */
+    }
+
+    template <int dim>
+    void CustomSolver<dim>::copyLocalToGlobal(const AssemblyCopyData &copy_data)
+    {
+        if (copy_data.isAssembled)
+        {
+            // Finally, we remove hanging nodes from the system and apply zero
+            // boundary values to the linear system that defines the Newton updates
+            // $\delta u^n$:
+            hanging_node_constraints.condense(system_matrix);
+            hanging_node_constraints.condense(system_rhs);
+
+            ComponentMask all_but_pressure_mask(COMPONENT_COUNT, true);
+            all_but_pressure_mask.set(dim, false);
+
+            ComponentMask magnetic_field_mask(COMPONENT_COUNT, false);
+            for (int i = dim + 1; i < COMPONENT_COUNT; i++)
+                magnetic_field_mask.set(i, true);
+
+            std::map<types::global_dof_index, double> boundary_values_wall;
+            std::map<types::global_dof_index, double> boundary_values_inlet;
+            std::map<types::global_dof_index, double> boundary_values_outlet;
+
+            VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_WALL, ZeroFunction<dim>(COMPONENT_COUNT), boundary_values_wall, all_but_pressure_mask);
+            MatrixTools::apply_boundary_values(boundary_values_wall, system_matrix, newton_update, system_rhs);
+
+            if (INLET_VELOCITY_FIXED)
+            {
+                VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_INLET, ZeroFunction<dim>(COMPONENT_COUNT), boundary_values_inlet, all_but_pressure_mask);
+                MatrixTools::apply_boundary_values(boundary_values_inlet, system_matrix, newton_update, system_rhs);
+            }
+            else
+            {
+                VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_INLET, ZeroFunction<dim>(COMPONENT_COUNT), boundary_values_inlet, magnetic_field_mask);
+                MatrixTools::apply_boundary_values(boundary_values_inlet, system_matrix, newton_update, system_rhs);
+            }
+
+            VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_OUTLET, ZeroFunction<dim>(COMPONENT_COUNT), boundary_values_outlet, magnetic_field_mask);
+            MatrixTools::apply_boundary_values(boundary_values_outlet, system_matrix, newton_update, system_rhs);
+        }
     }
 
     // @sect4{CustomSolver::solve}
