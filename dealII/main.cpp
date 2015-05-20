@@ -4,24 +4,40 @@
 
 #define DIM 3
 
+const bool PRINT_ALGEBRA = false;
+
+#include <deal.II/base/point.h>
+#include <vector>
+const dealii::Point<DIM> p1(0., 0., 0.);
+const dealii::Point<DIM> p2(1., 1., 1.);
+const unsigned int INIT_REF_NUM = 6;
+const std::vector<unsigned int> refinements({ INIT_REF_NUM, INIT_REF_NUM, INIT_REF_NUM });
+
+const unsigned int BOUNDARY_FRONT = 1;
+const unsigned int BOUNDARY_RIGHT = 2;
+const unsigned int BOUNDARY_BACK = 3;
+const unsigned int BOUNDARY_LEFT = 4;
+const unsigned int BOUNDARY_BOTTOM = 5;
+const unsigned int BOUNDARY_TOP = 6;
+
+std::vector<unsigned int> velocityDirichletMarkers({ BOUNDARY_FRONT, BOUNDARY_RIGHT, BOUNDARY_BACK, BOUNDARY_LEFT });
+std::vector<unsigned int> magnetismDirichletMarkers({ BOUNDARY_FRONT, BOUNDARY_BOTTOM, BOUNDARY_BACK, BOUNDARY_TOP });
+
+const bool INLET_VELOCITY_FIXED = false;
+const double INLET_VELOCITY_AMPLITUDE = 1.0;
+
+const unsigned int POLYNOMIAL_DEGREE_MAG = 2;
+
 const double MU = 1.2566371e-6;
 const double MU_R = 1.;
 const double SIGMA = 3.e6;
 const double A_0[3] = { 1.e-1, 0., 0. };
+const double J_EXT[3] = { 1.e5, 0., 0. };
 
 const double REYNOLDS = 5.;
 
-const int INIT_REF_NUM = 3;
-
-const double NEWTON_DAMPING = 0.9;
-const int NEWTON_ITERATIONS = 6;
-const double INLET_AMPLITUDE = 1.0;
-
-const int BOUNDARY_WALL = 0;
-const int BOUNDARY_INLET = 1;
-const int BOUNDARY_OUTLET = 2;
-
-const bool INLET_VELOCITY_FIXED = false;
+const double NEWTON_DAMPING = 1.;
+const int NEWTON_ITERATIONS = 5;
 
 const int COMPONENT_COUNT = 2 * DIM + 1;
 
@@ -80,7 +96,7 @@ namespace Step15
     class CustomSolver
     {
     public:
-        CustomSolver(int polynomial_degree = 2);
+        CustomSolver();
         ~CustomSolver();
 
         void run();
@@ -119,6 +135,8 @@ namespace Step15
 
         void copyLocalToGlobal(const AssemblyCopyData &copy_data);
 
+        void finishAssembling();
+
         void solve();
         void refine_mesh();
         void set_boundary_values();
@@ -141,8 +159,6 @@ namespace Step15
         Vector<double>       system_rhs;
 
         dealii::SparseDirectUMFPACK direct_CustomSolver;
-
-        int degree;
     };
 
     template <int dim>
@@ -159,9 +175,7 @@ namespace Step15
     double BoundaryValuesInlet<2>::value(const Point<2> &p, const unsigned int component) const
     {
         if (component == 1)
-            return INLET_AMPLITUDE * (p(0) * (1.0 - p(0)));
-        else if (component > 2)
-            return A_0[component - 3];
+            return INLET_VELOCITY_AMPLITUDE * (p(0) * (1.0 - p(0)));
         else
             return 0;
     }
@@ -170,12 +184,7 @@ namespace Step15
     double BoundaryValuesInlet<3>::value(const Point<3> &p, const unsigned int component) const
     {
         if (component == 1)
-        {
-            //return INLET_AMPLITUDE * (p(0) * (1.0 - p(0))) * (p(2) * (1.0 - p(2)));
-            return 0.;
-        }
-        else if (component > 3)
-            return A_0[component - 4];
+            return INLET_VELOCITY_AMPLITUDE * (p(0) * (1.0 - p(0))) * (p(2) * (1.0 - p(2)));
         else
             return 0;
     }
@@ -200,22 +209,21 @@ namespace Step15
     }
 
     template <int dim>
-    CustomSolver<dim>::CustomSolver(int degree)
-        : degree(degree), dof_handler(triangulation)
+    CustomSolver<dim>::CustomSolver() : dof_handler(triangulation)
     {
         std::vector<const dealii::FiniteElement<dim> *> fes;
         std::vector<unsigned int> multiplicities;
 
         // Velocity
-        fes.push_back(new dealii::FE_Q<dim>(degree));
+        fes.push_back(new dealii::FE_Q<dim>(2));
         multiplicities.push_back(dim);
 
         // Pressure
-        fes.push_back(new dealii::FE_Q<dim>(degree - 1));
+        fes.push_back(new dealii::FE_Q<dim>(1));
         multiplicities.push_back(1);
 
         // A
-        fes.push_back(new dealii::FE_Q<dim>(degree - 1));
+        fes.push_back(new dealii::FE_Q<dim>(POLYNOMIAL_DEGREE_MAG));
         multiplicities.push_back(dim);
 
         // Push all components
@@ -225,8 +233,8 @@ namespace Step15
 
         // TODO
         // optimize, but the problem is the most consuming product is 2 * value, 1 * derivative which is basically this.
-        qCollection.push_back(dealii::QGauss<dim>(3 * degree));
-        qCollectionFace.push_back(dealii::QGauss<dim - 1>(3 * degree));
+        qCollection.push_back(dealii::QGauss<dim>(3 * std::max<unsigned int>(POLYNOMIAL_DEGREE_MAG, 2)));
+        qCollectionFace.push_back(dealii::QGauss<dim - 1>(3 * std::max<unsigned int>(POLYNOMIAL_DEGREE_MAG, 2)));
     }
 
     template <int dim>
@@ -323,6 +331,8 @@ namespace Step15
             &CustomSolver<dim>::copyLocalToGlobal,
             AssemblyScratchData(this->feCollection, this->mappingCollection, this->qCollection),
             AssemblyCopyData());
+
+        this->finishAssembling();
     }
 
 
@@ -331,8 +341,8 @@ namespace Step15
         const dealii::hp::MappingCollection<dim> &mappingCollection,
         const dealii::hp::QCollection<dim> &quadratureFormulas)
         :
-        hp_fe_values(mappingCollection,        feCollection,        quadratureFormulas,
-        dealii::update_values | dealii::update_gradients | dealii::update_quadrature_points | dealii::update_JxW_values)        
+        hp_fe_values(mappingCollection, feCollection, quadratureFormulas,
+        dealii::update_values | dealii::update_gradients | dealii::update_quadrature_points | dealii::update_JxW_values)
     {}
 
     template <int dim>
@@ -435,7 +445,7 @@ namespace Step15
                                 * shape_value[j][q_point]
                                 * JxW[q_point];
 
-                            // Forces from magnetic field
+                            // Forces from magnetic field - coinciding indices
                             // Force expression is J x B, but it is on the right hand side, so it has to have a negative sign in the matrix and positive one in rhs (residual)
                             for (int other_component = 0; other_component < dim; other_component++)
                             {
@@ -456,7 +466,7 @@ namespace Step15
                                 * shape_value[j][q_point]
                                 * JxW[q_point];
 
-                            // Forces from magnetic field
+                            // Forces from magnetic field - NON-coinciding indices
                             copy_data.cell_matrix(i, j) -= SIGMA * old_A_curl[q_point][components[i]] * old_A_curl[q_point][components[j]]
                                 * shape_value[i][q_point]
                                 * shape_value[j][q_point]
@@ -492,6 +502,9 @@ namespace Step15
                                 * JxW[q_point]
                                 / (MU * MU_R);
                         }
+
+                        // TODO
+                        // Dodelat clen [u x (Nabla x A)]
                     }
                 }
 
@@ -537,6 +550,15 @@ namespace Step15
                                 * JxW[q_point];
                         }
                     }
+                    // Force from external current density.
+                    // TODO
+                    // This assumes (correctly) that there is no force in other than z- direction => generalize.
+                    if (components[i] == 2)
+                    {
+                        copy_data.cell_rhs(i) -= J_EXT[0] * old_A_curl[q_point][1]
+                            * shape_value[i][q_point]
+                            * JxW[q_point];
+                    }
                 }
 
                 // Pressure rhs
@@ -557,20 +579,20 @@ namespace Step15
                         * old_solution_gradients[q_point][components[i]]
                         * JxW[q_point]
                         / (MU * MU_R);
+
+                    // External current density.
+                    copy_data.cell_rhs(i) += shape_value[i][q_point]
+                        * J_EXT[components[i] - dim - 1]
+                        * JxW[q_point];
                 }
             }
         }
 
-        for (unsigned int i = 0; i < dofs_per_cell; ++i)
-        {
-            for (unsigned int j = 0; j < dofs_per_cell; ++j)
-            {
-                system_matrix.add(local_dof_indices[i],
-                    local_dof_indices[j],
-                    copy_data.cell_matrix(i, j));
-            }
-            system_rhs(local_dof_indices[i]) += copy_data.cell_rhs(i);
-        }
+        // distribute local to global matrix
+        copy_data.local_dof_indices.resize(dofs_per_cell);
+        cell->get_dof_indices(copy_data.local_dof_indices);
+
+        copy_data.isAssembled = true;
 
         /*
         dealii::hp::FEFaceValues<dim> hp_fe_face_values(mappingCollection, feCollection, qCollectionFace, dealii::update_quadrature_points);
@@ -611,41 +633,90 @@ namespace Step15
     {
         if (copy_data.isAssembled)
         {
-            // Finally, we remove hanging nodes from the system and apply zero
-            // boundary values to the linear system that defines the Newton updates
-            // $\delta u^n$:
-            hanging_node_constraints.condense(system_matrix);
-            hanging_node_constraints.condense(system_rhs);
-
-            ComponentMask all_but_pressure_mask(COMPONENT_COUNT, true);
-            all_but_pressure_mask.set(dim, false);
-
-            ComponentMask magnetic_field_mask(COMPONENT_COUNT, false);
-            for (int i = dim + 1; i < COMPONENT_COUNT; i++)
-                magnetic_field_mask.set(i, true);
-
-            std::map<types::global_dof_index, double> boundary_values_wall;
-            std::map<types::global_dof_index, double> boundary_values_inlet;
-            std::map<types::global_dof_index, double> boundary_values_outlet;
-
-            VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_WALL, ZeroFunction<dim>(COMPONENT_COUNT), boundary_values_wall, all_but_pressure_mask);
-            MatrixTools::apply_boundary_values(boundary_values_wall, system_matrix, newton_update, system_rhs);
-
-            if (INLET_VELOCITY_FIXED)
-            {
-                VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_INLET, ZeroFunction<dim>(COMPONENT_COUNT), boundary_values_inlet, all_but_pressure_mask);
-                MatrixTools::apply_boundary_values(boundary_values_inlet, system_matrix, newton_update, system_rhs);
-            }
-            else
-            {
-                VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_INLET, ZeroFunction<dim>(COMPONENT_COUNT), boundary_values_inlet, magnetic_field_mask);
-                MatrixTools::apply_boundary_values(boundary_values_inlet, system_matrix, newton_update, system_rhs);
-            }
-
-            VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_OUTLET, ZeroFunction<dim>(COMPONENT_COUNT), boundary_values_outlet, magnetic_field_mask);
-            MatrixTools::apply_boundary_values(boundary_values_outlet, system_matrix, newton_update, system_rhs);
+            hanging_node_constraints.distribute_local_to_global(copy_data.cell_matrix,
+                copy_data.cell_rhs,
+                copy_data.local_dof_indices,
+                system_matrix,
+                system_rhs);
         }
     }
+
+    template <int dim>
+    void CustomSolver<dim>::finishAssembling()
+    {
+        // Finally, we remove hanging nodes from the system and apply zero
+        // boundary values to the linear system that defines the Newton updates
+        // $\delta u^n$:
+        hanging_node_constraints.condense(system_matrix);
+        hanging_node_constraints.condense(system_rhs);
+
+        ComponentMask velocity_mask(COMPONENT_COUNT, false);
+        for (int i = 0; i < dim; i++)
+            velocity_mask.set(i, true);
+
+        ComponentMask magnetic_field_mask(COMPONENT_COUNT, false);
+        for (int i = dim + 1; i < COMPONENT_COUNT; i++)
+            magnetic_field_mask.set(i, true);
+
+        std::map<types::global_dof_index, double> boundary_values;
+
+        // Velocity
+        for (std::vector<unsigned int>::iterator it = velocityDirichletMarkers.begin(); it != velocityDirichletMarkers.end(); ++it)
+        {
+            VectorTools::interpolate_boundary_values(dof_handler, *it, ZeroFunction<dim>(COMPONENT_COUNT), boundary_values, velocity_mask);
+            MatrixTools::apply_boundary_values(boundary_values, system_matrix, newton_update, system_rhs);
+        }
+        if (INLET_VELOCITY_FIXED)
+        {
+            VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_BOTTOM, ZeroFunction<dim>(COMPONENT_COUNT), boundary_values, velocity_mask);
+            MatrixTools::apply_boundary_values(boundary_values, system_matrix, newton_update, system_rhs);
+        }
+
+        // Magnetism
+        for (std::vector<unsigned int>::iterator it = magnetismDirichletMarkers.begin(); it != magnetismDirichletMarkers.end(); ++it)
+        {
+            VectorTools::interpolate_boundary_values(dof_handler, *it, ZeroFunction<dim>(COMPONENT_COUNT), boundary_values, magnetic_field_mask);
+            MatrixTools::apply_boundary_values(boundary_values, system_matrix, newton_update, system_rhs);
+        }
+    }
+
+    template <int dim>
+    void CustomSolver<dim>::set_boundary_values()
+    {
+        std::map<types::global_dof_index, double> boundary_values;
+
+        ComponentMask velocity_mask(COMPONENT_COUNT, false);
+        for (int i = 0; i < dim; i++)
+            velocity_mask.set(i, true);
+
+        ComponentMask magnetic_field_mask(COMPONENT_COUNT, false);
+        for (int i = dim + 1; i < COMPONENT_COUNT; i++)
+            magnetic_field_mask.set(i, true);
+
+        // Velocity
+        for (std::vector<unsigned int>::iterator it = velocityDirichletMarkers.begin(); it != velocityDirichletMarkers.end(); ++it)
+        {
+            VectorTools::interpolate_boundary_values(dof_handler, *it, BoundaryValuesWall<dim>(), boundary_values, velocity_mask);
+            for (std::map<types::global_dof_index, double>::const_iterator p = boundary_values.begin(); p != boundary_values.end(); ++p)
+                present_solution(p->first) = p->second;
+        }
+        if (INLET_VELOCITY_FIXED)
+        {
+            VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_BOTTOM, BoundaryValuesInlet<dim>(), boundary_values, velocity_mask);
+            for (std::map<types::global_dof_index, double>::const_iterator p = boundary_values.begin(); p != boundary_values.end(); ++p)
+                present_solution(p->first) = p->second;
+        }
+
+        // Magnetism
+        for (std::vector<unsigned int>::iterator it = magnetismDirichletMarkers.begin(); it != magnetismDirichletMarkers.end(); ++it)
+        {
+            VectorTools::interpolate_boundary_values(dof_handler, *it, BoundaryValuesWall<dim>(), boundary_values, magnetic_field_mask);
+            for (std::map<types::global_dof_index, double>::const_iterator p = boundary_values.begin(); p != boundary_values.end(); ++p)
+                present_solution(p->first) = p->second;
+        }
+    }
+
+
 
     // @sect4{CustomSolver::solve}
 
@@ -664,47 +735,10 @@ namespace Step15
     }
 
     template <int dim>
-    void CustomSolver<dim>::set_boundary_values()
-    {
-        std::map<types::global_dof_index, double> boundary_values_wall;
-        std::map<types::global_dof_index, double> boundary_values_inlet;
-        std::map<types::global_dof_index, double> boundary_values_outlet;
-
-        ComponentMask all_but_pressure_mask(COMPONENT_COUNT, true);
-        all_but_pressure_mask.set(dim, false);
-
-        ComponentMask magnetic_field_mask(COMPONENT_COUNT, false);
-        for (int i = dim + 1; i < COMPONENT_COUNT; i++)
-            magnetic_field_mask.set(i, true);
-
-        VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_WALL, BoundaryValuesWall<dim>(), boundary_values_wall, all_but_pressure_mask);
-        for (std::map<types::global_dof_index, double>::const_iterator p = boundary_values_wall.begin(); p != boundary_values_wall.end(); ++p)
-            present_solution(p->first) = p->second;
-
-        if (INLET_VELOCITY_FIXED)
-        {
-            VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_INLET, BoundaryValuesInlet<dim>(), boundary_values_inlet, all_but_pressure_mask);
-            for (std::map<types::global_dof_index, double>::const_iterator p = boundary_values_inlet.begin(); p != boundary_values_inlet.end(); ++p)
-                present_solution(p->first) = p->second;
-        }
-        else
-        {
-            VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_INLET, BoundaryValuesInlet<dim>(), boundary_values_inlet, magnetic_field_mask);
-            for (std::map<types::global_dof_index, double>::const_iterator p = boundary_values_inlet.begin(); p != boundary_values_inlet.end(); ++p)
-                present_solution(p->first) = p->second;
-        }
-
-        VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_OUTLET, BoundaryValuesInlet<dim>(), boundary_values_outlet, magnetic_field_mask);
-        for (std::map<types::global_dof_index, double>::const_iterator p = boundary_values_outlet.begin(); p != boundary_values_outlet.end(); ++p)
-            present_solution(p->first) = p->second;
-    }
-
-    template <int dim>
     void CustomSolver<dim>::run()
     {
         // Mesh
-        GridGenerator::hyper_cube(triangulation);
-        triangulation.refine_global(INIT_REF_NUM);
+        GridGenerator::subdivided_hyper_rectangle(triangulation, refinements, p1, p2);
 
         typename Triangulation<dim>::cell_iterator
             cell = triangulation.begin(),
@@ -713,11 +747,23 @@ namespace Step15
         {
             for (unsigned int face_number = 0; face_number < GeometryInfo<dim>::faces_per_cell; ++face_number)
             {
-                if (std::fabs(cell->face(face_number)->center()(1)) < 1e-12)
-                    cell->face(face_number)->set_boundary_indicator(BOUNDARY_INLET);
+                if (std::fabs(cell->face(face_number)->center()(1) - p1(1))< 1e-12)
+                    cell->face(face_number)->set_boundary_indicator(BOUNDARY_FRONT);
 
-                if (std::fabs(cell->face(face_number)->center()(1) - 1.0) < 1e-12)
-                    cell->face(face_number)->set_boundary_indicator(BOUNDARY_OUTLET);
+                if (std::fabs(cell->face(face_number)->center()(0) - p1(0))< 1e-12)
+                    cell->face(face_number)->set_boundary_indicator(BOUNDARY_LEFT);
+
+                if (std::fabs(cell->face(face_number)->center()(1) - p2(1))< 1e-12)
+                    cell->face(face_number)->set_boundary_indicator(BOUNDARY_BACK);
+
+                if (std::fabs(cell->face(face_number)->center()(0) - p2(0))< 1e-12)
+                    cell->face(face_number)->set_boundary_indicator(BOUNDARY_RIGHT);
+
+                if (std::fabs(cell->face(face_number)->center()(2) - p1(2))< 1e-12)
+                    cell->face(face_number)->set_boundary_indicator(BOUNDARY_BOTTOM);
+
+                if (std::fabs(cell->face(face_number)->center()(2) - p2(2))< 1e-12)
+                    cell->face(face_number)->set_boundary_indicator(BOUNDARY_TOP);
             }
         }
 
@@ -726,6 +772,16 @@ namespace Step15
         setup_system(true);
         set_boundary_values();
 
+        if (PRINT_ALGEBRA)
+        {
+            std::cout << "  Printing initial solution... " << std::endl;
+
+            std::ofstream sln_out("Initial_Sln");
+            present_solution.print(sln_out, 3, true, false);
+            sln_out.close();
+        }
+
+
         for (unsigned int inner_iteration = 0; inner_iteration < NEWTON_ITERATIONS; ++inner_iteration)
         {
             std::cout << "Assembling..." << std::endl;
@@ -733,15 +789,42 @@ namespace Step15
             previous_res = system_rhs.l2_norm();
             std::cout << "  Residual: " << previous_res << std::endl;
 
-            // system_rhs.print(std::cout);
-            // system_matrix.print(std::cout);
+            if (PRINT_ALGEBRA)
+            {
+                std::cout << "  Printing system " << inner_iteration << "... " << std::endl;
+
+                std::string matrix_file = "Matrix_";
+                std::string rhs_file = "Rhs_";
+
+                matrix_file.append(std::to_string(inner_iteration));
+                rhs_file.append(std::to_string(inner_iteration));
+
+                std::ofstream matrix_out(matrix_file);
+                std::ofstream rhs_out(rhs_file);
+
+                system_matrix.print(matrix_out);
+                system_rhs.print(rhs_out, 3, true, false);
+
+                matrix_out.close();
+                rhs_out.close();
+            }
 
             std::cout << "Solving..." << std::endl;
 
             solve();
 
-            DataOut<dim, hp::DoFHandler<dim> > data_out;
+            if (PRINT_ALGEBRA)
+            {
+                std::cout << "  Printing solution " << inner_iteration << "... " << std::endl;
 
+                std::string sln_file = "Sln_";
+                sln_file.append(std::to_string(inner_iteration));
+                std::ofstream sln_out(sln_file);
+                newton_update.print(sln_out, 8, true, false);
+                sln_out.close();
+            }
+
+            DataOut<dim, hp::DoFHandler<dim> > data_out;
             data_out.attach_dof_handler(dof_handler);
             data_out.add_data_vector(present_solution, "solution");
             data_out.build_patches();
