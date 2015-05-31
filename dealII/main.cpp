@@ -9,7 +9,7 @@
 const bool PRINT_ALGEBRA = false;
 const bool A_ONLY_LAPLACE = true;
 const bool NO_INDUCED_FORCE = true;
-const bool NO_EXT_FORCE = false;
+const bool NO_EXT_FORCE = true;
 const bool A_LINEAR_WRT_Z = false;
 
 #pragma endregion
@@ -553,7 +553,7 @@ namespace Step15
                 }
                 break;
               }
-              copy_data.cell_matrix(i, j) += SIGMA * value
+              copy_data.cell_matrix(i, j) -= SIGMA * value
                 * shape_value[i][q_point]
                 * JxW[q_point];
             }
@@ -568,7 +568,7 @@ namespace Step15
                 {
                   if (other_component != components[i])
                   {
-                    copy_data.cell_matrix(i, j) -= SIGMA * J_EXT[other_component]
+                    copy_data.cell_matrix(i, j) += SIGMA * J_EXT[other_component]
                       * shape_value[i][q_point]
                       * shape_grad[j][q_point][other_component]
                       * JxW[q_point];
@@ -578,7 +578,7 @@ namespace Step15
               // - second part (NON-coinciding indices)
               else
               {
-                copy_data.cell_matrix(i, j) += SIGMA * J_EXT[components[j] - dim - 1]
+                copy_data.cell_matrix(i, j) -= SIGMA * J_EXT[components[j] - dim - 1]
                   * shape_value[i][q_point]
                   * shape_grad[j][q_point][components[i]]
                   * JxW[q_point];
@@ -627,7 +627,7 @@ namespace Step15
                 {
                   if (other_component != components[i] - dim - 1)
                   {
-                    copy_data.cell_matrix(i, j) -= SIGMA * v_prev[q_point][other_component]
+                    copy_data.cell_matrix(i, j) += SIGMA * v_prev[q_point][other_component]
                       * shape_value[i][q_point]
                       * shape_grad[j][q_point][other_component]
                       * JxW[q_point];
@@ -637,7 +637,7 @@ namespace Step15
               // (u x (\Nabla x A)) - second part (NON-coinciding indices)
               else
               {
-                copy_data.cell_matrix(i, j) += SIGMA * v_prev[q_point][components[j] - dim - 1]
+                copy_data.cell_matrix(i, j) -= SIGMA * v_prev[q_point][components[j] - dim - 1]
                   * shape_value[i][q_point]
                   * shape_grad[j][q_point][components[i] - dim - 1]
                   * JxW[q_point];
@@ -649,7 +649,7 @@ namespace Step15
           {
             if (components[i] > dim && components[j] < dim && (components[i] != (components[j] + dim + 1)))
             {
-              copy_data.cell_matrix(i, j) += SIGMA * (old_solution_gradients[q_point][components[j] + dim + 1][components[i] - dim - 1] - old_solution_gradients[q_point][components[i]][components[j]])
+              copy_data.cell_matrix(i, j) -= SIGMA * (old_solution_gradients[q_point][components[j] + dim + 1][components[i] - dim - 1] - old_solution_gradients[q_point][components[i]][components[j]])
                 * shape_value[i][q_point]
                 * shape_value[j][q_point]
                 * JxW[q_point];
@@ -677,7 +677,6 @@ namespace Step15
           if (!NO_INDUCED_FORCE)
           {
             // Forces from magnetic field
-            // Force expression is J x B, but it is on the right hand side, so it has to have a negative sign in the matrix and positive one in rhs (residual)
             for (unsigned int j = 0; j < dim; ++j)
             {
               if (j == components[i])
@@ -710,7 +709,7 @@ namespace Step15
             {
               if (components[i] < dim && (components[i] != j))
               {
-                copy_data.cell_rhs(i) -= (old_solution_gradients[q_point][j + dim + 1][components[i]] - old_solution_gradients[q_point][components[i] + dim + 1][j])
+                copy_data.cell_rhs(i) += (old_solution_gradients[q_point][j + dim + 1][components[i]] - old_solution_gradients[q_point][components[i] + dim + 1][j])
                   * shape_value[i][q_point]
                   * J_EXT[j]
                   * JxW[q_point];
@@ -753,7 +752,7 @@ namespace Step15
             {
               if (components[i] > dim && (components[i] != (j + dim + 1)))
               {
-                copy_data.cell_rhs(i) -= SIGMA * (old_solution_gradients[q_point][j + dim + 1][components[i] - dim - 1] - old_solution_gradients[q_point][components[i]][j])
+                copy_data.cell_rhs(i) += SIGMA * (old_solution_gradients[q_point][j + dim + 1][components[i] - dim - 1] - old_solution_gradients[q_point][components[i]][j])
                   * shape_value[i][q_point]
                   * v_prev[q_point][j]
                   * JxW[q_point];
@@ -1000,7 +999,6 @@ namespace Step15
         sln_out.close();
       }
 
-      /*
       DataOut<dim, hp::DoFHandler<dim> > data_out;
       data_out.attach_dof_handler(dof_handler);
       data_out.add_data_vector(present_solution, "solution");
@@ -1010,7 +1008,6 @@ namespace Step15
       filename.append(".vtk");
       std::ofstream output(filename.c_str());
       data_out.write_vtk(output);
-      */
     }
   }
 }
