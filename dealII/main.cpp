@@ -7,8 +7,8 @@
 #pragma region TESTING
 
 const bool PRINT_ALGEBRA = false;
-const bool A_ONLY_LAPLACE = false;
-const bool NO_INDUCED_FORCE = false;
+const bool A_ONLY_LAPLACE = true;
+const bool NO_INDUCED_FORCE = true;
 const bool NO_EXT_FORCE = false;
 const bool A_LINEAR_WRT_Z = false;
 
@@ -211,7 +211,10 @@ namespace Step15
   double BoundaryValuesWall<dim>::value(const Point<dim> &p, const unsigned int component) const
   {
     if (component > dim)
-      return A_LINEAR_WRT_Z ? (p(2) - p1(2)) / (p2(2) - p1(2)) * A_0[component - dim - 1] : A_0[component - dim - 1];
+    {
+      double coefficient = A_LINEAR_WRT_Z ? (p(2) - p1(2)) / (p2(2) - p1(2)) : 1.;
+      return A_0[component - dim - 1] * coefficient;
+    }
     else
       return 0;
   }
@@ -292,20 +295,6 @@ namespace Step15
     std::cout << "System set up, " << triangulation.n_active_cells() << " cells, " << dof_handler.n_dofs() << " dofs" << std::endl;
   }
 
-  dealii::Tensor<1, 2> custom_cross_product(dealii::Tensor<1, 2>& left, dealii::Tensor<1, 2>& right)
-  {
-    dealii::Tensor<1, 2> result;
-    dealii::cross_product(result, left);
-    return result;
-  }
-
-  dealii::Tensor<1, 3> custom_cross_product(dealii::Tensor<1, 3>& left, dealii::Tensor<1, 3>& right)
-  {
-    dealii::Tensor<1, 3> result;
-    dealii::cross_product(result, left, right);
-    return result;
-  }
-
   dealii::Tensor<1, 2> curl(dealii::Tensor<1, 2>& gradient)
   {
     dealii::Tensor<1, 2> result;
@@ -315,9 +304,9 @@ namespace Step15
   dealii::Tensor<1, 3> curl(dealii::Tensor<1, 3>& gradient_0, dealii::Tensor<1, 3>& gradient_1, dealii::Tensor<1, 3>& gradient_2)
   {
     dealii::Tensor<1, 3> result;
-    result[0] = gradient_1[2] - gradient_2[1];
-    result[1] = gradient_2[0] - gradient_0[2];
-    result[2] = gradient_0[1] - gradient_1[0];
+    result[0] = gradient_2[1] - gradient_1[2];
+    result[1] = gradient_0[2] - gradient_2[0];
+    result[2] = gradient_1[0] - gradient_0[1];
     return result;
   }
 
@@ -387,26 +376,26 @@ namespace Step15
     std::vector<types::global_dof_index>    local_dof_indices(dofs_per_cell);
     cell->get_dof_indices(local_dof_indices);
 
+    std::vector<dealii::Tensor<1, dim> > v_prev(n_q_points, dealii::Tensor<1, dim>(dim));
     std::vector<dealii::Vector<double> > old_solution_values(n_q_points, dealii::Vector<double>(COMPONENT_COUNT));
-    std::vector<dealii::Tensor<1, dim> > old_velocity_values(n_q_points, dealii::Tensor<1, dim>(COMPONENT_COUNT - 1));
     std::vector<std::vector<dealii::Tensor<1, dim> > > old_solution_gradients(n_q_points, std::vector<dealii::Tensor<1, dim> >(COMPONENT_COUNT));
 
+    std::vector<int> components(dofs_per_cell);
+
     fe_values.get_function_values(present_solution, old_solution_values);
+    fe_values.get_function_gradients(present_solution, old_solution_gradients);
+
     // Only velocity values for simpler form expressions
     for (int i = 0; i < old_solution_values.size(); i++)
     {
       for (int j = 0; j < dim; j++)
-        old_velocity_values[i][j] = old_solution_values[i][j];
+        v_prev[i][j] = old_solution_values[i][j];
     }
-    fe_values.get_function_gradients(present_solution, old_solution_gradients);
 
-
-    std::vector<dealii::Tensor<1, dim> > old_A_curl(n_q_points);
-
+    // curl A from the previous iteration.
+    std::vector<dealii::Tensor<1, dim> > C(n_q_points);
     for (int i = 0; i < n_q_points; i++)
-      old_A_curl[i] = curl(old_solution_gradients[i][dim + 1], old_solution_gradients[i][dim + 2], old_solution_gradients[i][dim + 3]);
-
-    std::vector<int> components(dofs_per_cell);
+      C[i] = curl(old_solution_gradients[i][dim + 1], old_solution_gradients[i][dim + 2], old_solution_gradients[i][dim + 3]);
 
     std::vector<std::vector<double> > shape_value(dofs_per_cell, std::vector<double>(n_q_points));
     std::vector<double> JxW(n_q_points);
@@ -433,6 +422,7 @@ namespace Step15
           // Velocity forms
           if (components[i] < dim && components[j] < dim)
           {
+            // Coinciding indices.
             if (components[i] == components[j])
             {
               // Diffusion
@@ -442,7 +432,7 @@ namespace Step15
                 / REYNOLDS;
 
               // Advection - 1/2
-              copy_data.cell_matrix(i, j) += old_velocity_values[q_point]
+              copy_data.cell_matrix(i, j) += v_prev[q_point]
                 * shape_grad[j][q_point]
                 * shape_value[i][q_point]
                 * JxW[q_point];
@@ -455,13 +445,12 @@ namespace Step15
 
               if (!NO_INDUCED_FORCE)
               {
-                // Forces from magnetic field - coinciding indices
-                // Force expression is J x B, but it is on the right hand side, so it has to have a negative sign in the matrix and positive one in rhs (residual)
+                // sigma (u x B) x B WRT VELOCITIES - coinciding indices
                 for (int other_component = 0; other_component < dim; other_component++)
                 {
                   if (other_component != components[i])
                   {
-                    copy_data.cell_matrix(i, j) += SIGMA * old_A_curl[q_point][other_component] * old_A_curl[q_point][other_component]
+                    copy_data.cell_matrix(i, j) += SIGMA * C[q_point][other_component] * C[q_point][other_component]
                       * shape_value[i][q_point]
                       * shape_value[j][q_point]
                       * JxW[q_point];
@@ -469,9 +458,10 @@ namespace Step15
                 }
               }
             }
-            // Nonsymmetrical terms from N-S equations
+            // NON-Coinciding indices.
             else
             {
+              // Nonsymmetrical terms from N-S equations
               copy_data.cell_matrix(i, j) += old_solution_gradients[q_point][components[i]][components[j]]
                 * shape_value[i][q_point]
                 * shape_value[j][q_point]
@@ -479,8 +469,8 @@ namespace Step15
 
               if (!NO_INDUCED_FORCE)
               {
-                // Forces from magnetic field - NON-coinciding indices
-                copy_data.cell_matrix(i, j) -= SIGMA * old_A_curl[q_point][components[i]] * old_A_curl[q_point][components[j]]
+                // sigma (u x B) x B WRT VELOCITIES - NON-coinciding indices
+                copy_data.cell_matrix(i, j) -= SIGMA * C[q_point][components[i]] * C[q_point][components[j]]
                   * shape_value[i][q_point]
                   * shape_value[j][q_point]
                   * JxW[q_point];
@@ -488,9 +478,86 @@ namespace Step15
             }
           }
 
-          // External force.
+          // [J_{ext} + Sigma (u x B)] x B WRT MAGNETISM
           if (components[i] < dim && components[j] > dim)
           {
+            if (!NO_INDUCED_FORCE)
+            {
+#pragma region paperToCodeHelpers
+  #define v_x v_prev[q_point][0]
+  #define v_y v_prev[q_point][1]
+  #define v_z v_prev[q_point][2]
+
+  #define P_x_y old_solution_gradients[q_point][4][1]
+  #define P_x_z old_solution_gradients[q_point][4][2]
+
+  #define P_y_x old_solution_gradients[q_point][5][0]
+  #define P_y_z old_solution_gradients[q_point][5][2]
+
+  #define P_z_x old_solution_gradients[q_point][6][0]
+  #define P_z_y old_solution_gradients[q_point][6][1]
+
+  #define C_x C[q_point][0]
+  #define C_y C[q_point][1]
+  #define C_z C[q_point][2]
+
+  #define u_x shape_grad[j][q_point][0]
+  #define u_y shape_grad[j][q_point][1]
+  #define u_z shape_grad[j][q_point][2]
+#pragma endregion
+              double value = 0.;
+              switch (components[i])
+              {
+              case 0:
+                switch (components[j] - dim - 1)
+                {
+                case 0:
+                  value = -(v_z * C_x * u_y) - (v_x * (2. * P_x_y * u_y - 2. * P_y_x * u_y)) - (v_x * (2. * P_x_z * u_z - 2. * P_z_x * u_z)) + (v_y * C_x * u_z);
+                  break;
+                case 1:
+                  value = (v_z * (P_z_y * u_x - (P_y_x * u_z + P_y_z * u_x) + P_x_y * u_z)) - (v_x * (2. * P_y_x * u_x - 2. * P_x_y * u_x)) - (v_y * C_y * u_z);
+                  break;
+                case 2:
+                  value = (v_z * C_z * u_y) - (v_x * (2. * P_z_x * u_x - 2. * P_x_z * u_x)) + (v_y * (P_x_z * u_y - (P_z_x * u_y + P_z_y * u_x) + P_y_z * u_x));
+                  break;
+                }
+                break;
+                break;
+              case 1:
+                switch (components[j] - dim - 1)
+                {
+                case 0:
+                  value = (v_x * C_x * u_z) - (v_y * (2. * P_x_y * u_y - 2. * P_y_x * u_y)) + (v_z * (P_y_x * u_z - (P_x_z * u_y + P_x_y * u_z) + P_z_x * u_y));
+                  break;
+                case 1:
+                  value = (-v_x * C_y * u_z) - (v_y * (2. * P_y_z * u_z - 2. * P_z_y * u_z)) - (v_y * (2.* P_y_x * u_x - 2. * P_x_y * u_x)) + (v_z * C_y * u_x);
+                  break;
+                case 2:
+                  value = (v_x * (P_x_z * u_y - (P_z_y * u_x + P_z_x * u_y) + P_y_z * u_x)) - (v_y * (2. * P_z_y * u_y - 2. * P_y_z * u_y)) - (v_z * C_z * u_x);
+                    break;
+                }
+                break;
+                break;
+              case 2:
+                switch (components[j] - dim - 1)
+                {
+                case 0:
+                    value = (v_y * (P_y_x * u_y - (P_x_y * u_z + P_x_z * u_y) + P_z_x * u_y)) - (v_z * (2. * P_x_z * u_z - 2. * P_z_x * u_z)) - (v_x * C_x * u_y);
+                  break;
+                case 1:
+                  value = (v_y * C_y * u_x) - (v_z * (2. * P_y_z * u_z - 2. * P_z_y * u_z)) + (v_x * (P_z_y * u_x - (P_y_z * u_x + P_y_x * u_z) + P_x_y * u_z));
+                  break;
+                case 2:
+                  value = (-v_y * C_z * P_z_x) - (v_z * (2. * P_z_x * u_x - 2. * P_x_z * u_x)) - (v_z * (2. * P_z_y * u_y - 2. * P_y_z * u_y)) + (v_x * C_z * u_y);
+                  break;
+                }
+                break;
+              }
+              copy_data.cell_matrix(i, j) += SIGMA * value
+                * shape_value[i][q_point]
+                * JxW[q_point];
+            }
+
             if (!NO_EXT_FORCE)
             {
               // (J_ext x (\Nabla x A))
@@ -553,25 +620,24 @@ namespace Step15
 
             if (!A_ONLY_LAPLACE)
             {
-              // Gamma * (u x (\Nabla x A))
-              // - first part (coinciding indices)
+              // (u x (\Nabla x A)) - first part (coinciding indices)
               if (components[i] == components[j])
               {
                 for (int other_component = 0; other_component < dim; other_component++)
                 {
                   if (other_component != components[i] - dim - 1)
                   {
-                    copy_data.cell_matrix(i, j) -= SIGMA * old_velocity_values[q_point][other_component]
+                    copy_data.cell_matrix(i, j) -= SIGMA * v_prev[q_point][other_component]
                       * shape_value[i][q_point]
                       * shape_grad[j][q_point][other_component]
                       * JxW[q_point];
                   }
                 }
               }
-              // - second part (NON-coinciding indices)
+              // (u x (\Nabla x A)) - second part (NON-coinciding indices)
               else
               {
-                copy_data.cell_matrix(i, j) += SIGMA * old_velocity_values[q_point][components[j] - dim - 1]
+                copy_data.cell_matrix(i, j) += SIGMA * v_prev[q_point][components[j] - dim - 1]
                   * shape_value[i][q_point]
                   * shape_grad[j][q_point][components[i] - dim - 1]
                   * JxW[q_point];
@@ -581,13 +647,13 @@ namespace Step15
           // But we must not forget to differentiate wrt. velocities
           if (!A_ONLY_LAPLACE)
           {
-              if (components[i] > dim && components[j] < dim && (components[i] != (components[j] + dim + 1)))
-              {
-                copy_data.cell_matrix(i, j) += SIGMA * (old_solution_gradients[q_point][components[j] + dim + 1][components[i] - dim - 1] - old_solution_gradients[q_point][components[i]][components[j]])
-                  * shape_value[i][q_point]
-                  * shape_value[j][q_point]
-                  * JxW[q_point];
-              }
+            if (components[i] > dim && components[j] < dim && (components[i] != (components[j] + dim + 1)))
+            {
+              copy_data.cell_matrix(i, j) += SIGMA * (old_solution_gradients[q_point][components[j] + dim + 1][components[i] - dim - 1] - old_solution_gradients[q_point][components[i]][components[j]])
+                * shape_value[i][q_point]
+                * shape_value[j][q_point]
+                * JxW[q_point];
+            }
           }
         }
 
@@ -605,7 +671,7 @@ namespace Step15
 
           copy_data.cell_rhs(i) -= shape_value[i][q_point]
             * old_solution_gradients[q_point][components[i]]
-            * old_velocity_values[q_point]
+            * v_prev[q_point]
             * JxW[q_point];
 
           if (!NO_INDUCED_FORCE)
@@ -620,18 +686,18 @@ namespace Step15
                 {
                   if (other_component != components[i])
                   {
-                    copy_data.cell_rhs(i) -= SIGMA * old_A_curl[q_point][other_component] * old_A_curl[q_point][other_component]
+                    copy_data.cell_rhs(i) -= SIGMA * C[q_point][other_component] * C[q_point][other_component]
                       * shape_value[i][q_point]
-                      * old_velocity_values[q_point][j]
+                      * v_prev[q_point][j]
                       * JxW[q_point];
                   }
                 }
               }
               else
               {
-                copy_data.cell_rhs(i) += SIGMA * old_A_curl[q_point][components[i]] * old_A_curl[q_point][components[j]]
+                copy_data.cell_rhs(i) += SIGMA * C[q_point][components[i]] * C[q_point][components[j]]
                   * shape_value[i][q_point]
-                  * old_velocity_values[q_point][j]
+                  * v_prev[q_point][j]
                   * JxW[q_point];
               }
             }
@@ -640,29 +706,13 @@ namespace Step15
           // External force.
           if (!NO_EXT_FORCE)
           {
-            for (int j = 0; j < dim; j++)
+            for (unsigned int j = 0; j < dim; ++j)
             {
-              // (J_ext x (\Nabla x A))
-              // - first part (coinciding indices)
-              if (components[i] == j)
+              if (components[i] < dim && (components[i] != j))
               {
-                for (int other_component = 0; other_component < dim; other_component++)
-                {
-                  if (other_component != components[i])
-                  {
-                    copy_data.cell_rhs(i) += SIGMA * J_EXT[other_component]
-                      * shape_value[i][q_point]
-                      * old_solution_gradients[q_point][j + dim + 1][other_component]
-                      * JxW[q_point];
-                  }
-                }
-              }
-              // - second part (NON-coinciding indices)
-              else
-              {
-                copy_data.cell_rhs(i) -= SIGMA * J_EXT[j]
+                copy_data.cell_rhs(i) -= (old_solution_gradients[q_point][j + dim + 1][components[i]] - old_solution_gradients[q_point][components[i] + dim + 1][j])
                   * shape_value[i][q_point]
-                  * old_solution_gradients[q_point][j + dim + 1][components[i]]
+                  * J_EXT[j]
                   * JxW[q_point];
               }
             }
@@ -696,48 +746,17 @@ namespace Step15
               * JxW[q_point];
           }
 
+          // Residual: u x (curl A)
           if (!A_ONLY_LAPLACE)
           {
-            // Gamma * (u x (\Nabla x A))
-            // - first part (coinciding indices)
             for (unsigned int j = 0; j < dim; ++j)
             {
-              if (components[i] - dim - 1 == j)
+              if (components[i] > dim && (components[i] != (j + dim + 1)))
               {
-                for (int other_component = 0; other_component < dim; other_component++)
-                {
-                  if (other_component != components[i] - dim - 1)
-                  {
-                    copy_data.cell_rhs(i) += SIGMA * old_velocity_values[q_point][other_component]
-                      * shape_value[i][q_point]
-                      * old_solution_gradients[q_point][j + dim + 1][other_component]
-                      * JxW[q_point];
-                  }
-                }
-              }
-              // - second part (NON-coinciding indices)
-              else
-              {
-                copy_data.cell_rhs(i) -= SIGMA * old_velocity_values[q_point][j]
+                copy_data.cell_rhs(i) -= SIGMA * (old_solution_gradients[q_point][j + dim + 1][components[i] - dim - 1] - old_solution_gradients[q_point][components[i]][j])
                   * shape_value[i][q_point]
-                  * old_solution_gradients[q_point][j + dim + 1][components[i] - dim - 1]
+                  * v_prev[q_point][j]
                   * JxW[q_point];
-              }
-            }
-
-
-            // But we must not forget to differentiate wrt. velocities
-            if (!A_ONLY_LAPLACE)
-            {
-              for (unsigned int j = 0; j < dim; ++j)
-              {
-                if (components[i] > dim && (components[i] != (j + dim + 1)))
-                {
-                  copy_data.cell_rhs(i) -= SIGMA * (old_solution_gradients[q_point][j + dim + 1][components[i] - dim - 1] - old_solution_gradients[q_point][components[i]][j])
-                    * shape_value[i][q_point]
-                    * old_velocity_values[q_point][j]
-                    * JxW[q_point];
-                }
               }
             }
           }
@@ -981,6 +1000,7 @@ namespace Step15
         sln_out.close();
       }
 
+      /*
       DataOut<dim, hp::DoFHandler<dim> > data_out;
       data_out.attach_dof_handler(dof_handler);
       data_out.add_data_vector(present_solution, "solution");
@@ -990,6 +1010,7 @@ namespace Step15
       filename.append(".vtk");
       std::ofstream output(filename.c_str());
       data_out.write_vtk(output);
+      */
     }
   }
 }
