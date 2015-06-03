@@ -444,6 +444,7 @@ namespace Step15
                 * shape_value[j][q_point]
                 * JxW[q_point];
 
+#pragma region NO_MOVEMENT_INDUCED_FORCE
               if (!NO_MOVEMENT_INDUCED_FORCE)
               {
                 // sigma (u x B) x B WRT VELOCITIES - coinciding indices
@@ -458,6 +459,7 @@ namespace Step15
                   }
                 }
               }
+#pragma endregion
             }
             // NON-Coinciding indices.
             else
@@ -468,6 +470,7 @@ namespace Step15
                 * shape_value[j][q_point]
                 * JxW[q_point];
 
+#pragma region NO_MOVEMENT_INDUCED_FORCE
               if (!NO_MOVEMENT_INDUCED_FORCE)
               {
                 // sigma (u x B) x B WRT VELOCITIES - NON-coinciding indices
@@ -476,12 +479,14 @@ namespace Step15
                   * shape_value[j][q_point]
                   * JxW[q_point];
               }
+#pragma endregion
             }
           }
 
           // [J_{ext} + Sigma (u x B)] x B WRT MAGNETISM
           if (components[i] < dim && components[j] > dim)
           {
+#pragma region NO_MOVEMENT_INDUCED_FORCE
             if (!NO_MOVEMENT_INDUCED_FORCE)
             {
 #pragma region paperToCodeHelpers
@@ -558,7 +563,9 @@ namespace Step15
                 * shape_value[i][q_point]
                 * JxW[q_point];
             }
+#pragma endregion
 
+#pragma region NO_EXT_CURR_DENSITY_FORCE
             if (!NO_EXT_CURR_DENSITY_FORCE)
             {
               // (J_ext x (\Nabla x A))
@@ -585,27 +592,20 @@ namespace Step15
                   * JxW[q_point];
               }
             }
+#pragma endregion
           }
 
+#pragma region PRESSURE
           // Pressure forms
-          if (components[i] == dim || components[j] == dim)
+          if ((components[i] == dim || components[j] == dim) && components[i] != components[j])
           {
-            // First let us do the last pseudo-row.
-            // TODO
-            // This is just anti-symmetry => optimize
+            double value = shape_value[i][q_point] * shape_grad[j][q_point][components[j]] * JxW[q_point];
             if (components[i] == dim && components[j] < dim)
-            {
-              copy_data.cell_matrix(i, j) += shape_value[i][q_point]
-                * shape_grad[j][q_point][components[j]]
-                * JxW[q_point];
-            }
-            else if (components[j] == dim && components[i] < dim)
-            {
-              copy_data.cell_matrix(i, j) -= shape_value[j][q_point]
-                * shape_grad[i][q_point][components[i]]
-                * JxW[q_point];
-            }
+              copy_data.cell_matrix(i, j) += value;
+            else
+              copy_data.cell_matrix(i, j) -= value;
           }
+#pragma endregion
 
           // Magnetism forms - Laplace
           if (components[i] > dim && components[j] > dim)
@@ -619,6 +619,7 @@ namespace Step15
                 / (MU * MU_R);
             }
 
+#pragma region A_ONLY_LAPLACE
             if (!A_ONLY_LAPLACE)
             {
               // (u x (\Nabla x A)) - first part (coinciding indices)
@@ -644,7 +645,9 @@ namespace Step15
                   * JxW[q_point];
               }
             }
+#pragma endregion
           }
+#pragma region A_ONLY_LAPLACE
           // But we must not forget to differentiate wrt. velocities
           if (!A_ONLY_LAPLACE)
           {
@@ -656,6 +659,7 @@ namespace Step15
                 * JxW[q_point];
             }
           }
+#pragma endregion
         }
 
         // Velocity rhs
@@ -666,7 +670,7 @@ namespace Step15
             * JxW[q_point]
             / REYNOLDS;
 
-          // Pressure
+          // Pressure form
           copy_data.cell_rhs(i) -= shape_grad[i][q_point][components[i]]
             * old_solution_values[q_point][dim]
             * JxW[q_point];
@@ -676,6 +680,7 @@ namespace Step15
             * v_prev[q_point]
             * JxW[q_point];
 
+#pragma region NO_MOVEMENT_INDUCED_FORCE
           if (!NO_MOVEMENT_INDUCED_FORCE)
           {
             // Forces from magnetic field
@@ -703,8 +708,9 @@ namespace Step15
               }
             }
           }
+#pragma endregion
 
-          // External force.
+#pragma region NO_EXT_CURR_DENSITY_FORCE
           if (!NO_EXT_CURR_DENSITY_FORCE)
           {
             for (unsigned int j = 0; j < dim; ++j)
@@ -718,7 +724,9 @@ namespace Step15
               }
             }
           }
+#pragma endregion
         }
+#pragma region PRESSURE
         // Pressure rhs
         if (components[i] == dim)
         {
@@ -729,6 +737,7 @@ namespace Step15
               * JxW[q_point];
           }
         }
+#pragma endregion
 
         // Magnetism rhs
         if (components[i] > dim)
@@ -739,6 +748,7 @@ namespace Step15
             * JxW[q_point]
             / (MU * MU_R);
 
+#pragma region A_ONLY_LAPLACE
           if (!A_ONLY_LAPLACE)
           {
             // External current density.
@@ -762,6 +772,7 @@ namespace Step15
               }
             }
           }
+#pragma endregion
         }
       }
     }
