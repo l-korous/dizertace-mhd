@@ -665,6 +665,7 @@ namespace Step15
             * JxW[q_point]
             / REYNOLDS;
 
+          // Pressure
           copy_data.cell_rhs(i) -= shape_grad[i][q_point][components[i]]
             * old_solution_values[q_point][dim]
             * JxW[q_point];
@@ -732,7 +733,7 @@ namespace Step15
         if (components[i] > dim)
         {
           // Laplace
-          copy_data.cell_rhs(i) += shape_grad[i][q_point]
+          copy_data.cell_rhs(i) -= shape_grad[i][q_point]
             * old_solution_gradients[q_point][components[i]]
             * JxW[q_point]
             / (MU * MU_R);
