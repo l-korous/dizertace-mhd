@@ -1,16 +1,16 @@
-// TODO
-// so far A comes after v, p in the system (hardcoded)
-// A is linear
+// A comes after v, p in the system (hardcoded)
+// Assembling is done in the form J() | = F()
+// i.e. the negative sign on the RHS is handled after assembling of F.
 
 #define DIM 3
 
 #pragma region TESTING
 
 const bool PRINT_ALGEBRA = false;
-const bool A_ONLY_LAPLACE = true;
-const bool NO_INDUCED_FORCE = true;
-const bool NO_EXT_FORCE = true;
-const bool A_LINEAR_WRT_Z = false;
+const bool A_ONLY_LAPLACE = false;
+const bool NO_MOVEMENT_INDUCED_FORCE = true;
+const bool NO_EXT_CURR_DENSITY_FORCE = false;
+const bool A_LINEAR_WRT_Z = true;
 
 #pragma endregion
 
@@ -18,7 +18,7 @@ const bool A_LINEAR_WRT_Z = false;
 #include <vector>
 const dealii::Point<DIM> p1(0., 0., 0.);
 const dealii::Point<DIM> p2(1., 1., 1.);
-const unsigned int INIT_REF_NUM = 5;
+const unsigned int INIT_REF_NUM = 4;
 const std::vector<unsigned int> refinements({ INIT_REF_NUM, INIT_REF_NUM, INIT_REF_NUM });
 
 const unsigned int BOUNDARY_FRONT = 1;
@@ -44,8 +44,8 @@ const double J_EXT[3] = { 1.e5, 0., 0. };
 
 const double REYNOLDS = 5.;
 
-const double NEWTON_DAMPING = .8;
-const int NEWTON_ITERATIONS = 10;
+const double NEWTON_DAMPING = 1.;
+const int NEWTON_ITERATIONS = 30;
 
 const int COMPONENT_COUNT = 2 * DIM + 1;
 
@@ -443,7 +443,7 @@ namespace Step15
                 * shape_value[j][q_point]
                 * JxW[q_point];
 
-              if (!NO_INDUCED_FORCE)
+              if (!NO_MOVEMENT_INDUCED_FORCE)
               {
                 // sigma (u x B) x B WRT VELOCITIES - coinciding indices
                 for (int other_component = 0; other_component < dim; other_component++)
@@ -467,7 +467,7 @@ namespace Step15
                 * shape_value[j][q_point]
                 * JxW[q_point];
 
-              if (!NO_INDUCED_FORCE)
+              if (!NO_MOVEMENT_INDUCED_FORCE)
               {
                 // sigma (u x B) x B WRT VELOCITIES - NON-coinciding indices
                 copy_data.cell_matrix(i, j) -= SIGMA * C[q_point][components[i]] * C[q_point][components[j]]
@@ -481,7 +481,7 @@ namespace Step15
           // [J_{ext} + Sigma (u x B)] x B WRT MAGNETISM
           if (components[i] < dim && components[j] > dim)
           {
-            if (!NO_INDUCED_FORCE)
+            if (!NO_MOVEMENT_INDUCED_FORCE)
             {
 #pragma region paperToCodeHelpers
   #define v_x v_prev[q_point][0]
@@ -558,7 +558,7 @@ namespace Step15
                 * JxW[q_point];
             }
 
-            if (!NO_EXT_FORCE)
+            if (!NO_EXT_CURR_DENSITY_FORCE)
             {
               // (J_ext x (\Nabla x A))
               // - first part (coinciding indices)
@@ -612,7 +612,7 @@ namespace Step15
             // Laplace
             if (components[i] == components[j])
             {
-              copy_data.cell_matrix(i, j) += shape_grad[i][q_point]
+              copy_data.cell_matrix(i, j) -= shape_grad[i][q_point]
                 * shape_grad[j][q_point]
                 * JxW[q_point]
                 / (MU * MU_R);
@@ -660,21 +660,21 @@ namespace Step15
         // Velocity rhs
         if (components[i] < dim)
         {
-          copy_data.cell_rhs(i) -= shape_grad[i][q_point]
+          copy_data.cell_rhs(i) += shape_grad[i][q_point]
             * old_solution_gradients[q_point][components[i]]
             * JxW[q_point]
             / REYNOLDS;
 
-          copy_data.cell_rhs(i) += shape_grad[i][q_point][components[i]]
+          copy_data.cell_rhs(i) -= shape_grad[i][q_point][components[i]]
             * old_solution_values[q_point][dim]
             * JxW[q_point];
 
-          copy_data.cell_rhs(i) -= shape_value[i][q_point]
+          copy_data.cell_rhs(i) += shape_value[i][q_point]
             * old_solution_gradients[q_point][components[i]]
             * v_prev[q_point]
             * JxW[q_point];
 
-          if (!NO_INDUCED_FORCE)
+          if (!NO_MOVEMENT_INDUCED_FORCE)
           {
             // Forces from magnetic field
             for (unsigned int j = 0; j < dim; ++j)
@@ -685,7 +685,7 @@ namespace Step15
                 {
                   if (other_component != components[i])
                   {
-                    copy_data.cell_rhs(i) -= SIGMA * C[q_point][other_component] * C[q_point][other_component]
+                    copy_data.cell_rhs(i) += SIGMA * C[q_point][other_component] * C[q_point][other_component]
                       * shape_value[i][q_point]
                       * v_prev[q_point][j]
                       * JxW[q_point];
@@ -694,7 +694,7 @@ namespace Step15
               }
               else
               {
-                copy_data.cell_rhs(i) += SIGMA * C[q_point][components[i]] * C[q_point][components[j]]
+                copy_data.cell_rhs(i) -= SIGMA * C[q_point][components[i]] * C[q_point][components[j]]
                   * shape_value[i][q_point]
                   * v_prev[q_point][j]
                   * JxW[q_point];
@@ -703,13 +703,13 @@ namespace Step15
           }
 
           // External force.
-          if (!NO_EXT_FORCE)
+          if (!NO_EXT_CURR_DENSITY_FORCE)
           {
             for (unsigned int j = 0; j < dim; ++j)
             {
               if (components[i] < dim && (components[i] != j))
               {
-                copy_data.cell_rhs(i) += (old_solution_gradients[q_point][j + dim + 1][components[i]] - old_solution_gradients[q_point][components[i] + dim + 1][j])
+                copy_data.cell_rhs(i) -= (old_solution_gradients[q_point][j + dim + 1][components[i]] - old_solution_gradients[q_point][components[i] + dim + 1][j])
                   * shape_value[i][q_point]
                   * J_EXT[j]
                   * JxW[q_point];
@@ -722,7 +722,7 @@ namespace Step15
         {
           for (int vel_i = 0; vel_i < dim; vel_i++)
           {
-            copy_data.cell_rhs(i) -= shape_value[i][q_point]
+            copy_data.cell_rhs(i) += shape_value[i][q_point]
               * old_solution_gradients[q_point][vel_i][vel_i]
               * JxW[q_point];
           }
@@ -732,7 +732,7 @@ namespace Step15
         if (components[i] > dim)
         {
           // Laplace
-          copy_data.cell_rhs(i) -= shape_grad[i][q_point]
+          copy_data.cell_rhs(i) += shape_grad[i][q_point]
             * old_solution_gradients[q_point][components[i]]
             * JxW[q_point]
             / (MU * MU_R);
@@ -752,7 +752,7 @@ namespace Step15
             {
               if (components[i] > dim && (components[i] != (j + dim + 1)))
               {
-                copy_data.cell_rhs(i) += SIGMA * (old_solution_gradients[q_point][j + dim + 1][components[i] - dim - 1] - old_solution_gradients[q_point][components[i]][j])
+                copy_data.cell_rhs(i) -= SIGMA * (old_solution_gradients[q_point][j + dim + 1][components[i] - dim - 1] - old_solution_gradients[q_point][components[i]][j])
                   * shape_value[i][q_point]
                   * v_prev[q_point][j]
                   * JxW[q_point];
@@ -902,6 +902,9 @@ namespace Step15
   void CustomSolver<dim>::solve()
   {
     direct_CustomSolver.initialize(system_matrix);
+
+    // RHS for Newton is -F
+    system_rhs *= -1;
     direct_CustomSolver.vmult(newton_update, system_rhs);
 
     hanging_node_constraints.distribute(newton_update);
