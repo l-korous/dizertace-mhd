@@ -7,7 +7,7 @@
 #pragma region TESTING
 
 const bool PRINT_ALGEBRA = false;
-const bool A_ONLY_LAPLACE = false;
+const bool A_ONLY_LAPLACE = true;
 const bool NO_MOVEMENT_INDUCED_FORCE = true;
 const bool NO_EXT_CURR_DENSITY_FORCE = false;
 const bool A_LINEAR_WRT_Z = true;
@@ -45,7 +45,8 @@ const double J_EXT[3] = { 1.e5, 0., 0. };
 const double REYNOLDS = 5.;
 
 const double NEWTON_DAMPING = 1.;
-const int NEWTON_ITERATIONS = 30;
+const int NEWTON_ITERATIONS = 100;
+const double NEWTON_RESIDUAL_THRESHOLD = 1e-6;
 
 const int COMPONENT_COUNT = 2 * DIM + 1;
 
@@ -968,7 +969,7 @@ namespace Step15
       assemble_system();
       previous_res = system_rhs.l2_norm();
       std::cout << "  Residual: " << previous_res << std::endl;
-
+      
       if (PRINT_ALGEBRA)
       {
         std::cout << "  Printing system " << inner_iteration << "... " << std::endl;
@@ -1013,6 +1014,9 @@ namespace Step15
       filename.append(".vtk");
       std::ofstream output(filename.c_str());
       data_out.write_vtk(output);
+
+      if(previous_res < NEWTON_RESIDUAL_THRESHOLD)
+        break;
     }
   }
 }
