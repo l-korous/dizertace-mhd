@@ -740,7 +740,8 @@ namespace Step15
           if (!A_ONLY_LAPLACE)
           {
             // External current density.
-            copy_data.cell_rhs(i) += shape_value[i][q_point]
+            // This is with a minus sign, because in F(u) = 0 form, it is on the left hand side.
+            copy_data.cell_rhs(i) -= shape_value[i][q_point]
               * J_EXT[components[i] - dim - 1]
               * JxW[q_point];
           }
