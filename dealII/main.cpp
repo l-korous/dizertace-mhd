@@ -10,7 +10,7 @@ const bool PRINT_ALGEBRA = false;
 const bool A_ONLY_LAPLACE = true;
 const bool NO_MOVEMENT_INDUCED_FORCE = true;
 const bool NO_EXT_CURR_DENSITY_FORCE = false;
-const bool A_LINEAR_WRT_Z = true;
+const bool A_LINEAR_WRT_Z = false;
 
 #pragma endregion
 
@@ -44,7 +44,7 @@ const double J_EXT[3] = { 1.e5, 0., 0. };
 
 const double REYNOLDS = 5.;
 
-const double NEWTON_DAMPING = 1.;
+const double NEWTON_DAMPING = .8;
 const int NEWTON_ITERATIONS = 100;
 const double NEWTON_RESIDUAL_THRESHOLD = 1e-6;
 
