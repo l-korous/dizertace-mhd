@@ -576,7 +576,7 @@ namespace Step15
                 {
                   if (other_component != components[i])
                   {
-                    copy_data.cell_matrix(i, j) += SIGMA * J_EXT[other_component]
+                    copy_data.cell_matrix(i, j) += J_EXT[other_component]
                       * shape_value[i][q_point]
                       * shape_grad[j][q_point][other_component]
                       * JxW[q_point];
@@ -586,7 +586,7 @@ namespace Step15
               // - second part (NON-coinciding indices)
               else
               {
-                copy_data.cell_matrix(i, j) -= SIGMA * J_EXT[components[j] - dim - 1]
+                copy_data.cell_matrix(i, j) -= J_EXT[components[j] - dim - 1]
                   * shape_value[i][q_point]
                   * shape_grad[j][q_point][components[i]]
                   * JxW[q_point];
