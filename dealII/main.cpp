@@ -318,7 +318,7 @@ namespace Step15
 
     dealii::hp::FEValues<dim> hp_fe_values(feCollection, qCollection, dealii::update_values | dealii::update_gradients | dealii::update_JxW_values);
 
-    dealii::hp::DoFHandler<dim>::active_cell_iterator
+    typename dealii::hp::DoFHandler<dim>::active_cell_iterator
       cell = dof_handler.begin_active(),
       endc = dof_handler.end();
 
