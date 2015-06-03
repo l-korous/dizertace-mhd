@@ -490,26 +490,26 @@ namespace Step15
             if (!NO_MOVEMENT_INDUCED_FORCE)
             {
 #pragma region paperToCodeHelpers
-  #define v_x v_prev[q_point][0]
-  #define v_y v_prev[q_point][1]
-  #define v_z v_prev[q_point][2]
+#define v_x v_prev[q_point][0]
+#define v_y v_prev[q_point][1]
+#define v_z v_prev[q_point][2]
 
-  #define P_x_y old_solution_gradients[q_point][4][1]
-  #define P_x_z old_solution_gradients[q_point][4][2]
+#define P_x_y old_solution_gradients[q_point][4][1]
+#define P_x_z old_solution_gradients[q_point][4][2]
 
-  #define P_y_x old_solution_gradients[q_point][5][0]
-  #define P_y_z old_solution_gradients[q_point][5][2]
+#define P_y_x old_solution_gradients[q_point][5][0]
+#define P_y_z old_solution_gradients[q_point][5][2]
 
-  #define P_z_x old_solution_gradients[q_point][6][0]
-  #define P_z_y old_solution_gradients[q_point][6][1]
+#define P_z_x old_solution_gradients[q_point][6][0]
+#define P_z_y old_solution_gradients[q_point][6][1]
 
-  #define C_x C[q_point][0]
-  #define C_y C[q_point][1]
-  #define C_z C[q_point][2]
+#define C_x C[q_point][0]
+#define C_y C[q_point][1]
+#define C_z C[q_point][2]
 
-  #define u_x shape_grad[j][q_point][0]
-  #define u_y shape_grad[j][q_point][1]
-  #define u_z shape_grad[j][q_point][2]
+#define u_x shape_grad[j][q_point][0]
+#define u_y shape_grad[j][q_point][1]
+#define u_z shape_grad[j][q_point][2]
 #pragma endregion
               double value = 0.;
               switch (components[i])
@@ -540,7 +540,7 @@ namespace Step15
                   break;
                 case 2:
                   value = (v_x * (P_x_z * u_y - (P_z_y * u_x + P_z_x * u_y) + P_y_z * u_x)) - (v_y * (2. * P_z_y * u_y - 2. * P_y_z * u_y)) - (v_z * C_z * u_x);
-                    break;
+                  break;
                 }
                 break;
                 break;
@@ -548,7 +548,7 @@ namespace Step15
                 switch (components[j] - dim - 1)
                 {
                 case 0:
-                    value = (v_y * (P_y_x * u_y - (P_x_y * u_z + P_x_z * u_y) + P_z_x * u_y)) - (v_z * (2. * P_x_z * u_z - 2. * P_z_x * u_z)) - (v_x * C_x * u_y);
+                  value = (v_y * (P_y_x * u_y - (P_x_y * u_z + P_x_z * u_y) + P_z_x * u_y)) - (v_z * (2. * P_x_z * u_z - 2. * P_z_x * u_z)) - (v_x * C_x * u_y);
                   break;
                 case 1:
                   value = (v_y * C_y * u_x) - (v_z * (2. * P_y_z * u_z - 2. * P_z_y * u_z)) + (v_x * (P_z_y * u_x - (P_y_z * u_x + P_y_x * u_z) + P_x_y * u_z));
@@ -597,13 +597,23 @@ namespace Step15
 
 #pragma region PRESSURE
           // Pressure forms
-          if ((components[i] == dim || components[j] == dim) && components[i] != components[j])
+          if (components[i] == dim || components[j] == dim)
           {
-            double value = shape_value[i][q_point] * shape_grad[j][q_point][components[j]] * JxW[q_point];
+            // First let us do the last pseudo-row.
+            // TODO
+            // This is just anti-symmetry => optimize
             if (components[i] == dim && components[j] < dim)
-              copy_data.cell_matrix(i, j) += value;
-            else
-              copy_data.cell_matrix(i, j) -= value;
+            {
+              copy_data.cell_matrix(i, j) += shape_value[i][q_point]
+                * shape_grad[j][q_point][components[j]]
+                * JxW[q_point];
+            }
+            else if (components[j] == dim && components[i] < dim)
+            {
+              copy_data.cell_matrix(i, j) -= shape_value[j][q_point]
+                * shape_grad[i][q_point][components[i]]
+                * JxW[q_point];
+            }
           }
 #pragma endregion
 
@@ -715,12 +725,29 @@ namespace Step15
           {
             for (unsigned int j = 0; j < dim; ++j)
             {
-              if (components[i] < dim && (components[i] != j))
+              if (components[i] == j)
               {
-                copy_data.cell_rhs(i) -= (old_solution_gradients[q_point][j + dim + 1][components[i]] - old_solution_gradients[q_point][components[i] + dim + 1][j])
+                for (int other_component = 0; other_component < dim; other_component++)
+                {
+                  if (other_component != components[i])
+                  {
+                    double val = J_EXT[other_component]
+                      * shape_value[i][q_point]
+                      * old_solution_gradients[q_point][j + dim + 1][other_component]
+                      * JxW[q_point];
+
+                    copy_data.cell_rhs(i) += val;
+                  }
+                }
+              }
+              // - second part (NON-coinciding indices)
+              else
+              {
+                double val = -J_EXT[j]
                   * shape_value[i][q_point]
-                  * J_EXT[j]
+                  * old_solution_gradients[q_point][j + dim + 1][components[i]]
                   * JxW[q_point];
+                copy_data.cell_rhs(i) += val;
               }
             }
           }
@@ -980,7 +1007,7 @@ namespace Step15
       assemble_system();
       previous_res = system_rhs.l2_norm();
       std::cout << "  Residual: " << previous_res << std::endl;
-      
+
       if (PRINT_ALGEBRA)
       {
         std::cout << "  Printing system " << inner_iteration << "... " << std::endl;
@@ -1026,7 +1053,7 @@ namespace Step15
       std::ofstream output(filename.c_str());
       data_out.write_vtk(output);
 
-      if(previous_res < NEWTON_RESIDUAL_THRESHOLD)
+      if (previous_res < NEWTON_RESIDUAL_THRESHOLD)
         break;
     }
   }
