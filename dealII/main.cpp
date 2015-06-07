@@ -8,9 +8,9 @@
 
 const bool PRINT_ALGEBRA = false;
 const bool A_ONLY_LAPLACE = true;
-const bool NO_MOVEMENT_INDUCED_FORCE = true;
+const bool NO_MOVEMENT_INDUCED_FORCE = false;
 const bool NO_EXT_CURR_DENSITY_FORCE = false;
-const bool A_LINEAR_WRT_Z = false;
+const bool A_LINEAR_WRT_Y = true;
 
 #pragma endregion
 
@@ -18,7 +18,7 @@ const bool A_LINEAR_WRT_Z = false;
 #include <vector>
 const dealii::Point<DIM> p1(0., 0., 0.);
 const dealii::Point<DIM> p2(1., 1., 1.);
-const unsigned int INIT_REF_NUM = 4;
+const unsigned int INIT_REF_NUM = 6;
 const std::vector<unsigned int> refinements({ INIT_REF_NUM, INIT_REF_NUM, INIT_REF_NUM });
 
 const unsigned int BOUNDARY_FRONT = 1;
@@ -29,12 +29,12 @@ const unsigned int BOUNDARY_BOTTOM = 5;
 const unsigned int BOUNDARY_TOP = 6;
 
 std::vector<unsigned int> velocityDirichletMarkers({ BOUNDARY_FRONT, BOUNDARY_RIGHT, BOUNDARY_BACK, BOUNDARY_LEFT });
-std::vector<unsigned int> magnetismDirichletMarkers({ BOUNDARY_FRONT, BOUNDARY_BOTTOM, BOUNDARY_BACK, BOUNDARY_TOP });
+std::vector<unsigned int> magnetismDirichletMarkers({ BOUNDARY_FRONT, BOUNDARY_BOTTOM, BOUNDARY_BACK, BOUNDARY_TOP, BOUNDARY_LEFT, BOUNDARY_RIGHT });
 
 const bool INLET_VELOCITY_FIXED = false;
 const double INLET_VELOCITY_AMPLITUDE = 1.0;
 
-const unsigned int POLYNOMIAL_DEGREE_MAG = 2;
+const unsigned int POLYNOMIAL_DEGREE_MAG = 1;
 
 const double MU = 1.2566371e-6;
 const double MU_R = 1.;
@@ -44,9 +44,9 @@ const double J_EXT[3] = { 1.e5, 0., 0. };
 
 const double REYNOLDS = 5.;
 
-const double NEWTON_DAMPING = .8;
+const double NEWTON_DAMPING = 1.0;
 const int NEWTON_ITERATIONS = 100;
-const double NEWTON_RESIDUAL_THRESHOLD = 1e-6;
+const double NEWTON_RESIDUAL_THRESHOLD = 1e-8;
 
 const int COMPONENT_COUNT = 2 * DIM + 1;
 
@@ -138,6 +138,25 @@ namespace Step15
       std::vector<dealii::types::global_dof_index> local_dof_indices;
     };
 
+    class Postprocessor : public DataPostprocessor < dim >
+    {
+    public:
+      Postprocessor();
+      virtual
+        void
+        compute_derived_quantities_vector(const std::vector<Vector<double> > &uh,
+        const std::vector<std::vector<Tensor<1, dim> > > &duh,
+        const std::vector<std::vector<Tensor<2, dim> > > &dduh,
+        const std::vector<Point<dim> >                  &normals,
+        const std::vector<Point<dim> >                  &evaluation_points,
+        std::vector<Vector<double> >                    &computed_quantities) const;
+      virtual std::vector<std::string> get_names() const;
+      virtual std::vector < DataComponentInterpretation::DataComponentInterpretation > get_data_component_interpretation() const;
+      virtual UpdateFlags get_needed_update_flags() const;
+    };
+
+    void output_results(int inner_iteration);
+
     void localAssembleSystem(const typename dealii::hp::DoFHandler<dim>::active_cell_iterator &iter,
       AssemblyScratchData &scratch_data,
       AssemblyCopyData &copy_data);
@@ -213,11 +232,99 @@ namespace Step15
   {
     if (component > dim)
     {
-      double coefficient = A_LINEAR_WRT_Z ? (p(2) - p1(2)) / (p2(2) - p1(2)) : 1.;
+      double coefficient = A_LINEAR_WRT_Y ? (p(1) - p1(1)) / (p2(1) - p1(1)) : 1.;
       return A_0[component - dim - 1] * coefficient;
     }
     else
       return 0;
+  }
+
+  template <int dim>
+  CustomSolver<dim>::Postprocessor::
+    Postprocessor()
+  {}
+
+  template<int dim>
+  void CustomSolver<dim>::output_results(int inner_iteration)
+  {
+    typename CustomSolver<dim>::Postprocessor postprocessor;
+    DataOut<dim, hp::DoFHandler<dim> > data_out;
+    data_out.attach_dof_handler(dof_handler);
+    const DataOut<dim, hp::DoFHandler<dim> >::DataVectorType data_vector_type = DataOut<dim, hp::DoFHandler<dim> >::type_dof_data;
+    data_out.add_data_vector(present_solution, postprocessor.get_names(), data_vector_type, postprocessor.get_data_component_interpretation());
+    data_out.build_patches();
+    std::string filename = "solution";
+    filename.append(std::to_string(inner_iteration));
+    filename.append(".vtk");
+    std::ofstream output(filename.c_str());
+    data_out.write_vtk(output);
+  }
+
+  template <int dim>
+  void
+    CustomSolver<dim>::Postprocessor::
+    compute_derived_quantities_vector(const std::vector<Vector<double> >              &uh,
+    const std::vector<std::vector<Tensor<1, dim> > > &duh,
+    const std::vector<std::vector<Tensor<2, dim> > > &/*dduh*/,
+    const std::vector<Point<dim> >                  &/*normals*/,
+    const std::vector<Point<dim> >                  &/*evaluation_points*/,
+    std::vector<Vector<double> >                    &computed_quantities) const
+  {
+    const unsigned int n_quadrature_points = uh.size();
+
+    for (unsigned int q = 0; q < n_quadrature_points; ++q)
+    {
+      // Velocities
+      for (unsigned int d = 0; d < dim; ++d)
+        computed_quantities[q](d) = uh[q](d);
+      // Velocity divergence
+      computed_quantities[q](dim) = duh[q][0][0] + duh[q][1][1] + duh[q][2][2];
+      // Curl A
+      Tensor<1, dim> A_x = duh[q][dim + 1];
+      Tensor<1, dim> A_y = duh[q][dim + 2];
+      Tensor<1, dim> A_z = duh[q][dim + 3];
+      computed_quantities[q](dim + 1) = A_z[1] - A_y[2];
+      computed_quantities[q](dim + 2) = A_x[2] - A_z[0];
+      computed_quantities[q](dim + 3) = A_y[0] - A_x[1];
+    }
+  }
+  
+  template <int dim>
+  std::vector<std::string>
+    CustomSolver<dim>::Postprocessor::
+    get_names() const
+  {
+    std::vector<std::string> names;
+    for (unsigned int d = 0; d < dim; ++d)
+      names.push_back("velocity");
+    names.push_back("div_velocity");
+    for (unsigned int d = 0; d < dim; ++d)
+      names.push_back("curl_A");
+    //names.push_back("J_ext_curl_A");
+    //names.push_back("J_ind_curl_A");
+    return names;
+  }
+  
+
+  template <int dim>
+  std::vector<DataComponentInterpretation::DataComponentInterpretation>
+    CustomSolver<dim>::Postprocessor::
+    get_data_component_interpretation() const
+  {
+    std::vector<DataComponentInterpretation::DataComponentInterpretation> interpretation;
+    for (unsigned int d = 0; d < dim; ++d)
+      interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
+    interpretation.push_back(DataComponentInterpretation::component_is_scalar);
+    for (unsigned int d = 0; d < dim; ++d)
+      interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
+    return interpretation;
+  }
+  
+  template <int dim>
+  UpdateFlags CustomSolver<dim>::Postprocessor::
+    get_needed_update_flags() const
+  {
+      return update_values | update_gradients;
   }
 
   template <int dim>
@@ -780,9 +887,9 @@ namespace Step15
           {
             // External current density.
             // This is with a minus sign, because in F(u) = 0 form, it is on the left hand side.
-            copy_data.cell_rhs(i) -= shape_value[i][q_point]
-              * J_EXT[components[i] - dim - 1]
-              * JxW[q_point];
+            //            copy_data.cell_rhs(i) -= shape_value[i][q_point]
+            //              * J_EXT[components[i] - dim - 1]
+            //              * JxW[q_point];
           }
 
           // Residual: u x (curl A)
@@ -966,22 +1073,22 @@ namespace Step15
     {
       for (unsigned int face_number = 0; face_number < GeometryInfo<dim>::faces_per_cell; ++face_number)
       {
-        if (std::fabs(cell->face(face_number)->center()(1) - p1(1)) < 1e-12)
+        if (std::fabs(cell->face(face_number)->center()(2) - p1(2)) < 1e-12)
           cell->face(face_number)->set_boundary_indicator(BOUNDARY_FRONT);
 
         if (std::fabs(cell->face(face_number)->center()(0) - p1(0)) < 1e-12)
           cell->face(face_number)->set_boundary_indicator(BOUNDARY_LEFT);
 
-        if (std::fabs(cell->face(face_number)->center()(1) - p2(1)) < 1e-12)
+        if (std::fabs(cell->face(face_number)->center()(2) - p2(2)) < 1e-12)
           cell->face(face_number)->set_boundary_indicator(BOUNDARY_BACK);
 
         if (std::fabs(cell->face(face_number)->center()(0) - p2(0)) < 1e-12)
           cell->face(face_number)->set_boundary_indicator(BOUNDARY_RIGHT);
 
-        if (std::fabs(cell->face(face_number)->center()(2) - p1(2)) < 1e-12)
+        if (std::fabs(cell->face(face_number)->center()(1) - p1(1)) < 1e-12)
           cell->face(face_number)->set_boundary_indicator(BOUNDARY_BOTTOM);
 
-        if (std::fabs(cell->face(face_number)->center()(2) - p2(2)) < 1e-12)
+        if (std::fabs(cell->face(face_number)->center()(1) - p2(1)) < 1e-12)
           cell->face(face_number)->set_boundary_indicator(BOUNDARY_TOP);
       }
     }
@@ -1043,15 +1150,7 @@ namespace Step15
         sln_out.close();
       }
 
-      DataOut<dim, hp::DoFHandler<dim> > data_out;
-      data_out.attach_dof_handler(dof_handler);
-      data_out.add_data_vector(present_solution, "solution");
-      data_out.build_patches();
-      std::string filename = "solution";
-      filename.append(std::to_string(inner_iteration));
-      filename.append(".vtk");
-      std::ofstream output(filename.c_str());
-      data_out.write_vtk(output);
+      output_results(inner_iteration);
 
       if (previous_res < NEWTON_RESIDUAL_THRESHOLD)
         break;
