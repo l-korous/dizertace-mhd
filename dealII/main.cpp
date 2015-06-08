@@ -431,13 +431,16 @@ namespace Step15
         computed_quantities[q](d) = uh[q](d);
       // Velocity divergence
       computed_quantities[q](dim) = duh[q][0][0] + duh[q][1][1] + duh[q][2][2];
+      // A
+      for (unsigned int d = 0; d < dim; ++d)
+        computed_quantities[q](dim + d + 1) = uh[q](d);
       // Curl A
-      Tensor<1, dim> A_x = duh[q][dim + 1];
-      Tensor<1, dim> A_y = duh[q][dim + 2];
-      Tensor<1, dim> A_z = duh[q][dim + 3];
-      computed_quantities[q](dim + 1) = A_z[1] - A_y[2];
-      computed_quantities[q](dim + 2) = A_x[2] - A_z[0];
-      computed_quantities[q](dim + 3) = A_y[0] - A_x[1];
+      Tensor<1, dim> A_x = duh[q][2 * dim + 1];
+      Tensor<1, dim> A_y = duh[q][2 * dim + 2];
+      Tensor<1, dim> A_z = duh[q][2 * dim + 3];
+      computed_quantities[q](2 * dim + 1) = A_z[1] - A_y[2];
+      computed_quantities[q](2 * dim + 2) = A_x[2] - A_z[0];
+      computed_quantities[q](2 * dim + 3) = A_y[0] - A_x[1];
     }
   }
   
@@ -450,6 +453,8 @@ namespace Step15
     for (unsigned int d = 0; d < dim; ++d)
       names.push_back("velocity");
     names.push_back("div_velocity");
+    for (unsigned int d = 0; d < dim; ++d)
+      names.push_back("A");
     for (unsigned int d = 0; d < dim; ++d)
       names.push_back("curl_A");
     //names.push_back("J_ext_curl_A");
@@ -467,6 +472,8 @@ namespace Step15
     for (unsigned int d = 0; d < dim; ++d)
       interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
     interpretation.push_back(DataComponentInterpretation::component_is_scalar);
+    for (unsigned int d = 0; d < dim; ++d)
+      interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
     for (unsigned int d = 0; d < dim; ++d)
       interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
     return interpretation;
