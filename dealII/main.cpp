@@ -189,7 +189,6 @@ namespace Step15
     Vector<double>       system_rhs;
 
     dealii::SparseDirectUMFPACK direct_CustomSolver;
-    dealii::Triangulation<dim> triangulation;
   };
 
   template <int dim>
