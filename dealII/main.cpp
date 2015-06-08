@@ -18,7 +18,7 @@ const bool A_LINEAR_WRT_Y = true;
 #include <vector>
 const dealii::Point<DIM> p1(0., 0., 0.);
 const dealii::Point<DIM> p2(1., 1., 1.);
-const unsigned int INIT_REF_NUM = 6;
+const unsigned int INIT_REF_NUM = 11;
 const std::vector<unsigned int> refinements({ INIT_REF_NUM, INIT_REF_NUM, INIT_REF_NUM });
 
 const unsigned int BOUNDARY_FRONT = 1;
@@ -34,7 +34,7 @@ std::vector<unsigned int> magnetismDirichletMarkers({ BOUNDARY_FRONT, BOUNDARY_B
 const bool INLET_VELOCITY_FIXED = false;
 const double INLET_VELOCITY_AMPLITUDE = 1.0;
 
-const unsigned int POLYNOMIAL_DEGREE_MAG = 1;
+const unsigned int POLYNOMIAL_DEGREE_MAG = 2;
 
 const double MU = 1.2566371e-6;
 const double MU_R = 1.;
@@ -155,6 +155,8 @@ namespace Step15
       virtual UpdateFlags get_needed_update_flags() const;
     };
 
+    void create_mesh();
+
     void output_results(int inner_iteration);
 
     void localAssembleSystem(const typename dealii::hp::DoFHandler<dim>::active_cell_iterator &iter,
@@ -187,6 +189,7 @@ namespace Step15
     Vector<double>       system_rhs;
 
     dealii::SparseDirectUMFPACK direct_CustomSolver;
+    dealii::Triangulation<dim> triangulation;
   };
 
   template <int dim>
@@ -238,6 +241,156 @@ namespace Step15
     else
       return 0;
   }
+  /*
+
+  template <int dim>
+  CustomSolver<dim>::create_mesh()
+  {
+    // vertices
+    std::vector<dealii::Point<dim> > vertices;
+     
+    vertices.push_back(dealii::Point<dim>( , , ));
+
+    // F
+    std::map<std::map<std::pair<int, int> > > edges_between_elements;
+
+    // elements
+    std::vector<dealii::CellData<dim> > cells;
+    for (int element_i = 0; element_i < elementList.count(); element_i++)
+    {
+      MeshElement element = elementList[element_i];
+      if (element.isUsed && (!Agros2D::scene()->labels->at(element.marker)->isHole()))
+      {
+          dealii::CellData<2> cell;
+          cell.vertices[0] = element.node[0];
+          cell.vertices[1] = element.node[1];
+          cell.vertices[2] = element.node[2];
+          cell.vertices[3] = element.node[3];
+          cell.material_id = element.marker + 1;
+          
+          cells.push_back(cell);
+      }
+
+      edges_between_elements.push_back(QList<QPair<int, int> >());
+    }
+
+
+    // boundary markers
+    dealii::SubCellData subcelldata;
+    for (int edge_i = 0; edge_i < edgeList.count(); edge_i++)
+    {
+      if (edgeList[edge_i].marker == -1)
+        continue;
+      // std::cout << " neigh elements " << edgeList[edge_i].neighElem[0] << ", " << edgeList[edge_i].neighElem[1] << std::endl;
+
+      dealii::CellData<1> cell_data;
+      cell_data.vertices[0] = edgeList[edge_i].node[0];
+      cell_data.vertices[1] = edgeList[edge_i].node[1];
+
+      if (edgeList[edge_i].neighElem[1] != -1)
+      {
+        edges_between_elements[edgeList[edge_i].neighElem[0]].push_back(QPair<int, int>(edgeList[edge_i].neighElem[1], edgeList[edge_i].marker + 1));
+        edges_between_elements[edgeList[edge_i].neighElem[1]].push_back(QPair<int, int>(edgeList[edge_i].neighElem[0], edgeList[edge_i].marker + 1));
+
+        // do not push the boundary line
+        continue;
+        //cell_data.boundary_id = dealii::numbers::internal_face_boundary_id;
+      }
+      else
+      {
+        cell_data.boundary_id = edgeList[edge_i].marker + 1;
+        // std::cout << "marker: " << edgeList[edge_i].marker + 1 << std::endl;
+      }
+      // todo: co je hranice?
+      // todo: kde to deal potrebuje? Kdyz si okrajove podminky resim sam...
+      //            if (Agros2D::scene()->edges->at(edgeList[edge_i].marker)->marker(fieldInfo) == SceneBoundaryContainer::getNone(fieldInfo))
+      //                continue;
+
+      //            if (Agros2D::scene()->edges->at(edgeList[edge_i].marker)->marker(Agros2D::problem()->fieldInfo("current"))== SceneBoundaryContainer::getNone(Agros2D::problem()->fieldInfo("current")))
+      //                continue;
+
+
+      //cell_data.boundary_id = dealii::numbers::internal_face_boundary_id;
+      // todo: (Pavel Kus) I do not know how exactly this works, whether internal_face_boundary_id is determined apriori or not
+      // todo: but it seems to be potentially dangerous, when there would be many boundaries
+      //assert(cell_data.boundary_id != dealii::numbers::internal_face_boundary_id);
+
+      if (surfManifolds.find(edge_i + 1) == surfManifolds.end())
+        cell_data.manifold_id = 0;
+      else
+        cell_data.manifold_id = edge_i + 1;
+
+      subcelldata.boundary_lines.push_back(cell_data);
+    }
+
+    dealii::GridTools::delete_unused_vertices(vertices, cells, subcelldata);
+    dealii::GridReordering<2>::invert_all_cells_of_negative_grid(vertices, cells);
+    dealii::GridReordering<2>::reorder_cells(cells);
+    m_triangulation.create_triangulation_compatibility(vertices, cells, subcelldata);
+
+    // Fix of dealII automatic marking of sub-objects with the same manifoldIds (quads -> lines).
+    for (dealii::Triangulation<2>::face_iterator line = m_triangulation.begin_face(); line != m_triangulation.end_face(); ++line) {
+      if (line->manifold_id() >= maxEdgeMarker)
+        line->set_manifold_id(0);
+    }
+
+    for (std::map<dealii::types::manifold_id, AgrosManifoldVolume<2>*>::iterator iterator = volManifolds.begin(); iterator != volManifolds.end(); iterator++) {
+      m_triangulation.set_manifold(iterator->first, *iterator->second);
+    }
+
+    for (std::map<dealii::types::manifold_id, AgrosManifoldSurface<2>*>::iterator iterator = surfManifolds.begin(); iterator != surfManifolds.end(); iterator++) {
+      m_triangulation.set_manifold(iterator->first, *iterator->second);
+    }
+
+    dealii::Triangulation<2>::cell_iterator cell = m_triangulation.begin();
+    dealii::Triangulation<2>::cell_iterator end_cell = m_triangulation.end();
+
+    int cell_idx = 0;
+    for (; cell != end_cell; ++cell)
+    {
+      // todo: probably active is not neccessary
+      if (cell->active())
+      {
+        for (int neigh_i = 0; neigh_i < dealii::GeometryInfo<2>::faces_per_cell; neigh_i++)
+        {
+          if (cell->face(neigh_i)->boundary_indicator() == dealii::numbers::internal_face_boundary_id)
+          {
+            cell->face(neigh_i)->set_user_index(0);
+          }
+          else
+          {
+            cell->face(neigh_i)->set_user_index((int)cell->face(neigh_i)->boundary_indicator());
+            //std::cout << "cell cell_idx: " << cell_idx << ", face  " << neigh_i << " set to " << (int) cell->face(neigh_i)->boundary_indicator() << " -> value " << cell->face(neigh_i)->user_index() << std::endl;
+          }
+
+          int neighbor_cell_idx = cell->neighbor_index(neigh_i);
+          if (neighbor_cell_idx != -1)
+          {
+            assert(cell->face(neigh_i)->user_index() == 0);
+            QPair<int, int> neighbor_edge_pair;
+            foreach(neighbor_edge_pair, edges_between_elements[cell_idx])
+            {
+              if (neighbor_edge_pair.first == neighbor_cell_idx)
+              {
+                cell->face(neigh_i)->set_user_index(neighbor_edge_pair.second);
+                //std::cout << "cell cell_idx: " << cell_idx << ", face adj to " << neighbor_cell_idx << " set to " << neighbor_edge_pair.second << " -> value " << cell->face(neigh_i)->user_index() << std::endl;
+                //dealii::TriaAccessor<1,2,2> line = cell->line(neigh_i);
+                //cell->neighbor()
+              }
+            }
+          }
+        }
+        cell_idx++;
+      }
+    }
+
+    // save to disk
+    QString fnMesh = QString("%1/%2_initial.msh").arg(cacheProblemDir()).arg("mesh");
+    std::ofstream ofsMesh(fnMesh.toStdString());
+    boost::archive::binary_oarchive sbMesh(ofsMesh);
+    m_triangulation.save(sbMesh, 0);
+  }
+  */
 
   template <int dim>
   CustomSolver<dim>::Postprocessor::
@@ -250,7 +403,7 @@ namespace Step15
     typename CustomSolver<dim>::Postprocessor postprocessor;
     DataOut<dim, hp::DoFHandler<dim> > data_out;
     data_out.attach_dof_handler(dof_handler);
-    const DataOut<dim, hp::DoFHandler<dim> >::DataVectorType data_vector_type = DataOut<dim, hp::DoFHandler<dim> >::type_dof_data;
+    const typename DataOut<dim, hp::DoFHandler<dim> >::DataVectorType data_vector_type = DataOut<dim, hp::DoFHandler<dim> >::type_dof_data;
     data_out.add_data_vector(present_solution, postprocessor.get_names(), data_vector_type, postprocessor.get_data_component_interpretation());
     data_out.build_patches();
     std::string filename = "solution";
