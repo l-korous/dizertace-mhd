@@ -7,7 +7,7 @@
 #pragma region TESTING
 
 const bool PRINT_ALGEBRA = false;
-const bool A_ONLY_LAPLACE = true;
+const bool A_ONLY_LAPLACE = false;
 const bool NO_MOVEMENT_INDUCED_FORCE = false;
 const bool NO_EXT_CURR_DENSITY_FORCE = false;
 const bool A_LINEAR_WRT_Y = true;
@@ -18,7 +18,7 @@ const bool A_LINEAR_WRT_Y = true;
 #include <vector>
 const dealii::Point<DIM> p1(0., 0., 0.);
 const dealii::Point<DIM> p2(1., 1., 1.);
-const unsigned int INIT_REF_NUM = 11;
+const unsigned int INIT_REF_NUM = 6;
 const std::vector<unsigned int> refinements({ INIT_REF_NUM, INIT_REF_NUM, INIT_REF_NUM });
 
 const unsigned int BOUNDARY_FRONT = 1;
@@ -46,7 +46,7 @@ const double REYNOLDS = 5.;
 
 const double NEWTON_DAMPING = 1.0;
 const int NEWTON_ITERATIONS = 100;
-const double NEWTON_RESIDUAL_THRESHOLD = 1e-8;
+const double NEWTON_RESIDUAL_THRESHOLD = 1e-12;
 
 const int COMPONENT_COUNT = 2 * DIM + 1;
 
@@ -431,13 +431,10 @@ namespace Step15
         computed_quantities[q](d) = uh[q](d);
       // Velocity divergence
       computed_quantities[q](dim) = duh[q][0][0] + duh[q][1][1] + duh[q][2][2];
-      // A
-      for (unsigned int d = 0; d < dim; ++d)
-        computed_quantities[q](dim + d + 1) = uh[q](d);
       // Curl A
-      Tensor<1, dim> A_x = duh[q][2 * dim + 1];
-      Tensor<1, dim> A_y = duh[q][2 * dim + 2];
-      Tensor<1, dim> A_z = duh[q][2 * dim + 3];
+      Tensor<1, dim> A_x = duh[q][dim + 1];
+      Tensor<1, dim> A_y = duh[q][dim + 2];
+      Tensor<1, dim> A_z = duh[q][dim + 3];
       computed_quantities[q](2 * dim + 1) = A_z[1] - A_y[2];
       computed_quantities[q](2 * dim + 2) = A_x[2] - A_z[0];
       computed_quantities[q](2 * dim + 3) = A_y[0] - A_x[1];
@@ -455,8 +452,6 @@ namespace Step15
     names.push_back("div_velocity");
     for (unsigned int d = 0; d < dim; ++d)
       names.push_back("A");
-    for (unsigned int d = 0; d < dim; ++d)
-      names.push_back("curl_A");
     //names.push_back("J_ext_curl_A");
     //names.push_back("J_ind_curl_A");
     return names;
@@ -472,8 +467,6 @@ namespace Step15
     for (unsigned int d = 0; d < dim; ++d)
       interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
     interpretation.push_back(DataComponentInterpretation::component_is_scalar);
-    for (unsigned int d = 0; d < dim; ++d)
-      interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
     for (unsigned int d = 0; d < dim; ++d)
       interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
     return interpretation;
@@ -889,7 +882,7 @@ namespace Step15
             // Laplace
             if (components[i] == components[j])
             {
-              copy_data.cell_matrix(i, j) -= shape_grad[i][q_point]
+              copy_data.cell_matrix(i, j) += shape_grad[i][q_point]
                 * shape_grad[j][q_point]
                 * JxW[q_point]
                 / (MU * MU_R);
@@ -1036,7 +1029,7 @@ namespace Step15
         if (components[i] > dim)
         {
           // Laplace
-          copy_data.cell_rhs(i) -= shape_grad[i][q_point]
+          copy_data.cell_rhs(i) += shape_grad[i][q_point]
             * old_solution_gradients[q_point][components[i]]
             * JxW[q_point]
             / (MU * MU_R);
