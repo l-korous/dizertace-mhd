@@ -53,85 +53,126 @@ Department of Theory of Electrical Engineering, Faculty of Electrical Engineerin
 		\subsubsection{Steadystate}
 		Initial:
 		\begin{equation}
-			\nabla \times \left(\nabla \times A \right) - \gamma \mu \mathbf{v} \times \left( \nabla \times A \right) = \mu J_{ext}
+			\frac{1}{\mu}\nabla \times \left(\nabla \times A \right) - \gamma \mathbf{v} \times \left( \nabla \times A \right) = 0
 		\end{equation}
-		$\rightarrow$ Omitting velocity:
+		$\rightarrow$
 		\begin{equation}
-			\nabla \times \left(\nabla \times A \right) = \mu J_{ext}
+			-\frac{1}{\mu}\Delta A - \gamma \mathbf{v} \times \left( \nabla \times A \right) = 0
 		\end{equation}
-		$\rightarrow$ 2D:
+		Weak formulation  ($\varphi$ is a test function):
 		\begin{equation}
-			-\Delta A_z = \mu J_{ext}
-		\end{equation}
-		$\rightarrow$ Weak (u = Az):
-		\begin{equation}
-			\int_{\Omega}\nabla u \cdot \nabla v - \int_{\partial \Omega} \left(\nabla u \cdot \mathbf{n}\right)\ v = \int_{\Omega} \mu J_{ext} \ v
-		\end{equation}
+			\frac{1}{\mu}\int_{\Omega}\nabla A \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla A \cdot \mathbf{n}\right)\ \varphi 
+			 - \int_{\Omega} \gamma \left[\mathbf{v} \times \left( \nabla \times A \right)\right]\,\varphi = 0,
+		\end{equation}\ \\
+		$\Gamma_{N}$ - Neumann part of the boundary\ \\
 		
+		
+		 \begin{align}
+    \left( \nabla \times A \right) & = \begin{pmatrix}
+           \frac{\partial A_z}{\partial y} - \frac{\partial A_y}{\partial z} \\
+           \frac{\partial A_x}{\partial z} - \frac{\partial A_z}{\partial x} \\
+           \frac{\partial A_y}{\partial x} - \frac{\partial A_x}{\partial y}
+         \end{pmatrix} = \begin{pmatrix}
+           C_x \\
+           C_y \\
+           C_z
+         \end{pmatrix}\\
+				v \times \left( \nabla \times A \right) & = \begin{pmatrix}
+           v_y C_z
+					 - v_z C_y\\
+					v_z C_x
+					 - v_x C_z\\
+					v_x C_y
+					 - v_y C_x
+         \end{pmatrix}\\ & = \begin{pmatrix}
+           v_y \left(\frac{\partial A_y}{\partial x} - \frac{\partial A_x}{\partial y}\right)
+					 - v_z \left(\frac{\partial A_x}{\partial z} - \frac{\partial A_z}{\partial x}\right)\\
+					v_z \left(\frac{\partial A_z}{\partial y} - \frac{\partial A_y}{\partial z}\right)
+					 - v_x \left(\frac{\partial A_y}{\partial x} - \frac{\partial A_x}{\partial y}\right)\\
+					v_x \left(\frac{\partial A_x}{\partial z} - \frac{\partial A_z}{\partial x}\right)
+					 - v_y \left(\frac{\partial A_z}{\partial y} - \frac{\partial A_y}{\partial z}\right)
+         \end{pmatrix}\\& = \begin{pmatrix}
+           v_y \frac{\partial A_y}{\partial x} + v_z \frac{\partial A_z}{\partial x}
+					- v_y \frac{\partial A_x}{\partial y} - v_z \frac{\partial A_x}{\partial z}\\
+					v_z \frac{\partial A_z}{\partial y} + v_x \frac{\partial A_x}{\partial y}
+					- v_z \frac{\partial A_y}{\partial z} - v_x \frac{\partial A_y}{\partial x}\\
+					v_x \frac{\partial A_x}{\partial z} + v_y \frac{\partial A_y}{\partial z}
+					- v_x \frac{\partial A_z}{\partial x} - v_y \frac{\partial A_z}{\partial y}
+         \end{pmatrix}\\
+				\left[v \times \left( \nabla \times A \right)\right] \times \left( \nabla \times A \right) & = \begin{pmatrix}
+           v_z C_x C_z - v_x C_z C_z - v_x C_y C_y + v_y C_x C_y\\
+					 v_x C_y C_x - v_y C_x C_x - v_y C_z C_z + v_z C_y C_z\\
+					 v_y C_z C_y - v_z C_y C_y - v_z C_x C_x + v_x C_z C_x
+         \end{pmatrix}
+   \end{align}
 	
-		\subsubsection{Harmonic field}
-		Initial:
-		\begin{equation}
-			\nabla \times \left(\nabla \times \underline A \right) + j \omega \gamma \mu \underline A - \gamma \mu \mathbf{v} \times \left( \nabla \times \underline A \right) = \mu J_{ext}
-		\end{equation}
-		 $\rightarrow$ Omitting velocity:
-		\begin{equation}
-			\nabla \times \left(\nabla \times \underline A \right) + j \omega \gamma \mu \underline A  = \mu J_{ext}
-		\end{equation}
-		$\rightarrow$ 2D:
-		\begin{equation}
-			-\Delta \underline A_z + j \omega \gamma \mu \underline A_z  = \mu J_{ext}
-		\end{equation}
-		$\rightarrow$ Weak formulation $(u_1 = {\underline A_z}_r, u_2 = {\underline A_z}_i)$:
-		\begin{eqnarray}
-			\int_{\Omega}\nabla u_1 \cdot \nabla v_1 - \int_{\partial \Omega} \left(\nabla u_1 \cdot \mathbf{n}\right)\ v_1 - \int_{\Omega} \omega \gamma \mu u_2 & = & \int_{\Omega} \mu J_{ext, r} \ v\\
-			\int_{\Omega}\nabla u_2 \cdot \nabla v_2 - \int_{\partial \Omega} \left(\nabla u_2 \cdot \mathbf{n}\right)\ v_2 + \int_{\Omega} \omega \gamma \mu u_1 & = & \int_{\Omega} \mu J_{ext, i} \ v
-		\end{eqnarray}
-		
+		The term $v \times \left( \nabla \times A \right)$ can be written in the code using the following:
+		$$\sum_{\substack{j = x, y, z \\ j != i}} v_j \frac{\partial A_j}{\partial i} - v_j \frac{\partial A_i}{\partial j},\ i = x, y, z$$
 		\subsection{Flow field}
 		Initial:
 		\begin{eqnarray}
-			\rho \left(\mathbf{v} \cdot \nabla\right)\mathbf{v} + \nabla p - \mu \Delta \mathbf{v} & = & f_{Lorentz}\\
+			\left(\mathbf{v} \cdot \nabla\right)\mathbf{v} + \nabla p - \frac{1}{Re} \Delta \mathbf{v} & = & f_{Lorentz}\\
+			\nabla \cdot \mathbf{v} & = & 0
+		\end{eqnarray}\ \\
+		$\rightarrow$ $f_{Lorentz} = \left(\mathbf{J}_{ext} + \mathbf{J}_{ind}\right) \times \mathbf{B}$:
+		\ \\
+		\begin{eqnarray}
+			\left(\mathbf{v} \cdot \nabla\right)\mathbf{v} + \nabla p - \frac{1}{Re} \Delta \mathbf{v} & = & \left[\mathbf{J}_{ext} + \sigma \left(v \times \mathbf{B}\right)\right] \times \mathbf{B}\\
 			\nabla \cdot \mathbf{v} & = & 0
 		\end{eqnarray}
-		$\rightarrow$ $f_{Lorentz} = \mathbf{J} \times \mathbf{B}$:
+		Weak formulation  ($\varphi$ is a test function):
 		\begin{eqnarray}
-			\rho \left(\mathbf{v} \cdot \nabla\right)\mathbf{v} + \nabla p - \mu \Delta \mathbf{v} & = & \mathbf{J} \times \mathbf{B}\\
-			\nabla \cdot \mathbf{v} & = & 0
+			\int_{\Omega} \left(\mathbf{v} \cdot \nabla\right)\mathbf{v} \varphi
+			- \int_{\Omega} p \nabla \varphi
+			+ \frac{1}{Re} \int_{\Omega} \nabla v \cdot \nabla \varphi
+			& = &
+			\int_{\Omega} \left(\mathbf{J}_{ext} \times \mathbf{B}\right) \varphi
+			+ \int_{\Omega} \left[\sigma \left(v \times \mathbf{B}\right) \times \mathbf{B}\right]\, \varphi
+			\\
+			\int_{\Omega} \left(\nabla \cdot \mathbf{v}\right) \varphi & = & 0
 		\end{eqnarray}
-		$\rightarrow$ $\mathbf{J} = \frac{1}{\mu_0} \ \nabla \times \mathbf{B}$:
+				
+		\section{Complete weak formulation of the nonlinear problem}
 		\begin{eqnarray}
-			\rho \left(\mathbf{v} \cdot \nabla\right)\mathbf{v} + \nabla p - \mu \Delta \mathbf{v} & = & \frac{1}{\mu_0} \ \left(\nabla \times \mathbf{B} \right) \times \mathbf{B}\\
-			\nabla \cdot \mathbf{v} & = & 0
+			\int_{\Omega} \left(\mathbf{v} \cdot \nabla\right)\mathbf{v} \varphi
+			- \int_{\Omega} p \nabla \varphi
+			+ \frac{1}{Re} \int_{\Omega} \nabla v \cdot \nabla \varphi
+			- \int_{\Omega} \left(\mathbf{J}_{ext} \times \mathbf{B}\right) \varphi
+			- \int_{\Omega} \left[\sigma \left(v \times \mathbf{B}\right) \times \mathbf{B}\right]\, \varphi
+			& = & 0
+			\\
+			\int_{\Omega} \left(\nabla \cdot \mathbf{v}\right) \varphi & = & 0\\
+			\frac{1}{\mu}\int_{\Omega}\nabla A \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla A\cdot \mathbf{n}\right)\ \varphi 
+			 - \int_{\Omega} \gamma \left[\mathbf{v} \times \left( \nabla \times A \right)\right]\,\varphi & = & 0
 		\end{eqnarray}
-			\subsubsection{Steady magnetic field}
-		$\rightarrow$ $2D\ \  \& \ \ \mathbf{B} = \left( \frac{\partial A_z}{\partial y}, -\frac{\partial A_z}{\partial x}, 0 \right)$\ \\
-		$\rightarrow$ $\left(\nabla \times \mathbf{B} \right) = \left(0, 0, -\Delta A_z\right)$\ \\
-		$\rightarrow$ $\left(\nabla \times \mathbf{B} \right) \times \mathbf{B} = \left(-\Delta A_z \frac{\partial A_z}{\partial x}, -\Delta A_z \frac{\partial A_z}{\partial y}, 0\right)$\ \\
+		\subsection{Component-wise}
 		\begin{eqnarray}
-			\rho \left(\mathbf{v} \cdot \nabla\right)v_x + \frac{\partial p}{\partial x} - \mu \Delta v_x & = & -\frac{1}{\mu_0} \ \Delta A_z \frac{\partial A_z}{\partial x}\\
-			\rho \left(\mathbf{v} \cdot \nabla\right)v_y + \frac{\partial p}{\partial y}  - \mu \Delta v_y & = & -\frac{1}{\mu_0} \ \Delta A_z \frac{\partial A_z}{\partial y}\\
-			\nabla \cdot \mathbf{v} & = & 0
+			\int_{\Omega} \left(v_x \frac{v_x}{\partial x} + v_y \frac{v_x}{\partial y} + v_z \frac{v_x}{\partial z}\right) \varphi
+			- \int_{\Omega} p \frac{\partial \varphi}{\partial x}
+			+ \frac{1}{Re} \int_{\Omega} \nabla v_x \cdot \nabla \varphi
+			\nonumber & -\\- \int_{\Omega} \left({\mathbf{J}_{ext}}_y C_z - {\mathbf{J}_{ext}}_z C_y\right) \varphi			
+			- \int_{\Omega} \sigma \left({\mathbf{J}_{ext}}_z C_x C_z - {\mathbf{J}_{ext}}_x C_z C_z - {\mathbf{J}_{ext}}_x C_y C_y + {\mathbf{J}_{ext}}_y C_x C_y\right)\, \varphi
+			& = & 0\nonumber \\
+			\int_{\Omega} \left(v_x \frac{v_y}{\partial x} + v_y \frac{v_y}{\partial y} + v_z \frac{v_y}{\partial z}\right) \varphi
+			- \int_{\Omega} p \frac{\partial \varphi}{\partial y}
+			+ \frac{1}{Re} \int_{\Omega} \nabla v_y \cdot \nabla \varphi
+			\nonumber & -\\- \int_{\Omega} \left({\mathbf{J}_{ext}}_z C_x - {\mathbf{J}_{ext}}_x C_z\right) \varphi			
+			- \int_{\Omega} \sigma \left({\mathbf{J}_{ext}}_x C_y C_x - {\mathbf{J}_{ext}}_y C_x C_x - {\mathbf{J}_{ext}}_y C_z C_z + {\mathbf{J}_{ext}}_z C_y C_z\right)\, \varphi
+			& = & 0\nonumber \\
+			\int_{\Omega} \left(v_x \frac{v_z}{\partial x} + v_y \frac{v_z}{\partial y} + v_z \frac{v_z}{\partial z}\right) \varphi
+			- \int_{\Omega} p \frac{\partial \varphi}{\partial z}
+			+ \frac{1}{Re} \int_{\Omega} \nabla v_z \cdot \nabla \varphi
+			\nonumber & -\\- \int_{\Omega} \left({\mathbf{J}_{ext}}_x C_y - {\mathbf{J}_{ext}}_y C_x\right) \varphi			
+			- \int_{\Omega} \sigma \left({\mathbf{J}_{ext}}_y C_z C_y - {\mathbf{J}_{ext}}_z C_y C_y - {\mathbf{J}_{ext}}_z C_x C_x + {\mathbf{J}_{ext}}_x C_z C_x\right)\, \varphi
+			& = & 0\nonumber \\			
+			\int_{\Omega} \left(\frac{\partial v_x}{\partial x} + \frac{\partial v_y}{\partial y} + \frac{\partial v_z}{\partial z}\right) \varphi & = & 0\nonumber \\
+			\frac{1}{\mu}\int_{\Omega}\nabla A_x \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla A_x\cdot \mathbf{n}\right)\ \varphi 
+			 - \int_{\Omega} \gamma \left(v_y C_z - v_z C_y\right)\,\varphi & = & 0\nonumber \\
+			\frac{1}{\mu}\int_{\Omega}\nabla A_y \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla A_y\cdot \mathbf{n}\right)\ \varphi 
+			 - \int_{\Omega} \gamma \left(v_z C_x - v_x C_z\right)\,\varphi & = & 0\nonumber \\
+			\frac{1}{\mu}\int_{\Omega}\nabla A_z \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla A_z\cdot \mathbf{n}\right)\ \varphi 
+			 - \int_{\Omega} \gamma \left(v_x C_y - v_y C_x\right)\,\varphi & = & 0\nonumber \\
+			 \nonumber 
 		\end{eqnarray}
-		$\rightarrow$ Weak formulation $(u_1 = v_x, u_2 = v_y, u_3 = p)$:\ \\
-		\begin{eqnarray}
-			\int_{\Omega} \rho u_1\ \frac{\partial u_1}{\partial x}\ v_1 + u_2 \frac{\partial u_1}{\partial y}\ v_1 + \int_{\Omega}\frac{\partial u_3}{\partial x}\ v_1 - \int_{\Omega}\mu \nabla u_1 \cdot \nabla v_1 & = & -\int_{\Omega}\frac{1}{\mu_0} \ \Delta A_z \frac{\partial A_z}{\partial x} v_1\\
-			\int_{\Omega} \rho u_1\ \frac{\partial u_2}{\partial x}\ v_2 + u_2 \frac{\partial u_2}{\partial y}\ v_2 + \int_{\Omega}\frac{\partial u_3}{\partial y}\ v_2 - \int_{\Omega}\mu \nabla u_2 \cdot \nabla v_2 & = & -\int_{\Omega}\frac{1}{\mu_0} \ \Delta A_z \frac{\partial A_z}{\partial y} v_2\\
-			\int_{\Omega}\left(\frac{\partial u_1}{\partial x} + \frac{\partial u_2}{\partial y}\right) v_3 & = & 0
-		\end{eqnarray}
-		$\rightarrow$ Linear problem (omiting convection):\ \\
-		\begin{eqnarray}
-			\int_{\Omega}\frac{\partial u_3}{\partial x}\ v_1 - \int_{\Omega}\mu \nabla u_1 \cdot \nabla v_1 & = & -\int_{\Omega}\frac{1}{\mu_0} \ \Delta A_z \frac{\partial A_z}{\partial x} v_1\\
-			\int_{\Omega}\frac{\partial u_3}{\partial y}\ v_2 - \int_{\Omega}\mu \nabla u_2 \cdot \nabla v_2 & = & -\int_{\Omega}\frac{1}{\mu_0} \ \Delta A_z \frac{\partial A_z}{\partial y} v_2\\
-			\int_{\Omega}\left(\frac{\partial u_1}{\partial x} + \frac{\partial u_2}{\partial y}\right) v_3 & = & 0
-		\end{eqnarray}
-		$\rightarrow$ Nonlinear problem (Newton):\ \\
-		TODO
-		
-		\subsubsection{Harmonic magnetic field}
-		\begin{itemize}
-			\item (???) Rovnice pro $J_{ext}$
-			\item (???) Vztah $\mathbf{B} =? \left( \frac{\partial A_z}{\partial y}, -\frac{\partial A_z}{\partial x}, 0 \right)$ pro fazor $\underline A_z$
-		\end{itemize}
 		
 \end{document}
