@@ -24,6 +24,11 @@
 %
 \usepackage{amssymb,amsmath}
 \usepackage{float}
+\usepackage{color}
+\definecolor{darkRed}{rgb}{0.6,0.2,0.2}
+\definecolor{darkBlue}{rgb}{0.2,0.2,0.6}
+\definecolor{darkGreen}{rgb}{0.2,0.6,0.2}
+\definecolor{orange}{rgb}{1,0.5,0}
 \frenchspacing
 \pagenumbering{arabic}
 \oddsidemargin  0.3in	% levy okraj stranky; pripocte se 1 inch
@@ -145,25 +150,28 @@ Department of Theory of Electrical Engineering, Faculty of Electrical Engineerin
 			\frac{1}{\mu}\int_{\Omega}\nabla A \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla A\cdot \mathbf{n}\right)\ \varphi 
 			 - \int_{\Omega} \gamma \left[\mathbf{v} \times \left( \nabla \times A \right)\right]\,\varphi & = & 0
 		\end{eqnarray}
-		\subsection{Component-wise}
+		\subsection{Component-wise residual (all values from previous iteration)}
 		\begin{eqnarray}
-			\int_{\Omega} \left(v_x \frac{v_x}{\partial x} + v_y \frac{v_x}{\partial y} + v_z \frac{v_x}{\partial z}\right) \varphi
+			\int_{\Omega} \left({v_x} \frac{v_x}{\partial x} + v_y \frac{v_x}{\partial y} + v_z \frac{v_x}{\partial z}\right) \varphi
 			- \int_{\Omega} p \frac{\partial \varphi}{\partial x}
 			+ \frac{1}{Re} \int_{\Omega} \nabla v_x \cdot \nabla \varphi
-			\nonumber & -\\- \int_{\Omega} \left({\mathbf{J}_{ext}}_y C_z - {\mathbf{J}_{ext}}_z C_y\right) \varphi			
-			- \int_{\Omega} \sigma \left({\mathbf{J}_{ext}}_z C_x C_z - {\mathbf{J}_{ext}}_x C_z C_z - {\mathbf{J}_{ext}}_x C_y C_y + {\mathbf{J}_{ext}}_y C_x C_y\right)\, \varphi
+			\nonumber & -\\
+			- \int_{\Omega} \left({\mathbf{J}_{ext}}_y C_z - {\mathbf{J}_{ext}}_z C_y\right) \varphi			
+			- \int_{\Omega} \sigma \left(v_z C_x C_z - v_x C_z C_z - v_x C_y C_y + v_y C_x C_y\right)\, \varphi
 			& = & 0\nonumber \\
 			\int_{\Omega} \left(v_x \frac{v_y}{\partial x} + v_y \frac{v_y}{\partial y} + v_z \frac{v_y}{\partial z}\right) \varphi
 			- \int_{\Omega} p \frac{\partial \varphi}{\partial y}
 			+ \frac{1}{Re} \int_{\Omega} \nabla v_y \cdot \nabla \varphi
-			\nonumber & -\\- \int_{\Omega} \left({\mathbf{J}_{ext}}_z C_x - {\mathbf{J}_{ext}}_x C_z\right) \varphi			
-			- \int_{\Omega} \sigma \left({\mathbf{J}_{ext}}_x C_y C_x - {\mathbf{J}_{ext}}_y C_x C_x - {\mathbf{J}_{ext}}_y C_z C_z + {\mathbf{J}_{ext}}_z C_y C_z\right)\, \varphi
+			\nonumber & -\\
+			- \int_{\Omega} \left({\mathbf{J}_{ext}}_z C_x - {\mathbf{J}_{ext}}_x C_z\right) \varphi			
+			- \int_{\Omega} \sigma \left(v_x C_y C_x - v_y C_x C_x - v_y C_z C_z + v_z C_y C_z\right)\, \varphi
 			& = & 0\nonumber \\
 			\int_{\Omega} \left(v_x \frac{v_z}{\partial x} + v_y \frac{v_z}{\partial y} + v_z \frac{v_z}{\partial z}\right) \varphi
 			- \int_{\Omega} p \frac{\partial \varphi}{\partial z}
 			+ \frac{1}{Re} \int_{\Omega} \nabla v_z \cdot \nabla \varphi
-			\nonumber & -\\- \int_{\Omega} \left({\mathbf{J}_{ext}}_x C_y - {\mathbf{J}_{ext}}_y C_x\right) \varphi			
-			- \int_{\Omega} \sigma \left({\mathbf{J}_{ext}}_y C_z C_y - {\mathbf{J}_{ext}}_z C_y C_y - {\mathbf{J}_{ext}}_z C_x C_x + {\mathbf{J}_{ext}}_x C_z C_x\right)\, \varphi
+			\nonumber & -\\
+			- \int_{\Omega} \left({\mathbf{J}_{ext}}_x C_y - {\mathbf{J}_{ext}}_y C_x\right) \varphi			
+			- \int_{\Omega} \sigma \left(v_y C_z C_y - v_z C_y C_y - v_z C_x C_x + v_x C_z C_x\right)\, \varphi
 			& = & 0\nonumber \\			
 			\int_{\Omega} \left(\frac{\partial v_x}{\partial x} + \frac{\partial v_y}{\partial y} + \frac{\partial v_z}{\partial z}\right) \varphi & = & 0\nonumber \\
 			\frac{1}{\mu}\int_{\Omega}\nabla A_x \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla A_x\cdot \mathbf{n}\right)\ \varphi 
@@ -172,6 +180,48 @@ Department of Theory of Electrical Engineering, Faculty of Electrical Engineerin
 			 - \int_{\Omega} \gamma \left(v_z C_x - v_x C_z\right)\,\varphi & = & 0\nonumber \\
 			\frac{1}{\mu}\int_{\Omega}\nabla A_z \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla A_z\cdot \mathbf{n}\right)\ \varphi 
 			 - \int_{\Omega} \gamma \left(v_x C_y - v_y C_x\right)\,\varphi & = & 0\nonumber \\
+			 \nonumber 
+		\end{eqnarray}
+		\subsection{Expanding the residual}
+		\begin{eqnarray}
+			\int_{\Omega} \left(\textcolor{red}{v_x} \frac{\textcolor{red}{v_x}}{\partial x} + \textcolor{blue}{v_y} \frac{\textcolor{red}{v_x}}{\partial y} + \textcolor{green}{v_z} \frac{\textcolor{red}{v_x}}{\partial z}\right) \varphi
+			- \int_{\Omega} \textcolor{orange}{p} \frac{\partial \varphi}{\partial x}
+			+ \frac{1}{Re} \int_{\Omega} \nabla \textcolor{red}{v_x} \cdot \nabla \varphi
+			\nonumber & -\\
+			- \int_{\Omega} \left[{\mathbf{J}_{ext}}_y \left(\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - \frac{\partial \textcolor{darkRed}{A_x}}{\partial y}\right) - {\mathbf{J}_{ext}}_z \left(\frac{\partial \textcolor{darkRed}{A_x}}{\partial z} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\right)\right] \varphi			
+			\nonumber & -\\
+			- \int_{\Omega} \sigma \textcolor{green}{v_z} \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} - \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} + \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} \right) \varphi& +\nonumber \\			
+			+ \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - 2 \frac{\partial \textcolor{darkBlue}{A_y}}{\partial x}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} + \frac{\partial \textcolor{darkRed}{A_x}}{\partial y}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} \right)\, \varphi& +\nonumber \\			
+			+ \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkRed}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial z} - 2 \frac{\partial \textcolor{darkRed}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} + \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} \right)\, \varphi& -\nonumber \\			
+			- \int_{\Omega} \sigma \textcolor{blue}{v_y} \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial z} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} - \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial z}  + \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} \right)\, \varphi& = & 0 \\			
+			\int_{\Omega} \left(\textcolor{red}{v_x} \frac{\textcolor{blue}{v_y}}{\partial x} + \textcolor{blue}{v_y} \frac{\textcolor{blue}{v_y}}{\partial y} + \textcolor{green}{v_z} \frac{\textcolor{blue}{v_y}}{\partial z}\right) \varphi
+			- \int_{\Omega} \textcolor{orange}{p} \frac{\partial \varphi}{\partial y}
+			+ \frac{1}{Re} \int_{\Omega} \nabla \textcolor{blue}{v_y} \cdot \nabla \varphi
+			\nonumber & -\\
+			- \int_{\Omega} \left[{\mathbf{J}_{ext}}_z \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y} - \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\right) - {\mathbf{J}_{ext}}_x \left(\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - \frac{\partial \textcolor{darkRed}{A_x}}{\partial y}\right)\right] \varphi			
+			\nonumber & -\\
+			- \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial z} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} - \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial z}  + \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} \right)\, \varphi& +\nonumber \\			
+			+ \int_{\Omega} \sigma \textcolor{blue}{v_y} \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y} - 2 \frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial z} + \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial z} \right)\, \varphi& +\nonumber \\			
+			+ \int_{\Omega} \sigma \textcolor{blue}{v_y} \left(\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - 2 \frac{\partial \textcolor{darkBlue}{A_y}}{\partial x}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} + \frac{\partial \textcolor{darkRed}{A_x}}{\partial y}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} \right)\, \varphi& -\nonumber \\			
+			- \int_{\Omega} \sigma \textcolor{green}{v_z} \left(\frac{\partial \textcolor{darkRed}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - \frac{\partial \textcolor{darkRed}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x}  + \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} \right)\, \varphi& = & 0 \\			
+			\int_{\Omega} \left(\textcolor{red}{v_x} \frac{\textcolor{green}{v_z}}{\partial x} + \textcolor{blue}{v_y} \frac{\textcolor{green}{v_z}}{\partial y} + \textcolor{green}{v_z} \frac{\textcolor{green}{v_z}}{\partial z}\right) \varphi
+			- \int_{\Omega} \textcolor{orange}{p} \frac{\partial \varphi}{\partial z}
+			+ \frac{1}{Re} \int_{\Omega} \nabla \textcolor{green}{v_z} \cdot \nabla \varphi \nonumber & -\\
+			- \int_{\Omega} \left[{\mathbf{J}_{ext}}_x \left(\frac{\partial \textcolor{darkRed}{A_x}}{\partial z} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\right) - {\mathbf{J}_{ext}}_y \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y} - \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\right)\right)] \varphi			
+			\nonumber & -\\			- \int_{\Omega} \sigma \textcolor{blue}{v_y} \left(\frac{\partial \textcolor{darkRed}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - \frac{\partial \textcolor{darkRed}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x}  + \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} \right)\, \varphi& +\nonumber \\			
+			+ \int_{\Omega} \sigma \textcolor{green}{v_z} \left(\frac{\partial \textcolor{darkRed}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial z} - 2 \frac{\partial \textcolor{darkRed}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} + \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} \right)\, \varphi& +\nonumber \\			
+			+ \int_{\Omega} \sigma \textcolor{green}{v_z} \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y} - 2 \frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial z} + \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial z} \right)\, \varphi& -\nonumber \\			
+			- \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} - \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} + \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} \right)\, \varphi& = & 0 \\				
+			\int_{\Omega} \left(\frac{\partial \textcolor{red}{v_x}}{\partial x} + \frac{\partial \textcolor{blue}{v_y}}{\partial y} + \frac{\partial \textcolor{green}{v_z}}{\partial z}\right) \varphi & = & 0 \\
+			\frac{1}{\mu}\int_{\Omega}\nabla \textcolor{darkRed}{A_x} \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla \textcolor{darkRed}{A_x}\cdot \mathbf{n}\right)\ \varphi 
+			 \nonumber& - \\
+			-  \int_{\Omega} \gamma \left[\textcolor{blue}{v_y} \left(\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - \frac{\partial \textcolor{darkRed}{A_x}}{\partial y}\right) - \textcolor{green}{v_z} \left(\frac{\partial \textcolor{darkRed}{A_x}}{\partial z} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\right)\right]\,\varphi & = & 0 \\			
+			\frac{1}{\mu}\int_{\Omega}\nabla \textcolor{darkBlue}{A_y} \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla \textcolor{darkBlue}{A_y}\cdot \mathbf{n}\right)\ \varphi 
+			 \nonumber& - \\
+			- \int_{\Omega} \gamma \left[\textcolor{green}{v_z} \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y} - \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\right) - \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - \frac{\partial \textcolor{darkRed}{A_x}}{\partial y}\right)\right]\,\varphi & = & 0 \\			
+			\frac{1}{\mu}\int_{\Omega}\nabla \textcolor{darkGreen}{A_z} \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla \textcolor{darkGreen}{A_z}\cdot \mathbf{n}\right)\ \varphi 
+			 \nonumber& - \\
+			-  \int_{\Omega} \gamma \left[\textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkRed}{A_x}}{\partial z} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\right) - \textcolor{blue}{v_y} \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y} - \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\right)\right]\,\varphi & = & 0 \\
 			 \nonumber 
 		\end{eqnarray}
 		
