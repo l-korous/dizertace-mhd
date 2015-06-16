@@ -651,6 +651,7 @@ namespace Step15
     std::vector<dealii::Tensor<1, dim> > v_prev(n_q_points, dealii::Tensor<1, dim>(dim));
     std::vector<dealii::Vector<double> > old_solution_values(n_q_points, dealii::Vector<double>(COMPONENT_COUNT));
     std::vector<std::vector<dealii::Tensor<1, dim> > > old_solution_gradients(n_q_points, std::vector<dealii::Tensor<1, dim> >(COMPONENT_COUNT));
+    std::vector<std::vector<dealii::Tensor<1, dim> > > A_prev_gradients(n_q_points, std::vector<dealii::Tensor<1, dim> >(dim));
 
     std::vector<int> components(dofs_per_cell);
 
@@ -662,6 +663,12 @@ namespace Step15
     {
       for (int j = 0; j < dim; j++)
         v_prev[i][j] = old_solution_values[i][j];
+    }
+    // Only magnetism gradients for simpler form expressions
+    for (int i = 0; i < old_solution_gradients.size(); i++)
+    {
+      for (int j = 0; j < dim; j++)
+        A_prev_gradients[i][j] = old_solution_gradients[i][j + dim + 1];
     }
 
     // curl A from the previous iteration.
@@ -689,8 +696,11 @@ namespace Step15
     {
       for (unsigned int i = 0; i < dofs_per_cell; ++i)
       {
+        int components_mag_i = components[i] - dim - 1;
         for (unsigned int j = 0; j < dofs_per_cell; ++j)
         {
+          int components_mag_j = components[j] - dim - 1;
+
           // Velocity forms
           if (components[i] < dim && components[j] < dim)
           {
@@ -765,22 +775,25 @@ namespace Step15
 #define v_y v_prev[q_point][1]
 #define v_z v_prev[q_point][2]
 
-#define P_x_y old_solution_gradients[q_point][4][1]
-#define P_x_z old_solution_gradients[q_point][4][2]
+              // Previous derivatives - we never need An_k_k
+#define An_x_y old_solution_gradients[q_point][4][1]
+#define An_x_z old_solution_gradients[q_point][4][2]
 
-#define P_y_x old_solution_gradients[q_point][5][0]
-#define P_y_z old_solution_gradients[q_point][5][2]
+#define An_y_x old_solution_gradients[q_point][5][0]
+#define An_y_z old_solution_gradients[q_point][5][2]
 
-#define P_z_x old_solution_gradients[q_point][6][0]
-#define P_z_y old_solution_gradients[q_point][6][1]
+#define An_z_x old_solution_gradients[q_point][6][0]
+#define An_z_y old_solution_gradients[q_point][6][1]
 
+              // Previous curl
 #define C_x C[q_point][0]
 #define C_y C[q_point][1]
 #define C_z C[q_point][2]
 
-#define u_x shape_grad[j][q_point][0]
-#define u_y shape_grad[j][q_point][1]
-#define u_z shape_grad[j][q_point][2]
+              // Current A - ith component (component the derivative is with respect to).
+#define Ai_x shape_grad[j][q_point][0]
+#define Ai_y shape_grad[j][q_point][1]
+#define Ai_z shape_grad[j][q_point][2]
 #pragma endregion
               double value = 0.;
               switch (components[i])
@@ -789,13 +802,18 @@ namespace Step15
                 switch (components[j] - dim - 1)
                 {
                 case 0:
-                  value = -(v_z * C_x * u_y) - (v_x * (2. * P_x_y * u_y - 2. * P_y_x * u_y)) - (v_x * (2. * P_x_z * u_z - 2. * P_z_x * u_z)) + (v_y * C_x * u_z);
+                  value = (v_z * C_x * Ai_y) - (v_y * C_x * Ai_z)
+                    - (v_x * 2. * C_z * Ai_y) + (v_x * 2. * C_y * Ai_z);
                   break;
                 case 1:
-                  value = (v_z * (P_z_y * u_x - (P_y_x * u_z + P_y_z * u_x) + P_x_y * u_z)) - (v_x * (2. * P_y_x * u_x - 2. * P_x_y * u_x)) - (v_y * C_y * u_z);
+                  value = (v_y * C_y * Ai_z)
+                    + (v_x * 2. * C_z * Ai_x)
+                    - (v_z * (C_x * Ai_x - C_z * Ai_z));
                   break;
                 case 2:
-                  value = (v_z * C_z * u_y) - (v_x * (2. * P_z_x * u_x - 2. * P_x_z * u_x)) + (v_y * (P_x_z * u_y - (P_z_x * u_y + P_z_y * u_x) + P_y_z * u_x));
+                  value = -(v_z * C_z * Ai_y)
+                    - (v_x * 2. * C_y * Ai_x)
+                    - (v_y * (C_y * Ai_y - C_x * Ai_x));
                   break;
                 }
                 break;
@@ -804,13 +822,18 @@ namespace Step15
                 switch (components[j] - dim - 1)
                 {
                 case 0:
-                  value = (v_x * C_x * u_z) - (v_y * (2. * P_x_y * u_y - 2. * P_y_x * u_y)) + (v_z * (P_y_x * u_z - (P_x_z * u_y + P_x_y * u_z) + P_z_x * u_y));
+                  value = -(v_x * C_x * Ai_z)
+                    - (v_y * 2. * C_z * Ai_y)
+                    - (v_z * (C_z * Ai_z - C_y * Ai_y));
                   break;
                 case 1:
-                  value = (-v_x * C_y * u_z) - (v_y * (2. * P_y_z * u_z - 2. * P_z_y * u_z)) - (v_y * (2.* P_y_x * u_x - 2. * P_x_y * u_x)) + (v_z * C_y * u_x);
+                  value = (v_x * C_y * Ai_z) - (v_z * C_y * Ai_x)
+                    - (v_y * 2. * C_x * Ai_z) + (v_y * 2.* C_z * Ai_x);
                   break;
                 case 2:
-                  value = (v_x * (P_x_z * u_y - (P_z_y * u_x + P_z_x * u_y) + P_y_z * u_x)) - (v_y * (2. * P_z_y * u_y - 2. * P_y_z * u_y)) - (v_z * C_z * u_x);
+                  value = (v_z * C_z * Ai_x)
+                    + (v_y * 2. * C_x * Ai_y)
+                    - (v_x * (C_y * Ai_y - C_x * Ai_x));
                   break;
                 }
                 break;
@@ -819,18 +842,23 @@ namespace Step15
                 switch (components[j] - dim - 1)
                 {
                 case 0:
-                  value = (v_y * (P_y_x * u_y - (P_x_y * u_z + P_x_z * u_y) + P_z_x * u_y)) - (v_z * (2. * P_x_z * u_z - 2. * P_z_x * u_z)) - (v_x * C_x * u_y);
+                  value = (v_x * C_x * Ai_y)
+                    + (v_z * 2. * C_y * Ai_z)
+                    - (v_y * (C_z * Ai_z - C_y * Ai_y));
                   break;
                 case 1:
-                  value = (v_y * C_y * u_x) - (v_z * (2. * P_y_z * u_z - 2. * P_z_y * u_z)) + (v_x * (P_z_y * u_x - (P_y_z * u_x + P_y_x * u_z) + P_x_y * u_z));
+                  value = -(v_y * C_y * Ai_x)
+                    - (v_z * 2. * C_x * Ai_z)
+                    - (v_x * (C_x * Ai_x - C_z * Ai_z));
                   break;
                 case 2:
-                  value = (-v_y * C_z * P_z_x) - (v_z * (2. * P_z_x * u_x - 2. * P_x_z * u_x)) - (v_z * (2. * P_z_y * u_y - 2. * P_y_z * u_y)) + (v_x * C_z * u_y);
+                  value = (v_y * C_z * Ai_x) - (v_x * C_z * Ai_y)
+                    - (v_z * 2. * C_y * Ai_x) + (v_z * 2. * C_x * Ai_y);
                   break;
                 }
                 break;
               }
-              copy_data.cell_matrix(i, j) -= SIGMA * value
+              copy_data.cell_matrix(i, j) += SIGMA * value
                 * shape_value[i][q_point]
                 * JxW[q_point];
             }
@@ -841,7 +869,7 @@ namespace Step15
             {
               // (J_ext x (\Nabla x A))
               // - first part (coinciding indices)
-              if (components[i] == components[j] - dim - 1)
+              if (components[i] == components_mag_j)
               {
                 for (int other_component = 0; other_component < dim; other_component++)
                 {
@@ -857,7 +885,7 @@ namespace Step15
               // - second part (NON-coinciding indices)
               else
               {
-                copy_data.cell_matrix(i, j) -= J_EXT[components[j] - dim - 1]
+                copy_data.cell_matrix(i, j) -= J_EXT[components_mag_j]
                   * shape_value[i][q_point]
                   * shape_grad[j][q_point][components[i]]
                   * JxW[q_point];
@@ -1004,7 +1032,7 @@ namespace Step15
                   {
                     double val = J_EXT[other_component]
                       * shape_value[i][q_point]
-                      * old_solution_gradients[q_point][j + dim + 1][other_component]
+                      * A_prev_gradients[q_point][j][other_component]
                       * JxW[q_point];
 
                     copy_data.cell_rhs(i) += val;
@@ -1014,11 +1042,11 @@ namespace Step15
               // - second part (NON-coinciding indices)
               else
               {
-                double val = -J_EXT[j]
+                double val = J_EXT[j]
                   * shape_value[i][q_point]
-                  * old_solution_gradients[q_point][j + dim + 1][components[i]]
+                  * A_prev_gradients[q_point][j][components[i]]
                   * JxW[q_point];
-                copy_data.cell_rhs(i) += val;
+                copy_data.cell_rhs(i) -= val;
               }
             }
           }
@@ -1042,7 +1070,7 @@ namespace Step15
         {
           // Laplace
           copy_data.cell_rhs(i) += shape_grad[i][q_point]
-            * old_solution_gradients[q_point][components[i]]
+            * A_prev_gradients[q_point][components_mag_i]
             * JxW[q_point]
             / (MU * MU_R);
 
@@ -1061,9 +1089,9 @@ namespace Step15
           {
             for (unsigned int j = 0; j < dim; ++j)
             {
-              if (components[i] > dim && (components[i] != (j + dim + 1)))
+              if (components_mag_i != j)
               {
-                copy_data.cell_rhs(i) -= SIGMA * (old_solution_gradients[q_point][j + dim + 1][components[i] - dim - 1] - old_solution_gradients[q_point][components[i]][j])
+                copy_data.cell_rhs(i) -= SIGMA * (A_prev_gradients[q_point][j][components_mag_i] - A_prev_gradients[q_point][components_mag_i][j])
                   * shape_value[i][q_point]
                   * v_prev[q_point][j]
                   * JxW[q_point];

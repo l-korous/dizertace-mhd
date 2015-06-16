@@ -25,9 +25,11 @@
 \usepackage{amssymb,amsmath}
 \usepackage{float}
 \usepackage{color}
-\definecolor{darkRed}{rgb}{0.6,0.2,0.2}
-\definecolor{darkBlue}{rgb}{0.2,0.2,0.6}
-\definecolor{darkGreen}{rgb}{0.2,0.6,0.2}
+\definecolor{blu}{rgb}{0.0,0.0,1.0}
+\definecolor{gre}{rgb}{0.0,1,0.0}
+\definecolor{darkred}{rgb}{0.6,0.2,0.2}
+\definecolor{darkblu}{rgb}{0.2,0.2,0.6}
+\definecolor{darkgre}{rgb}{0.2,0.6,0.2}
 \definecolor{orange}{rgb}{1,0.5,0}
 \frenchspacing
 \pagenumbering{arabic}
@@ -184,98 +186,267 @@ Department of Theory of Electrical Engineering, Faculty of Electrical Engineerin
 		\end{eqnarray}
 		\subsection{Expanding the residual}
 		\begin{eqnarray}
-			\int_{\Omega} \left(\textcolor{red}{v_x} \frac{\textcolor{red}{v_x}}{\partial x} + \textcolor{blue}{v_y} \frac{\textcolor{red}{v_x}}{\partial y} + \textcolor{green}{v_z} \frac{\textcolor{red}{v_x}}{\partial z}\right) \varphi
+			\int_{\Omega} \left(\textcolor{red}{v_x} \frac{\textcolor{red}{v_x}}{\partial x} + \textcolor{blu}{v_y} \frac{\textcolor{red}{v_x}}{\partial y} + \textcolor{gre}{v_z} \frac{\textcolor{red}{v_x}}{\partial z}\right) \varphi
 			- \int_{\Omega} \textcolor{orange}{p} \frac{\partial \varphi}{\partial x}
 			+ \frac{1}{Re} \int_{\Omega} \nabla \textcolor{red}{v_x} \cdot \nabla \varphi
 			\nonumber & -\\
-			- \int_{\Omega} \left[{\mathbf{J}_{ext}}_y \left(\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - \frac{\partial \textcolor{darkRed}{A_x}}{\partial y}\right) - {\mathbf{J}_{ext}}_z \left(\frac{\partial \textcolor{darkRed}{A_x}}{\partial z} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\right)\right] \varphi			
+			- \int_{\Omega} \left[{\mathbf{J}_{ext}}_y \left(\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkred}{A_x}}{\partial y}\right) - {\mathbf{J}_{ext}}_z \left(\frac{\partial \textcolor{darkred}{A_x}}{\partial z} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\right)\right] \varphi			
 			\nonumber & -\\
-			- \int_{\Omega} \sigma \textcolor{green}{v_z} \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} - \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} + \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} \right) \varphi& +\nonumber \\			
-			+ \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - 2 \frac{\partial \textcolor{darkBlue}{A_y}}{\partial x}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} + \frac{\partial \textcolor{darkRed}{A_x}}{\partial y}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} \right)\, \varphi& +\nonumber \\			
-			+ \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkRed}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial z} - 2 \frac{\partial \textcolor{darkRed}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} + \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} \right)\, \varphi& -\nonumber \\			
-			- \int_{\Omega} \sigma \textcolor{blue}{v_y} \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial z} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} - \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial z}  + \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} \right)\, \varphi& = & F_0 = 0 \\			
-			\int_{\Omega} \left(\textcolor{red}{v_x} \frac{\textcolor{blue}{v_y}}{\partial x} + \textcolor{blue}{v_y} \frac{\textcolor{blue}{v_y}}{\partial y} + \textcolor{green}{v_z} \frac{\textcolor{blue}{v_y}}{\partial z}\right) \varphi
+			- \int_{\Omega} \sigma \textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} - \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} + \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} \right) \varphi& +\nonumber \\			
+			+ \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkblu}{A_y}}{\partial x}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - 2 \frac{\partial \textcolor{darkblu}{A_y}}{\partial x}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} + \frac{\partial \textcolor{darkred}{A_x}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} \right)\, \varphi& +\nonumber \\			
+			+ \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkred}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z} - 2 \frac{\partial \textcolor{darkred}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} + \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} \right)\, \varphi& -\nonumber \\			
+			- \int_{\Omega} \sigma \textcolor{blu}{v_y} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} - \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z}  + \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} \right)\, \varphi& = & F_0 = 0 \\			
+			\int_{\Omega} \left(\textcolor{red}{v_x} \frac{\textcolor{blu}{v_y}}{\partial x} + \textcolor{blu}{v_y} \frac{\textcolor{blu}{v_y}}{\partial y} + \textcolor{gre}{v_z} \frac{\textcolor{blu}{v_y}}{\partial z}\right) \varphi
 			- \int_{\Omega} \textcolor{orange}{p} \frac{\partial \varphi}{\partial y}
-			+ \frac{1}{Re} \int_{\Omega} \nabla \textcolor{blue}{v_y} \cdot \nabla \varphi
+			+ \frac{1}{Re} \int_{\Omega} \nabla \textcolor{blu}{v_y} \cdot \nabla \varphi
 			\nonumber & -\\
-			- \int_{\Omega} \left[{\mathbf{J}_{ext}}_z \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y} - \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\right) - {\mathbf{J}_{ext}}_x \left(\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - \frac{\partial \textcolor{darkRed}{A_x}}{\partial y}\right)\right] \varphi			
+			- \int_{\Omega} \left[{\mathbf{J}_{ext}}_z \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y} - \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\right) - {\mathbf{J}_{ext}}_x \left(\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkred}{A_x}}{\partial y}\right)\right] \varphi			
 			\nonumber & -\\
-			- \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial z} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} - \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial z}  + \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} \right)\, \varphi& +\nonumber \\			
-			+ \int_{\Omega} \sigma \textcolor{blue}{v_y} \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y} - 2 \frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial z} + \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial z} \right)\, \varphi& +\nonumber \\			
-			+ \int_{\Omega} \sigma \textcolor{blue}{v_y} \left(\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - 2 \frac{\partial \textcolor{darkBlue}{A_y}}{\partial x}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} + \frac{\partial \textcolor{darkRed}{A_x}}{\partial y}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} \right)\, \varphi& -\nonumber \\			
-			- \int_{\Omega} \sigma \textcolor{green}{v_z} \left(\frac{\partial \textcolor{darkRed}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - \frac{\partial \textcolor{darkRed}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x}  + \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} \right)\, \varphi& = & F_1 = 0 \\			
-			\int_{\Omega} \left(\textcolor{red}{v_x} \frac{\textcolor{green}{v_z}}{\partial x} + \textcolor{blue}{v_y} \frac{\textcolor{green}{v_z}}{\partial y} + \textcolor{green}{v_z} \frac{\textcolor{green}{v_z}}{\partial z}\right) \varphi
+			- \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} - \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z}  + \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} \right)\, \varphi& +\nonumber \\			
+			+ \int_{\Omega} \sigma \textcolor{blu}{v_y} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial y} - 2 \frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial z} + \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial z} \right)\, \varphi& +\nonumber \\			
+			+ \int_{\Omega} \sigma \textcolor{blu}{v_y} \left(\frac{\partial \textcolor{darkblu}{A_y}}{\partial x}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - 2 \frac{\partial \textcolor{darkblu}{A_y}}{\partial x}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} + \frac{\partial \textcolor{darkred}{A_x}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} \right)\, \varphi& -\nonumber \\			
+			- \int_{\Omega} \sigma \textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkred}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkred}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x}  + \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} \right)\, \varphi& = & F_1 = 0 \\			
+			\int_{\Omega} \left(\textcolor{red}{v_x} \frac{\textcolor{gre}{v_z}}{\partial x} + \textcolor{blu}{v_y} \frac{\textcolor{gre}{v_z}}{\partial y} + \textcolor{gre}{v_z} \frac{\textcolor{gre}{v_z}}{\partial z}\right) \varphi
 			- \int_{\Omega} \textcolor{orange}{p} \frac{\partial \varphi}{\partial z}
-			+ \frac{1}{Re} \int_{\Omega} \nabla \textcolor{green}{v_z} \cdot \nabla \varphi \nonumber & -\\
-			- \int_{\Omega} \left[{\mathbf{J}_{ext}}_x \left(\frac{\partial \textcolor{darkRed}{A_x}}{\partial z} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\right) - {\mathbf{J}_{ext}}_y \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y} - \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\right)\right)] \varphi			
-			\nonumber & -\\			- \int_{\Omega} \sigma \textcolor{blue}{v_y} \left(\frac{\partial \textcolor{darkRed}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - \frac{\partial \textcolor{darkRed}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x}  + \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} \right)\, \varphi& +\nonumber \\			
-			+ \int_{\Omega} \sigma \textcolor{green}{v_z} \left(\frac{\partial \textcolor{darkRed}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial z} - 2 \frac{\partial \textcolor{darkRed}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} + \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} \right)\, \varphi& +\nonumber \\			
-			+ \int_{\Omega} \sigma \textcolor{green}{v_z} \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y} - 2 \frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial z} + \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial z} \right)\, \varphi& -\nonumber \\			
-			- \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} - \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} + \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} \right)\, \varphi& = & F_2 = 0 \\				
-			\int_{\Omega} \left(\frac{\partial \textcolor{red}{v_x}}{\partial x} + \frac{\partial \textcolor{blue}{v_y}}{\partial y} + \frac{\partial \textcolor{green}{v_z}}{\partial z}\right) \varphi & = & F_3 = 0 \\
-			\frac{1}{\mu}\int_{\Omega}\nabla \textcolor{darkRed}{A_x} \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla \textcolor{darkRed}{A_x}\cdot \mathbf{n}\right)\ \varphi 
+			+ \frac{1}{Re} \int_{\Omega} \nabla \textcolor{gre}{v_z} \cdot \nabla \varphi \nonumber & -\\
+			- \int_{\Omega} \left[{\mathbf{J}_{ext}}_x \left(\frac{\partial \textcolor{darkred}{A_x}}{\partial z} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\right) - {\mathbf{J}_{ext}}_y \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y} - \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\right)\right)] \varphi			
+			\nonumber & -\\			- \int_{\Omega} \sigma \textcolor{blu}{v_y} \left(\frac{\partial \textcolor{darkred}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkred}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x}  + \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} \right)\, \varphi& +\nonumber \\			
+			+ \int_{\Omega} \sigma \textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkred}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z} - 2 \frac{\partial \textcolor{darkred}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} + \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} \right)\, \varphi& +\nonumber \\			
+			+ \int_{\Omega} \sigma \textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial y} - 2 \frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial z} + \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial z} \right)\, \varphi& -\nonumber \\			
+			- \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} - \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} + \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} \right)\, \varphi& = & F_2 = 0 \\				
+			\int_{\Omega} \left(\frac{\partial \textcolor{red}{v_x}}{\partial x} + \frac{\partial \textcolor{blu}{v_y}}{\partial y} + \frac{\partial \textcolor{gre}{v_z}}{\partial z}\right) \varphi & = & F_3 = 0 \\
+			\frac{1}{\mu}\int_{\Omega}\nabla \textcolor{darkred}{A_x} \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla \textcolor{darkred}{A_x}\cdot \mathbf{n}\right)\ \varphi 
 			 \nonumber& - \\
-			-  \int_{\Omega} \gamma \left[\textcolor{blue}{v_y} \left(\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - \frac{\partial \textcolor{darkRed}{A_x}}{\partial y}\right) - \textcolor{green}{v_z} \left(\frac{\partial \textcolor{darkRed}{A_x}}{\partial z} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\right)\right]\,\varphi & = & F_4 = 0 \\			
-			\frac{1}{\mu}\int_{\Omega}\nabla \textcolor{darkBlue}{A_y} \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla \textcolor{darkBlue}{A_y}\cdot \mathbf{n}\right)\ \varphi 
+			-  \int_{\Omega} \gamma \left[\textcolor{blu}{v_y} \left(\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkred}{A_x}}{\partial y}\right) - \textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkred}{A_x}}{\partial z} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\right)\right]\,\varphi & = & F_4 = 0 \\			
+			\frac{1}{\mu}\int_{\Omega}\nabla \textcolor{darkblu}{A_y} \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla \textcolor{darkblu}{A_y}\cdot \mathbf{n}\right)\ \varphi 
 			 \nonumber& - \\
-			- \int_{\Omega} \gamma \left[\textcolor{green}{v_z} \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y} - \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\right) - \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - \frac{\partial \textcolor{darkRed}{A_x}}{\partial y}\right)\right]\,\varphi & = & F_5 = 0 \\			
-			\frac{1}{\mu}\int_{\Omega}\nabla \textcolor{darkGreen}{A_z} \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla \textcolor{darkGreen}{A_z}\cdot \mathbf{n}\right)\ \varphi 
+			- \int_{\Omega} \gamma \left[\textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y} - \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\right) - \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkred}{A_x}}{\partial y}\right)\right]\,\varphi & = & F_5 = 0 \\			
+			\frac{1}{\mu}\int_{\Omega}\nabla \textcolor{darkgre}{A_z} \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla \textcolor{darkgre}{A_z}\cdot \mathbf{n}\right)\ \varphi 
 			 \nonumber& - \\
-			-  \int_{\Omega} \gamma \left[\textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkRed}{A_x}}{\partial z} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\right) - \textcolor{blue}{v_y} \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y} - \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\right)\right]\,\varphi & = & F_6 = 0 \\
+			-  \int_{\Omega} \gamma \left[\textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkred}{A_x}}{\partial z} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\right) - \textcolor{blu}{v_y} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y} - \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\right)\right]\,\varphi & = & F_6 = 0 \\
 			 \nonumber 
 		\end{eqnarray}
 		
 		\subsection{Jacobian components}
 		\begin{eqnarray}
 		\frac{\partial F_0}{\partial \textcolor{red}{v_x}} & = &
-		\int_{\Omega} \left(\textcolor{red}{v_x^n} \frac{\textcolor{red}{v_x}}{\partial x} + \textcolor{red}{v_x} \frac{\textcolor{red}{v_x^n}}{\partial x} + \textcolor{blue}{v_y^n} \frac{\textcolor{red}{v_x}}{\partial y} + \textcolor{green}{v_z^n} \frac{\textcolor{red}{v_x}}{\partial z}\right) \varphi
+		\int_{\Omega} \left(\textcolor{red}{v_x^n} \frac{\textcolor{red}{v_x}}{\partial x} + \textcolor{red}{v_x} \frac{\textcolor{red}{v_x^n}}{\partial x} + \textcolor{blu}{v_y^n} \frac{\textcolor{red}{v_x}}{\partial y} + \textcolor{gre}{v_z^n} \frac{\textcolor{red}{v_x}}{\partial z}\right) \varphi
 			+ \frac{1}{Re} \int_{\Omega} \nabla \textcolor{red}{v_x} \cdot \nabla \varphi \nonumber \\
-			& + & \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkBlue}{A_y^n}}{\partial x}\,\frac{\partial \textcolor{darkBlue}{A_y^n}}{\partial x} - 2 \frac{\partial \textcolor{darkBlue}{A_y^n}}{\partial x}\,\frac{\partial \textcolor{darkRed}{A_x^n}}{\partial y} + \frac{\partial \textcolor{darkRed}{A_x^n}}{\partial y}\,\frac{\partial \textcolor{darkRed}{A_x^n}}{\partial y} \right)\, \varphi \nonumber \\				
-			& + & \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkRed}{A_x^n}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x^n}}{\partial z} - 2 \frac{\partial \textcolor{darkRed}{A_x^n}}{\partial z}\,\frac{\partial \textcolor{darkGreen}{A_z^n}}{\partial x} + \frac{\partial \textcolor{darkGreen}{A_z^n}}{\partial x}\,\frac{\partial \textcolor{darkGreen}{A_z^n}}{\partial x} \right)\, \varphi \\
-			\frac{\partial F_0}{\partial \textcolor{blue}{v_y}} & = &
-		\int_{\Omega} \textcolor{blue}{v_y} \frac{\textcolor{red}{v_x^n}}{\partial y} \varphi \nonumber  \\		
-			& - & \int_{\Omega} \sigma \textcolor{blue}{v_y} \left(\frac{\partial \textcolor{darkGreen}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkRed}{A_x^n}}{\partial z} - \frac{\partial \textcolor{darkGreen}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkGreen}{A_z^n}}{\partial x} - \frac{\partial \textcolor{darkBlue}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x^n}}{\partial z}  + \frac{\partial \textcolor{darkBlue}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkGreen}{A_z^n}}{\partial x} \right)\, \varphi \\			
-			\frac{\partial F_0}{\partial \textcolor{green}{v_z}} & = &
-		\int_{\Omega} \textcolor{green}{v_z} \frac{\textcolor{red}{v_x^n}}{\partial y} \varphi
+			& + & \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkblu}{A_y^n}}{\partial x}\,\frac{\partial \textcolor{darkblu}{A_y^n}}{\partial x} - 2 \frac{\partial \textcolor{darkblu}{A_y^n}}{\partial x}\,\frac{\partial \textcolor{darkred}{A_x^n}}{\partial y} + \frac{\partial \textcolor{darkred}{A_x^n}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x^n}}{\partial y} \right)\, \varphi \nonumber \\				
+			& + & \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkred}{A_x^n}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x^n}}{\partial z} - 2 \frac{\partial \textcolor{darkred}{A_x^n}}{\partial z}\,\frac{\partial \textcolor{darkgre}{A_z^n}}{\partial x} + \frac{\partial \textcolor{darkgre}{A_z^n}}{\partial x}\,\frac{\partial \textcolor{darkgre}{A_z^n}}{\partial x} \right)\, \varphi \\
+			\frac{\partial F_0}{\partial \textcolor{blu}{v_y}} & = &
+		\int_{\Omega} \textcolor{blu}{v_y} \frac{\textcolor{red}{v_x^n}}{\partial y} \varphi \nonumber  \\		
+			& - & \int_{\Omega} \sigma \textcolor{blu}{v_y} \left(\frac{\partial \textcolor{darkgre}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x^n}}{\partial z} - \frac{\partial \textcolor{darkgre}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkgre}{A_z^n}}{\partial x} - \frac{\partial \textcolor{darkblu}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x^n}}{\partial z}  + \frac{\partial \textcolor{darkblu}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkgre}{A_z^n}}{\partial x} \right)\, \varphi \\			
+			\frac{\partial F_0}{\partial \textcolor{gre}{v_z}} & = &
+		\int_{\Omega} \textcolor{gre}{v_z} \frac{\textcolor{red}{v_x^n}}{\partial y} \varphi
 			\nonumber \\
-			& - &\int_{\Omega} \sigma \textcolor{green}{v_z} \left(\frac{\partial \textcolor{darkGreen}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkBlue}{A_y^n}}{\partial x} - \frac{\partial \textcolor{darkGreen}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkRed}{A_x^n}}{\partial y} - \frac{\partial \textcolor{darkBlue}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkBlue}{A_y^n}}{\partial x} + \frac{\partial \textcolor{darkBlue}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x^n}}{\partial y} \right) \varphi \\			
+			& - &\int_{\Omega} \sigma \textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkgre}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkblu}{A_y^n}}{\partial x} - \frac{\partial \textcolor{darkgre}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x^n}}{\partial y} - \frac{\partial \textcolor{darkblu}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y^n}}{\partial x} + \frac{\partial \textcolor{darkblu}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x^n}}{\partial y} \right) \varphi \\			
 			\frac{\partial F_0}{\partial \textcolor{orange}{p}} & = &
-		- \int_{\Omega} \textcolor{orange}{p} \frac{\partial \varphi}{\partial x} \\			
-			\frac{\partial F_0}{\partial \textcolor{darkRed}{A_x}} & = &
-			\int_{\Omega} \left({\mathbf{J}_{ext}}_y \frac{\partial \textcolor{darkRed}{A_x}}{\partial y} + {\mathbf{J}_{ext}}_z \frac{\partial \textcolor{darkRed}{A_x}}{\partial z}\right) \varphi			
+		- \int_{\Omega} \textcolor{orange}{p} \frac{\partial \varphi}{\partial x}
+			\end{eqnarray}
+			
+			%F_0_x
+			\begin{eqnarray}
+			\frac{\partial F_0}{\partial \textcolor{darkred}{A_x}} & = &
+			\int_{\Omega} \left({\mathbf{J}_{ext}}_y \frac{\partial \textcolor{darkred}{A_x}}{\partial y} + {\mathbf{J}_{ext}}_z \frac{\partial \textcolor{darkred}{A_x}}{\partial z}\right) \varphi			
 			\nonumber \\
-			& + &\int_{\Omega} \sigma \textcolor{green}{v_z} \left(\frac{\partial \textcolor{darkGreen}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} - \frac{\partial \textcolor{darkBlue}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} \right) \varphi \nonumber \\			
-			& + & \int_{\Omega} \sigma \textcolor{red}{v_x} \left( 2 \frac{\partial \textcolor{darkRed}{A_x}}{\partial y}\,\frac{\partial \textcolor{darkRed}{A_x^n}}{\partial y} - 2 \frac{\partial \textcolor{darkBlue}{A_y^n}}{\partial x}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial y} \right)\, \varphi \nonumber \\			
-			& + & \int_{\Omega} \sigma \textcolor{red}{v_x} \left(2 \frac{\partial \textcolor{darkRed}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x^n}}{\partial z} - 2 \frac{\partial \textcolor{darkRed}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkGreen}{A_z^n}}{\partial x} \right)\, \varphi \nonumber \\			
-			& - & \int_{\Omega} \sigma \textcolor{blue}{v_y} \left(\frac{\partial \textcolor{darkGreen}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial z} - \frac{\partial \textcolor{darkBlue}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x}}{\partial z} \right)\, \varphi \\			
-			\frac{\partial F_0}{\partial \textcolor{darkBlue}{A_y}} & = &
-			-\int_{\Omega} {\mathbf{J}_{ext}}_y \frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} \varphi
+			& + &\int_{\Omega} \sigma \textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkgre}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} - \frac{\partial \textcolor{darkblu}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} \right) \varphi \nonumber \\			
+			& + & \int_{\Omega} \sigma \textcolor{red}{v_x} \left( 2 \frac{\partial \textcolor{darkred}{A_x}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x^n}}{\partial y} - 2 \frac{\partial \textcolor{darkblu}{A_y^n}}{\partial x}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} \right)\, \varphi \nonumber \\			
+			& + & \int_{\Omega} \sigma \textcolor{red}{v_x} \left(2 \frac{\partial \textcolor{darkred}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x^n}}{\partial z} - 2 \frac{\partial \textcolor{darkred}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkgre}{A_z^n}}{\partial x} \right)\, \varphi \nonumber \\			
+			& - & \int_{\Omega} \sigma \textcolor{blu}{v_y} \left(\frac{\partial \textcolor{darkgre}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z} - \frac{\partial \textcolor{darkblu}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z} \right)\, \varphi\\
+			 & = &
+			\int_{\Omega} \left({\mathbf{J}_{ext}}_y \frac{\partial \textcolor{darkred}{A_x}}{\partial y} + {\mathbf{J}_{ext}}_z \frac{\partial \textcolor{darkred}{A_x}}{\partial z}\right) \varphi			
 			\nonumber \\
-			& - & \int_{\Omega} \sigma \textcolor{green}{v_z} \left(\frac{\partial \textcolor{darkGreen}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - \frac{\partial \textcolor{darkBlue}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkBlue}{A_y^n}}{\partial x} + \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x^n}}{\partial y} \right) \varphi \nonumber \\			
-			& + &\int_{\Omega} \sigma \textcolor{red}{v_x} \left(2 \frac{\partial \textcolor{darkBlue}{A_y^n}}{\partial x}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - 2 \frac{\partial \textcolor{darkBlue}{A_y}}{\partial x}\,\frac{\partial \textcolor{darkRed}{A_x^n}}{\partial y}\right)\, \varphi \nonumber \\		
-			& + & \int_{\Omega} \sigma \textcolor{blue}{v_y} \left(\frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkRed}{A_x^n}}{\partial z} - \frac{\partial \textcolor{darkBlue}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkGreen}{A_z^n}}{\partial x} \right)\, \varphi \\			
-			\frac{\partial F_0}{\partial \textcolor{darkGreen}{A_z}} & = &
-			-\int_{\Omega} {\mathbf{J}_{ext}}_z \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} \varphi
+			& + &\int_{\Omega} \sigma  \textcolor{gre}{v_z}    C_x \frac{\partial \textcolor{darkred}{A_x}}{\partial y} \varphi \nonumber \\			
+			& - & \int_{\Omega} \sigma \textcolor{red}{v_x}\ 2\ C_z \frac{\partial \textcolor{darkred}{A_x}}{\partial y} \varphi \nonumber \\			
+			& + & \int_{\Omega} \sigma \textcolor{red}{v_x}\ 2\ C_y \frac{\partial \textcolor{darkred}{A_x}}{\partial z} \varphi \nonumber \\			
+			& - & \int_{\Omega} \sigma \textcolor{blu}{v_y}    C_x \frac{\partial \textcolor{darkred}{A_x}}{\partial z} \varphi
+						\end{eqnarray}
+						
+						%F_0_y
+			\begin{eqnarray}
+			\frac{\partial F_0}{\partial \textcolor{darkblu}{A_y}} & = &
+			-\int_{\Omega} {\mathbf{J}_{ext}}_y \frac{\partial \textcolor{darkblu}{A_y}}{\partial x} \varphi
 			\nonumber \\
-			& - & \int_{\Omega} \sigma \textcolor{green}{v_z} \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkBlue}{A_y}}{\partial x} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkRed}{A_x^n}}{\partial y}\right) \varphi \nonumber \\			
-			& - & \int_{\Omega} \sigma \textcolor{red}{v_x} \left( 2 \frac{\partial \textcolor{darkRed}{A_x^n}}{\partial z}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} - 2 \frac{\partial \textcolor{darkGreen}{A_z^n}}{\partial x}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} \right)\, \varphi \nonumber \\			
-			& - & \int_{\Omega} \sigma \textcolor{blue}{v_y} \left(\frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkRed}{A_x^n}}{\partial z} - \frac{\partial \textcolor{darkGreen}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} - \frac{\partial \textcolor{darkGreen}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkGreen}{A_z^n}}{\partial x} + \frac{\partial \textcolor{darkBlue}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkGreen}{A_z}}{\partial x} \right)\, \varphi
+			& - & \int_{\Omega} \sigma \textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkgre}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkblu}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y^n}}{\partial x} + \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x^n}}{\partial y} \right) \varphi \nonumber \\			
+			& + &\int_{\Omega} \sigma \textcolor{red}{v_x} \left(2 \frac{\partial \textcolor{darkblu}{A_y^n}}{\partial x}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - 2 \frac{\partial \textcolor{darkblu}{A_y}}{\partial x}\,\frac{\partial \textcolor{darkred}{A_x^n}}{\partial y}\right)\, \varphi \nonumber \\		
+			& + & \int_{\Omega} \sigma \textcolor{blu}{v_y} \left(\frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x^n}}{\partial z} - \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkgre}{A_z^n}}{\partial x} \right)\, \varphi\\
+			 & = &
+			-\int_{\Omega} {\mathbf{J}_{ext}}_y \frac{\partial \textcolor{darkblu}{A_y}}{\partial x} \varphi
+			\nonumber \\
+			& - &\int_{\Omega} \sigma  \textcolor{gre}{v_z} \left( C_x \frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - C_z \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\right)\, \varphi \nonumber \\			
+			& + & \int_{\Omega} \sigma \textcolor{red}{v_x}\ 2\ C_z \frac{\partial \textcolor{darkblu}{A_y}}{\partial x} \varphi \nonumber \\
+			& + & \int_{\Omega} \sigma \textcolor{blu}{v_y}    C_y \frac{\partial \textcolor{darkblu}{A_y}}{\partial z} \varphi
+					\end{eqnarray}
+					
+					%F_0_z
+			\begin{eqnarray}
+			\frac{\partial F_0}{\partial \textcolor{darkgre}{A_z}} & = &
+			-\int_{\Omega} {\mathbf{J}_{ext}}_z \frac{\partial \textcolor{darkgre}{A_z}}{\partial x} \varphi
+			\nonumber \\
+			& - & \int_{\Omega} \sigma \textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkblu}{A_y^n}}{\partial x} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x^n}}{\partial y}\right) \varphi \nonumber \\			
+			& - & \int_{\Omega} \sigma \textcolor{red}{v_x} \left( 2 \frac{\partial \textcolor{darkred}{A_x^n}}{\partial z}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} - 2 \frac{\partial \textcolor{darkgre}{A_z^n}}{\partial x}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} \right)\, \varphi \nonumber \\			
+			& - & \int_{\Omega} \sigma \textcolor{blu}{v_y} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x^n}}{\partial z} - \frac{\partial \textcolor{darkgre}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkgre}{A_z^n}}{\partial x} + \frac{\partial \textcolor{darkblu}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} \right)\, \varphi\\
+			 & = &
+			\int_{\Omega} \left({\mathbf{J}_{ext}}_y \frac{\partial \textcolor{darkred}{A_x}}{\partial y} + {\mathbf{J}_{ext}}_z \frac{\partial \textcolor{darkred}{A_x}}{\partial z}\right) \varphi			
+			\nonumber \\
+			& - &\int_{\Omega} \sigma  \textcolor{gre}{v_z}    C_z \frac{\partial \textcolor{darkgre}{A_z}}{\partial y} \varphi \nonumber \\			
+			& - & \int_{\Omega} \sigma \textcolor{red}{v_x}\ 2\ C_y \frac{\partial \textcolor{darkgre}{A_z}}{\partial x} \varphi \nonumber \\			
+			& - & \int_{\Omega} \sigma \textcolor{blu}{v_y} \left( C_y \frac{\partial \textcolor{darkgre}{A_z}}{\partial y} - C_x \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\right)\, \varphi
+		\end{eqnarray}
+		
+		%F_1_x
+			\begin{eqnarray}
+			\frac{\partial F_1}{\partial \textcolor{darkred}{A_x}} & = &
+			-\int_{\Omega} {\mathbf{J}_{ext}}_x \frac{\partial \textcolor{darkred}{A_x}}{\partial y} \varphi				
+			\nonumber \\
+			& - &\int_{\Omega} \sigma \textcolor{red}{v_x} \left(
+				\frac{\partial \textcolor{darkgre}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z}
+				- \frac{\partial \textcolor{darkblu}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z}
+				\right) \varphi \nonumber \\			
+			& + & \int_{\Omega} \sigma \textcolor{blu}{v_y} \left( 2 \frac{\partial \textcolor{darkred}{A_x}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x^n}}{\partial y} - 2 \frac{\partial \textcolor{darkblu}{A_y^n}}{\partial x}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} \right)\, \varphi \nonumber \\		
+			& - & \int_{\Omega} \sigma \textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkblu}{A_y^n}}{\partial x}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z} - \frac{\partial \textcolor{darkred}{A_x^n}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} - \frac{\partial \textcolor{darkred}{A_x^n}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z} + \frac{\partial \textcolor{darkgre}{A_z^n}}{\partial x}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} \right)\, \varphi\\
+			 & = &
+			-\int_{\Omega} {\mathbf{J}_{ext}}_x \frac{\partial \textcolor{darkred}{A_x}}{\partial y} \varphi	
+			\nonumber \\
+			& - &\int_{\Omega} \sigma  \textcolor{red}{v_x}    C_x \frac{\partial \textcolor{darkred}{A_x}}{\partial z} \varphi \nonumber \\			
+			& - & \int_{\Omega} \sigma \textcolor{blu}{v_y}\ 2\ C_z \frac{\partial \textcolor{darkred}{A_x}}{\partial y} \varphi \nonumber \\			
+			& - & \int_{\Omega} \sigma \textcolor{gre}{v_z}    \left( C_z \frac{\partial \textcolor{darkred}{A_x}}{\partial z} - C_y \frac{\partial \textcolor{darkred}{A_x}}{\partial y}\right)\, \varphi
+						\end{eqnarray}
+						
+						%F_1_y
+			\begin{eqnarray}
+			\frac{\partial F_1}{\partial \textcolor{darkblu}{A_y}} & = &
+			\int_{\Omega} \left({\mathbf{J}_{ext}}_z \frac{\partial \textcolor{darkblu}{A_y}}{\partial z} + {\mathbf{J}_{ext}}_x \frac{\partial \textcolor{darkblu}{A_y}}{\partial x}\right) \varphi		
+			\nonumber \\
+			& - &\int_{\Omega} \sigma \textcolor{red}{v_x} \left(
+				\frac{\partial \textcolor{darkgre}{A_z^n}}{\partial x}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial z}
+				- \frac{\partial \textcolor{darkred}{A_x^n}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial z}
+				\right) \varphi \nonumber \\			
+			& + & \int_{\Omega} \sigma \textcolor{blu}{v_y} \left( 2 \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y^n}}{\partial z} - 2 \frac{\partial \textcolor{darkgre}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial z} \right)\, \varphi \nonumber \\		
+			& + & \int_{\Omega} \sigma \textcolor{blu}{v_y} \left( 2 \frac{\partial \textcolor{darkblu}{A_y}}{\partial x}\,\frac{\partial \textcolor{darkblu}{A_y^n}}{\partial x} - 2 \frac{\partial \textcolor{darkred}{A_x^n}}{\partial y}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} \right)\, \varphi \nonumber \\		
+			& - & \int_{\Omega} \sigma \textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkred}{A_x^n}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkgre}{A_z^n}}{\partial x}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} \right)\, \varphi\\
+						 & = &
+			\int_{\Omega} \left({\mathbf{J}_{ext}}_z \frac{\partial \textcolor{darkblu}{A_y}}{\partial z} + {\mathbf{J}_{ext}}_x \frac{\partial \textcolor{darkblu}{A_y}}{\partial x}\right) \varphi		
+			\nonumber \\
+			& + &\int_{\Omega} \sigma  \textcolor{red}{v_x}    C_y \frac{\partial \textcolor{darkblu}{A_y}}{\partial z} \varphi \nonumber \\			
+			& - & \int_{\Omega} \sigma \textcolor{blu}{v_y}\ 2\ C_x \frac{\partial \textcolor{darkblu}{A_y}}{\partial z} \varphi \nonumber \\			
+			& + & \int_{\Omega} \sigma \textcolor{blu}{v_y}\ 2\ C_z \frac{\partial \textcolor{darkblu}{A_y}}{\partial x} \varphi \nonumber \\			
+			& - & \int_{\Omega} \sigma \textcolor{gre}{v_z}    C_y \frac{\partial \textcolor{darkblu}{A_y}}{\partial x} \varphi
+					\end{eqnarray}
+					
+					%F_1_z
+			\begin{eqnarray}
+			\frac{\partial F_1}{\partial \textcolor{darkgre}{A_z}} & = &
+			-\int_{\Omega} {\mathbf{J}_{ext}}_z \frac{\partial \textcolor{darkgre}{A_z}}{\partial y} \varphi				
+			\nonumber \\
+			& - & \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x^n}}{\partial z} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkgre}{A_z^n}}{\partial x} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkgre}{A_z^n}}{\partial y} + \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkblu}{A_y^n}}{\partial z} \right) \varphi \nonumber \\			
+			& + & \int_{\Omega} \sigma \textcolor{blu}{v_y} \left( 2 \frac{\partial \textcolor{darkgre}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial y} - 2 \frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkblu}{A_y^n}}{\partial z} \right)\, \varphi \nonumber \\			
+			& - & \int_{\Omega} \sigma \textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkred}{A_x^n}}{\partial y} - \frac{\partial \textcolor{darkblu}{A_y^n}}{\partial x}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} \right)\, \varphi\\
+			 & = &
+			-\int_{\Omega} {\mathbf{J}_{ext}}_z \frac{\partial \textcolor{darkgre}{A_z}}{\partial y} \varphi	
+			\nonumber \\
+			& - &\int_{\Omega} \sigma  \textcolor{red}{v_x}    \left(C_y \frac{\partial \textcolor{darkgre}{A_z}}{\partial y} - C_x \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\right) \varphi \nonumber \\			
+			& + & \int_{\Omega} \sigma \textcolor{blu}{v_y}\ 2\ C_x \frac{\partial \textcolor{darkgre}{A_z}}{\partial y} \varphi \nonumber \\			
+			& + & \int_{\Omega} \sigma \textcolor{gre}{v_z} C_z \frac{\partial \textcolor{darkgre}{A_z}}{\partial x} \varphi
+		\end{eqnarray}
+		
+		%F_2_x
+			\begin{eqnarray}
+			\frac{\partial F_2}{\partial \textcolor{darkred}{A_x}} & = &
+			-\int_{\Omega} {\mathbf{J}_{ext}}_x \frac{\partial \textcolor{darkred}{A_x}}{\partial z} \varphi				
+			\nonumber \\
+			& - &\int_{\Omega} \sigma \textcolor{blu}{v_y} \left(
+			\frac{\partial \textcolor{darkblu}{A_y^n}}{\partial x}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z}
+			- \frac{\partial \textcolor{darkred}{A_x^n}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y}
+			- \frac{\partial \textcolor{darkred}{A_x^n}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z}
+			+ \frac{\partial \textcolor{darkgre}{A_z^n}}{\partial x}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y}
+				\right) \varphi \nonumber \\			
+			& + &\int_{\Omega} \sigma \textcolor{gre}{v_z} \left(
+			2 \frac{\partial \textcolor{darkred}{A_x^n}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z}
+			- 2 \frac{\partial \textcolor{darkgre}{A_z^n}}{\partial x}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z}\right) \varphi \nonumber \\			
+			& + &\int_{\Omega} \sigma \textcolor{red}{v_x} \left(
+			\frac{\partial \textcolor{darkgre}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y}
+			- \frac{\partial \textcolor{darkblu}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y}
+				\right) \varphi \nonumber \\		
+			 & = &
+			-\int_{\Omega} {\mathbf{J}_{ext}}_x \frac{\partial \textcolor{darkred}{A_x}}{\partial z} \varphi				
+			\nonumber \\
+			& - &\int_{\Omega} \sigma  \textcolor{blu}{v_y} \left( C_z \frac{\partial \textcolor{darkred}{A_x}}{\partial z} - C_y \frac{\partial \textcolor{darkred}{A_x}}{\partial y}\right)\,\varphi \nonumber \\			
+			& + &\int_{\Omega} \sigma  \textcolor{red}{v_z} \ 2\ C_y \frac{\partial \textcolor{darkred}{A_x}}{\partial z} \varphi \nonumber \\			
+			& + & \int_{\Omega} \sigma \textcolor{gre}{v_x} C_x \frac{\partial \textcolor{darkred}{A_x}}{\partial y}  \varphi
+						\end{eqnarray}
+						
+						%F_2_y
+			\begin{eqnarray}
+			\frac{\partial F_2}{\partial \textcolor{darkblu}{A_y}} & = &
+			-\int_{\Omega} {\mathbf{J}_{ext}}_y \frac{\partial \textcolor{darkblu}{A_y}}{\partial z} \varphi				
+			\nonumber \\
+			& - &\int_{\Omega} \sigma \textcolor{blu}{v_y} \left(
+			\frac{\partial \textcolor{darkred}{A_x^n}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x}
+			- \frac{\partial \textcolor{darkgre}{A_z^n}}{\partial x}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x}
+				\right) \varphi \nonumber \\		
+			& + &\int_{\Omega} \sigma \textcolor{gre}{v_z} \left(
+			2 \frac{\partial \textcolor{darkblu}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial z}
+			- 2 \frac{\partial \textcolor{darkgre}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\right) \varphi \nonumber \\			
+			& - &\int_{\Omega} \sigma \textcolor{red}{v_x} \left(
+			\frac{\partial \textcolor{darkgre}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x}
+			- \frac{\partial \textcolor{darkblu}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x}
+			- \frac{\partial \textcolor{darkblu}{A_y^n}}{\partial x}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial z}
+			+ \frac{\partial \textcolor{darkred}{A_x^n}}{\partial y}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial z}
+				\right) \varphi \nonumber \\		
+			 & = &
+			-\int_{\Omega} {\mathbf{J}_{ext}}_y \frac{\partial \textcolor{darkblu}{A_y}}{\partial z} \varphi				
+			\nonumber \\
+			& - &\int_{\Omega} \sigma  \textcolor{blu}{v_y}    C_y \frac{\partial \textcolor{darkblu}{A_y}}{\partial x} \varphi \nonumber \\			
+			& - &\int_{\Omega} \sigma  \textcolor{red}{v_z} \ 2\ C_x \frac{\partial \textcolor{darkblu}{A_y}}{\partial z} \varphi \nonumber \\			
+			& - & \int_{\Omega} \sigma \textcolor{blu}{v_x} \left( C_x \frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - C_z \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\right)\,\varphi
+					\end{eqnarray}
+					
+					%F_2_z
+			\begin{eqnarray}
+			\frac{\partial F_2}{\partial \textcolor{darkgre}{A_z}} & = &
+			\int_{\Omega} \left({\mathbf{J}_{ext}}_x \frac{\partial \textcolor{darkgre}{A_z}}{\partial x} + {\mathbf{J}_{ext}}_y \frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\right)\, \varphi		
+			\nonumber \\
+			& + &\int_{\Omega} \sigma \textcolor{blu}{v_y} \left(
+			\frac{\partial \textcolor{darkblu}{A_y^n}}{\partial x}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x}
+			- \frac{\partial \textcolor{darkred}{A_x^n}}{\partial y}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x}
+							\right) \varphi \nonumber \\			
+			& + &\int_{\Omega} \sigma \textcolor{gre}{v_z} \left(
+			2 \frac{\partial \textcolor{darkgre}{A_z^n}}{\partial x}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x}
+			- 2 \frac{\partial \textcolor{darkred}{A_x^n}}{\partial z}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x}
+				\right) \varphi \nonumber \\		
+			& + &\int_{\Omega} \sigma \textcolor{gre}{v_z} \left(
+			2 \frac{\partial \textcolor{darkgre}{A_z^n}}{\partial y}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}
+			- 2 \frac{\partial \textcolor{darkblu}{A_y^n}}{\partial z}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}
+				\right) \varphi \nonumber \\			
+			& - &\int_{\Omega} \sigma \textcolor{red}{v_x} \left(
+			\frac{\partial \textcolor{darkblu}{A_y^n}}{\partial x}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}
+			- \frac{\partial \textcolor{darkred}{A_x^n}}{\partial y}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}
+				\right) \varphi \nonumber \\		
+			 & = &
+			\int_{\Omega} \left({\mathbf{J}_{ext}}_x \frac{\partial \textcolor{darkgre}{A_z}}{\partial x} + {\mathbf{J}_{ext}}_y \frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\right)\, \varphi		
+			\nonumber \\
+			& + &\int_{\Omega} \sigma  \textcolor{blu}{v_y}    C_z \frac{\partial \textcolor{darkred}{A_z}}{\partial x} \varphi \nonumber \\			
+			& - &\int_{\Omega} \sigma  \textcolor{red}{v_z}\ 2\ C_y \frac{\partial \textcolor{darkred}{A_z}}{\partial x} \varphi \nonumber \\			
+			& + & \int_{\Omega} \sigma \textcolor{blu}{v_z}\ 2\ C_x \frac{\partial \textcolor{darkred}{A_z}}{\partial y} \varphi \nonumber \\			
+			& - & \int_{\Omega} \sigma \textcolor{gre}{v_x}  C_z \frac{\partial \textcolor{darkred}{A_z}}{\partial y}  \varphi
 		\end{eqnarray}
 		
 		\begin{eqnarray}
 		\frac{\partial F_4}{\partial \textcolor{red}{v_x}} & = & 0 \\
-		\frac{\partial F_4}{\partial \textcolor{blue}{v_y}} & = &
-		-\int_{\Omega} \gamma \textcolor{blue}{v_y} \left(\frac{\partial \textcolor{darkBlue}{A_y^n}}{\partial x} - \frac{\partial \textcolor{darkRed}{A_x^n}}{\partial y}\right)\,\varphi  \\
-		\frac{\partial F_4}{\partial \textcolor{green}{v_z}} & = &
-		+\int_{\Omega} \gamma \textcolor{green}{v_z} \left(\frac{\partial \textcolor{darkRed}{A_x^n}}{\partial z} - \frac{\partial \textcolor{darkGreen}{A_z^n}}{\partial x}\right)\,\varphi\\
+		\frac{\partial F_4}{\partial \textcolor{blu}{v_y}} & = &
+		-\int_{\Omega} \gamma \textcolor{blu}{v_y} \left(\frac{\partial \textcolor{darkblu}{A_y^n}}{\partial x} - \frac{\partial \textcolor{darkred}{A_x^n}}{\partial y}\right)\,\varphi  \\
+		\frac{\partial F_4}{\partial \textcolor{gre}{v_z}} & = &
+		+\int_{\Omega} \gamma \textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkred}{A_x^n}}{\partial z} - \frac{\partial \textcolor{darkgre}{A_z^n}}{\partial x}\right)\,\varphi\\
 		\frac{\partial F_4}{\partial \textcolor{orange}{p}} & = & 0 \\
-		\frac{\partial F_4}{\partial \textcolor{darkRed}{A_x}} & = & 
-		\frac{1}{\mu}\int_{\Omega}\nabla \textcolor{darkRed}{A_x} \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla \textcolor{darkRed}{A_x}\cdot \mathbf{n}\right)\ \varphi 
-			 + \int_{\Omega} \gamma \left(\textcolor{blue}{v_y} \frac{\partial \textcolor{darkRed}{A_x}}{\partial y} + \textcolor{green}{v_z} \frac{\partial \textcolor{darkRed}{A_x}}{\partial z}\right)\,\varphi\\
-		\frac{\partial F_4}{\partial \textcolor{darkBlue}{A_y}} & = & 
-		-  \int_{\Omega} \gamma \left(\textcolor{blue}{v_y} \frac{\partial \textcolor{darkBlue}{A_y}}{\partial x}\right)\,\varphi\\
-		\frac{\partial F_4}{\partial \textcolor{darkGreen}{A_z}} & = & 
-		-  \int_{\Omega} \gamma \left(\textcolor{green}{v_z} \frac{\partial \textcolor{darkGreen}{A_z}}{\partial x}\right)\,\varphi
+		\frac{\partial F_4}{\partial \textcolor{darkred}{A_x}} & = & 
+		\frac{1}{\mu}\int_{\Omega}\nabla \textcolor{darkred}{A_x} \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla \textcolor{darkred}{A_x}\cdot \mathbf{n}\right)\ \varphi 
+			 + \int_{\Omega} \gamma \left(\textcolor{blu}{v_y} \frac{\partial \textcolor{darkred}{A_x}}{\partial y} + \textcolor{gre}{v_z} \frac{\partial \textcolor{darkred}{A_x}}{\partial z}\right)\,\varphi\\
+		\frac{\partial F_4}{\partial \textcolor{darkblu}{A_y}} & = & 
+		-  \int_{\Omega} \gamma \left(\textcolor{blu}{v_y} \frac{\partial \textcolor{darkblu}{A_y}}{\partial x}\right)\,\varphi\\
+		\frac{\partial F_4}{\partial \textcolor{darkgre}{A_z}} & = & 
+		-  \int_{\Omega} \gamma \left(\textcolor{gre}{v_z} \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\right)\,\varphi
 		\end{eqnarray}
 		
 \end{document}
