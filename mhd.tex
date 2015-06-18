@@ -57,12 +57,11 @@ Department of Theory of Electrical Engineering, Faculty of Electrical Engineerin
 
 	\subsection{Magnetic field}
 	
-		\subsubsection{Steadystate}
-		Initial:
+		\subsubsection{Equations for a steady magnetic field}
 		\begin{equation}
 			\frac{1}{\mu}\nabla \times \left(\nabla \times A \right) - \gamma \mathbf{v} \times \left( \nabla \times A \right) = 0
 		\end{equation}
-		$\rightarrow$
+		Some transformation:
 		\begin{equation}
 			-\frac{1}{\mu}\Delta A - \gamma \mathbf{v} \times \left( \nabla \times A \right) = 0
 		\end{equation}
@@ -74,6 +73,7 @@ Department of Theory of Electrical Engineering, Faculty of Electrical Engineerin
 		$\Gamma_{N}$ - Neumann part of the boundary\ \\
 		
 		
+		\subsubsection{Expanding the expressions with curl}
 		 \begin{align}
     \left( \nabla \times A \right) & = \begin{pmatrix}
            \frac{\partial A_z}{\partial y} - \frac{\partial A_y}{\partial z} \\
@@ -116,12 +116,12 @@ Department of Theory of Electrical Engineering, Faculty of Electrical Engineerin
 		The term $v \times \left( \nabla \times A \right)$ can be written in the code using the following:
 		$$\sum_{\substack{j = x, y, z \\ j != i}} v_j \frac{\partial A_j}{\partial i} - v_j \frac{\partial A_i}{\partial j},\ i = x, y, z$$
 		\subsection{Flow field}
-		Initial:
+		\subsubsection{Equations for velocity and pressure distribution}
 		\begin{eqnarray}
 			\left(\mathbf{v} \cdot \nabla\right)\mathbf{v} + \nabla p - \frac{1}{Re} \Delta \mathbf{v} & = & f_{Lorentz}\\
 			\nabla \cdot \mathbf{v} & = & 0
 		\end{eqnarray}\ \\
-		$\rightarrow$ $f_{Lorentz} = \left(\mathbf{J}_{ext} + \mathbf{J}_{ind}\right) \times \mathbf{B}$:
+		$\rightarrow$ - $f_{Lorentz} = \left(\mathbf{J}_{ext} + \mathbf{J}_{ind}\right) \times \mathbf{B}$:
 		\ \\
 		\begin{eqnarray}
 			\left(\mathbf{v} \cdot \nabla\right)\mathbf{v} + \nabla p - \frac{1}{Re} \Delta \mathbf{v} & = & \left[\mathbf{J}_{ext} + \sigma \left(v \times \mathbf{B}\right)\right] \times \mathbf{B}\\
@@ -139,7 +139,7 @@ Department of Theory of Electrical Engineering, Faculty of Electrical Engineerin
 			\int_{\Omega} \left(\nabla \cdot \mathbf{v}\right) \varphi & = & 0
 		\end{eqnarray}
 				
-		\section{Complete weak formulation of the nonlinear problem}
+		\section{Complete weak formulation of the coupled nonlinear problem}
 		\begin{eqnarray}
 			\int_{\Omega} \left(\mathbf{v} \cdot \nabla\right)\mathbf{v} \varphi
 			- \int_{\Omega} p \nabla \varphi
@@ -152,7 +152,8 @@ Department of Theory of Electrical Engineering, Faculty of Electrical Engineerin
 			\frac{1}{\mu}\int_{\Omega}\nabla A \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla A\cdot \mathbf{n}\right)\ \varphi 
 			 - \int_{\Omega} \gamma \left[\mathbf{v} \times \left( \nabla \times A \right)\right]\,\varphi & = & 0
 		\end{eqnarray}
-		\subsection{Component-wise residual (all values from previous iteration)}
+		
+		\subsection{Component-wise residual (all values are taken from the previous Newton iteration)}
 		\begin{eqnarray}
 			\int_{\Omega} \left({v_x} \frac{v_x}{\partial x} + v_y \frac{v_x}{\partial y} + v_z \frac{v_x}{\partial z}\right) \varphi
 			- \int_{\Omega} p \frac{\partial \varphi}{\partial x}
@@ -184,7 +185,8 @@ Department of Theory of Electrical Engineering, Faculty of Electrical Engineerin
 			 - \int_{\Omega} \gamma \left(v_x C_y - v_y C_x\right)\,\varphi & = & 0\nonumber \\
 			 \nonumber 
 		\end{eqnarray}
-		\subsection{Expanding the residual}
+		
+		\subsection{Expanding the residual expressions}
 		\begin{eqnarray}
 			\int_{\Omega} \left(\textcolor{red}{v_x} \frac{\textcolor{red}{v_x}}{\partial x} + \textcolor{blu}{v_y} \frac{\textcolor{red}{v_x}}{\partial y} + \textcolor{gre}{v_z} \frac{\textcolor{red}{v_x}}{\partial z}\right) \varphi
 			- \int_{\Omega} \textcolor{orange}{p} \frac{\partial \varphi}{\partial x}
@@ -227,7 +229,7 @@ Department of Theory of Electrical Engineering, Faculty of Electrical Engineerin
 			 \nonumber 
 		\end{eqnarray}
 		
-		\subsection{Jacobian components}
+		\subsection{Jacobian components - only interesting ones}
 		\begin{eqnarray}
 		\frac{\partial F_0}{\partial \textcolor{red}{v_x}} & = &
 		\int_{\Omega} \left(\textcolor{red}{v_x^n} \frac{\textcolor{red}{v_x}}{\partial x} + \textcolor{red}{v_x} \frac{\textcolor{red}{v_x^n}}{\partial x} + \textcolor{blu}{v_y^n} \frac{\textcolor{red}{v_x}}{\partial y} + \textcolor{gre}{v_z^n} \frac{\textcolor{red}{v_x}}{\partial z}\right) \varphi
