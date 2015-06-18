@@ -46,7 +46,7 @@ const double REYNOLDS = 5.;
 
 const double NEWTON_DAMPING = 1.0;
 const int NEWTON_ITERATIONS = 100;
-const double NEWTON_RESIDUAL_THRESHOLD = 1e-12;
+const double NEWTON_RESIDUAL_THRESHOLD = 1e-10;
 
 const int COMPONENT_COUNT = 2 * DIM + 1;
 
