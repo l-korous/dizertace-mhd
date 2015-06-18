@@ -338,6 +338,30 @@ namespace Step15
 
 #pragma endregion
 
+#pragma region Curl
+  dealii::Tensor<1, 2> curl(dealii::Tensor<1, 2>& gradient)
+  {
+    dealii::Tensor<1, 2> result;
+    throw "2D not implemented";
+  }
+
+  dealii::Tensor<1, 3> curl(dealii::Tensor<1, 3>& gradient_0, dealii::Tensor<1, 3>& gradient_1, dealii::Tensor<1, 3>& gradient_2)
+  {
+    dealii::Tensor<1, 3> result;
+    result[0] = gradient_2[1] - gradient_1[2];
+    result[1] = gradient_0[2] - gradient_2[0];
+    result[2] = gradient_1[0] - gradient_0[1];
+    return result;
+  }
+
+  dealii::Tensor<1, 3> custom_cross_product(dealii::Tensor<1, 3>& left, dealii::Tensor<1, 3>& right)
+  {
+    dealii::Tensor<1, 3> result;
+    dealii::cross_product(result, left, right);
+    return result;
+  }
+#pragma endregion
+
 #pragma region Postprocessor
 
   template <int dim>
@@ -465,30 +489,6 @@ namespace Step15
     return update_values | update_gradients;
   }
 
-#pragma endregion
-
-#pragma region Curl
-  dealii::Tensor<1, 2> curl(dealii::Tensor<1, 2>& gradient)
-  {
-    dealii::Tensor<1, 2> result;
-    throw "2D not implemented";
-  }
-
-  dealii::Tensor<1, 3> curl(dealii::Tensor<1, 3>& gradient_0, dealii::Tensor<1, 3>& gradient_1, dealii::Tensor<1, 3>& gradient_2)
-  {
-    dealii::Tensor<1, 3> result;
-    result[0] = gradient_2[1] - gradient_1[2];
-    result[1] = gradient_0[2] - gradient_2[0];
-    result[2] = gradient_1[0] - gradient_0[1];
-    return result;
-  }
-
-  dealii::Tensor<1, 3> custom_cross_product(dealii::Tensor<1, 3>& left, dealii::Tensor<1, 3>& right)
-  {
-    dealii::Tensor<1, 3> result;
-    dealii::cross_product(result, left, right);
-    return result;
-  }
 #pragma endregion
 
   template <int dim>
