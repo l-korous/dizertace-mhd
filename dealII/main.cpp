@@ -4,7 +4,9 @@
 
 #define DIM 3
 #define SUBDOMAINSUSED 1
-#define RANDOM_INITIAL_GUESS 0.001
+#define RANDOM_INITIAL_GUESS 0.01
+#define AIR_LAYER_THICKNESS 2
+#define COIL_LAYER_THICKNESS 2
 
 #pragma region TESTING
 
@@ -21,7 +23,7 @@ const bool A_LINEAR_WRT_Y = true;
 const dealii::Point<DIM> p1(0., 0., 0.);
 const dealii::Point<DIM> p2(1., 1., 1.);
 const dealii::Point<DIM> pc((p2(0) - p1(0)) / 2., (p2(1) - p1(1)) / 2., (p2(2) - p1(2)) / 2.);
-const unsigned int INIT_REF_NUM = 8;
+const unsigned int INIT_REF_NUM = 9;
 const std::vector<unsigned int> refinements({ INIT_REF_NUM, INIT_REF_NUM, INIT_REF_NUM });
 const dealii::Point<DIM> singleLayerThickness((p2(0) - p1(0)) / ((double)INIT_REF_NUM), (p2(1) - p1(1)) / ((double)INIT_REF_NUM), (p2(2) - p1(2)) / ((double)INIT_REF_NUM));
 
@@ -1216,56 +1218,49 @@ namespace Step15
     if (subDomainsUsed)
     {
       // 0 Left, 1 Right, 2 Bottom, 3 Top, 4 Front, 5 Back
-      bool layer[6] = { false, false, false, false, false, false };
-      bool layerButOne[6] = { false, false, false, false, false, false };
+      int layerFromEdge[6] = { 0, 0, 0, 0, 0, 0 };
       int comparedCoordinate[6] = { 0, 0, 1, 1, 2, 2 };
       double comparedValue[6] = { p1(0), p2(0), p1(1), p2(1), p1(2), p2(2) };
-      double comparedValueButOne[6] = { p1(0) + singleLayerThickness(0), p2(0) - singleLayerThickness(0), p1(1) + singleLayerThickness(1), p2(1) - singleLayerThickness(1), p1(2) + singleLayerThickness(2), p2(2) - singleLayerThickness(2) };
-      double comparedValueButTwo[6] = { p1(0) + singleLayerThickness(0), p2(0) - 2. * singleLayerThickness(0), p1(1) + 2. * singleLayerThickness(1), p2(1) - 2. * singleLayerThickness(1), p1(2) + 2. * singleLayerThickness(2), p2(2) - 2. * singleLayerThickness(2) };
 
       for (unsigned int face_number = 0; face_number < GeometryInfo<dim>::faces_per_cell; ++face_number)
       {
         /*
         std::cout << "Face: " << face_number << ": [" <<
-        cell->face(face_number)->center()(0) << ", " <<
-        cell->face(face_number)->center()(1) << ", " <<
-        cell->face(face_number)->center()(2) << "]" << std::endl;
+          cell->face(face_number)->center()(0) << ", " <<
+          cell->face(face_number)->center()(1) << ", " <<
+          cell->face(face_number)->center()(2) << "]" << std::endl;
+
+        std::cout << std::fabs(cell->face(face_number)->center()(comparedCoordinate[face_number]) - comparedValue[face_number]) << std::endl;
+        std::cout << singleLayerThickness(comparedCoordinate[face_number]) << std::endl;
+        std::cout << std::fabs(cell->face(face_number)->center()(comparedCoordinate[face_number]) - comparedValue[face_number]) / singleLayerThickness(comparedCoordinate[face_number]) << std::endl;
         */
-
-        for (int i = 0; i < 6; i++)
-        {
-          if (std::fabs(cell->face(face_number)->center()(comparedCoordinate[i]) - comparedValue[i]) < 1e-8)
-            layer[i] = true;
-          if (std::fabs(cell->face(face_number)->center()(comparedCoordinate[i]) - comparedValueButOne[i]) < 1e-8)
-            layerButOne[i] = true;
-        }
-
-        for (int i = 0; i < 6; i++)
-        {
-          // Not fot top / bottom.
-          if (i == 2 || i == 3)
-            continue;
-          if (std::fabs(cell->face(face_number)->center()(comparedCoordinate[i]) - comparedValueButTwo[i]) < 1e-8)
-            cell->face(face_number)->set_boundary_indicator(BOUNDARY_VEL_WALL);
-        }
+        layerFromEdge[face_number] = std::round(std::fabs(cell->face(face_number)->center()(comparedCoordinate[face_number]) - comparedValue[face_number]) / singleLayerThickness(comparedCoordinate[face_number]));
       }
 
-      // If this cell is the outer layer, the previous algorithm will wrongly mark this as the outer but one too. This will fix it.
-      if (layer[0] || layer[1] || layer[4] || layer[5])
+      for (unsigned int i = 0; i < GeometryInfo<dim>::faces_per_cell; ++i)
+        if (layerFromEdge[i] < AIR_LAYER_THICKNESS)
+          cell->set_material_id(MARKER_AIR);
+
+      bool coil = true;
+      for (unsigned int i = 0; i < GeometryInfo<dim>::faces_per_cell; ++i)
       {
-        layerButOne[0] = false;
-        layerButOne[1] = false;
-        layerButOne[4] = false;
-        layerButOne[5] = false;
+        if (layerFromEdge[i] < AIR_LAYER_THICKNESS)
+          coil = false;
       }
 
-      cell->set_material_id(MARKER_FLUID);
-      if (layer[0] || layer[1] || layer[4] || layer[5])
-        cell->set_material_id(MARKER_AIR);
-      if ((layerButOne[0] || layerButOne[1] || layerButOne[4] || layerButOne[5]) && !(layer[2] || layer[3]))
+      if (coil)
         cell->set_material_id(MARKER_COIL);
-      if ((layerButOne[0] || layerButOne[1] || layerButOne[4] || layerButOne[5]) && (layer[2] || layer[3]))
-        cell->set_material_id(MARKER_AIR);
+
+      bool fluid = true;
+      for (unsigned int i = 0; i < GeometryInfo<dim>::faces_per_cell; ++i)
+      {
+        if (i == 2 || i == 3)
+          continue;
+        if (layerFromEdge[i] < (AIR_LAYER_THICKNESS + COIL_LAYER_THICKNESS))
+          fluid = false;
+      }
+      if (fluid)
+        cell->set_material_id(MARKER_FLUID);
     }
     else
     {
@@ -1312,7 +1307,7 @@ namespace Step15
     if (this->subDomainsUsed)
     {
       // Set the coil cells to use the FE system where only magnetism is solved.
-      dealii::hp::DoFHandler<dim>::active_cell_iterator dof_cell = dof_handler.begin_active(), dof_endc = dof_handler.end();
+      typename dealii::hp::DoFHandler<dim>::active_cell_iterator dof_cell = dof_handler.begin_active(), dof_endc = dof_handler.end();
       for (; dof_cell != dof_endc; ++dof_cell)
       {
         if (dof_cell->material_id() != MARKER_FLUID)
