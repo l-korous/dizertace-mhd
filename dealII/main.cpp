@@ -4,10 +4,11 @@
 
 #define DIM 3
 #define SUBDOMAINSUSED 1
+#define RANDOM_INITIAL_GUESS 0.001
 
 #pragma region TESTING
 
-const bool PRINT_ALGEBRA = false;
+const bool PRINT_ALGEBRA = false, PRINT_INIT_SLN = true;
 const bool A_ONLY_LAPLACE = false;
 const bool NO_MOVEMENT_INDUCED_FORCE = false;
 const bool NO_EXT_CURR_DENSITY_FORCE = false;
@@ -19,7 +20,8 @@ const bool A_LINEAR_WRT_Y = true;
 #include <vector>
 const dealii::Point<DIM> p1(0., 0., 0.);
 const dealii::Point<DIM> p2(1., 1., 1.);
-const unsigned int INIT_REF_NUM = 6;
+const dealii::Point<DIM> pc((p2(0) - p1(0)) / 2., (p2(1) - p1(1)) / 2., (p2(2) - p1(2)) / 2.);
+const unsigned int INIT_REF_NUM = 8;
 const std::vector<unsigned int> refinements({ INIT_REF_NUM, INIT_REF_NUM, INIT_REF_NUM });
 const dealii::Point<DIM> singleLayerThickness((p2(0) - p1(0)) / ((double)INIT_REF_NUM), (p2(1) - p1(1)) / ((double)INIT_REF_NUM), (p2(2) - p1(2)) / ((double)INIT_REF_NUM));
 
@@ -50,11 +52,34 @@ const double MU_R = 1.;
 
 // These are according to material id 
 const double SIGMA[3] = { 0, 0, 3.e6 };
+const double J_EXT_VAL = 1.e5;
 #if SUBDOMAINSUSED
-const double J_EXT[3][3] = { { 0., 0., 0. }, { 1.e5, 0., 0. }, { 0., 0., 0. } };
+double J_EXT(int marker, int component, dealii::Point<DIM> p)
+{
+  if (marker == MARKER_COIL && component != 1)
+  {
+    double n_x = p(0) - pc(0);
+    double n_z = p(2) - pc(2);
+
+    double t_x = -n_z / std::sqrt(n_x * n_x + n_z * n_z);
+    double t_z = n_x / std::sqrt(n_x * n_x + n_z * n_z);
+    if (component == 0)
+      return t_x * J_EXT_VAL;
+    else
+      return t_z * J_EXT_VAL;
+  }
+  return 0.;
+}
+
 #else
 // If not using subdomains, we only use the fluid marker everywhere
-const double J_EXT[3][3] = { { 0., 0., 0. }, { 0., 0., 0. }, { 1.e5, 0., 0. } };
+double J_EXT(int marker, int component, dealii::Point<DIM> p)
+{
+  if (component != 0)
+    return J_EXT_VAL;
+  else 
+    return 0.0;
+}
 #endif
 
 const double A_0[3] = { 1.e-1, 0., 0. };
@@ -282,6 +307,9 @@ namespace Step15
     ComponentMask magnetic_field_mask(COMPONENT_COUNT, false);
     for (int i = dim + 1; i < COMPONENT_COUNT; i++)
       magnetic_field_mask.set(i, true);
+
+    for (int i = 0; i < this->dof_handler.n_dofs(); i++)
+      present_solution(i) = RANDOM_INITIAL_GUESS;
 
     // Velocity
     for (std::vector<unsigned int>::iterator it = velocityDirichletMarkers.begin(); it != velocityDirichletMarkers.end(); ++it)
@@ -629,10 +657,18 @@ namespace Step15
     for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
       JxW[q_point] = fe_values.JxW(q_point);
 
+    // Volumetric marker
     unsigned int marker = cell->material_id();
+
+    // Geometrical points
+    std::vector<dealii::Point<dim> > points;
+    points.reserve(dealii::DoFTools::max_dofs_per_face(dof_handler));
+    points = fe_values.get_quadrature_points();
 
     for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
     {
+      dealii::Point<dim> q_p = points[q_point];
+
       for (unsigned int i = 0; i < dofs_per_cell; ++i)
       {
         int components_mag_i = components[i] - dim - 1;
@@ -814,7 +850,7 @@ namespace Step15
                 {
                   if (other_component != components[i])
                   {
-                    copy_data.cell_matrix(i, j) += J_EXT[marker][other_component]
+                    copy_data.cell_matrix(i, j) += J_EXT(marker, other_component, q_p)
                       * shape_value[i][q_point]
                       * shape_grad[j][q_point][other_component]
                       * JxW[q_point];
@@ -824,7 +860,7 @@ namespace Step15
               // - second part (NON-coinciding indices)
               else
               {
-                copy_data.cell_matrix(i, j) -= J_EXT[marker][components_mag_j]
+                copy_data.cell_matrix(i, j) -= J_EXT(marker, components_mag_j, q_p)
                   * shape_value[i][q_point]
                   * shape_grad[j][q_point][components[i]]
                   * JxW[q_point];
@@ -969,7 +1005,7 @@ namespace Step15
                 {
                   if (other_component != components[i])
                   {
-                    double val = J_EXT[marker][other_component]
+                    double val = J_EXT(marker, other_component, q_p)
                       * shape_value[i][q_point]
                       * A_prev_gradients[q_point][j][other_component]
                       * JxW[q_point];
@@ -981,7 +1017,7 @@ namespace Step15
               // - second part (NON-coinciding indices)
               else
               {
-                double val = J_EXT[marker][j]
+                double val = J_EXT(marker, j, q_p)
                   * shape_value[i][q_point]
                   * A_prev_gradients[q_point][j][components[i]]
                   * JxW[q_point];
@@ -1021,7 +1057,7 @@ namespace Step15
             // This is however only used if subdomains are involved.
 #if SUBDOMAINSUSED
             copy_data.cell_rhs(i) -= shape_value[i][q_point]
-              * J_EXT[marker][components_mag_i]
+              * J_EXT(marker, components_mag_i, q_p)
               * JxW[q_point];
 #endif
           }
@@ -1295,13 +1331,18 @@ namespace Step15
   {
     init_discretization();
 
-    if (PRINT_ALGEBRA)
+    if (PRINT_INIT_SLN)
     {
       std::cout << "  Printing initial solution... " << std::endl;
 
-      std::ofstream sln_out("Initial_Sln");
-      present_solution.print(sln_out, 3, true, false);
-      sln_out.close();
+      DataOut<dim, hp::DoFHandler<dim> > data_out;
+
+      data_out.attach_dof_handler(dof_handler);
+      data_out.add_data_vector(present_solution, "solution");
+      data_out.build_patches();
+      const std::string filename = "Initial_Sln.vtk";
+      std::ofstream output(filename.c_str());
+      data_out.write_vtk(output);
     }
 
     // The Newton iteration starts next.
