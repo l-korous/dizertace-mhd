@@ -23,7 +23,7 @@ const bool A_LINEAR_WRT_Y = true;
 const dealii::Point<DIM> p1(0., 0., 0.);
 const dealii::Point<DIM> p2(1., 1., 1.);
 const dealii::Point<DIM> pc((p2(0) - p1(0)) / 2., (p2(1) - p1(1)) / 2., (p2(2) - p1(2)) / 2.);
-const unsigned int INIT_REF_NUM = 9;
+const unsigned int INIT_REF_NUM = 12;
 const std::vector<unsigned int> refinements({ INIT_REF_NUM, INIT_REF_NUM, INIT_REF_NUM });
 const dealii::Point<DIM> singleLayerThickness((p2(0) - p1(0)) / ((double)INIT_REF_NUM), (p2(1) - p1(1)) / ((double)INIT_REF_NUM), (p2(2) - p1(2)) / ((double)INIT_REF_NUM));
 
@@ -54,7 +54,7 @@ const double MU_R = 1.;
 
 // These are according to material id 
 const double SIGMA[3] = { 0, 0, 3.e6 };
-const double J_EXT_VAL = 1.e5;
+const double J_EXT_VAL = 1.e6;
 #if SUBDOMAINSUSED
 double J_EXT(int marker, int component, dealii::Point<DIM> p)
 {
@@ -376,23 +376,38 @@ namespace Step15
     for (unsigned int q = 0; q < n_quadrature_points; ++q)
     {
       // Velocities
+      Tensor<1, dim> v({ uh[q](0), uh[q](1), uh[q](2) });
       for (unsigned int d = 0; d < dim; ++d)
-        computed_quantities[q](d) = uh[q](d);
+        computed_quantities[q](d) = v[d];
+      // Divergence
+      computed_quantities[q](dim) = duh[q][0][0] + duh[q][1][1] + duh[q][2][2];
       // Pressure
-      computed_quantities[q](dim) = uh[q](dim);
+      computed_quantities[q](dim + 1) = uh[q](dim);
       // A
-      for (unsigned int d = dim + 1; d < (2 * dim) + 1; ++d)
-        computed_quantities[q](d) = uh[q](d);
+      for (unsigned int d = dim + 2; d < (2 * dim) + 2; ++d)
+        computed_quantities[q](d) = uh[q](d-1);
       // Curl A
       Tensor<1, dim> A_x = duh[q][dim + 1];
       Tensor<1, dim> A_y = duh[q][dim + 2];
       Tensor<1, dim> A_z = duh[q][dim + 3];
-      computed_quantities[q](2 * dim + 1) = A_z[1] - A_y[2];
-      computed_quantities[q](2 * dim + 2) = A_x[2] - A_z[0];
-      computed_quantities[q](2 * dim + 3) = A_y[0] - A_x[1];
+
+      Tensor<1, dim> B = curl(A_x, A_y, A_z);
+      computed_quantities[q](2 * dim + 2) = B[0];
+      computed_quantities[q](2 * dim + 3) = B[1];
+      computed_quantities[q](2 * dim + 4) = B[2];
+
+      Tensor<1, dim> v_x_B = custom_cross_product(v, B);
+      computed_quantities[q](3 * dim + 2) = v_x_B[0];
+      computed_quantities[q](3 * dim + 3) = v_x_B[1];
+      computed_quantities[q](3 * dim + 4) = v_x_B[2];
+
+      Tensor<1, dim> v_x_B_xB = custom_cross_product(v_x_B, B);
+      computed_quantities[q](4 * dim + 2) = v_x_B_xB[0];
+      computed_quantities[q](4 * dim + 3) = v_x_B_xB[1];
+      computed_quantities[q](4 * dim + 4) = v_x_B_xB[2];
+
       // Velocity divergence
-      computed_quantities[q](2 * dim + 4) = duh[q][0][0] + duh[q][1][1] + duh[q][2][2];
-      computed_quantities[q](2 * dim + 5) = mat_id;
+      computed_quantities[q](4 * dim + 5) = mat_id;
     }
   }
 
@@ -404,12 +419,16 @@ namespace Step15
     std::vector<std::string> names;
     for (unsigned int d = 0; d < dim; ++d)
       names.push_back("velocity");
+    names.push_back("div_velocity");
     names.push_back("pressure");
     for (unsigned int d = 0; d < dim; ++d)
       names.push_back("A");
     for (unsigned int d = 0; d < dim; ++d)
-      names.push_back("gradA");
-    names.push_back("div_velocity");
+      names.push_back("B");
+    for (unsigned int d = 0; d < dim; ++d)
+      names.push_back("vxB");
+    for (unsigned int d = 0; d < dim; ++d)
+      names.push_back("(vxB)xB");
     names.push_back("material");
     //names.push_back("J_ext_curl_A");
     //names.push_back("J_ind_curl_A");
@@ -426,11 +445,15 @@ namespace Step15
     for (unsigned int d = 0; d < dim; ++d)
       interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
     interpretation.push_back(DataComponentInterpretation::component_is_scalar);
-    for (unsigned int d = 0; d < dim; ++d)
-      interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
-    for (unsigned int d = 0; d < dim; ++d)
-      interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
     interpretation.push_back(DataComponentInterpretation::component_is_scalar);
+    for (unsigned int d = 0; d < dim; ++d)
+      interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
+    for (unsigned int d = 0; d < dim; ++d)
+      interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
+    for (unsigned int d = 0; d < dim; ++d)
+      interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
+    for (unsigned int d = 0; d < dim; ++d)
+      interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
     interpretation.push_back(DataComponentInterpretation::component_is_scalar);
     return interpretation;
   }
@@ -460,6 +483,12 @@ namespace Step15
     return result;
   }
 
+  dealii::Tensor<1, 3> custom_cross_product(dealii::Tensor<1, 3>& left, dealii::Tensor<1, 3>& right)
+  {
+    dealii::Tensor<1, 3> result;
+    dealii::cross_product(result, left, right);
+    return result;
+  }
 #pragma endregion
 
   template <int dim>
