@@ -5,7 +5,7 @@
 #define DIM 3
 #define SUBDOMAINSUSED 1
 #define RANDOM_INITIAL_GUESS 0.01
-#define AIR_LAYER_THICKNESS 2
+#define AIR_LAYER_THICKNESS 1
 #define COIL_LAYER_THICKNESS 2
 
 #pragma region TESTING
@@ -23,7 +23,7 @@ const bool A_LINEAR_WRT_Y = true;
 const dealii::Point<DIM> p1(0., 0., 0.);
 const dealii::Point<DIM> p2(1., 1., 1.);
 const dealii::Point<DIM> pc((p2(0) - p1(0)) / 2., (p2(1) - p1(1)) / 2., (p2(2) - p1(2)) / 2.);
-const unsigned int INIT_REF_NUM = 12;
+const unsigned int INIT_REF_NUM = 7;
 const std::vector<unsigned int> refinements({ INIT_REF_NUM, INIT_REF_NUM, INIT_REF_NUM });
 const dealii::Point<DIM> singleLayerThickness((p2(0) - p1(0)) / ((double)INIT_REF_NUM), (p2(1) - p1(1)) / ((double)INIT_REF_NUM), (p2(2) - p1(2)) / ((double)INIT_REF_NUM));
 
@@ -58,17 +58,12 @@ const double J_EXT_VAL = 1.e6;
 #if SUBDOMAINSUSED
 double J_EXT(int marker, int component, dealii::Point<DIM> p)
 {
-  if (marker == MARKER_COIL && component != 1)
+  if (marker == MARKER_COIL && component == 2)
   {
-    double n_x = p(0) - pc(0);
-    double n_z = p(2) - pc(2);
-
-    double t_x = -n_z / std::sqrt(n_x * n_x + n_z * n_z);
-    double t_z = n_x / std::sqrt(n_x * n_x + n_z * n_z);
-    if (component == 0)
-      return t_x * J_EXT_VAL;
+    if (p(0) < pc(0))
+      return -J_EXT_VAL;
     else
-      return t_z * J_EXT_VAL;
+      return J_EXT_VAL;
   }
   return 0.;
 }
@@ -409,7 +404,7 @@ namespace Step15
       computed_quantities[q](dim + 1) = uh[q](dim);
       // A
       for (unsigned int d = dim + 2; d < (2 * dim) + 2; ++d)
-        computed_quantities[q](d) = uh[q](d-1);
+        computed_quantities[q](d) = uh[q](d - 1);
       // Curl A
       Tensor<1, dim> A_x = duh[q][dim + 1];
       Tensor<1, dim> A_y = duh[q][dim + 2];
@@ -1255,9 +1250,9 @@ namespace Step15
       {
         /*
         std::cout << "Face: " << face_number << ": [" <<
-          cell->face(face_number)->center()(0) << ", " <<
-          cell->face(face_number)->center()(1) << ", " <<
-          cell->face(face_number)->center()(2) << "]" << std::endl;
+        cell->face(face_number)->center()(0) << ", " <<
+        cell->face(face_number)->center()(1) << ", " <<
+        cell->face(face_number)->center()(2) << "]" << std::endl;
 
         std::cout << std::fabs(cell->face(face_number)->center()(comparedCoordinate[face_number]) - comparedValue[face_number]) << std::endl;
         std::cout << singleLayerThickness(comparedCoordinate[face_number]) << std::endl;
@@ -1285,8 +1280,14 @@ namespace Step15
       {
         if (i == 2 || i == 3)
           continue;
-        if (layerFromEdge[i] < (AIR_LAYER_THICKNESS + COIL_LAYER_THICKNESS))
-          fluid = false;
+        if (i == 4 || i == 5) {
+          if (layerFromEdge[i] < (AIR_LAYER_THICKNESS))
+            fluid = false;
+        }
+        else {
+          if (layerFromEdge[i] < (AIR_LAYER_THICKNESS + COIL_LAYER_THICKNESS))
+            fluid = false;
+        }
       }
       if (fluid)
         cell->set_material_id(MARKER_FLUID);
