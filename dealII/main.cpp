@@ -6,7 +6,7 @@
 #define SUBDOMAINSUSED 1
 #define RANDOM_INITIAL_GUESS 0.01
 #define AIR_LAYER_THICKNESS 1
-#define COIL_LAYER_THICKNESS 2
+#define COIL_LAYER_THICKNESS 1
 
 #pragma region TESTING
 
@@ -23,7 +23,7 @@ const bool A_LINEAR_WRT_Y = true;
 const dealii::Point<DIM> p1(0., 0., 0.);
 const dealii::Point<DIM> p2(1., 1., 1.);
 const dealii::Point<DIM> pc((p2(0) - p1(0)) / 2., (p2(1) - p1(1)) / 2., (p2(2) - p1(2)) / 2.);
-const unsigned int INIT_REF_NUM = 7;
+const unsigned int INIT_REF_NUM = 6;
 const std::vector<unsigned int> refinements({ INIT_REF_NUM, INIT_REF_NUM, INIT_REF_NUM });
 const dealii::Point<DIM> singleLayerThickness((p2(0) - p1(0)) / ((double)INIT_REF_NUM), (p2(1) - p1(1)) / ((double)INIT_REF_NUM), (p2(2) - p1(2)) / ((double)INIT_REF_NUM));
 
@@ -44,7 +44,7 @@ const unsigned int BOUNDARY_VEL_WALL = 6;
 std::vector<unsigned int> velocityDirichletMarkers({ BOUNDARY_VEL_WALL, BOUNDARY_VEL_WALL });
 std::vector<unsigned int> magnetismDirichletMarkers({ BOUNDARY_FRONT, BOUNDARY_BOTTOM, BOUNDARY_BACK, BOUNDARY_TOP, BOUNDARY_LEFT, BOUNDARY_RIGHT });
 
-const bool INLET_VELOCITY_FIXED = false;
+const bool INLET_VELOCITY_FIXED = true;
 const double INLET_VELOCITY_AMPLITUDE = 1.0;
 
 const unsigned int POLYNOMIAL_DEGREE_MAG = 2;
@@ -1268,6 +1268,8 @@ namespace Step15
       bool coil = true;
       for (unsigned int i = 0; i < GeometryInfo<dim>::faces_per_cell; ++i)
       {
+        if (i == 2 || i == 3)
+          continue;
         if (layerFromEdge[i] < AIR_LAYER_THICKNESS)
           coil = false;
       }
