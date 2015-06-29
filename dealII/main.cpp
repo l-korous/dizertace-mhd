@@ -5,8 +5,8 @@
 #define DIM 3
 #define SUBDOMAINSUSED 1
 #define RANDOM_INITIAL_GUESS 0.01
-#define AIR_LAYER_THICKNESS 1
-#define COIL_LAYER_THICKNESS 1
+#define AIR_LAYER_THICKNESS 2
+#define COIL_LAYER_THICKNESS 2
 
 #pragma region TESTING
 
@@ -23,7 +23,7 @@ const bool A_LINEAR_WRT_Y = true;
 const dealii::Point<DIM> p1(0., 0., 0.);
 const dealii::Point<DIM> p2(1., 1., 1.);
 const dealii::Point<DIM> pc((p2(0) - p1(0)) / 2., (p2(1) - p1(1)) / 2., (p2(2) - p1(2)) / 2.);
-const unsigned int INIT_REF_NUM = 6;
+const unsigned int INIT_REF_NUM = 11;
 const std::vector<unsigned int> refinements({ INIT_REF_NUM, INIT_REF_NUM, INIT_REF_NUM });
 const dealii::Point<DIM> singleLayerThickness((p2(0) - p1(0)) / ((double)INIT_REF_NUM), (p2(1) - p1(1)) / ((double)INIT_REF_NUM), (p2(2) - p1(2)) / ((double)INIT_REF_NUM));
 
@@ -45,7 +45,7 @@ std::vector<unsigned int> velocityDirichletMarkers({ BOUNDARY_VEL_WALL, BOUNDARY
 std::vector<unsigned int> magnetismDirichletMarkers({ BOUNDARY_FRONT, BOUNDARY_BOTTOM, BOUNDARY_BACK, BOUNDARY_TOP, BOUNDARY_LEFT, BOUNDARY_RIGHT });
 
 const bool INLET_VELOCITY_FIXED = true;
-const double INLET_VELOCITY_AMPLITUDE = 1.0;
+const double INLET_VELOCITY_AMPLITUDE = 10.0;
 
 const unsigned int POLYNOMIAL_DEGREE_MAG = 2;
 
@@ -54,7 +54,7 @@ const double MU_R = 1.;
 
 // These are according to material id 
 const double SIGMA[3] = { 0, 0, 3.e6 };
-const double J_EXT_VAL = 1.e6;
+const double J_EXT_VAL = 1.e5;
 #if SUBDOMAINSUSED
 double J_EXT(int marker, int component, dealii::Point<DIM> p)
 {
@@ -261,7 +261,12 @@ namespace Step15
   double BoundaryValuesInlet<3>::value(const Point<3> &p, const unsigned int component) const
   {
     if (component == 1)
-      return INLET_VELOCITY_AMPLITUDE * (p(0) * (1.0 - p(0))) * (p(2) * (1.0 - p(2)));
+    {
+      double p_x[2] = { p1(0) + (AIR_LAYER_THICKNESS + COIL_LAYER_THICKNESS) * (p2(0) - p1(0)) / INIT_REF_NUM, p2(0) - (AIR_LAYER_THICKNESS + COIL_LAYER_THICKNESS) * (p2(0) - p1(0)) / INIT_REF_NUM };
+      double p_z[2] = { p1(2) + AIR_LAYER_THICKNESS * (p2(2) - p1(2)) / INIT_REF_NUM, p2(2) - AIR_LAYER_THICKNESS * (p2(2) - p1(2)) / INIT_REF_NUM };
+      return INLET_VELOCITY_AMPLITUDE * ((p(0) - p_x[0]) * (p_x[1] - p(0))) * ((p(2) - p_z[0]) * (p_z[1] - p(2)));
+    }
+
     else
       return 0;
   }
@@ -286,7 +291,7 @@ namespace Step15
     {
       double coefficient = A_LINEAR_WRT_Y ? (p(1) - p1(1)) / (p2(1) - p1(1)) : 1.;
       return A_0[component - dim - 1] * coefficient;
-    }
+}
     else
       return 0.;
 #endif
