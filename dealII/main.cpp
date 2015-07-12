@@ -3,16 +3,17 @@
 // i.e. the negative sign on the RHS is handled after assembling of F.
 
 #define DIM 3
-#define SUBDOMAINSUSED 1
-#define RANDOM_INITIAL_GUESS 0.01
-#define AIR_LAYER_THICKNESS 2
-#define COIL_LAYER_THICKNESS 2
+#define RANDOM_INITIAL_GUESS 0.0
+#define DEPTH 5
+#define MAGNET_SIZE 3
+#define AIR_LAYER_THICKNESS 3
+#define INIT_REF_NUM 14
 
 #pragma region TESTING
 
 const bool PRINT_ALGEBRA = false, PRINT_INIT_SLN = true;
 const bool A_ONLY_LAPLACE = false;
-const bool NO_MOVEMENT_INDUCED_FORCE = false;
+const bool NO_MOVEMENT_INDUCED_FORCE = true;
 const bool NO_EXT_CURR_DENSITY_FORCE = false;
 const bool A_LINEAR_WRT_Y = true;
 
@@ -23,14 +24,11 @@ const bool A_LINEAR_WRT_Y = true;
 const dealii::Point<DIM> p1(0., 0., 0.);
 const dealii::Point<DIM> p2(1., 1., 1.);
 const dealii::Point<DIM> pc((p2(0) - p1(0)) / 2., (p2(1) - p1(1)) / 2., (p2(2) - p1(2)) / 2.);
-const unsigned int INIT_REF_NUM = 11;
-const std::vector<unsigned int> refinements({ INIT_REF_NUM, INIT_REF_NUM, INIT_REF_NUM });
-const dealii::Point<DIM> singleLayerThickness((p2(0) - p1(0)) / ((double)INIT_REF_NUM), (p2(1) - p1(1)) / ((double)INIT_REF_NUM), (p2(2) - p1(2)) / ((double)INIT_REF_NUM));
+const std::vector<unsigned int> refinements({ INIT_REF_NUM, INIT_REF_NUM, DEPTH });
+const dealii::Point<DIM> singleLayerThickness((p2(0) - p1(0)) / ((double)refinements[0]), (p2(1) - p1(1)) / ((double)refinements[1]), (p2(2) - p1(2)) / ((double)refinements[2]));
+const double flowChannelWidth = singleLayerThickness(0) * INIT_REF_NUM - MAGNET_SIZE - AIR_LAYER_THICKNESS;
+const double flowChannelBoundaries[2] = { pc(0) - flowChannelWidth, pc(0) + flowChannelWidth };
 
-// material id 
-const unsigned int MARKER_AIR = 0;
-const unsigned int MARKER_COIL = 1;
-const unsigned int MARKER_FLUID = 2;
 
 // boundary id
 const unsigned int BOUNDARY_FRONT = 1;
@@ -39,51 +37,44 @@ const unsigned int BOUNDARY_BACK = 3;
 const unsigned int BOUNDARY_LEFT = 4;
 const unsigned int BOUNDARY_BOTTOM = 5;
 const unsigned int BOUNDARY_TOP = 6;
-const unsigned int BOUNDARY_VEL_WALL = 6;
+const unsigned int BOUNDARY_VEL_WALL = 7;
+const unsigned int BOUNDARY_ELECTRODES = 8;
 
 std::vector<unsigned int> velocityDirichletMarkers({ BOUNDARY_VEL_WALL, BOUNDARY_VEL_WALL });
-std::vector<unsigned int> magnetismDirichletMarkers({ BOUNDARY_FRONT, BOUNDARY_BOTTOM, BOUNDARY_BACK, BOUNDARY_TOP, BOUNDARY_LEFT, BOUNDARY_RIGHT });
+std::vector<unsigned int> magnetismDirichletMarkers({ BOUNDARY_BOTTOM, BOUNDARY_TOP, BOUNDARY_LEFT, BOUNDARY_RIGHT });
+std::vector<unsigned int> currentDirichletMarkers({ BOUNDARY_ELECTRODES, BOUNDARY_ELECTRODES });
 
-const bool INLET_VELOCITY_FIXED = true;
+const bool INLET_VELOCITY_FIXED = false;
+const unsigned int INLET_VELOCITY_FIXED_BOUNDARY = BOUNDARY_BACK;
 const double INLET_VELOCITY_AMPLITUDE = 10.0;
 
 const unsigned int POLYNOMIAL_DEGREE_MAG = 2;
+const unsigned int POLYNOMIAL_DEGREE_E = 2;
 
 const double MU = 1.2566371e-6;
 const double MU_R = 1.;
 
-// These are according to material id 
-const double SIGMA[3] = { 0, 0, 3.e6 };
-const double J_EXT_VAL = 1.e5;
-#if SUBDOMAINSUSED
+// material id 
+const unsigned int MARKER_AIR = 0;
+const unsigned int MARKER_MAGNET = 1;
+const unsigned int MARKER_FLUID = 2;
+const unsigned int MARKER_ELECTRODE = 3;
+
+// These are according to components
+const double B_R[3] = { 0., -1.e-4, 0. };
+// These are according to material ids
+const double SIGMA[3] = { 0., 0., 3.e6 };
+const double J_EXT_VAL = 1.e-4;
 double J_EXT(int marker, int component, dealii::Point<DIM> p)
 {
-  if (marker == MARKER_COIL && component == 2)
-  {
-    if (p(0) < pc(0))
-      return -J_EXT_VAL;
-    else
-      return J_EXT_VAL;
-  }
+  if (marker == MARKER_FLUID && component == 0)
+    return J_EXT_VAL;
   return 0.;
 }
 
-#else
-// If not using subdomains, we only use the fluid marker everywhere
-double J_EXT(int marker, int component, dealii::Point<DIM> p)
-{
-  if (component != 0)
-    return J_EXT_VAL;
-  else 
-    return 0.0;
-}
-#endif
-
-const double A_0[3] = { 1.e-1, 0., 0. };
-
 const double REYNOLDS = 5.;
 
-const double NEWTON_DAMPING = 1.0;
+const double NEWTON_DAMPING = .7;
 const int NEWTON_ITERATIONS = 100;
 const double NEWTON_RESIDUAL_THRESHOLD = 1e-10;
 
@@ -190,13 +181,12 @@ namespace Step15
   class CustomSolver
   {
   public:
-    CustomSolver(bool subDomainsUsed = false);
+    CustomSolver();
     ~CustomSolver();
 
     void run();
 
   private:
-    bool subDomainsUsed;
     void setup_system(const bool initial_step);
     void assemble_system();
 
@@ -249,26 +239,19 @@ namespace Step15
   };
 
   template <>
-  double BoundaryValuesInlet<2>::value(const Point<2> &p, const unsigned int component) const
-  {
-    if (component == 1)
-      return INLET_VELOCITY_AMPLITUDE * (p(0) * (1.0 - p(0)));
-    else
-      return 0;
-  }
-
-  template <>
   double BoundaryValuesInlet<3>::value(const Point<3> &p, const unsigned int component) const
   {
+    /*
     if (component == 1)
     {
-      double p_x[2] = { p1(0) + (AIR_LAYER_THICKNESS + COIL_LAYER_THICKNESS) * (p2(0) - p1(0)) / INIT_REF_NUM, p2(0) - (AIR_LAYER_THICKNESS + COIL_LAYER_THICKNESS) * (p2(0) - p1(0)) / INIT_REF_NUM };
-      double p_z[2] = { p1(2) + AIR_LAYER_THICKNESS * (p2(2) - p1(2)) / INIT_REF_NUM, p2(2) - AIR_LAYER_THICKNESS * (p2(2) - p1(2)) / INIT_REF_NUM };
-      return INLET_VELOCITY_AMPLITUDE * ((p(0) - p_x[0]) * (p_x[1] - p(0))) * ((p(2) - p_z[0]) * (p_z[1] - p(2)));
+    double p_x[2] = { p1(0) + (AIR_LAYER_THICKNESS + COIL_LAYER_THICKNESS) * (p2(0) - p1(0)) / INIT_REF_NUM, p2(0) - (AIR_LAYER_THICKNESS + COIL_LAYER_THICKNESS) * (p2(0) - p1(0)) / INIT_REF_NUM };
+    double p_z[2] = { p1(2) + AIR_LAYER_THICKNESS * (p2(2) - p1(2)) / INIT_REF_NUM, p2(2) - AIR_LAYER_THICKNESS * (p2(2) - p1(2)) / INIT_REF_NUM };
+    return INLET_VELOCITY_AMPLITUDE * ((p(0) - p_x[0]) * (p_x[1] - p(0))) * ((p(2) - p_z[0]) * (p_z[1] - p(2)));
     }
 
     else
-      return 0;
+    */
+    return 0;
   }
 
   template <int dim>
@@ -284,17 +267,7 @@ namespace Step15
   template <int dim>
   double BoundaryValuesWall<dim>::value(const Point<dim> &p, const unsigned int component) const
   {
-#if SUBDOMAINSUSED
     return 0.;
-#else
-    if (component > dim)
-    {
-      double coefficient = A_LINEAR_WRT_Y ? (p(1) - p1(1)) / (p2(1) - p1(1)) : 1.;
-      return A_0[component - dim - 1] * coefficient;
-}
-    else
-      return 0.;
-#endif
   }
 
   template <int dim>
@@ -389,9 +362,9 @@ namespace Step15
     Postprocessor<dim>::
     compute_derived_quantities_vector(const std::vector<Vector<double> >              &uh,
     const std::vector<std::vector<Tensor<1, dim> > > &duh,
-    const std::vector<std::vector<Tensor<2, dim> > > &/*dduh*/,
-    const std::vector<Point<dim> >                  &/*normals*/,
-    const std::vector<Point<dim> >                  &/*evaluation_points*/,
+    const std::vector<std::vector<Tensor<2, dim> > > &dduh,
+    const std::vector<Point<dim> >                  &normals,
+    const std::vector<Point<dim> >                  &evaluation_points,
     const dealii::types::material_id mat_id,
     std::vector<Vector<double> >                    &computed_quantities) const
   {
@@ -430,8 +403,18 @@ namespace Step15
       computed_quantities[q](4 * dim + 3) = v_x_B_xB[1];
       computed_quantities[q](4 * dim + 4) = v_x_B_xB[2];
 
+      Tensor<1, dim> J_ext = Tensor<1, dim>({ J_EXT(mat_id, 0, evaluation_points[q]), J_EXT(mat_id, 1, evaluation_points[q]), J_EXT(mat_id, 2, evaluation_points[q]) });
+      Tensor<1, dim> J_ext_xB = custom_cross_product(J_ext, B);
+      computed_quantities[q](5 * dim + 2) = J_ext_xB[0];
+      computed_quantities[q](5 * dim + 3) = J_ext_xB[1];
+      computed_quantities[q](5 * dim + 4) = J_ext_xB[2];
+
+      computed_quantities[q](6 * dim + 2) = J_ext[0];
+      computed_quantities[q](6 * dim + 3) = J_ext[1];
+      computed_quantities[q](6 * dim + 4) = J_ext[2];
+
       // Velocity divergence
-      computed_quantities[q](4 * dim + 5) = mat_id;
+      computed_quantities[q](6 * dim + 5) = mat_id;
     }
   }
 
@@ -453,6 +436,10 @@ namespace Step15
       names.push_back("vxB");
     for (unsigned int d = 0; d < dim; ++d)
       names.push_back("(vxB)xB");
+    for (unsigned int d = 0; d < dim; ++d)
+      names.push_back("(J_ext)xB");
+    for (unsigned int d = 0; d < dim; ++d)
+      names.push_back("J_ext");
     names.push_back("material");
     //names.push_back("J_ext_curl_A");
     //names.push_back("J_ind_curl_A");
@@ -478,6 +465,10 @@ namespace Step15
       interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
     for (unsigned int d = 0; d < dim; ++d)
       interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
+    for (unsigned int d = 0; d < dim; ++d)
+      interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
+    for (unsigned int d = 0; d < dim; ++d)
+      interpretation.push_back(DataComponentInterpretation::component_is_part_of_vector);
     interpretation.push_back(DataComponentInterpretation::component_is_scalar);
     return interpretation;
   }
@@ -486,13 +477,13 @@ namespace Step15
   UpdateFlags Postprocessor<dim>::
     get_needed_update_flags() const
   {
-    return update_values | update_gradients;
+    return update_values | update_gradients | update_quadrature_points;
   }
 
 #pragma endregion
 
   template <int dim>
-  CustomSolver<dim>::CustomSolver(bool subDomainsUsed) : dof_handler(triangulation), subDomainsUsed(subDomainsUsed)
+  CustomSolver<dim>::CustomSolver() : dof_handler(triangulation)
   {
     // The first (default) FE system - identified by cell->active_fe_index is for the entire system, i.e. subdomains where both equations for fluid and for magnetism are solved
     {
@@ -513,8 +504,7 @@ namespace Step15
       feCollection.push_back(dealii::FESystem<dim, dim>(fes, multiplicities));
     }
 
-    // Second is only magnetism (coils)
-    if (subDomainsUsed)
+    // Second is only magnetism (coils + air)
     {
       std::vector<const dealii::FiniteElement<dim> *> fes;
       std::vector<unsigned int> multiplicities;
@@ -532,8 +522,6 @@ namespace Step15
       multiplicities.push_back(dim);
       feCollection.push_back(dealii::FESystem<dim, dim>(fes, multiplicities));
     }
-
-    // Push all components
 
     mappingCollection.push_back(dealii::MappingQ<dim>(1, true));
 
@@ -732,7 +720,7 @@ namespace Step15
                 * JxW[q_point];
 
 #pragma region NO_MOVEMENT_INDUCED_FORCE
-              if (!NO_MOVEMENT_INDUCED_FORCE)
+              if (!NO_MOVEMENT_INDUCED_FORCE && marker == MARKER_FLUID)
               {
                 // sigma (u x B) x B WRT VELOCITIES - coinciding indices
                 for (int other_component = 0; other_component < dim; other_component++)
@@ -758,7 +746,7 @@ namespace Step15
                 * JxW[q_point];
 
 #pragma region NO_MOVEMENT_INDUCED_FORCE
-              if (!NO_MOVEMENT_INDUCED_FORCE)
+              if (!NO_MOVEMENT_INDUCED_FORCE && marker == MARKER_FLUID)
               {
                 // sigma (u x B) x B WRT VELOCITIES - NON-coinciding indices
                 copy_data.cell_matrix(i, j) -= SIGMA[marker] * C[q_point][components[i]] * C[q_point][components[j]]
@@ -774,7 +762,7 @@ namespace Step15
           if (components[i] < dim && components[j] > dim)
           {
 #pragma region NO_MOVEMENT_INDUCED_FORCE
-            if (!NO_MOVEMENT_INDUCED_FORCE)
+            if (!NO_MOVEMENT_INDUCED_FORCE && marker == MARKER_FLUID)
             {
 #pragma region paperToCodeHelpers
 #define v_x v_prev[q_point][0]
@@ -871,7 +859,7 @@ namespace Step15
 #pragma endregion
 
 #pragma region NO_EXT_CURR_DENSITY_FORCE
-            if (!NO_EXT_CURR_DENSITY_FORCE)
+            if (!NO_EXT_CURR_DENSITY_FORCE && marker == MARKER_FLUID)
             {
               // (J_ext x (\Nabla x A))
               // - first part (coinciding indices)
@@ -935,7 +923,7 @@ namespace Step15
             }
 
 #pragma region A_ONLY_LAPLACE
-            if (!A_ONLY_LAPLACE)
+            if (!A_ONLY_LAPLACE && marker == MARKER_FLUID)
             {
               // (u x (\Nabla x A)) - first part (coinciding indices)
               if (components[i] == components[j])
@@ -964,7 +952,7 @@ namespace Step15
           }
 #pragma region A_ONLY_LAPLACE
           // But we must not forget to differentiate wrt. velocities
-          if (!A_ONLY_LAPLACE)
+          if (!A_ONLY_LAPLACE && marker == MARKER_FLUID)
           {
             if (components[i] > dim && components[j] < dim && (components[i] != (components[j] + dim + 1)))
             {
@@ -996,7 +984,7 @@ namespace Step15
             * JxW[q_point];
 
 #pragma region NO_MOVEMENT_INDUCED_FORCE
-          if (!NO_MOVEMENT_INDUCED_FORCE)
+          if (!NO_MOVEMENT_INDUCED_FORCE && marker == MARKER_FLUID)
           {
             // Forces from magnetic field
             for (unsigned int j = 0; j < dim; ++j)
@@ -1026,7 +1014,7 @@ namespace Step15
 #pragma endregion
 
 #pragma region NO_EXT_CURR_DENSITY_FORCE
-          if (!NO_EXT_CURR_DENSITY_FORCE)
+          if (!NO_EXT_CURR_DENSITY_FORCE && marker == MARKER_FLUID)
           {
             for (unsigned int j = 0; j < dim; ++j)
             {
@@ -1080,21 +1068,31 @@ namespace Step15
             * JxW[q_point]
             / (MU * MU_R);
 
-#pragma region A_ONLY_LAPLACE
-          if (!A_ONLY_LAPLACE)
+          // Remanent induction.
+          if (marker == MARKER_MAGNET)
           {
-            // External current density.
-            // This is with a minus sign, because in F(u) = 0 form, it is on the left hand side.
-            // This is however only used if subdomains are involved.
-#if SUBDOMAINSUSED
-            copy_data.cell_rhs(i) -= shape_value[i][q_point]
-              * J_EXT(marker, components_mag_i, q_p)
-              * JxW[q_point];
-#endif
+            if (components_mag_i == 0) {
+              copy_data.cell_rhs(i) += (B_R[2] * shape_grad[i][q_point][1] - B_R[1] * shape_grad[i][q_point][2])
+                * JxW[q_point]
+                / (MU * MU_R);
+            }
+
+            if (components_mag_i == 1) {
+              copy_data.cell_rhs(i) += (B_R[0] * shape_grad[i][q_point][2] - B_R[2] * shape_grad[i][q_point][0])
+                * JxW[q_point]
+                / (MU * MU_R);
+            }
+
+            if (components_mag_i == 2) {
+              copy_data.cell_rhs(i) += (B_R[1] * shape_grad[i][q_point][0] - B_R[0] * shape_grad[i][q_point][1])
+                * JxW[q_point]
+                / (MU * MU_R);
+            }
           }
 
+#pragma region A_ONLY_LAPLACE
           // Residual: u x (curl A)
-          if (!A_ONLY_LAPLACE)
+          if (!A_ONLY_LAPLACE && marker == MARKER_FLUID)
           {
             for (unsigned int j = 0; j < dim; ++j)
             {
@@ -1192,7 +1190,7 @@ namespace Step15
     }
     if (INLET_VELOCITY_FIXED)
     {
-      VectorTools::interpolate_boundary_values(dof_handler, BOUNDARY_BOTTOM, ZeroFunction<dim>(COMPONENT_COUNT), boundary_values, velocity_mask);
+      VectorTools::interpolate_boundary_values(dof_handler, INLET_VELOCITY_FIXED_BOUNDARY, ZeroFunction<dim>(COMPONENT_COUNT), boundary_values, velocity_mask);
       MatrixTools::apply_boundary_values(boundary_values, system_matrix, newton_update, system_rhs);
     }
 
@@ -1244,65 +1242,59 @@ namespace Step15
   void CustomSolver<dim>::add_markers(typename Triangulation<dim>::cell_iterator cell)
   {
     // Volumetric.
-    if (subDomainsUsed)
+    // 0 Left, 1 Right, 2 Bottom, 3 Top, 4 Front, 5 Back
+    int layerFromEdge[6] = { 0, 0, 0, 0, 0, 0 };
+    int comparedCoordinate[6] = { 0, 0, 1, 1, 2, 2 };
+    double comparedValue[6] = { p1(0), p2(0), p1(1), p2(1), p1(2), p2(2) };
+
+    for (unsigned int face_number = 0; face_number < GeometryInfo<dim>::faces_per_cell; ++face_number)
     {
-      // 0 Left, 1 Right, 2 Bottom, 3 Top, 4 Front, 5 Back
-      int layerFromEdge[6] = { 0, 0, 0, 0, 0, 0 };
-      int comparedCoordinate[6] = { 0, 0, 1, 1, 2, 2 };
-      double comparedValue[6] = { p1(0), p2(0), p1(1), p2(1), p1(2), p2(2) };
+      /*
+      std::cout << "Face: " << face_number << ": [" <<
+      cell->face(face_number)->center()(0) << ", " <<
+      cell->face(face_number)->center()(1) << ", " <<
+      cell->face(face_number)->center()(2) << "]" << std::endl;
 
-      for (unsigned int face_number = 0; face_number < GeometryInfo<dim>::faces_per_cell; ++face_number)
-      {
-        /*
-        std::cout << "Face: " << face_number << ": [" <<
-        cell->face(face_number)->center()(0) << ", " <<
-        cell->face(face_number)->center()(1) << ", " <<
-        cell->face(face_number)->center()(2) << "]" << std::endl;
-
-        std::cout << std::fabs(cell->face(face_number)->center()(comparedCoordinate[face_number]) - comparedValue[face_number]) << std::endl;
-        std::cout << singleLayerThickness(comparedCoordinate[face_number]) << std::endl;
-        std::cout << std::fabs(cell->face(face_number)->center()(comparedCoordinate[face_number]) - comparedValue[face_number]) / singleLayerThickness(comparedCoordinate[face_number]) << std::endl;
-        */
-        layerFromEdge[face_number] = std::round(std::fabs(cell->face(face_number)->center()(comparedCoordinate[face_number]) - comparedValue[face_number]) / singleLayerThickness(comparedCoordinate[face_number]));
-      }
-
-      for (unsigned int i = 0; i < GeometryInfo<dim>::faces_per_cell; ++i)
-        if (layerFromEdge[i] < AIR_LAYER_THICKNESS)
-          cell->set_material_id(MARKER_AIR);
-
-      bool coil = true;
-      for (unsigned int i = 0; i < GeometryInfo<dim>::faces_per_cell; ++i)
-      {
-        if (i == 2 || i == 3)
-          continue;
-        if (layerFromEdge[i] < AIR_LAYER_THICKNESS)
-          coil = false;
-      }
-
-      if (coil)
-        cell->set_material_id(MARKER_COIL);
-
-      bool fluid = true;
-      for (unsigned int i = 0; i < GeometryInfo<dim>::faces_per_cell; ++i)
-      {
-        if (i == 2 || i == 3)
-          continue;
-        if (i == 4 || i == 5) {
-          if (layerFromEdge[i] < (AIR_LAYER_THICKNESS))
-            fluid = false;
-        }
-        else {
-          if (layerFromEdge[i] < (AIR_LAYER_THICKNESS + COIL_LAYER_THICKNESS))
-            fluid = false;
-        }
-      }
-      if (fluid)
-        cell->set_material_id(MARKER_FLUID);
+      std::cout << std::fabs(cell->face(face_number)->center()(comparedCoordinate[face_number]) - comparedValue[face_number]) << std::endl;
+      std::cout << singleLayerThickness(comparedCoordinate[face_number]) << std::endl;
+      std::cout << std::fabs(cell->face(face_number)->center()(comparedCoordinate[face_number]) - comparedValue[face_number]) / singleLayerThickness(comparedCoordinate[face_number]) << std::endl;
+      */
+      layerFromEdge[face_number] = std::round(std::fabs(cell->face(face_number)->center()(comparedCoordinate[face_number]) - comparedValue[face_number]) / singleLayerThickness(comparedCoordinate[face_number]));
     }
-    else
+
+    cell->set_material_id(MARKER_AIR);
+    bool fluid = true;
+    for (unsigned int i = 0; i < GeometryInfo<dim>::faces_per_cell; ++i)
     {
+      if (i == 4 || i == 5)
+        continue;
+      if (layerFromEdge[i] < AIR_LAYER_THICKNESS + MAGNET_SIZE)
+        fluid = false;
+    }
+    if (fluid)
       cell->set_material_id(MARKER_FLUID);
+
+    bool magnet = true;
+    for (unsigned int i = 0; i < GeometryInfo<dim>::faces_per_cell; ++i)
+    {
+      if (i == 4 || i == 5)
+        continue;
+
+      if (i == 0 || i == 1) {
+        if (layerFromEdge[i] < AIR_LAYER_THICKNESS + MAGNET_SIZE)
+          magnet = false;
+      }
+
+      if (i == 2 || i == 3) {
+        if (layerFromEdge[i] < AIR_LAYER_THICKNESS)
+          magnet = false;
+      }
+
+      if (cell->material_id() == MARKER_FLUID)
+        magnet = false;
     }
+    if (magnet)
+      cell->set_material_id(MARKER_MAGNET);
 
     // Surface.
     for (unsigned int face_number = 0; face_number < GeometryInfo<dim>::faces_per_cell; ++face_number)
@@ -1324,6 +1316,12 @@ namespace Step15
 
       if (std::fabs(cell->face(face_number)->center()(1) - p2(1)) < 1e-12)
         cell->face(face_number)->set_boundary_indicator(BOUNDARY_TOP);
+
+      if (((std::fabs(cell->face(face_number)->center()(0) - flowChannelBoundaries[0]) < 1e-12) || (std::fabs(cell->face(face_number)->center()(0) - flowChannelBoundaries[1]) < 1e-12)) && (std::fabs(cell->face(face_number)->center()(1)) > flowChannelBoundaries[0]) && (std::fabs(cell->face(face_number)->center()(1)) < flowChannelBoundaries[1]))
+        cell->face(face_number)->set_boundary_indicator(BOUNDARY_VEL_WALL);
+
+      if (((std::fabs(cell->face(face_number)->center()(1) - flowChannelBoundaries[0]) < 1e-12) || (std::fabs(cell->face(face_number)->center()(1) - flowChannelBoundaries[1]) < 1e-12)) && (std::fabs(cell->face(face_number)->center()(0)) > flowChannelBoundaries[0]) && (std::fabs(cell->face(face_number)->center()(0)) < flowChannelBoundaries[1]))
+        cell->face(face_number)->set_boundary_indicator(BOUNDARY_VEL_WALL);
     }
   }
 
@@ -1341,16 +1339,13 @@ namespace Step15
       this->add_markers(cell);
     }
 
-    if (this->subDomainsUsed)
+    // Set the coil cells to use the FE system where only magnetism is solved.
+    typename dealii::hp::DoFHandler<dim>::active_cell_iterator dof_cell = dof_handler.begin_active(), dof_endc = dof_handler.end();
+    for (; dof_cell != dof_endc; ++dof_cell)
     {
-      // Set the coil cells to use the FE system where only magnetism is solved.
-      typename dealii::hp::DoFHandler<dim>::active_cell_iterator dof_cell = dof_handler.begin_active(), dof_endc = dof_handler.end();
-      for (; dof_cell != dof_endc; ++dof_cell)
+      if (dof_cell->material_id() != MARKER_FLUID)
       {
-        if (dof_cell->material_id() != MARKER_FLUID)
-        {
-          dof_cell->set_active_fe_index(1);
-        }
+        dof_cell->set_active_fe_index(1);
       }
     }
 
@@ -1417,7 +1412,7 @@ int main()
 
     deallog.depth_console(0);
 
-    CustomSolver<DIM> fe_problem(SUBDOMAINSUSED);
+    CustomSolver<DIM> fe_problem;
     fe_problem.run();
   }
   catch (std::exception &exc)
