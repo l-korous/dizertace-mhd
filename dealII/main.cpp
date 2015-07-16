@@ -402,22 +402,22 @@ namespace MHD
       for (unsigned int face_number = 0; face_number < GeometryInfo<DIM>::faces_per_cell; ++face_number)
       {
         if (std::fabs(cell->face(face_number)->center()(2) - p1Flow(2)) < 1e-12)
-          cell->set_material_id(BOUNDARY_BACK);
+          cell->face(face_number)->set_boundary_indicator(BOUNDARY_BACK);
 
         if (std::fabs(cell->face(face_number)->center()(0) - p1Flow(0)) < 1e-12)
-          cell->set_material_id(BOUNDARY_LEFT);
+          cell->face(face_number)->set_boundary_indicator(BOUNDARY_LEFT);
 
         if (std::fabs(cell->face(face_number)->center()(2) - p2Flow(2)) < 1e-12)
-          cell->set_material_id(BOUNDARY_FRONT);
+          cell->face(face_number)->set_boundary_indicator(BOUNDARY_FRONT);
 
         if (std::fabs(cell->face(face_number)->center()(0) - p2Flow(0)) < 1e-12)
-          cell->set_material_id(BOUNDARY_RIGHT);
+          cell->face(face_number)->set_boundary_indicator(BOUNDARY_RIGHT);
 
         if (std::fabs(cell->face(face_number)->center()(1) - p1Flow(1)) < 1e-12)
-          cell->set_material_id(BOUNDARY_BOTTOM);
+          cell->face(face_number)->set_boundary_indicator(BOUNDARY_BOTTOM);
 
         if (std::fabs(cell->face(face_number)->center()(1) - p2Flow(1)) < 1e-12)
-          cell->set_material_id(BOUNDARY_TOP);
+          cell->face(face_number)->set_boundary_indicator(BOUNDARY_TOP);
       }
     }
 
