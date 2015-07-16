@@ -1,8 +1,13 @@
+#ifndef _MSC_VER
+#define TYPENAME typename
+#else
+#define TYPENAME 
+#endif
 #define DIM 3
 #define DEPTH 6
-#define MAGNET_SIZE 2
-#define AIR_LAYER_THICKNESS 2
-#define INIT_REF_NUM 16
+#define MAGNET_SIZE 3
+#define AIR_LAYER_THICKNESS 3
+#define INIT_REF_NUM 17
 
 const bool NO_MOVEMENT_INDUCED_FORCE = true;
 const bool NO_EXT_CURR_DENSITY_FORCE = false;
@@ -111,7 +116,7 @@ const double B_R[3] = { 0., -1., 0. };
 const double SIGMA = 3.e6;
 const double DENSITY = 8.e4;
 
-const double J_EXT_VAL = 1.e4;
+const double J_EXT_VAL = 1.e5;
 double J_EXT(int marker, int component, dealii::Point<DIM> p)
 {
   if (marker == MARKER_FLUID && component == 0)
@@ -123,9 +128,9 @@ const double REYNOLDS = 5.;
 
 const double NEWTON_DAMPING = .8;
 const int NEWTON_ITERATIONS = 100;
-const double NEWTON_RESIDUAL_THRESHOLD = 1e-10;
+const double NEWTON_RESIDUAL_THRESHOLD = 1e-8;
 
-const double TIME_STEP = 1.e-5;
+const double TIME_STEP = 1.e-3;
 const double T_END = 1.;
 
 dealii::Tensor<1, 3> curl(dealii::Tensor<1, 3>& gradient_0, dealii::Tensor<1, 3>& gradient_1, dealii::Tensor<1, 3>& gradient_2)
@@ -250,7 +255,7 @@ namespace MHD
       // Data
       Triangulation<DIM>   triangulation;
       hp::DoFHandler<DIM>      dof_handler;
-      Mag::Solver*      magSolver;;
+      Mag::Solver*      magSolver;
 
       dealii::hp::FECollection<DIM> feCollection;
       dealii::hp::MappingCollection<DIM> mappingCollection;
@@ -919,7 +924,7 @@ namespace MHD
       scratch_data.hp_fe_values_Flow.reinit(cell);
       const dealii::FEValues<DIM> &fe_values_Flow = scratch_data.hp_fe_values_Flow.get_present_fe_values();
 
-      dealii::hp::DoFHandler<DIM>::active_cell_iterator &cellMag = GridTools::find_active_cell_around_point(this->magSolver->dof_handler, cell->center());
+      const TYPENAME dealii::hp::DoFHandler<DIM>::active_cell_iterator &cellMag = GridTools::find_active_cell_around_point(this->magSolver->dof_handler, cell->center());
       scratch_data.hp_fe_values_Mag.reinit(cellMag);
       const dealii::FEValues<DIM> &fe_values_Mag = scratch_data.hp_fe_values_Mag.get_present_fe_values();
 
@@ -1567,9 +1572,10 @@ namespace MHD
     this->magSolver->init_discretization(this->flowSolver);
 
     double time = 0.0;
-    for (int iteration = 0; time < T_END; time += TIME_STEP)
+    for (int iteration = 0; time < T_END; time += TIME_STEP, iteration++)
     {
-      this->magSolver->solveOneStep(this->flowSolver->present_solution, iteration);
+      if(iteration == 0)
+        this->magSolver->solveOneStep(this->flowSolver->present_solution, iteration);
       this->flowSolver->solveOneStep(this->magSolver->present_solution, iteration);
     }
   }
