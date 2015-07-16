@@ -5,9 +5,9 @@
 #endif
 #define DIM 3
 #define DEPTH 6
-#define MAGNET_SIZE 3
-#define AIR_LAYER_THICKNESS 3
-#define INIT_REF_NUM 17
+#define MAGNET_SIZE 2
+#define AIR_LAYER_THICKNESS 1
+#define INIT_REF_NUM 10
 
 const bool NO_MOVEMENT_INDUCED_FORCE = true;
 const bool NO_EXT_CURR_DENSITY_FORCE = false;
@@ -87,10 +87,9 @@ const unsigned int BOUNDARY_BACK = 3;
 const unsigned int BOUNDARY_LEFT = 4;
 const unsigned int BOUNDARY_BOTTOM = 5;
 const unsigned int BOUNDARY_TOP = 6;
-const unsigned int BOUNDARY_VEL_WALL = 7;
 const unsigned int BOUNDARY_ELECTRODES = 8;
 
-std::vector<unsigned int> velocityDirichletMarkers({ BOUNDARY_VEL_WALL, BOUNDARY_VEL_WALL });
+std::vector<unsigned int> velocityDirichletMarkers({ BOUNDARY_LEFT, BOUNDARY_RIGHT, BOUNDARY_BOTTOM, BOUNDARY_TOP });
 std::vector<unsigned int> magnetismDirichletMarkers({ BOUNDARY_BOTTOM, BOUNDARY_TOP, BOUNDARY_LEFT, BOUNDARY_RIGHT });
 std::vector<unsigned int> currentDirichletMarkers({ BOUNDARY_ELECTRODES, BOUNDARY_ELECTRODES });
 
@@ -403,22 +402,22 @@ namespace MHD
       for (unsigned int face_number = 0; face_number < GeometryInfo<DIM>::faces_per_cell; ++face_number)
       {
         if (std::fabs(cell->face(face_number)->center()(2) - p1Flow(2)) < 1e-12)
-          cell->face(face_number)->set_boundary_indicator(BOUNDARY_BACK);
+          cell->set_material_id(BOUNDARY_BACK);
 
         if (std::fabs(cell->face(face_number)->center()(0) - p1Flow(0)) < 1e-12)
-          cell->face(face_number)->set_boundary_indicator(BOUNDARY_LEFT);
+          cell->set_material_id(BOUNDARY_LEFT);
 
         if (std::fabs(cell->face(face_number)->center()(2) - p2Flow(2)) < 1e-12)
-          cell->face(face_number)->set_boundary_indicator(BOUNDARY_FRONT);
+          cell->set_material_id(BOUNDARY_FRONT);
 
         if (std::fabs(cell->face(face_number)->center()(0) - p2Flow(0)) < 1e-12)
-          cell->face(face_number)->set_boundary_indicator(BOUNDARY_RIGHT);
+          cell->set_material_id(BOUNDARY_RIGHT);
 
         if (std::fabs(cell->face(face_number)->center()(1) - p1Flow(1)) < 1e-12)
-          cell->face(face_number)->set_boundary_indicator(BOUNDARY_BOTTOM);
+          cell->set_material_id(BOUNDARY_BOTTOM);
 
         if (std::fabs(cell->face(face_number)->center()(1) - p2Flow(1)) < 1e-12)
-          cell->face(face_number)->set_boundary_indicator(BOUNDARY_TOP);
+          cell->set_material_id(BOUNDARY_TOP);
       }
     }
 
