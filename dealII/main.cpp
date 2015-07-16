@@ -4,10 +4,10 @@
 #define TYPENAME 
 #endif
 #define DIM 3
-#define DEPTH 8
-#define MAGNET_SIZE 3
-#define AIR_LAYER_THICKNESS 2
-#define INIT_REF_NUM 16
+#define MAGNET_SIZE 1
+#define AIR_LAYER_THICKNESS 1
+#define INIT_REF_NUM 6
+#define DEPTH INIT_REF_NUM
 
 const bool NO_MOVEMENT_INDUCED_FORCE = false;
 const bool NO_EXT_CURR_DENSITY_FORCE = false;
@@ -78,7 +78,13 @@ const double flowChannelOffsetXY[2] = { ((p2Mag[0] - p1Mag[0]) / (INIT_REF_NUM))
 
 const dealii::Point<DIM> p1Flow(flowChannelOffsetXY[0], flowChannelOffsetXY[1], 0.);
 const dealii::Point<DIM> p2Flow(1. - flowChannelOffsetXY[0], 1. - flowChannelOffsetXY[1], 1.);
-const std::vector<unsigned int> refinementsFlow({ INIT_REF_NUM - AIR_LAYER_THICKNESS - MAGNET_SIZE, INIT_REF_NUM - AIR_LAYER_THICKNESS - MAGNET_SIZE, DEPTH });
+const dealii::Point<DIM> p3Flow(flowChannelOffsetXY[0], flowChannelOffsetXY[1], 2.);
+const dealii::Point<DIM> p4Flow(flowChannelOffsetXY[0] - 2., 1. - flowChannelOffsetXY[1], 2. - flowChannelOffsetXY[1]);
+const dealii::Point<DIM> p5Flow(-2., flowChannelOffsetXY[1], -1. - flowChannelOffsetXY[1]);
+const dealii::Point<DIM> p6Flow(1. - flowChannelOffsetXY[0], 1. - flowChannelOffsetXY[1], -1.);
+const std::vector<unsigned int> refinementsFlow1({ INIT_REF_NUM - AIR_LAYER_THICKNESS - MAGNET_SIZE, INIT_REF_NUM - AIR_LAYER_THICKNESS - MAGNET_SIZE, DEPTH });
+const std::vector<unsigned int> refinementsFlow2x({ 2 * DEPTH, INIT_REF_NUM - AIR_LAYER_THICKNESS - MAGNET_SIZE, INIT_REF_NUM - AIR_LAYER_THICKNESS - MAGNET_SIZE});
+const std::vector<unsigned int> refinementsFlow3z({ INIT_REF_NUM - AIR_LAYER_THICKNESS - MAGNET_SIZE, INIT_REF_NUM - AIR_LAYER_THICKNESS - MAGNET_SIZE, 3*DEPTH });
 
 // boundary id
 const unsigned int BOUNDARY_FRONT = 1;
@@ -87,9 +93,10 @@ const unsigned int BOUNDARY_BACK = 3;
 const unsigned int BOUNDARY_LEFT = 4;
 const unsigned int BOUNDARY_BOTTOM = 5;
 const unsigned int BOUNDARY_TOP = 6;
+const unsigned int BOUNDARY_VELOCITY_WALL = 7;
 const unsigned int BOUNDARY_ELECTRODES = 8;
 
-std::vector<unsigned int> velocityDirichletMarkers({ BOUNDARY_LEFT, BOUNDARY_RIGHT, BOUNDARY_BOTTOM, BOUNDARY_TOP });
+std::vector<unsigned int> velocityDirichletMarkers({ BOUNDARY_VELOCITY_WALL, BOUNDARY_VELOCITY_WALL });
 std::vector<unsigned int> magnetismDirichletMarkers({ BOUNDARY_BOTTOM, BOUNDARY_TOP, BOUNDARY_LEFT, BOUNDARY_RIGHT });
 std::vector<unsigned int> currentDirichletMarkers({ BOUNDARY_ELECTRODES, BOUNDARY_ELECTRODES });
 
@@ -107,7 +114,8 @@ const double MU_R = 1.;
 const unsigned int MARKER_AIR = 0;
 const unsigned int MARKER_MAGNET = 1;
 const unsigned int MARKER_FLUID = 2;
-const unsigned int MARKER_ELECTRODE = 3;
+const unsigned int MARKER_ONLY_FLUID = 3;
+const unsigned int MARKER_ELECTRODE = 4;
 
 // These are according to components
 const double B_R[3] = { 0., -1., 0. };
@@ -379,7 +387,18 @@ namespace MHD
       this->magSolver = magSolver;
 
       // Mesh
-      GridGenerator::subdivided_hyper_rectangle(triangulation, refinementsFlow, p1Flow, p2Flow);
+      Triangulation<DIM>   triangulation_util[10];
+      GridGenerator::subdivided_hyper_rectangle(triangulation_util[0], refinementsFlow1, p1Flow, p2Flow);
+      GridGenerator::subdivided_hyper_rectangle(triangulation_util[1], refinementsFlow1, p2Flow, p3Flow);
+      GridGenerator::subdivided_hyper_rectangle(triangulation_util[2], refinementsFlow2x, p3Flow, p4Flow);
+      GridGenerator::subdivided_hyper_rectangle(triangulation_util[3], refinementsFlow3z, p4Flow, p5Flow);
+      GridGenerator::subdivided_hyper_rectangle(triangulation_util[4], refinementsFlow2x, p5Flow, p6Flow);
+      GridGenerator::subdivided_hyper_rectangle(triangulation_util[5], refinementsFlow1, p6Flow, p1Flow);
+      GridGenerator::merge_triangulations(triangulation_util[0], triangulation_util[1], triangulation_util[6]);
+      GridGenerator::merge_triangulations(triangulation_util[2], triangulation_util[3], triangulation_util[7]);
+      GridGenerator::merge_triangulations(triangulation_util[4], triangulation_util[5], triangulation_util[8]);
+      GridGenerator::merge_triangulations(triangulation_util[6], triangulation_util[7], triangulation_util[9]);
+      GridGenerator::merge_triangulations(triangulation_util[8], triangulation_util[9], triangulation);
 
       Triangulation<DIM>::cell_iterator
         cell = triangulation.begin(),
@@ -396,28 +415,16 @@ namespace MHD
     void Solver::add_markers(Triangulation<DIM>::cell_iterator cell)
     {
       // Volumetric.
-      cell->set_material_id(MARKER_FLUID);
+      if (cell->center()(2) >= 0. && cell->center()(2) <= 1. && cell->center()(0) >= 0. && cell->center()(0) <= 1.)
+        cell->set_material_id(MARKER_FLUID);
+      else
+        cell->set_material_id(MARKER_ONLY_FLUID);
 
       // Surface.
       for (unsigned int face_number = 0; face_number < GeometryInfo<DIM>::faces_per_cell; ++face_number)
       {
-        if (std::fabs(cell->face(face_number)->center()(2) - p1Flow(2)) < 1e-12)
-          cell->face(face_number)->set_boundary_indicator(BOUNDARY_BACK);
-
-        if (std::fabs(cell->face(face_number)->center()(0) - p1Flow(0)) < 1e-12)
-          cell->face(face_number)->set_boundary_indicator(BOUNDARY_LEFT);
-
-        if (std::fabs(cell->face(face_number)->center()(2) - p2Flow(2)) < 1e-12)
-          cell->face(face_number)->set_boundary_indicator(BOUNDARY_FRONT);
-
-        if (std::fabs(cell->face(face_number)->center()(0) - p2Flow(0)) < 1e-12)
-          cell->face(face_number)->set_boundary_indicator(BOUNDARY_RIGHT);
-
-        if (std::fabs(cell->face(face_number)->center()(1) - p1Flow(1)) < 1e-12)
-          cell->face(face_number)->set_boundary_indicator(BOUNDARY_BOTTOM);
-
-        if (std::fabs(cell->face(face_number)->center()(1) - p2Flow(1)) < 1e-12)
-          cell->face(face_number)->set_boundary_indicator(BOUNDARY_TOP);
+        if(cell->face(face_number)->at_boundary())
+          cell->face(face_number)->set_boundary_indicator(BOUNDARY_VELOCITY_WALL);
       }
     }
 
@@ -786,11 +793,11 @@ namespace MHD
             {
               // TODO - KDYZ SE TAM DA TENTO (ASI SPRAVNY) VYRAZ, A PRIDA SE VYRAZ PRO NEUMANNA DALE, TAK TO NEJDE
               if (components[i] == 0) {
-              copy_data.cell_rhs(i) -= (B_R[2] * shape_grad[i][q_point][1] - B_R[1] * shape_grad[i][q_point][2])
-              * JxW[q_point]
-              / (MU * MU_R);
+                copy_data.cell_rhs(i) -= (B_R[2] * shape_grad[i][q_point][1] - B_R[1] * shape_grad[i][q_point][2])
+                  * JxW[q_point]
+                  / (MU * MU_R);
               }
-              
+
               if (components[i] == 1) {
                 copy_data.cell_rhs(i) -= (B_R[0] * shape_grad[i][q_point][2] - B_R[2] * shape_grad[i][q_point][0])
                   * JxW[q_point]
@@ -811,46 +818,46 @@ namespace MHD
       // TODO - KDYZ SE TAM DA TENTO (ASI SPRAVNY) VYRAZ, A PRIDA SE VYRAZ PRO REMANENTNI INDUKCI V (component == 0), TAK TO NEJDE - proto je ted na pravou stranu (component == 0) dana nula
       if (marker == MARKER_MAGNET)
       {
-      dealii::hp::FEFaceValues<DIM> hp_fe_face_values(mappingCollection, feCollection, qCollectionFace, dealii::update_quadrature_points | dealii::update_values | dealii::update_JxW_values);
+        dealii::hp::FEFaceValues<DIM> hp_fe_face_values(mappingCollection, feCollection, qCollectionFace, dealii::update_quadrature_points | dealii::update_values | dealii::update_JxW_values);
 
-      for (unsigned int face = 0; face < dealii::GeometryInfo<DIM>::faces_per_cell; ++face)
-      {
-      if (cell->face(face)->boundary_indicator() == BOUNDARY_FRONT || cell->face(face)->boundary_indicator() == BOUNDARY_BACK)
-      {
+        for (unsigned int face = 0; face < dealii::GeometryInfo<DIM>::faces_per_cell; ++face)
+        {
+          if (cell->face(face)->boundary_indicator() == BOUNDARY_FRONT || cell->face(face)->boundary_indicator() == BOUNDARY_BACK)
+          {
 
-      hp_fe_face_values.reinit(cell, face);
+            hp_fe_face_values.reinit(cell, face);
 
-      const dealii::FEFaceValues<DIM> &fe_face_values = hp_fe_face_values.get_present_fe_values();
-      const unsigned int n_face_q_points = fe_face_values.n_quadrature_points;
+            const dealii::FEFaceValues<DIM> &fe_face_values = hp_fe_face_values.get_present_fe_values();
+            const unsigned int n_face_q_points = fe_face_values.n_quadrature_points;
 
-      std::vector<std::vector<double> > shape_face_value = std::vector<std::vector<double> >(dofs_per_cell);
+            std::vector<std::vector<double> > shape_face_value = std::vector<std::vector<double> >(dofs_per_cell);
 
-      for (unsigned int i = 0; i < dofs_per_cell; ++i)
-      {
-      shape_face_value[i].resize(n_face_q_points);
-      for (unsigned int q_point = 0; q_point < n_face_q_points; ++q_point)
-      shape_face_value[i][q_point] = fe_face_values.shape_value(i, q_point);
-      }
+            for (unsigned int i = 0; i < dofs_per_cell; ++i)
+            {
+              shape_face_value[i].resize(n_face_q_points);
+              for (unsigned int q_point = 0; q_point < n_face_q_points; ++q_point)
+                shape_face_value[i][q_point] = fe_face_values.shape_value(i, q_point);
+            }
 
-      std::vector<double> shape_face_JxW(n_face_q_points);
-      for (unsigned int q_point = 0; q_point < n_face_q_points; ++q_point)
-      shape_face_JxW[q_point] = fe_face_values.JxW(q_point);
+            std::vector<double> shape_face_JxW(n_face_q_points);
+            for (unsigned int q_point = 0; q_point < n_face_q_points; ++q_point)
+              shape_face_JxW[q_point] = fe_face_values.JxW(q_point);
 
-      for (unsigned int q_point = 0; q_point < n_face_q_points; ++q_point)
-      {
-      for (unsigned int i = 0; i < dofs_per_cell; ++i)
-      {
-      double normal_z = (cell->face(face)->boundary_indicator() == BOUNDARY_FRONT) ? 1.0 : -1.0;
+            for (unsigned int q_point = 0; q_point < n_face_q_points; ++q_point)
+            {
+              for (unsigned int i = 0; i < dofs_per_cell; ++i)
+              {
+                double normal_z = (cell->face(face)->boundary_indicator() == BOUNDARY_FRONT) ? 1.0 : -1.0;
 
-      if (components[i] == 0) {
-      copy_data.cell_rhs(i) += B_R[1] * normal_z * shape_face_value[i][q_point]
-      * shape_face_JxW[q_point]
-      / (MU * MU_R);
-      }
-      }
-      }
-      }
-      }
+                if (components[i] == 0) {
+                  copy_data.cell_rhs(i) += B_R[1] * normal_z * shape_face_value[i][q_point]
+                    * shape_face_JxW[q_point]
+                    / (MU * MU_R);
+                }
+              }
+            }
+          }
+        }
       }
       //
 
@@ -947,11 +954,6 @@ namespace MHD
     {
       scratch_data.hp_fe_values_Flow.reinit(cell);
       const dealii::FEValues<DIM> &fe_values_Flow = scratch_data.hp_fe_values_Flow.get_present_fe_values();
-
-      const TYPENAME dealii::hp::DoFHandler<DIM>::active_cell_iterator &cellMag = GridTools::find_active_cell_around_point(this->magSolver->dof_handler, cell->center());
-      scratch_data.hp_fe_values_Mag.reinit(cellMag);
-      const dealii::FEValues<DIM> &fe_values_Mag = scratch_data.hp_fe_values_Mag.get_present_fe_values();
-
       const unsigned int dofs_per_cell = cell->get_fe().dofs_per_cell;
       const unsigned int n_q_points = fe_values_Flow.n_quadrature_points;
 
@@ -980,9 +982,18 @@ namespace MHD
       fe_values_Flow.get_function_values(this->previous_sln_Flow, prev_values_time_Flow);
       fe_values_Flow.get_function_gradients(this->previous_sln_Flow, prev_gradients_time_Flow);
 
-      fe_values_Mag.get_function_values(this->previous_sln_Mag, prev_values_Mag);
-      fe_values_Mag.get_function_gradients(this->previous_sln_Mag, prev_gradients_Mag);
+      // Volumetric marker
+      unsigned int marker = cell->material_id();
 
+      if (marker == MARKER_FLUID)
+      {
+        const TYPENAME dealii::hp::DoFHandler<DIM>::active_cell_iterator &cellMag = GridTools::find_active_cell_around_point(this->magSolver->dof_handler, cell->center());
+        scratch_data.hp_fe_values_Mag.reinit(cellMag);
+        const dealii::FEValues<DIM> &fe_values_Mag = scratch_data.hp_fe_values_Mag.get_present_fe_values();
+
+        fe_values_Mag.get_function_values(this->previous_sln_Mag, prev_values_Mag);
+        fe_values_Mag.get_function_gradients(this->previous_sln_Mag, prev_gradients_Mag);
+      }
 
       // curl A from the previous iteration.
       std::vector<dealii::Tensor<1, DIM> > C(n_q_points);
@@ -1004,9 +1015,6 @@ namespace MHD
       }
       for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
         JxW[q_point] = fe_values_Flow.JxW(q_point);
-
-      // Volumetric marker
-      unsigned int marker = cell->material_id();
 
       // Geometrical points
       std::vector<dealii::Point<DIM> > points;
@@ -1594,6 +1602,17 @@ namespace MHD
 
     this->flowSolver->init_discretization(this->magSolver);
     this->magSolver->init_discretization(this->flowSolver);
+
+    std::cout << "  Printing initial solution... " << std::endl;
+
+    DataOut<DIM, hp::DoFHandler<DIM> > data_out;
+
+    data_out.attach_dof_handler(this->flowSolver->dof_handler);
+    data_out.add_data_vector(this->flowSolver->present_solution, "solution");
+    data_out.build_patches();
+    const std::string filename = "Initial_Sln.vtk";
+    std::ofstream output(filename.c_str());
+    data_out.write_vtk(output);
 
     double time = 0.0;
     for (int iteration = 0; time < T_END; time += TIME_STEP, iteration++)
