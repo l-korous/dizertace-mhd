@@ -59,20 +59,20 @@ Department of Theory of Electrical Engineering, Faculty of Electrical Engineerin
 	
 		\subsubsection{Equations for a steady magnetic field}
 		\begin{equation}
-			\frac{1}{\mu}\nabla \times \left(\nabla \times A \right) - \sigma \mathbf{v} \times \left( \nabla \times A \right) = 0
+			\frac{1}{\mu}\nabla \times \left(\nabla \times A - B_r \right) - \sigma \mathbf{v} \times \left( \nabla \times A \right) = 0
 		\end{equation}
 		Some transformation:
 		\begin{equation}
-			\nabla \left(\nabla \cdot A \right) -\frac{1}{\mu}\Delta A - \sigma \mathbf{v} \times \left( \nabla \times A \right) = 0
+			\nabla \left(\nabla \cdot A \right) -\frac{1}{\mu}\Delta A - \frac{1}{\mu} \left(\nabla \times B_r \right) - \sigma \mathbf{v} \times \left( \nabla \times A \right) = 0
 		\end{equation}
 		A is solenoidal ($\nabla \cdot A = 0$):
 		\begin{equation}
-			-\frac{1}{\mu}\Delta A - \sigma \mathbf{v} \times \left( \nabla \times A \right) = 0
+			-\frac{1}{\mu}\Delta A - \frac{1}{\mu} \left(\nabla \times B_r \right) - \sigma \mathbf{v} \times \left( \nabla \times A \right) = 0
 		\end{equation}
 		Weak formulation  ($\varphi$ is a test function):
 		\begin{equation}
 			\frac{1}{\mu}\int_{\Omega}\nabla A \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla A \cdot \mathbf{n}\right)\ \varphi 
-			 - \int_{\Omega} \sigma \left[\mathbf{v} \times \left( \nabla \times A \right)\right]\,\varphi = 0,
+			 - \int_{\Omega} \sigma \left[\mathbf{v} \times \left( \nabla \times A \right)\right]\,\varphi = \int_{\Omega}\frac{1}{\mu} \left(\nabla \times B_r \right)\,\varphi,
 		\end{equation}\ \\
 		$\Gamma_{N}$ - Neumann part of the boundary\ \\
 		
@@ -143,7 +143,7 @@ Department of Theory of Electrical Engineering, Faculty of Electrical Engineerin
 			\int_{\Omega} \left(\nabla \cdot \mathbf{v}\right) \varphi & = & 0
 		\end{eqnarray}
 				
-		\section{Complete weak formulation of the coupled nonlinear problem}
+		\subsection{Complete weak formulation of the steady-state coupled nonlinear problem}
 		\begin{eqnarray}
 			\int_{\Omega} \left(\mathbf{v} \cdot \nabla\right)\mathbf{v} \varphi
 			- \int_{\Omega} p \nabla \varphi
@@ -154,9 +154,33 @@ Department of Theory of Electrical Engineering, Faculty of Electrical Engineerin
 			\\
 			\int_{\Omega} \left(\nabla \cdot \mathbf{v}\right) \varphi & = & 0\\
 			\frac{1}{\mu}\int_{\Omega}\nabla A \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla A\cdot \mathbf{n}\right)\ \varphi 
-			 - \int_{\Omega} \sigma \left[\mathbf{v} \times \left( \nabla \times A \right)\right]\,\varphi & = & 0
+			 - \int_{\Omega} \sigma \left[\mathbf{v} \times \left( \nabla \times A \right)\right]\,\varphi - \int_{\Omega}\frac{1}{\mu} \left(\nabla \times B_r \right)\,\varphi& = &
 		\end{eqnarray}
 		
+		\section{Operator splitting scheme for transient model}
+		At each time step, first the magnetic field progresses to the new time level:
+		$$ \mathbf{A_n}\rightarrow\mathbf{A_{n+1}}, \mathbf{A_{n+1}} = f\left(\mathbf{A_n}, \mathbf{v_n}, p_n\right)$$
+		then the flow field:
+		$$ \mathbf{v_n}\rightarrow\mathbf{v_{n+1}},$$
+		$$ p_n\rightarrow p_{n+1},$$
+		$$ \left[\mathbf{v_{n+1}}, p_{n+1}\right] = f\left(\mathbf{A_{n+1}}, \mathbf{v_n}, p_n\right)$$
+		
+		\subsection{Complete weak formulation of the transient operator splitting problem}
+		\begin{eqnarray}
+			\frac{1}{\mu}\int_{\Omega}\nabla \mathbf{A_{n+1}} \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla \mathbf{A_{n+1}}\cdot \mathbf{n}\right)\ \varphi 
+			 & - &\\
+			\int_{\Omega} \sigma \left[\mathbf{v_n} \times \left( \nabla \times \mathbf{A_{n+1}} \right)\right]\,\varphi - \int_{\Omega}\frac{1}{\mu} \left(\nabla \times B_r \right)\,\varphi& = & 0\\
+			\int_{\Omega} \left(\mathbf{v_{n+1}} \cdot \nabla\right)\mathbf{v_{n+1}} \varphi
+			- \int_{\Omega} p_{n+1} \nabla \varphi
+			+ \frac{1}{Re} \int_{\Omega} \nabla v_{n+1} \cdot \nabla \varphi
+			& - &\\\int_{\Omega} \left(\mathbf{J}_{ext} \times \mathbf{B_{n+1}}\right) \varphi
+			- \int_{\Omega} \left[\sigma \left(v_{n+1} \times \mathbf{B_{n+1}}\right) \times \mathbf{B_{n+1}}\right]\, \varphi
+			& = & 0
+			\\
+			\int_{\Omega} \left(\nabla \cdot \mathbf{v_{n+1}}\right) \varphi & = & 0
+		\end{eqnarray}
+		
+		\section{Newton's method for the full coupled stationary model}
 		\subsection{Component-wise residual (all values are taken from the previous Newton iteration)}
 		\begin{eqnarray}
 			\int_{\Omega} \left({v_x} \frac{v_x}{\partial x} + v_y \frac{v_x}{\partial y} + v_z \frac{v_x}{\partial z}\right) \varphi
@@ -165,28 +189,28 @@ Department of Theory of Electrical Engineering, Faculty of Electrical Engineerin
 			\nonumber & -\\
 			- \int_{\Omega} \left({\mathbf{J}_{ext}}_y C_z - {\mathbf{J}_{ext}}_z C_y\right) \varphi			
 			- \int_{\Omega} \sigma \left(v_z C_x C_z - v_x C_z C_z - v_x C_y C_y + v_y C_x C_y\right)\, \varphi
-			& = & 0\nonumber \\
+			& = & F_0\nonumber \\
 			\int_{\Omega} \left(v_x \frac{v_y}{\partial x} + v_y \frac{v_y}{\partial y} + v_z \frac{v_y}{\partial z}\right) \varphi
 			- \int_{\Omega} p \frac{\partial \varphi}{\partial y}
 			+ \frac{1}{Re} \int_{\Omega} \nabla v_y \cdot \nabla \varphi
 			\nonumber & -\\
 			- \int_{\Omega} \left({\mathbf{J}_{ext}}_z C_x - {\mathbf{J}_{ext}}_x C_z\right) \varphi			
 			- \int_{\Omega} \sigma \left(v_x C_y C_x - v_y C_x C_x - v_y C_z C_z + v_z C_y C_z\right)\, \varphi
-			& = & 0\nonumber \\
+			& = & F_1\nonumber \\
 			\int_{\Omega} \left(v_x \frac{v_z}{\partial x} + v_y \frac{v_z}{\partial y} + v_z \frac{v_z}{\partial z}\right) \varphi
 			- \int_{\Omega} p \frac{\partial \varphi}{\partial z}
 			+ \frac{1}{Re} \int_{\Omega} \nabla v_z \cdot \nabla \varphi
 			\nonumber & -\\
 			- \int_{\Omega} \left({\mathbf{J}_{ext}}_x C_y - {\mathbf{J}_{ext}}_y C_x\right) \varphi			
 			- \int_{\Omega} \sigma \left(v_y C_z C_y - v_z C_y C_y - v_z C_x C_x + v_x C_z C_x\right)\, \varphi
-			& = & 0\nonumber \\			
-			\int_{\Omega} \left(\frac{\partial v_x}{\partial x} + \frac{\partial v_y}{\partial y} + \frac{\partial v_z}{\partial z}\right) \varphi & = & 0\nonumber \\
+			& = & F_2\nonumber \\			
+			\int_{\Omega} \left(\frac{\partial v_x}{\partial x} + \frac{\partial v_y}{\partial y} + \frac{\partial v_z}{\partial z}\right) \varphi & = & F_3\nonumber \\
 			\frac{1}{\mu}\int_{\Omega}\nabla A_x \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla A_x\cdot \mathbf{n}\right)\ \varphi 
-			 - \int_{\Omega} \sigma \left(v_y C_z - v_z C_y\right)\,\varphi & = & 0\nonumber \\
+			 - \int_{\Omega} \sigma \left(v_y C_z - v_z C_y\right)\,\varphi -\int_{\Omega}\frac{1}{\mu} \left(\nabla \times B_r \right)_x\,\varphi & = & F_4\nonumber \\
 			\frac{1}{\mu}\int_{\Omega}\nabla A_y \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla A_y\cdot \mathbf{n}\right)\ \varphi 
-			 - \int_{\Omega} \sigma \left(v_z C_x - v_x C_z\right)\,\varphi & = & 0\nonumber \\
+			 - \int_{\Omega} \sigma \left(v_z C_x - v_x C_z\right)\,\varphi -\int_{\Omega}\frac{1}{\mu} \left(\nabla \times B_r \right)_y\,\varphi & = & F_5\nonumber \\
 			\frac{1}{\mu}\int_{\Omega}\nabla A_z \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla A_z\cdot \mathbf{n}\right)\ \varphi 
-			 - \int_{\Omega} \sigma \left(v_x C_y - v_y C_x\right)\,\varphi & = & 0\nonumber \\
+			 - \int_{\Omega} \sigma \left(v_x C_y - v_y C_x\right)\,\varphi -\int_{\Omega}\frac{1}{\mu} \left(\nabla \times B_r \right)_z\,\varphi & = & F_6\nonumber \\
 			 \nonumber 
 		\end{eqnarray}
 		
@@ -201,7 +225,7 @@ Department of Theory of Electrical Engineering, Faculty of Electrical Engineerin
 			- \int_{\Omega} \sigma \textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} - \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} + \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} \right) \varphi& +\nonumber \\			
 			+ \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkblu}{A_y}}{\partial x}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - 2 \frac{\partial \textcolor{darkblu}{A_y}}{\partial x}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} + \frac{\partial \textcolor{darkred}{A_x}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} \right)\, \varphi& +\nonumber \\			
 			+ \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkred}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z} - 2 \frac{\partial \textcolor{darkred}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} + \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} \right)\, \varphi& -\nonumber \\			
-			- \int_{\Omega} \sigma \textcolor{blu}{v_y} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} - \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z}  + \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} \right)\, \varphi& = & F_0 = 0 \\			
+			- \int_{\Omega} \sigma \textcolor{blu}{v_y} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} - \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z}  + \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} \right)\, \varphi& = & F_0\\			
 			\int_{\Omega} \left(\textcolor{red}{v_x} \frac{\textcolor{blu}{v_y}}{\partial x} + \textcolor{blu}{v_y} \frac{\textcolor{blu}{v_y}}{\partial y} + \textcolor{gre}{v_z} \frac{\textcolor{blu}{v_y}}{\partial z}\right) \varphi
 			- \int_{\Omega} \textcolor{orange}{p} \frac{\partial \varphi}{\partial y}
 			+ \frac{1}{Re} \int_{\Omega} \nabla \textcolor{blu}{v_y} \cdot \nabla \varphi
@@ -211,7 +235,7 @@ Department of Theory of Electrical Engineering, Faculty of Electrical Engineerin
 			- \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} - \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z}  + \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} \right)\, \varphi& +\nonumber \\			
 			+ \int_{\Omega} \sigma \textcolor{blu}{v_y} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial y} - 2 \frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial z} + \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial z} \right)\, \varphi& +\nonumber \\			
 			+ \int_{\Omega} \sigma \textcolor{blu}{v_y} \left(\frac{\partial \textcolor{darkblu}{A_y}}{\partial x}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - 2 \frac{\partial \textcolor{darkblu}{A_y}}{\partial x}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} + \frac{\partial \textcolor{darkred}{A_x}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} \right)\, \varphi& -\nonumber \\			
-			- \int_{\Omega} \sigma \textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkred}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkred}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x}  + \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} \right)\, \varphi& = & F_1 = 0 \\			
+			- \int_{\Omega} \sigma \textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkred}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkred}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x}  + \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} \right)\, \varphi& = & F_1\\			
 			\int_{\Omega} \left(\textcolor{red}{v_x} \frac{\textcolor{gre}{v_z}}{\partial x} + \textcolor{blu}{v_y} \frac{\textcolor{gre}{v_z}}{\partial y} + \textcolor{gre}{v_z} \frac{\textcolor{gre}{v_z}}{\partial z}\right) \varphi
 			- \int_{\Omega} \textcolor{orange}{p} \frac{\partial \varphi}{\partial z}
 			+ \frac{1}{Re} \int_{\Omega} \nabla \textcolor{gre}{v_z} \cdot \nabla \varphi \nonumber & -\\
@@ -219,17 +243,17 @@ Department of Theory of Electrical Engineering, Faculty of Electrical Engineerin
 			\nonumber & -\\			- \int_{\Omega} \sigma \textcolor{blu}{v_y} \left(\frac{\partial \textcolor{darkred}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkred}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x}  + \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} \right)\, \varphi& +\nonumber \\			
 			+ \int_{\Omega} \sigma \textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkred}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial z} - 2 \frac{\partial \textcolor{darkred}{A_x}}{\partial z}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} + \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial x} \right)\, \varphi& +\nonumber \\			
 			+ \int_{\Omega} \sigma \textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkgre}{A_z}}{\partial y} - 2 \frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial z} + \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial z} \right)\, \varphi& -\nonumber \\			
-			- \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} - \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} + \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} \right)\, \varphi& = & F_2 = 0 \\				
-			\int_{\Omega} \left(\frac{\partial \textcolor{red}{v_x}}{\partial x} + \frac{\partial \textcolor{blu}{v_y}}{\partial y} + \frac{\partial \textcolor{gre}{v_z}}{\partial z}\right) \varphi & = & F_3 = 0 \\
+			- \int_{\Omega} \sigma \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial y}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} - \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} + \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\,\frac{\partial \textcolor{darkred}{A_x}}{\partial y} \right)\, \varphi& = & F_2\\				
+			\int_{\Omega} \left(\frac{\partial \textcolor{red}{v_x}}{\partial x} + \frac{\partial \textcolor{blu}{v_y}}{\partial y} + \frac{\partial \textcolor{gre}{v_z}}{\partial z}\right) \varphi & = & F_3\\
 			\frac{1}{\mu}\int_{\Omega}\nabla \textcolor{darkred}{A_x} \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla \textcolor{darkred}{A_x}\cdot \mathbf{n}\right)\ \varphi 
 			 \nonumber& - \\
-			-  \int_{\Omega} \sigma \left[\textcolor{blu}{v_y} \left(\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkred}{A_x}}{\partial y}\right) - \textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkred}{A_x}}{\partial z} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\right)\right]\,\varphi & = & F_4 = 0 \\			
+			-  \int_{\Omega} \sigma \left[\textcolor{blu}{v_y} \left(\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkred}{A_x}}{\partial y}\right) - \textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkred}{A_x}}{\partial z} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\right)\right]\,\varphi -\int_{\Omega}\frac{1}{\mu} \left(\nabla \times B_r \right)_z\,\varphi & = & F_4\\			
 			\frac{1}{\mu}\int_{\Omega}\nabla \textcolor{darkblu}{A_y} \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla \textcolor{darkblu}{A_y}\cdot \mathbf{n}\right)\ \varphi 
 			 \nonumber& - \\
-			- \int_{\Omega} \sigma \left[\textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y} - \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\right) - \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkred}{A_x}}{\partial y}\right)\right]\,\varphi & = & F_5 = 0 \\			
+			- \int_{\Omega} \sigma \left[\textcolor{gre}{v_z} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y} - \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\right) - \textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkblu}{A_y}}{\partial x} - \frac{\partial \textcolor{darkred}{A_x}}{\partial y}\right)\right]\,\varphi -\int_{\Omega}\frac{1}{\mu} \left(\nabla \times B_r \right)_z\,\varphi & = & F_5\\			
 			\frac{1}{\mu}\int_{\Omega}\nabla \textcolor{darkgre}{A_z} \cdot \nabla \varphi - \int_{\partial \Omega \cap \Gamma_{N}} \left(\nabla \textcolor{darkgre}{A_z}\cdot \mathbf{n}\right)\ \varphi 
 			 \nonumber& - \\
-			-  \int_{\Omega} \sigma \left[\textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkred}{A_x}}{\partial z} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\right) - \textcolor{blu}{v_y} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y} - \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\right)\right]\,\varphi & = & F_6 = 0 \\
+			-  \int_{\Omega} \sigma \left[\textcolor{red}{v_x} \left(\frac{\partial \textcolor{darkred}{A_x}}{\partial z} - \frac{\partial \textcolor{darkgre}{A_z}}{\partial x}\right) - \textcolor{blu}{v_y} \left(\frac{\partial \textcolor{darkgre}{A_z}}{\partial y} - \frac{\partial \textcolor{darkblu}{A_y}}{\partial z}\right)\right]\,\varphi -\int_{\Omega}\frac{1}{\mu} \left(\nabla \times B_r \right)_z\,\varphi & = & F_6\\
 			 \nonumber 
 		\end{eqnarray}
 		
