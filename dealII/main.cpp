@@ -4,10 +4,10 @@
 #define TYPENAME 
 #endif
 #define DIM 3
-#define DEPTH 5
+#define DEPTH 8
 #define MAGNET_SIZE 3
 #define AIR_LAYER_THICKNESS 2
-#define INIT_REF_NUM 15
+#define INIT_REF_NUM 16
 
 const bool NO_MOVEMENT_INDUCED_FORCE = false;
 const bool NO_EXT_CURR_DENSITY_FORCE = false;
@@ -701,7 +701,7 @@ namespace MHD
       // - find the element on the second mesh.
       if (marker == MARKER_FLUID)
       {
-        TYPENAME dealii::hp::DoFHandler<DIM>::active_cell_iterator &cellFlow = GridTools::find_active_cell_around_point(this->flowSolver->dof_handler, cell->center());
+        const TYPENAME dealii::hp::DoFHandler<DIM>::active_cell_iterator &cellFlow = GridTools::find_active_cell_around_point(this->flowSolver->dof_handler, cell->center());
         scratch_data.hp_fe_values_Flow.reinit(cellFlow);
         const dealii::FEValues<DIM> &fe_values_Flow = scratch_data.hp_fe_values_Flow.get_present_fe_values();
         // - get the values.
@@ -784,13 +784,13 @@ namespace MHD
             // Remanent induction.
             if (marker == MARKER_MAGNET)
             {
-              /* TODO - KDYZ SE TAM DA TENTO (ASI SPRAVNY) VYRAZ, A PRIDA SE VYRAZ PRO NEUMANNA DALE, TAK TO NEJDE
+              // TODO - KDYZ SE TAM DA TENTO (ASI SPRAVNY) VYRAZ, A PRIDA SE VYRAZ PRO NEUMANNA DALE, TAK TO NEJDE
               if (components[i] == 0) {
               copy_data.cell_rhs(i) -= (B_R[2] * shape_grad[i][q_point][1] - B_R[1] * shape_grad[i][q_point][2])
               * JxW[q_point]
               / (MU * MU_R);
               }
-              */
+              
               if (components[i] == 1) {
                 copy_data.cell_rhs(i) -= (B_R[0] * shape_grad[i][q_point][2] - B_R[2] * shape_grad[i][q_point][0])
                   * JxW[q_point]
@@ -808,17 +808,15 @@ namespace MHD
       }
 
       // Remanent induction - SURFACE.
-      /* TODO - KDYZ SE TAM DA TENTO (ASI SPRAVNY) VYRAZ, A PRIDA SE VYRAZ PRO REMANENTNI INDUKCI V (component == 0), TAK TO NEJDE - proto je ted na pravou stranu (component == 0) dana nula
+      // TODO - KDYZ SE TAM DA TENTO (ASI SPRAVNY) VYRAZ, A PRIDA SE VYRAZ PRO REMANENTNI INDUKCI V (component == 0), TAK TO NEJDE - proto je ted na pravou stranu (component == 0) dana nula
       if (marker == MARKER_MAGNET)
       {
       dealii::hp::FEFaceValues<DIM> hp_fe_face_values(mappingCollection, feCollection, qCollectionFace, dealii::update_quadrature_points | dealii::update_values | dealii::update_JxW_values);
 
-      std::cout << "Cell: " << cell->center()(0) << ", " << cell->center()(1) << ", " << cell->center()(2) << std::endl;
       for (unsigned int face = 0; face < dealii::GeometryInfo<DIM>::faces_per_cell; ++face)
       {
       if (cell->face(face)->boundary_indicator() == BOUNDARY_FRONT || cell->face(face)->boundary_indicator() == BOUNDARY_BACK)
       {
-      std::cout << "Face: " << cell->face(face)->center()(0) << ", " << cell->face(face)->center()(1) << ", " << cell->face(face)->center()(2) << std::endl;
 
       hp_fe_face_values.reinit(cell, face);
 
@@ -854,7 +852,7 @@ namespace MHD
       }
       }
       }
-      */
+      //
 
       // distribute local to global matrix
       copy_data.local_dof_indices.resize(dofs_per_cell);
