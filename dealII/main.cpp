@@ -4,10 +4,10 @@
 #define TYPENAME 
 #endif
 #define DIM 3
-#define DEPTH 6
-#define MAGNET_SIZE 2
-#define AIR_LAYER_THICKNESS 1
-#define INIT_REF_NUM 10
+#define DEPTH 5
+#define MAGNET_SIZE 3
+#define AIR_LAYER_THICKNESS 2
+#define INIT_REF_NUM 15
 
 const bool NO_MOVEMENT_INDUCED_FORCE = true;
 const bool NO_EXT_CURR_DENSITY_FORCE = false;
@@ -125,12 +125,12 @@ double J_EXT(int marker, int component, dealii::Point<DIM> p)
 
 const double REYNOLDS = 5.;
 
-const double NEWTON_DAMPING = .8;
+const double NEWTON_DAMPING = .95;
 const int NEWTON_ITERATIONS = 100;
 const double NEWTON_RESIDUAL_THRESHOLD = 1e-8;
 
-const double TIME_STEP = 1.e-3;
-const double T_END = 1.;
+const double TIME_STEP = 1.e-1;
+const double T_END = 10.;
 
 dealii::Tensor<1, 3> curl(dealii::Tensor<1, 3>& gradient_0, dealii::Tensor<1, 3>& gradient_1, dealii::Tensor<1, 3>& gradient_2)
 {
