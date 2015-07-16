@@ -9,7 +9,7 @@
 #define AIR_LAYER_THICKNESS 2
 #define INIT_REF_NUM 15
 
-const bool NO_MOVEMENT_INDUCED_FORCE = true;
+const bool NO_MOVEMENT_INDUCED_FORCE = false;
 const bool NO_EXT_CURR_DENSITY_FORCE = false;
 
 const bool PRINT_ALGEBRA = false, PRINT_INIT_SLN = true;
@@ -694,16 +694,20 @@ namespace MHD
       fe_values_Mag.get_function_values(present_solution, prev_values_Mag);
       fe_values_Mag.get_function_gradients(present_solution, prev_gradients_Mag);
 
-      /*
+      // Volumetric marker
+      unsigned int marker = cell->material_id();
+
       // Previous flow values
       // - find the element on the second mesh.
-      dealii::hp::DoFHandler<DIM>::active_cell_iterator &cellFlow = GridTools::find_active_cell_around_point(this->flowSolver->dof_handler, cell->center());
-      scratch_data.hp_fe_values_Flow.reinit(cellFlow);
-      const dealii::FEValues<DIM> &fe_values_Flow = scratch_data.hp_fe_values_Flow.get_present_fe_values();
-      // - get the values.
-      fe_values_Flow.get_function_values(this->previous_sln_Flow, prev_values_Flow);
-      fe_values_Flow.get_function_gradients(this->previous_sln_Flow, prev_gradients_Flow);
-      */
+      if (marker == MARKER_FLUID)
+      {
+        TYPENAME dealii::hp::DoFHandler<DIM>::active_cell_iterator &cellFlow = GridTools::find_active_cell_around_point(this->flowSolver->dof_handler, cell->center());
+        scratch_data.hp_fe_values_Flow.reinit(cellFlow);
+        const dealii::FEValues<DIM> &fe_values_Flow = scratch_data.hp_fe_values_Flow.get_present_fe_values();
+        // - get the values.
+        fe_values_Flow.get_function_values(this->previous_sln_Flow, prev_values_Flow);
+        fe_values_Flow.get_function_gradients(this->previous_sln_Flow, prev_gradients_Flow);
+      }
 
       // curl A from the previous iteration.
       std::vector<dealii::Tensor<1, DIM> > C(n_q_points);
@@ -725,9 +729,6 @@ namespace MHD
       }
       for (unsigned int q_point = 0; q_point < n_q_points; ++q_point)
         JxW[q_point] = fe_values_Mag.JxW(q_point);
-
-      // Volumetric marker
-      unsigned int marker = cell->material_id();
 
       // Geometrical points
       std::vector<dealii::Point<DIM> > points;
@@ -754,14 +755,40 @@ namespace MHD
                 / (MU * MU_R);
             }
 
+            if (marker == MARKER_FLUID)
+            {
+              // (u x (\Nabla x A)) - first part (coinciding indices)
+              if (components[i] == components[j])
+              {
+                for (int other_component = 0; other_component < DIM; other_component++)
+                {
+                  if (other_component != components[i])
+                  {
+                    copy_data.cell_matrix(i, j) += SIGMA * prev_values_Flow[q_point][other_component]
+                      * shape_value[i][q_point]
+                      * shape_grad[j][q_point][other_component]
+                      * JxW[q_point];
+                  }
+                }
+              }
+              // (u x (\Nabla x A)) - second part (NON-coinciding indices)
+              else
+              {
+                copy_data.cell_matrix(i, j) -= SIGMA * prev_values_Flow[q_point][components[j]]
+                  * shape_value[i][q_point]
+                  * shape_grad[j][q_point][components[i]]
+                  * JxW[q_point];
+              }
+            }
+
             // Remanent induction.
             if (marker == MARKER_MAGNET)
             {
               /* TODO - KDYZ SE TAM DA TENTO (ASI SPRAVNY) VYRAZ, A PRIDA SE VYRAZ PRO NEUMANNA DALE, TAK TO NEJDE
               if (components[i] == 0) {
-                copy_data.cell_rhs(i) -= (B_R[2] * shape_grad[i][q_point][1] - B_R[1] * shape_grad[i][q_point][2])
-                  * JxW[q_point]
-                  / (MU * MU_R);
+              copy_data.cell_rhs(i) -= (B_R[2] * shape_grad[i][q_point][1] - B_R[1] * shape_grad[i][q_point][2])
+              * JxW[q_point]
+              / (MU * MU_R);
               }
               */
               if (components[i] == 1) {
@@ -784,48 +811,48 @@ namespace MHD
       /* TODO - KDYZ SE TAM DA TENTO (ASI SPRAVNY) VYRAZ, A PRIDA SE VYRAZ PRO REMANENTNI INDUKCI V (component == 0), TAK TO NEJDE - proto je ted na pravou stranu (component == 0) dana nula
       if (marker == MARKER_MAGNET)
       {
-        dealii::hp::FEFaceValues<DIM> hp_fe_face_values(mappingCollection, feCollection, qCollectionFace, dealii::update_quadrature_points | dealii::update_values | dealii::update_JxW_values);
+      dealii::hp::FEFaceValues<DIM> hp_fe_face_values(mappingCollection, feCollection, qCollectionFace, dealii::update_quadrature_points | dealii::update_values | dealii::update_JxW_values);
 
-        std::cout << "Cell: " << cell->center()(0) << ", " << cell->center()(1) << ", " << cell->center()(2) << std::endl;
-        for (unsigned int face = 0; face < dealii::GeometryInfo<DIM>::faces_per_cell; ++face)
-        {
-          if (cell->face(face)->boundary_indicator() == BOUNDARY_FRONT || cell->face(face)->boundary_indicator() == BOUNDARY_BACK)
-          {
-            std::cout << "Face: " << cell->face(face)->center()(0) << ", " << cell->face(face)->center()(1) << ", " << cell->face(face)->center()(2) << std::endl;
+      std::cout << "Cell: " << cell->center()(0) << ", " << cell->center()(1) << ", " << cell->center()(2) << std::endl;
+      for (unsigned int face = 0; face < dealii::GeometryInfo<DIM>::faces_per_cell; ++face)
+      {
+      if (cell->face(face)->boundary_indicator() == BOUNDARY_FRONT || cell->face(face)->boundary_indicator() == BOUNDARY_BACK)
+      {
+      std::cout << "Face: " << cell->face(face)->center()(0) << ", " << cell->face(face)->center()(1) << ", " << cell->face(face)->center()(2) << std::endl;
 
-            hp_fe_face_values.reinit(cell, face);
+      hp_fe_face_values.reinit(cell, face);
 
-            const dealii::FEFaceValues<DIM> &fe_face_values = hp_fe_face_values.get_present_fe_values();
-            const unsigned int n_face_q_points = fe_face_values.n_quadrature_points;
+      const dealii::FEFaceValues<DIM> &fe_face_values = hp_fe_face_values.get_present_fe_values();
+      const unsigned int n_face_q_points = fe_face_values.n_quadrature_points;
 
-            std::vector<std::vector<double> > shape_face_value = std::vector<std::vector<double> >(dofs_per_cell);
+      std::vector<std::vector<double> > shape_face_value = std::vector<std::vector<double> >(dofs_per_cell);
 
-            for (unsigned int i = 0; i < dofs_per_cell; ++i)
-            {
-              shape_face_value[i].resize(n_face_q_points);
-              for (unsigned int q_point = 0; q_point < n_face_q_points; ++q_point)
-                shape_face_value[i][q_point] = fe_face_values.shape_value(i, q_point);
-            }
+      for (unsigned int i = 0; i < dofs_per_cell; ++i)
+      {
+      shape_face_value[i].resize(n_face_q_points);
+      for (unsigned int q_point = 0; q_point < n_face_q_points; ++q_point)
+      shape_face_value[i][q_point] = fe_face_values.shape_value(i, q_point);
+      }
 
-            std::vector<double> shape_face_JxW(n_face_q_points);
-            for (unsigned int q_point = 0; q_point < n_face_q_points; ++q_point)
-              shape_face_JxW[q_point] = fe_face_values.JxW(q_point);
+      std::vector<double> shape_face_JxW(n_face_q_points);
+      for (unsigned int q_point = 0; q_point < n_face_q_points; ++q_point)
+      shape_face_JxW[q_point] = fe_face_values.JxW(q_point);
 
-            for (unsigned int q_point = 0; q_point < n_face_q_points; ++q_point)
-            {
-              for (unsigned int i = 0; i < dofs_per_cell; ++i)
-              {
-                double normal_z = (cell->face(face)->boundary_indicator() == BOUNDARY_FRONT) ? 1.0 : -1.0;
+      for (unsigned int q_point = 0; q_point < n_face_q_points; ++q_point)
+      {
+      for (unsigned int i = 0; i < dofs_per_cell; ++i)
+      {
+      double normal_z = (cell->face(face)->boundary_indicator() == BOUNDARY_FRONT) ? 1.0 : -1.0;
 
-                if (components[i] == 0) {
-                  copy_data.cell_rhs(i) += B_R[1] * normal_z * shape_face_value[i][q_point]
-                    * shape_face_JxW[q_point]
-                    / (MU * MU_R);
-                }
-              }
-            }
-          }
-        }
+      if (components[i] == 0) {
+      copy_data.cell_rhs(i) += B_R[1] * normal_z * shape_face_value[i][q_point]
+      * shape_face_JxW[q_point]
+      / (MU * MU_R);
+      }
+      }
+      }
+      }
+      }
       }
       */
 
@@ -1029,7 +1056,7 @@ namespace MHD
                   * JxW[q_point];
 
 #pragma region NO_MOVEMENT_INDUCED_FORCE
-                if (!NO_MOVEMENT_INDUCED_FORCE && marker == MARKER_FLUID)
+                if (!NO_MOVEMENT_INDUCED_FORCE)
                 {
                   // sigma (u x B) x B WRT VELOCITIES - coinciding indices
                   for (int other_component = 0; other_component < DIM; other_component++)
@@ -1056,7 +1083,7 @@ namespace MHD
                   * JxW[q_point];
 
 #pragma region NO_MOVEMENT_INDUCED_FORCE
-                if (!NO_MOVEMENT_INDUCED_FORCE && marker == MARKER_FLUID)
+                if (!NO_MOVEMENT_INDUCED_FORCE)
                 {
                   // sigma (u x B) x B WRT VELOCITIES - NON-coinciding indices
                   copy_data.cell_matrix(i, j) -= SIGMA * C[q_point][components[i]] * C[q_point][components[j]]
@@ -1117,7 +1144,7 @@ namespace MHD
               * JxW[q_point];
 
 #pragma region NO_MOVEMENT_INDUCED_FORCE
-            if (!NO_MOVEMENT_INDUCED_FORCE && marker == MARKER_FLUID)
+            if (!NO_MOVEMENT_INDUCED_FORCE)
             {
               // Forces from magnetic field
               for (unsigned int j = 0; j < DIM; ++j)
@@ -1573,8 +1600,7 @@ namespace MHD
     double time = 0.0;
     for (int iteration = 0; time < T_END; time += TIME_STEP, iteration++)
     {
-      if(iteration == 0)
-        this->magSolver->solveOneStep(this->flowSolver->present_solution, iteration);
+      this->magSolver->solveOneStep(this->flowSolver->present_solution, iteration);
       this->flowSolver->solveOneStep(this->magSolver->present_solution, iteration);
     }
   }
