@@ -1,0 +1,4 @@
+\subsection{Vectorization}
+- tady vyuzit to co jsem delal na predmet\\
+
+Similarly as in section (TODO: Parallelization), the goal here is to be able to solve the discretized problem in the most efficient (fast) way possible. One of the features that (modern) hardware offers is to employ vectorization instructions - i.e. unary or binary instructions that operate on $N, N > 1$ value (in case of unary instructions), or $N, N > 1$ pair of values (in case of binary instructions) - the number $N$ depends on the capabilities of the CPU, and on the precision (single or double). On the hardware that was available to perform calculations for this thesis (and based on always-used double precision), $N = \left\{4, 8\right\}$.

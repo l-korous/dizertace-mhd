@@ -1,0 +1,20 @@
+\section{Time-stepping and linearization}
+
+\subsection{Time-stepping}
+The simple time discretization scheme that we use (TODO: ref na sekci z math / num) allows us to simply implement the time-stepping in the following fashion:
+TODO: kus kodu, kde je naznaceno jak to vypada, jak se kopiruje reseni do predchoziho.
+
+
+
+\subsection{Linearization}
+Since our time discretization scheme is not unconditionally stable, and we cannot afford to decrease the time step length infinitely, we want to perform an iterative improvement of the solution at every time step, so that we can perform calculation with longer time steps and not lose stability of the calculation.
+The iterative improvement is in essence, reducing the error defined as:
+$$
+TODO:
+,
+$$
+and the iterative improvement loop looks like this:
+$$
+TODO:
+.
+$$
