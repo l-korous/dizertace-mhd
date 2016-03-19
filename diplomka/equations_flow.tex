@@ -1,0 +1,380 @@
+\chapter{Compressible flow and the Euler equations}
+	\section{Equations decribing the flow}
+	We consider a time interval $\left(0,T\right)$ and space domain $\Omega_{\textit{t}}\subset \mathbb{R}^3$ occupied by a fluid at time $t$.
+	By $\mathcal{M}$ we denote the space-time domain in consideration: 
+\begin{equation}\label{M}
+ \mathcal{M}=\left\{\left(\textbf{\textit{x}},t\right);\\\textbf{\textit{x}}\in\Omega_{\textit{t}},t\in\left(0,T\right)\right \}.
+\end{equation}
+	Moreover we assume that $\mathcal{M}$ is an open set.
+\subsection{Description of the flow}
+\paragraph{}
+In Computational Fluid Dynamics there exist two classical approaches to the description of the flow, the \textit{Lagrangian description} and the \textit{Eulerian description}.
+\paragraph{}
+
+The idea of the Lagrangian description is to monitor each fluid particle along its pathline (i.e. the curve which the particle traverses in time).
+If we wanted to set a computational mesh using this description, it would mean to firmly connect nodes of the mesh with certain particles (i.e. the node and the particle would have to share their space coordinates) and move the mesh accordingly to the motion of the fluid as to preserve the node - corresponding particle connection at each time instant.
+The obvious drawback is the necessity to perform re-meshing operations very frequently, especially when dealing with large distortion of the fluid.
+\paragraph{}
+
+The Eulerian description focuses on fluid particles that move through fixed points within a computational domain. In other words, whereas in the Lagrangian description the particle was fixed and the point in space it was currently occupying was changing, now it is the point in space that holds still and the particle in consideration is changing and is always corresponding to the one that is currently occupying the considered point in space. From this idea it follows that a computational mesh for this description would be fixed with respect to time.
+\paragraph{}
+It is not difficult to imagine that formulation of some basic mechanical principles could be easier for the moving particle, that is using the Lagrangian approach.
+However, the Eulerian description is used for the formulation of conservation laws as will be seen in the following subsections.
+Last, using this approach, large distortions of fluid domain can be handled with relative ease.
+\paragraph{}
+We shall proceed now with basics of the Lagrangian and the Eulerian descriptions and their relation. We shall present the equations describing the flow derived from conservation laws in their integral forms using the Eulerian approach.
+\paragraph{Lagrangian description}\ \\
+We specify the particle in consideration using the mapping 
+\begin{equation}\label{phi_def}
+\bsm{\varphi}\left(\bs{X},t_0;t\right)
+\end{equation} 
+which determines the current (at time $t$) position $\bs{x}\in\Omega_t$ of the particle that occupies the point $\bs{X}$ at time $t_0$, i.e.
+\begin{equation}\bs{x} = \bsm{\varphi}\left(\bs{X},t_0;t\right),\ \bs{X}\in\Omega_{t_0},
+\end{equation}
+where we can omit the reference time $t_0 $ and write
+\begin{equation}\label{x=phi}
+\bs{x} = \bsm{\varphi}\left(\bs{X},t\right).
+\end{equation}
+Customarily the components $X_1,X_2,X_3$ of the reference point $\bs{X}$ are called the \textit{Lagrangian coordinates} and the components
+$x_1,x_2,x_3$ of the point $\bs{x}$ in the current configuration $\Omega_t$ are called the \textit{Eulerian coordinates}. The \textit{velocity} and \textit{acceleration} of the particle given by the reference point $\bs{X}$ are defined as
+\begin{equation}\label{v_def}
+\hat{v}\left(\bs{X},t\right) = \pds{\bsm{\varphi}}{t}\left(\bs{X},t_0;t\right),
+\end{equation}
+\begin{equation}
+\hat{a}\left(\bs{X},t\right) = \frac{\partial^2{\bsm{\varphi}}}{\partial{t}^2}\left(\bs{X},t_0;t\right),
+\end{equation}
+provided the above derivatives exist.
+\paragraph{Eulerian description}\ \\
+Using once again the mapping $\phib$ defined in~\eqref{phi_def}, relation~\eqref{x=phi} and the Lagrangian definition of velocity~\eqref{v_def}, we can express the \textit{velocity} of the fluid particle passing through the point $\bs{x}$ at time $t$: 
+\begin{equation}
+\bs{v}\left(\bs{x},t\right) = \hat{\bs{v}}\left(\bs{X},t\right) = \pds{\bsm{\varphi}}{t}\left(\bs{X},t\right),
+\end{equation}
+where $\bs{x} = \phib\left(\bs{X},t\right).$ \\
+We shall demand the following regularity from the velocity function:
+\begin{equation}\label{v_reg}
+\bs{v}\in\left[\mathcal{C}^1\left(\mathcal{M}\right)\right]^3.
+\end{equation}
+We can pass to the Eulerian coordinates from the Lagrangian ones by solving the following initial value problem:
+\begin{equation}\label{lagrange-euler}
+ \pds{\bs{x}}{t} = \bs{v}\left(\bs{x},t\right),\ \ \bs{x}\left(t_0\right) = \bs{X}.
+\end{equation}
+Under assumption~\eqref{v_reg}, the problem~\eqref{lagrange-euler} has exactly one maximal solution $\phib\left(\bs{X},t_0,t\right)$ for each $\left(\bs{X},t_0\right)\in\mathcal{M}$ defined for $t$ from a certain subinterval of $\left(0,T\right)$. Moreover, in its domain of definition, the mapping $\phib$ has continuous first order derivatives with respect to $X_1,\ X_2,\ X_3,\ t_0,\ t$ and continuous second order derivatives $\partial^2\phib/\partial{t}\partial{X_i}$, $\partial^2\phib/\partial{t_0}\partial{X_i}$, $i = 1,\ 2,\ 3$. These statements result from theory of classical solutions of ordinary differential equations.
+\paragraph{}
+Under assumption~\eqref{v_reg}, the \textit{acceleration} of the particle passing through the point $\bs{x}$ at time $t$ can be expressed as 
+\begin{equation}
+ \bs{a}\left(\bs{x},t\right) = \pds{\bs{v}}{t}\left(\bs{x},t\right) + \sum_{i=1}^{3}v_i\left(\bs{x},t\right)\pds{\bs{v}}{x_i}\left(\bs{x},t\right).
+\end{equation}
+This, written in a short form reads
+\begin{equation}\label{a_def_2}
+ \bs{a}= \pds{\bs{v}}{t} + \left(\bs{v}\cdot\mathsf{grad}\right)\bs{v} = \pds{\bs{v}}{t}+\left(\bs{v}\cdot\nabla\right)\bs{v},
+\end{equation}
+where the differentiation represented by the symbol $\nabla$ is with respect to the spatial variables $x_1,x_2,x_3$.
+
+\subsection{The Transport theorem}
+\paragraph{}
+We wish to study some physical quantity which is transported by fluid particles in our space-time domain $\mc{M}$.
+Let a function $F = F\left(\bs{x},t\right):\mathcal{M}\longrightarrow \mathbb{R} $ represent some physical quantity in the Eulerian coordinates, and let us consider a system of fluid particles filling a bounded domain $\mathcal{V}\lo{t}\ro \subset \Omega_{t}$ at time $t$. By $\mathcal{F}$ we denote the total amount of the quantity represented by the function $F$ contained in $\mc{V}\lo{t}\ro $:
+\begin{equation}
+ \mathcal{F}\left(t\right) = \int_{\mathcal{V}\left(t\right)}F\left(\bs{x},t\right)d\bs{x}.
+\end{equation}
+For the formulation of fundamental equations describing the flow we need to calculate the rate of change of the quantity $\mc{F}$ bound on the system of particles considered. In other words we shall be interested in the derivative
+\begin{equation}\label{f_der}
+ \d{\mathcal{F}\left(t\right)}{t}=\d{}{t}\int_{\mathcal{V}\left(t\right)}F\left(\bs{x},t\right)d\bs{x}.
+\end{equation}
+In the following we shall suppose that~\eqref{v_reg} holds.
+\paragraph{Lemma 1.1}
+\itshape
+\ \newline
+Let $t_0 \in\left(0,T\right), \mathcal{V}\left(t_0\right)$ be a bounded
+ domain and let $\overline{\mathcal{V}\left(t_0\right)}\subset\Omega_{\textit{t}_0}$.
+Then there exist an interval $\left(t_1,t_2\right)\subset\left(0,T\right)$, $t_0\in\left(t_1,t_2\right)$ such that the following conditions are satisfied:
+\renewcommand{\labelenumi}{\alph{enumi})}
+\begin{enumerate}
+\upshape
+ \item\itshape The mapping '$t\in\left(t_1,t_2\right), \bs{X}\in\mathcal{V}\left(t_0\right)\longrightarrow\bs{x}=\bsm{\varphi}\left(\bs{X},t_0;t\right)\in\mathcal{V}\left(t\right)$' has continuous first order derivatives with respect to $t,X_1,X_2,X_3$ and continuous second order derivatives 
+${\partial^2\bsm{\varphi}}/{\partial{t}\partial{{X}_i}},\ i = 1, 2, 3.$
+\upshape
+ \item\itshape The mapping '$\bs{X}\in\mathcal{V}\left(t_0\right)\longrightarrow\bs{x}= \bsm{\varphi}\left(\bs{X},t_0;t\right)\in\mathcal{V}\left(t\right)$' is for all ${t}\in\left(t_1,t_2\right)$ a continuously differentiable one-to-one mapping of $\mathcal{V}\left(t_0\right)$ onto $\mathcal{V}\left(t\right)$ with continuous and bounded Jacobian $\mc{J}\left(\bs{X},t\right)$ which satisfies the condition 
+$$
+\mc{J}\left(\bs{X},t\right) > 0\ \ \forall\bs{X}\in \mathcal{V}\left(t_0\right),\ \forall{t}\in\left(t_1,t_2\right).$$
+ \upshape
+ \item\itshape The inclusion $$
+\left\{\left(\bs{x},t\right);\ t\in\left[t_1,t_2\right], \bs{x}\in \overline{{\mathcal{V}\left(t\right)}}\right\}\subset\mathcal{M}$$
+holds and therefore the mapping \bs{v} has continuous and bounded first order derivatives on $\left\{\left(\bs{x},t\right);\ t\in\left(t_1,t_2\right), \bs{x}\in\mathcal{V}\left(t\right)\right\}$ with respect to all variables.
+\upshape
+ \item\itshape $\bs{v}\left(\bsm{\varphi}\left(\bs{X},t_0;t\right),t\right)=\pds{\bsm{\varphi}}{t}\left(\bs{X},t_0;t\right)\ \forall\bs{X}\in\mathcal{V}\left(t_0\right),\ \forall\ t\in\left(t_1,t_2\right).$
+\end{enumerate}
+\upshape
+For proof, see~\cite{1993}.
+\paragraph{Theorem 1.2 - The transport theorem}
+\ \newline
+\itshape
+Let conditions from Lemma 1.1, a)-d) be satisfied and let the function $F = F\left(\bs{x},t\right)$ have continuous and bounded first order derivatives on the set \\$\left\{\left(\bs{x},t\right);t\in\left(t_1,t_2\right),\,x\in\mathcal{V}\left(t\right)\right\}$. Let $\mc{F}\lo{t}\ro = \int_{\mathcal{V}\left(t\right)}F\left(\bs{x},t\right) d\bs{x}$.
+\\
+Then for each $t\in\left(t_1,t_2\right)$ there exists a finite derivative
+\begin{eqnarray}
+\nonumber\frac{d\mathcal{F}}{dt}\left({t}\right)
+& = &
+\frac{d}{dt}\int_{\mathcal{V}\left(t\right)}F\left(\bs{x},t\right) d\bs{x}
+ \\
+& = & \int_{\mathcal{V}\left(t\right)}
+	\left[
+		\pds{F}{t}\left(\bs{x},t\right)
+		+
+		\mathrm{div}\left(F\bs{v}\right)\left(\bs{x},t\right)\right] d\bs{x}.
+\end{eqnarray}\upshape
+For proof, see~\cite{compress}.
+\subsection{The continuity equation}
+\ \newline
+The \textit{density of fluid is} a function
+$$\rho:\mathcal{M} \longrightarrow \left(0,+\infty\right)$$
+which allows us to determine the mass $m\left(\mathcal{V};t\right)$ of the fluid contained in any subdomain $\mathcal{V}\subset\Omega_{\textit{t}}:$
+\begin{equation}\label{m}
+ m\left(\mathcal{V};t\right) = \int_{\mathcal{V}}\rho\left(\bs{x},t\right)d\bs{x}.
+\end{equation}
+\paragraph{Assumptions 1.3}\label{assumption}\ \\
+In what follows, let $\rho\in\mathcal{C}^1\lo{}\mc{M}\ro $ and as before let $\bs{v}\in\left[\mathcal{C}^1\left(\mathcal{M}\right)\right]^3$. We shall consider an arbitrary time instant $t_0 \in\left(0,T\right)$ and a moving piece of fluid formed by the same particles at each time instant and filling at time $t_0$ a bounded domain $\mathcal{V}\subset\overline{\mathcal{V}}\subset\Omega_{{t}_0}$ with a Lipschitz-continuous boundary $\partial\mathcal{V}$ called the \textit{control volume} in the domain $\Omega_{{t}_0}$. By $\mc{V}\lo{t}\ro $ we denote the domain occupied by this piece of fluid at time $t\in\lo{}t_1,t_2\ro $, where $\lo{}t_1,t_2\ro $ is a sufficiently small interval containing $t_0$ with properties from Lemma 1.1.
+\paragraph{}Since the domain $\mathcal{V}\left(t\right)$ is formed by the same particles at each time instant, the \textit{conservation of mass} can be formulated in the following way:
+\textit{The mass of the piece of fluid represented by the domain }$\mathcal{V}\left(t\right)$\textit{ does not depend on time t.} This means that
+\begin{equation}
+ \d{m\left(\mathcal{V}\left(t\right);t\right)}{t} = 0,\ t \in\left(t_1,t_2\right),
+\end{equation}
+where with respect to~\eqref{m} we have
+\begin{equation}\label{mass}
+ m\left(\mathcal{V}\left(t\right);t\right)=\int_{\mathcal{V}\lo{t}\ro}\rho\left(\bs{x},t\right)d\bs{x}.
+\end{equation}
+From Theorem 1.2 for a function $F:=\rho$ we get the identity
+\begin{equation}
+\int_{\mathcal{V}\left(t\right)}\left[\pds{\rho}{t}\left(\bs{x},t\right) + \mathrm{div}\left(\rho\bs{v}\right)\left(\bs{x},t\right)\right] d\bs{x} = 0,\ \ t\in\left(t_1,t_2\right).
+\end{equation}
+If we substitute $t:=t_0$ and take into account that $\mathcal{V}\left(t_0\right) = \mathcal{V}$, we conclude that
+\begin{equation}
+\int_{\mathcal{V}}\left[\pds{\rho}{t}\left(\bs{x},t_0\right) + \mathrm{div}\left(\rho\bs{v}\right)\left(\bs{x},t_0\right)\right] d\bs{x} = 0
+\end{equation}
+for an arbitrary $t_0\in\left(0,T\right)$ and an arbitrary control volume $\mathcal{V}\subset\Omega_{t_0}$. We use the following Lemma in order to derive the differential form of the law of conservation of mass:
+\paragraph{Lemma 1.4}\label{4}\ \\
+\itshape
+Let $\Omega\subset\mathbb{R}^N$ be an open set and let $f\in\mathcal{C}\left(\Omega\right)$. Then the following holds: \\\\
+$f\equiv0$ in $\Omega$ if and only if $\int_{\mathcal{V}}f\lo{}\bs{x}\ro\,d\bs{x}=0$ for any bounded open set $\mathcal{V}\subset\overline{\mathcal{V}}\subset\Omega$.
+\upshape\paragraph{}
+Now we use Lemma 1.4 and obtain the differential form of the law of conservation of mass called the \textit{continuity equation}:
+\begin{equation}\label{continuity}
+ \pds{\rho}{t}\left(\bs{x},t\right) + \mathrm{div}\left(\rho\left(\bs{x},t\right)\bs{v}\left(\bs{x},t\right)\right) = 0,\ \  \bs{x}\in\Omega_t,\ t\in\left(0,T\right).
+\end{equation}
+\subsection{The equations of motion}
+We proceed by deriving basic dynamical equations describing flow motion from the \textit{law of conservation of momentum} which can be formulated in this way:
+\itshape
+\paragraph{}
+The rate of change of the total momentum of a piece of fluid formed by the same particles at each time and occupying the domain $\mathcal{V}\left(t\right)$ at time instant $t$ is equal to the force acting on $\mathcal{V}\left(t\right).$
+\upshape
+\paragraph{}
+Let assumptions 1.3 be satisfied. The total momentum of particles contained in $\mathcal{V}\left(t\right)$ is given by
+\begin{equation}\label{moment_1}
+ \bsm{\mathcal{H}}\left(\mathcal{V}\left(t\right)\right)= \int_{\mathcal{V}\left(t\right)}\rho\left(\bs{x},t\right)\bs{v}\left(\bs{x},t\right)d\bs{x}.
+\end{equation}
+Moreover, denoting by $\bsm{\mathcal{F}}\left(\mathcal{V}\left(t\right)\right)$ the force acting on the volume $\mathcal{V}$, the law of conservation of momentum reads
+\begin{equation}\label{moment_2}
+ \d{\bsm{\mathcal{H}}\left(\mathcal{V}\left(t\right)\right)}{t}=\bsm{\mathcal{F}}\left(\mathcal{V}\left(t\right)\right),\ \ t\in\left(t_1,t_2\right).
+\end{equation}
+Using Theorem 1.2 for functions $F:=\rho{v}_i$, $i=1, 2, 3$, we get
+\begin{equation}
+ \int_{\mathcal{V}\left(t\right)}\left[\pds{}{t}\left(\rho\left(\bs{x},t\right)v_i\left(\bs{x},t\right)\right)+\mathrm{div}
+\left(\rho\left(\bs{x},t\right)v_i\left(\bs{x},t\right)\bs{v}\left(\bs{x},t\right)\right)\right]\ d\bs{x}= \mathcal{F}_i\left(\mathcal{V}\left(t\right)\right),
+\end{equation}
+\begin{equation}
+i = 1, 2, 3,\ t\in\left(t_1,t_2\right). \nonumber
+\end{equation}
+Taking into account that $t_0\in\lo{}0,T\ro $ is an arbitrary time instant and $\mc{V}_{t_0}=\mc{V}\subset\overline{\mc{V}}\subset\Omega_{t_0}$, where $\mc{V}$ is an arbitrary control volume, we get the law of conservation of momentum in the form where we write $t$ instead of $t_0$:
+\begin{equation}\label{motion}
+  \int_{\mathcal{V}}\left[\pds{}{t}\left(\rho\left(\bs{x},t\right)v_i\left(\bs{x},t\right)\right)+\mathrm{div}
+\left(\rho\left(\bs{x},t\right)v_i\left(\bs{x},t\right)\bs{v}\left(\bs{x},t\right)\right)\right]\ d\bs{x}= \mathcal{F}_i\left(\mathcal{V};t\right),\\
+\end{equation}
+$i$ = 1, 2, 3, for an arbitrary $t\in\left(0,T\right)$ and an arbitrary control volume $\mathcal{V}\subset\overline{\mathcal{V}}\subset\Omega_t$.
+\paragraph{}
+According to~\cite{1993}, the components $\mathcal{F}_i\left(\mathcal{V};t\right),\,i=1, 2, 3,$ of the vector $\bsm{\mathcal{F}}\left(\mathcal{V};t\right)$ can be expressed as
+\begin{equation}
+\mathcal{F}_i\left(\mathcal{V};t\right) = \int_{\mathcal{V}}\rho\left(\bs{x},t\right)f_i\left(\bs{x},t\right)dx + \int_{\partial\mathcal{V}}\sum_{j=1}^3\tau_{ji}\left(\bs{x},t\right)n_j\left(\bs{x}\right)dS,\,i = 1,2,3,
+\end{equation}
+assuming that $\tau_{ij}\in\mc{C}^1\lo{}\mc{M}\ro $ and $f_i\in\mc{C}\lo{}\mc{M}\ro,\ \lo{}i,\,j=1, 2, 3\ro $. Here $\tau_{ji}$ are components of the \textit{stress tensor} $\mc{T}$ and $f_i$ are components of the \textit{density of the volume force} $\bs{f}$.
+Substituting this into~\eqref{motion},
+we get
+\begin{eqnarray}
+\int_{\mathcal{V}}\left[\pds{}{t}\left(\rho\left(\bs{x},t\right)v_i\left(\bs{x},t\right)\right)+\mathrm{div}\left(\rho\left(\bs{x},t\right)v_i\left(\bs{x},t\right)\bs{v}\left(\bs{x},t\right)\right)\right]dx= \\
+\int_{\mathcal{V}}\rho\left(\bs{x},t\right)f_i\left(\bs{x},t\right)dx + \int_{\partial\mathcal{V}}\sum_{j=1}^3\tau_{ji}\left(\bs{x},t\right)n_j\left(\bs{x}\right)dS,\ \ i = 1,2,3,
+\end{eqnarray}
+for each $t\in\left(0,T\right)$ and an arbitrary control volume $\mathcal{V}$ in $\Omega_t$.
+Moreover, applying Green's theorem and Lemma 1.4, we obtain the desired \textit{equation of motion of a general fluid in the differential conservative form}
+\begin{equation}
+ \pds{}{t}\left(\rho{v_i}\right)+\mathrm{div}\left(\rho{v_i}\bs{v}\right)=\rho{f_i} + \sum_{j=1}^3\pds{\tau_{ji}}{x_j},\ \ i = 1, 2, 3.
+\end{equation}
+This can be written as 
+\begin{equation}\label{general motion}
+ \pds{}{t}\left(\rho\bs{v}\right)+\mathrm{div}\left(\rho\bs{v}\otimes\bs{v}\right) = \rho\bs{f}+\mathrm{div}\,\mathcal{T},
+\end{equation}
+where $\otimes$ denotes the \textit{tensor product}:
+\begin{displaymath}
+\bs{a}\otimes\bs{b} =
+\left(
+\begin{array}{ccc}
+a_1b_1 & a_1b_2 & a_1b_3 \\
+a_2b_1 & a_2b_2 & a_2b_3 \\
+a_3b_1 & a_3b_2 & a_3b_3
+\end{array}
+\right),
+\end{displaymath}
+and 
+$\mathrm{div}\left(\bs{a}\otimes\bs{b}\right)$ is a vector quantity:
+\begin{displaymath}
+\mathrm{div}\left(\bs{a}\otimes\bs{b}\right)=
+\left(
+\begin{array}{ccc}
+\displaystyle\sum_{i=1}^{3}\pds{}{x_i}a_ib_1, & \displaystyle\sum_{i=1}^{3}\pds{}{x_i}a_ib_2, & \displaystyle\sum_{i=1}^{3}\pds{}{x_i}a_ib_3
+\end{array}
+\ro
+^T.
+\end{displaymath}
+\subsection{The Navier-Stokes equations}
+\paragraph{}
+The relation between the stress tensor and other quantities describing fluid flow, the velocity and its derivatives in particular, represent the so-called \textit{rheological equations} of the fluid. For the derivation of the Navier-Stokes equations we shall use
+\begin{equation}\label{tau}
+ \mathcal{T} = \left(-p+\lambda\mathrm{div}\bs{v}\right)\mathbb{I}+ 2\mu\mathbb{D}\left(\bs{v}\right),
+\end{equation}
+where $\mathbb{D}$ is the deformation velocity tensor:
+\begin{equation}
+\mathbb{D}=\mathbb{D}\lo{}\bs{v}\ro=\lo{}d_{ij}\ro_{i,j=1}^3,\ d_{ij}=\frac12\lo{}\pds{v_i}{x_j}+\pds{v_j}{x_i}\ro,
+\end{equation}
+$\lambda, \mu$ are constants or scalar functions of thermodynamical quantities, \upshape$\lambda$ and $\mu$ are called the \textit{first} and the \textit{second} \textit{viscosity coefficient} respectively. For the assumptions under which we can write~\eqref{tau} see~\cite{1993}.
+Altough viscosity coefficients can be functions of thermodynamical quantities (most important of which is $\theta$, the absolute temperature) we shall treat them as if they were constants. Let assumptions 1.3 be satisfied and let us assume that 
+\begin{equation}\label{nav_asu}
+\frac{\partial{\bs{v}}}{\partial{t}}\in\left[\mathcal{C}\left(\mathcal{M}\right)\right]^3,\ \frac{\partial^2\bs{v}}{\partial{x_i}
+\partial{x_j}}\in\left[\mathcal{C}\left(\mathcal{M}\right)\right]^3\ \left(i,j = 1, 2, 3\right).
+\end{equation}
+Now let us substitute relation~\eqref{tau} into the general equations of motion~\eqref{general motion} with the assumption of constant viscosity coefficients and assumptions~\eqref{nav_asu}. We come to the Navier-Stokes equations in the form
+\begin{equation}\label{Nav-Simple}
+\pds{\left(\rho\bs{v}\right)}{t} + \mathrm{div}\left(\rho\bs{v}\otimes\bs{v}\right)= \rho\bs{f} - \nabla\,p +
+\mu\,\triangle{\bs{v}} + \lo{}\mu+\lambda\ro\,\nabla\mathrm{div}\,\bs{v}.
+\end{equation}
+For details see~\cite{compress}.
+\subsection{The energy equation}
+Now let us derive a differential equation equivalent to the \textit{law of conservation of energy}. As in the preceding subsections, we consider a piece of fluid represented by a control volume $\mathcal{V}\lo{t}\ro $ satisfying assumptions 1.3. The law of conservation of energy can be formulated as follows:
+\itshape
+\\
+\hspace*{3mm}
+The rate of change of the total energy of the fluid particles, occupying the domain $\mathcal{V}\left(t\right)$ at time $t$, is equal to the sum of powers of the volume force acting on the volume $\mathcal{V}\left(t\right)$ and the surface force acting on the surface $\partial\mathcal{V}\left(t\right)$, and of the amount of heat transmitted to $\mathcal{V}\left(t\right)$.\\
+\upshape
+By $\mathcal{E}\left(\mathcal{V}\left(t\right)\right)$ let us denote the total energy of the fluid particles contained in the domain $\mathcal{V}\left(t\right)$ and by 
+$\mc{Q}\lo{}\mathcal{V}\lo{t}\ro\ro $ the amount of heat transmitted to $\mc{V}\lo{t}\ro $ at time $t$. Taking into account the character of volume and surface forces involved, we get the identity representing the law of conservation of energy:
+\begin{eqnarray}\label{energy}
+ \frac{d}{dt}\mc{E}\lo{}\mc{V}\lo{t}\ro\ro = \int_{\mc{V}\lo{t}\ro}\rho\lo{}\bs{x},t\ro\bs{f}\lo{}\bs{x},t\ro\cdot\bs{v}\lo{}\bs{x},t\ro{d}\bs{x} \\ \nonumber
++ \int_{\partial\mc{V}\lo{t}\ro}
+\sum_{i,j=1}^3\tau_{ji}\lo{}\bs{x},t\ro\,n_j\lo{}\bs{x}\ro\,v_i\lo{}\bs{x},t\ro
+{dS} + 
+\mc{Q}\lo{}\mc{V}\lo{t}\ro\ro.
+\end{eqnarray}
+Following relations hold:
+\begin{eqnarray}
+  \label{energy_rel}& a) &\ \mc{E}\lo{}\mc{V}\lo{t}\ro\ro = \int_{\mc{V}\lo{t}\ro}E\lo{}\bs{x},t\ro{d}\bs{x},\\
+  & b) &\  E = \rho\lo{}e+\frac{\left|\bs{v}\right|^2}{2}\ro \nonumber,\\ \nonumber
+  & c) &\  \mc{Q}\lo{}\mathcal{V}\lo{t}\ro\ro=\int_{\mc{V}\lo{t}\ro}\rho\lo{}\bs{x},t\ro{q}\lo{}\bs{x},t\ro{d}\bs{x} - \int_{\partial\mc{V}\lo{t}\ro}\bsm{\phi}_q\lo{}\bs{x},t\ro\cdot\bs{n}\lo{}\bs{x}\ro{d}S.
+\end{eqnarray}
+
+Here $E$ is the total energy, $e$ is the density of the specific internal energy (related to the unit mass) associated with molecular and atomic behavior, $\left|\bs{v}\right|^2/2$ is the density of the kinetic energy, $q$ represents the density of heat sources (again related to the unit mass) and $\bsm{\phi_{q}}$ is the heat flux.
+\paragraph{}
+Let assumptions 1.3 hold and further let $\tau_{ij},\lo{}\bsm{\phi}_q\ro_i \in \mc{C}^1\lo{}\mc{M}\ro $ and $f_i,q\in\mc{C}\lo{}\mc{M}\ro $ $\lo{}i,j=1,2 , 3\ro.$ Using this, relations~\eqref{energy_rel} \textit{a)-c)}, Theorem 1.2, Green's theorem and Lemma 1.4, we derive from~\eqref{energy} the differential \textit{energy equation}, where we take advantage of~\eqref{tau}:
+\begin{equation}\label{energy_fin}
+ \pds{E}{t} + \mathrm{div}\lo{E}\bs{v}\ro = \rho\bs{f}\cdot\bs{v} \,-\,\mathrm{div}\lo{p}\bs{v}\ro + \mathrm{div}\lo{}\lambda\bs{v}\ \mathrm{div}\bs{v}\ro + \mathrm{div}\lo{2}\mu\mathbb{D}\lo{}\bs{v}\ro\bs{v}\ro +
+\rho{q}- \mathrm{div}\bsm{\phi}_q.
+\end{equation}
+For details see~\cite{compress}.
+\subsection{Thermodynamical relations}
+\ \\In order to complete the equations describing the flow, some other relations shall be added.
+The system now contains seven unknown quantities: $v_1,v_2,v_3, \rho, e, \theta, p$, but only 5 equations (scalar continuity equation, vector Navier-Stokes equations and scalar energy equation), i.e. (1 + 3 + 1) = 5. From this we see, that additional two equations should be included.
+\paragraph{Basic Thermodynamical Quantities}\ \\
+The absolute temperature $\theta$, the density $\rho$ and the pressure $p$ are called the \textit{state variables}. All these quantities are positive scalar functions. We consider only the so-called \textit{perfect gas} or \textit{ideal gas} whose state variables satisfy the following \textit{equation of state}
+\begin{equation}\label{start_therm}
+p = R\theta\rho,
+\end{equation}
+where $R$ is the \textit{gas constant}, which is defined as 
+\begin{equation}
+R = c_p - c_v.
+\end{equation}
+Here $c_p$ denotes the \textit{specific heat at constant pressure}, i.e. the ratio of the increment of the amount of heat related to the unit mass, to the increment of temperature at constant pressure. Analogously $c_v$ denotes the \textit{specific heat at constant volume}. Experiments show that $c_p>{c_v}$, so that $R>0$, and that $c_p$ and $c_v$ can be treated like constants for a relatively large range of temperature. We set $\gamma = c_p / c_v$ which is the so-called \emph{Poisson adiabatic constant}. The internal energy related to the unit mass is defined by 
+\begin{equation}\label{internal_theta}
+ e = c_v\theta,
+\end{equation}
+which explains the meaning of the internal energy: it is the amount of heat it would have to be transmitted out of the fluid so that its temperature would reach (absolute) zero, volume being kept constant during the whole process.
+\paragraph{}
+With respect to the above relations, we can express the internal energy as
+\begin{equation}\label{end_therm}
+e = c_p\theta - R\theta.
+\end{equation}
+
+\paragraph{The complete system of equations describing the flow}\ \\
+The complete system now reads
+\begin{eqnarray}
+  \pds{\rho}{t} + \mathrm{div}\left(\rho\bs{v}\right) & = & 0,\\
+\pds{\left(\rho\bs{v}\right)}{t} + \mathrm{div}\left(\rho\bs{v}\otimes\bs{v}\right)& = & \rho\bs{f} - \nabla\,p +
+\mu\,\triangle{\bs{v}} + \lo{}\mu+\lambda\ro\,\nabla\mathrm{div}\,\bs{v},\ \ \\
+ \pds{E}{t} + \mathrm{div}\lo{E}\bs{v}\ro & = & \rho\bs{f}\cdot\bs{v} \,-\,\mathrm{div}\lo{p}\bs{v}\ro + \mathrm{div}\lo{}\lambda\bs{v}\ \mathrm{div}\bs{v}\ro +\ \  \\ & + &\nonumber \mathrm{div}\lo{2}\mu\mathbb{D}\lo{}\bs{v}\ro\bs{v}\ro +
+\rho{q}- \mathrm{div}\bsm{\phi}_q,\\
+p & = & \lo{}\gamma-1\ro\lo{E}-\rho\left|\bs{v}\right|^2/2\ro, \label{therm_1}\\
+\theta & = & \lo{E}/{\rho}-\left|\bs{v}\right|^2/2\ro/{c_v}.\label{therm_2}
+\end{eqnarray}
+This system is simply called the \textit{compressible Navier-Stokes equations} for a heat-conductive perfect gas. Equations~\eqref{therm_1} and~\eqref{therm_2} follow from ~\eqref{start_therm} -~\eqref{end_therm} and~\eqref{energy_rel}.
+
+\subsection{Entropy and the second law of thermodynamics}
+\paragraph{Entropy}
+One of the important thermodynamical quantities is the entropy $S$, defined by the relation
+\be
+\label{entropy}
+\theta dS = de +pdV,
+\ee
+where $V=1/\rho$ is the so-called specific volume. This identity is derived in thermodynamics under the assumption that the internal energy is a function of $S$ and $V$, $e = e(S,V)$, which explains the meaning of the differentials in~\eqref{entropy}.
+\paragraph{Theorem 1.3}
+\ \newline
+\itshape
+For a perfect gas we have
+\begin{eqnarray}
+\label{entropy_relation}
+S & = & c_v \ln\frac{p/p_0}{\lo\rho/\rho_0\ro^\gamma} + const \\
+  & = & c_v \ln\frac{\theta/\theta_0}{\lo\rho/\rho_0\ro^{\gamma - 1}} + const,
+\end{eqnarray}
+\upshape
+where $p_0$ and $\rho_0$ are fixed (reference) values of pressure and density and $\theta_0 = p_0/\lo{R\rho_0}\ro$.
+\paragraph{Proof}
+\ \newline
+\itshape
+Using~\eqref{internal_theta} and the relation $V = 1/\rho$, we can write~\eqref{entropy} in the form
+\be
+\theta dS = c_vd\theta - \frac{p d\rho}{\rho^2}.
+\ee
+From this and~\eqref{start_therm} -~\eqref{internal_theta} we get
+\be
+dS=c_v\frac{d\theta}{\theta} - \frac{p}{\rho\theta}\frac{d\rho}{\rho} = c_v\frac{d\lo{p/\rho}\ro}{\lo{p}/\rho \ro} - R\frac{d\rho}{\rho} = c_v d \ln\frac{p/p_0}{\lo{\rho/\rho_0}\ro^\gamma} = c_v d \ln\frac{\theta/\theta_0}{\lo{\rho/\rho_0}\ro^{\gamma - 1}},
+\ee
+which immediately yields~\eqref{entropy_relation}.
+\upshape
+\paragraph{The second law of thermodynamics}
+In the irreversible processes, equality~\eqref{entropy_relation} does not hold in general and is replaced by the inequality
+\be
+\label{entropy_inequality}
+dS \geq \frac{\delta\mc{Q}}{\theta}
+\ee
+called the $second\ law\ of\ thermodynamics$. For a system of fluid particles occupying a domain$\mc{V}\lo{t}\ro$ at time $t$ we postulate the second law of thermodynamics mathematically in the form
+\be
+\label{second_law_postulate}
+\frac{d}{dt}\int_{\mc{V}\lo{t}\ro} \rho\lo\bs{x},t\ro S\lo\bs{x}, t\ro d\bs{x}\geq \int_{\mc{V}\lo{t}\ro} \frac{\rho\lo\bs{x},t\ro q\lo\bs{x},t\ro}{\theta\lo\bs{x},t\ro}d\bs{x} - \int_{\delta\mc{V}\lo{t}\ro} \frac{\bsm{\phi}_q\lo\bs{x},t\ro\cdot\bs{n}\lo\bs{x}\ro}{\theta\lo\bs{x},t\ro}dS.
+\ee
+The left-hand side of~\eqref{second_law_postulate} represents the rate of change of the entropy contained in the volume $\mc{V}\lo{t}\ro$, and the first and second integral on the right-hand side are called the $entropy\ production$ and the $entropy\ flux$. Let $\rho$, $\theta$, $v_i$, ${\bsm{\phi}_q}_i\in\mc{C}^1\lo\mc{M}\ro;\  q, f_i \in \mc{C}\lo\mc{M}\ro,\ i = 1,2,3$. By virtue of the transport Theorem 1.2 and the continuity equation~\eqref{continuity}, from~\eqref{second_law_postulate} we obtain the inequality
+\be
+\rho\frac{\partial\lo\rho S\ro}{\partial t} + \mathrm{div}\lo\rho S\bs{v}\ro \geq \frac{\rho q}{\theta} - \mathrm{div}\lo\frac{\bsm{\phi}_q}{\theta}\ro.
+\ee
+A more general model of flow is obtained in thermodynamics under the assumption that the pressure is a function of the density and entropy: $p = p\lo\rho, S\ro$, where $p$ is a continuously differentiable function and $\partial p / \partial\rho >0$. Let us introduce the quantity
+\be
+a = \sqrt{\frac{\partial p}{\partial\rho}}
+\ee
+which has the dimension $m s^{-1}$ of velocity and is called the \emph{speed of sound}. Another important characteristic of the flow is so-called \textit{Mach number}, which is defined as
+\begin{equation}
+M=\frac{{|\bs{v}|}}{{a}}\ ,
+\end{equation}
+where $\bs{v}$ is the flow velocity.

@@ -1,0 +1,36 @@
+\normalsize
+\setcounter{page}{1}
+\tableofcontents
+
+\newpage
+
+\noindent
+Název práce: Adaptivní hp nespojitá Galerkinova metoda pro nestacionární stlaèitelné Eulerovy rovnice\\
+Autor: Lukáš Korous\\
+Katedra (ústav): Katedra numerické matematiky\\
+Vedoucí bakalárské práce: prof. RNDr. Miloslav Feistauer, DrSc., dr. h. c.\\
+e-mail vedoucího: feist@karlin.mff.cuni.cz\\
+
+\noindent Abstrakt: Stlaèitelné Eulerovy rovnice popisují pohyb stlaèitelných nevazkých tekutin.
+Používají se v mnoha oblastech leteckého, automobilového a jaderného inženýrství, chemie, ekologie, 
+klimatologie, i jinde.
+Matematicky, stlaèitelné Eulerovy rovnice pøedstavují hyperbolický systém skládající se z nìkolika nelineárních 
+parciálních diferenciálních rovnic (zákony zachování). Tyto rovnice jsou øešeny nejèasteji pomocí metody koneèných objemù (MKO), a metody koneèných prvkù (MKP) nízkého øádu. Nicménì, oba tyto pøístupy nedosahují vyššího øádu pøesnosti, a navíc je dobøe známo, že konformní metoda koneèných prvkù není optimální nástroj pro diskretizaci rovnic prvního øádu. Nejnadìjnìjší pøístup k pøibližnému øešení stlaèitelných Eulerových rovnic je nespojitá Galerkinova metoda, která kombinuje stabilitu MKO s vynikajícími aproximaèními vlastnostmi MKP vyššího øádu.  Cílem této diplomové práce byl vývoj, implementace a testování nových algoritmù pro adaptivní øešení  nestacionárních stlaèitelných Eulerovových rovnic na základì vyššího øádu nespojité Galerkinovy metody (hp-DG). Základem pro nové metody byly nespojitá Galerkinova metoda a èasoprostorové hp-MKP algoritmy na dynamických sítích pro nestacionární problémy druhého øádu. Nové algoritmy byly implementovány a testovány v rámci open source knihovny Hermes, a vztahují se na vybrané problémy transonického proudìní, a proudìní s nízkým Machovým èíslem v klimatologii.\\
+
+\noindent Klíèová slova: numerické simulace, metoda koneèných prvkù, Eulerovy rovnice, hp-adaptivita, nespojitá Galerkinova metoda
+
+\vspace{10mm}
+
+\noindent
+Title: Adaptive hp Discontinuous Galerkin Method
+for Nonstationary Compressible Euler Equations\\
+Author: Lukáš Korous\\
+Department: Department of Numerical Mathematics\\
+Supervisor: prof. RNDr. Miloslav Feistauer, DrSc., dr. h. c.\\
+Supervisor's e-mail address: feist@karlin.mff.cuni.cz\\
+
+\noindent Abstract: The compressible Euler equations describe the motion of compressible inviscid fluids. They are used in many areas ranging from aerospace, automotive, and nuclear engineering to chemistry, ecology, climatology, and others. Mathematically, the compressible Euler equations represent a hyperbolic system consisting of several nonlinear partial differential equations (conservation laws). These equations are solved most frequently by means of Finite Volume Methods (FVM) and low-order Finite Element Methods (FEM). However, both these approaches are lacking higher order accuracy and moreover, it is well known that conforming FEM is not the optimal tool for the discretization of first-order equations. The most promissing approach to the approximate solution of the compressible Euler equations is the discontinuous Galerkin method that combines the stability of FVM, with excellent approximation properties of higher-order FEM. The objective of this Master Thesis was to develop, implement and test new adaptive algorithms for the nonstationary compressible Euler equations based on higher-order discontinuous Galerkin (hp-DG) methods. The basis for the new methods will be the discontinuous Galerkin methods and space-time adaptive hp-FEM algorithms on dynamical meshes for nonstationary second-order problems. The new algorithms will be implemented and tested in the framework of the open source library Hermes, and they will be applied to selected problems of transonic flow and low Mach number flows in climatology. \\
+
+\noindent Keywords: numerical simulation, finite element method, Euler equations, hp-adaptivity, discontinuous Galerkin method
+
+\newpage

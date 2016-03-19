@@ -1,48 +1,51 @@
-\documentclass[a4paper,11pt]{report}
-
-\usepackage{natbib}
-\bibliographystyle{elsarticle-harv}
-%\usepackage{czech}
-%\usepackage{a4wide}
-\usepackage{geometry}
+\documentclass[12pt,notitlepage]{report}
+\usepackage[algoruled, noend]{algorithm2e}
+\usepackage{a4wide}
 \usepackage{graphicx}
-\usepackage{amsmath}
-\usepackage{amssymb}
+\usepackage[left=4cm]{geometry} % okraje
+\usepackage{latexsym}% kvuli symbolum v grafech vkladanych z gnuplotu
+\usepackage{amsfonts}
+\usepackage{amssymb,amsmath}
+\usepackage[cp1250]{inputenc}
+\usepackage[czech,english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\usepackage{subfigure}
+\selectlanguage{english}
+\usepackage{verbatim}
+\usepackage{enumerate}
+\usepackage{color}
+\usepackage{float}
+\usepackage{url}
+\usepackage{epsfig}
+\usepackage{natbib}
 \usepackage{setspace}
 \usepackage{hyperref}
 
+\lstset{language=C++, basicstyle=\scriptsize, commentstyle=, showstringspaces=true} 
 
-\newcommand{\dd}{\mathrm d}
-\newcommand{\der}[2]{\frac{{\dd} #1}{{\dd} #2}}
-\newcommand{\pard}[2]{\frac{\partial #1}{\partial #2}}
-\newcommand{\pardx}[3]{\frac{\partial^{#1} #2}{\partial #3^{#1}}}
-\newcommand{\vct}[1]{\boldsymbol{#1}}
-\newcommand{\op}[1]{{\cal{#1}}}
-\newcommand{\lp}{\left(}
-\newcommand{\rp}{\right)}
-\newcommand{\lb}{\left[}
-\newcommand{\rb}{\right]}
-\newcommand{\lsp}{\left\langle}
-\newcommand{\rsp}{\right\rangle}
-\newcommand{\lcb}{\left\lbrace}
-\newcommand{\rcb}{\right\rbrace}
-\newcommand{\li}{\left.}
-\newcommand{\ri}{\right.}
-\newcommand{\tens}[1]{\mbox{\boldmath$#1$}}
+\title{Large-scale Numerical Simulations of Magneto-Hydrodynamics Phenomena in Astrophysics} 
+\author{Lukas Korous} 
+\renewcommand{\sectionmark}[1]{\markright{#1}{}}
+
+\frenchspacing
+\pagenumbering{arabic}
+\oddsidemargin  0.3in	% levy okraj stranky; pripocte se 1 inch
+\evensidemargin 0.2in	% pravy okraj stranky; pripocte se 1 inch
+\textwidth      5.8in	% sirka textu
+\headheight     0.0in	% vyska hlavicky
+\topmargin      0.2in	% horni okraj
+\textheight     8.5in	% vyska textu
 
 \begin{document}
 
-\title{Large-scale Numerical Simulations of Magneto-Hydrodynamics Phenomena in Astrophysics}
+\input{commands}
 
-\maketitle
+\input{titlepage}
 
-\tableofcontents
-
-\input{formalities}
+\input{abstract}
 
 \input{introduction}
-
-\input{physical-model}
 
 \input{mathematical-model}
 
@@ -53,5 +56,7 @@
 \input {use-cases}
 
 \input {conclusion}
+
+\input {bibliography}
 		
 \end{document}

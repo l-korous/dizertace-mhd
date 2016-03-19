@@ -1,0 +1,205 @@
+\section{Euler equations and their properties}
+\label{sec:euler_properties}
+If we set $\mu = \lambda = k = 0$, we obtain the model of inviscid compressible flow,
+described by the continuity equation, the Euler equations, the energy equation and
+thermodynamical relations. Since gases are light, usually it is possible to neglect the
+effect of the volume force. Neglecting heat sources too (assuming $adiabatic flow$), we get the system for the perfect inviscid gas in the following form:
+\begin{eqnarray}
+  \pds{\rho}{t} + \mathrm{div}\left(\rho\bs{v}\right) & = & 0,\\
+  \pds{\left(\rho\bs{v}\right)}{t} + 
+  \mathrm{div}\left(\rho\bs{v}\otimes\bs{v}\right)+ 
+  \nabla p & = & 0,\\
+  \pds{E}{t} + \mathrm{div}\lo\lo E+p\ro\bs{v}\ro & = & 0,\\
+   p & = & \lo\gamma-1\ro\lo{E}-\rho\left|\bs{v}\right|^2/2\ro.
+	\end{eqnarray}
+This system is simply called the $compressible\ Euler\ equations$.
+\paragraph{}
+In the following we shall be concerned with the 2-dimensional case, which will be used in numerical examples. All results apply for the 3-dimensional case as well.
+
+\subsection{Dimensionless Euler equations}
+We set 3 similarity constants $l_r, v_r,$ and $\rho_r$, which are, in order: characteristic length, characteristic velocity, and characteristic density. Now we multiply the Euler equations by these constants in the following way:
+
+\begin{eqnarray}
+\left[{\partial\rho\over\partial t} + \mathrm{div}(\rho{\bs{v}})\right] {l_r\over\rho_r v_r} & = & 0,\\ \left[{\partial(\rho{\bs{v}})\over\partial t} + \mathrm{div}(\rho{\bs{v}}\otimes{\bs{v}}) + \nabla p\right]
+{l_r\over\rho_r v_r^2} & = & 0,\\
+\left[{\partial E\over\partial t} +\mathrm{div}((E+p){\bs{v}})\right] {l_r\over\rho_r v_r^3} & = & 0.
+\end{eqnarray}
+
+Then we get the dimensionless Euler equations in the form
+
+\begin{eqnarray}
+{\partial\tilde\rho\over\partial \tilde t} + \tilde\nabla\cdot(\tilde\rho \tilde{\bs{v}}) & = & 0,  \\ {\partial(\tilde \rho\tilde{\bs{v}})\over\partial \tilde t} + \tilde\nabla\cdot(\tilde\rho\tilde{\bs{v}}\otimes\tilde{\bs{v}}) + \tilde\nabla\tilde p & = &  0, \\ {\partial\tilde E\over\partial\tilde t} + \tilde\nabla\cdot( (\tilde E+\tilde p)\tilde{\bs{v}}) & = &  0,
+\end{eqnarray}
+
+where
+
+\begin{eqnarray}
+t_r & = & {l_r\over v_r},\\
+\tilde t & = &  {t\over t_r},\\
+\tilde \rho & = &  {\rho\over\rho_r},\\
+\tilde{\bs{v}} & = &  {{\bs{v}}\over v_r},\\
+\tilde\nabla & = &  l_r\nabla,\\
+\tilde E & = &  {E\over \rho_r u^2_r},\\
+\tilde p & = &  {p\over \rho_r u^2_r}.
+\end{eqnarray}
+
+As we see, the dimensionless Euler equations have the same form as the original equations, only the relations are rescaled using the above relations. Therefore, in the sequel, we shall omit the symbol "~" over the considered quantities.
+
+\subsection{Conservative form of the Euler equations}
+The system of governing equations can be written in the so-called $conservative$ $form$.
+\be
+\label{conservative_form}
+{\partial\bs{w}\over \partial t} + {\partial{\bs{f}}_1\over \partial x_1} + {\partial{\bs{f}}_2\over \partial x_2} = 0,
+\ee
+
+where
+
+\begin{eqnarray}
+{\bs{w}} & = & \left( \begin{array}{c} \varrho\\ \rho v_1\\ \rho v_2\\ E \end{array} \right) = \left( \begin{array}{c} w_1 \\ w_2 \\ w_3 \\ w_4 \\ \end{array} \right), \\
+\label{f_1}
+{\bs{f}}_1 & = & \left( \begin{array}{c} \rho v_1\\ \rho v_1^2 + p\\ \rho v_1 v_2\\ v_1(E+p) \end{array} \right) = \left( \begin{array}{c} w_2\\ \frac{w_2^2}{w_1} + p\\ \frac{w_2w_3}{w_1}\\ \frac{w_2}{w_1}(w_4+p) \end{array} \right), \\
+\label{f_2}
+{\bs{f}}_2 & = & \left( \begin{array}{c} \rho v_2\\ \rho v_2 v_1\\ \rho v_2^2 + p\\ v_2(E+p) \end{array} \right) = \left( \begin{array}{c} w_2\\ \frac{w_3w_2}{w_1}\\ \frac{w_3^2}{w_1} + p\\ \frac{w_3}{w_1}(w_4+p) \end{array} \right), \\
+p & = & \lo{\gamma - 1}\ro \lo w_4 - \frac{w_2^2 + w_3^2}{2w_1}\ro.
+\end{eqnarray}
+Usually, ${\bs{f}}_1$ and ${\bs{f}}_2,$ are called $inviscid\ Euler\ fluxes$. The unknowns $\rho, v_1, v_2, p$ in the original system of equations are called $primitive\ variables$, whereas $w_1 = \rho, w_2 = \rho v_1, w_3 = \rho v_2, w_4 = E$ are called $conservative\ variables$.
+\paragraph{}
+The domain of definition of the vector-valued functions $\bs{f}_1, \bs{f}_2$ is the open set $D\subset\mathrm{R}^2$ where the corresponding density and pressure are positive:
+\be
+D=\left\{\bs{w}\in\mathrm{R}^4;\ w_1 = \rho > 0, w_4 - \frac{w_2^2 + w_3^2}{2w_1} = \frac{p}{\gamma - 1} > 0\right\}.
+\ee
+One can see that the inviscid Euler fluxes are continuously differentiable in their domain of definition. Differentiation in~\eqref{conservative_form} and the chain rule lead to a first order system of quasilinear partial differential equations
+\be
+\label{final_Euler_form}
+\pds{\bs{w}}{t} + \mathbb{A}_1\lo\bs{w}\ro \pds{\bs{w}}{x_1} + \mathbb{A}_2\lo\bs{w}\ro \pds{\bs{w}}{x_2} = 0,
+\ee
+where $\mathbb{A}_s\lo \bs{w} \ro, s = 1, 2$ are $ m \times m$ matrices called $flux\ Jacobians$ defined as the Jacobi matrices of the mappings $\bs{f}_s, s = 1, 2$, at a point $\bs{w}\in D$:
+\be
+\mathbb{A}_s\lo\bs{w}\ro = \frac{D\bs{f}_s\lo\bs{w}\ro}{D\bs{w}} = \lo\frac{\partial f_{si}\lo\bs{w}\ro}{\partial w_{j}}\ro_{i, j = 1}^{2}.
+\ee
+For $\bs{w}\in D$ and $\bs{n} = \lo n_1, n_2\ro^T\in\mathbb{R}^2$ we put
+\be
+\label{P_definition}
+\mc{P}\lo\bs{w},\bs{n}\ro = \sum_{s = 1}^{2}\bs{f}_s\lo\bs{w}\ro n_s,
+\ee
+which is the flux of the quantity $\bs{w}$ in the direction $\bs{n}$. The Jacobi matrix $D\mc{P}\lo\bs{w},\bs{n}\ro/D\bs{w}$ can be expressed in the form
+\be
+\frac{D\mc{P}\lo\bs{w},\bs{n}\ro}{D\bs{w}} = \mathbb{P}\lo\bs{w},\bs{n}\ro = \sum_{s=1}^2\mathbb{A}_s\lo\bs{w}\ro n_s.
+\ee
+\paragraph{Lemma 1.5}
+\ \\
+\itshape
+The vector-valued functions $f_s, s = 1, 2$, defined by~\eqref{f_1} -~\eqref{f_2}, are first order homogenous mappings:
+\be
+\label{first_homo}
+\bs{f}_s\lo\alpha\bs{w}\ro = \alpha\bs{f}_s\lo\bs{w}\ro,\ \alpha > 0.
+\ee
+Moreover, we have
+\be
+\bs{f}_s\lo\bs{w}\ro = \mathbb{A}_s\lo\bs{w}\ro\bs{w}.
+\ee
+Similarly,
+\begin{eqnarray}
+\mc{P}\lo\alpha\bs{w},\bs{n}\ro & = & \alpha\mc{P}\lo\bs{w},\bs{n}\ro,\ \alpha > 0,\\
+\mc{P}\lo\bs{w},\bs{n}\ro & = & \mathbb{P}\lo\bs{w},\bs{n}\ro\bs{w}.
+\end{eqnarray}
+\upshape
+\paragraph{Proof:}
+Relation~\eqref{first_homo} immediately follows from~\eqref{f_1} -~\eqref{f_2}. Since $\bs{f}_s\in \mc{C}^1\lo D\ro^m$, the expression $\lo D \bs{f}_s\lo\bs{w}\ro/ D \bs{w}\ro \bs{w} = \mathbb{A}_s\lo\bs{w}\ro\bs{w}$ is the derivative of $\bs{f}_s$ in the direction $\bs{w}$ at the point $\bs{w}$. By the definition of the derivative and~\eqref{first_homo},
+\begin{eqnarray}
+\mathbb{A}_s\lo\bs{w}\ro\bs{w} & = & \lim_{\alpha\rightarrow 0}\frac{\bs{f}_s\lo\bs{w} + \alpha\bs{w}\ro - \bs{f}_s\lo\bs{w}\ro}{\alpha}\\
+& = & \lim_{\alpha\rightarrow 0}\frac{\lo 1 + \alpha\ro \bs{f}_s\lo\bs{w}\ro - \bs{f}_s\lo\bs{w}\ro}{\alpha} = \bs{f}_s\lo\bs{w}\ro.
+\end{eqnarray}
+The rest of the Lemma follows from the definitions of $\mc{P}$ and $\mathbb{P}$ and the above results.
+The flux Jacobians have the following form:
+\be
+\nonumber
+  \mathbb{A}_1({\bs{w}}) = {D{\bs{f}}_1\over D {\bs{w}}}
+\ee
+\scriptsize
+\begin{eqnarray}
+\nonumber
+= \left( \begin{array}{cccc} 0 & 1 & 0 & 0\\ -{w_2^2\over w_1^2} +{R\over c_v}{w_2^2+w_3^2\over 2 w_1^2} & {2w_2\over w_1}-{R\over c_v}{w_2\over w_1} & -{R\over c_v}{w_3\over w_1} & {R\over c_v}\\ -{w_2w_3\over w_1^2} & {w_3\over w_1} & {w_2\over w_1} & 0 \\ -{w_2w_4\over w_1^2}-{w_2\over w_1^2}{R\over c_v} \left(w_4-{w_2^2+w_3^2\over 2 w_1}\right) +{w_2\over w_1}{R\over c_v}{w_2^2+w_3^2\over 2 w_1^2} & {w_4\over w_1}+{1\over w_1}{R\over c_v} \left(w_4-{w_2^2+w_3^2\over 2 w_1}\right) -{R\over c_v}{w_2^2\over w_1^2} & -{R\over c_v}{w_2w_3\over w_1^2} & {w_2\over w_1}+{R\over c_v}{w_2\over w_1} \\ \end{array} \right),
+\end{eqnarray}
+\normalsize
+\be
+\nonumber
+\mathbb{A}_2({\bs{w}}) = {D{\bs{f}}_2\over D {\bs{w}}}
+\ee
+\scriptsize
+\begin{eqnarray}
+\nonumber
+= \left( \begin{array}{cccc} 0 & 0 & 1 & 0\\ -{w_3w_2\over w_1^2} & {w_3\over w_1} & {w_2\over w_1} & 0 \\ -{w_3^2\over w_1^2} +{R\over c_v}{w_2^2+w_3^2\over 2 w_1^2} & -{R\over c_v}{w_2\over w_1} & {2w_3\over w_1} -{R\over c_v}{w_3\over w_1} & {R\over c_v}\\ -{w_3w_4\over w_1^2}-{w_3\over w_1^2}{R\over c_v} \left(w_4-{w_2^2+w_3^2\over 2 w_1}\right) +{w_3\over w_1}{R\over c_v}{w_2^2+w_3^2\over 2 w_1^2}& -{R\over c_v}{w_3w_2\over w_1^2} & {w_4\over w_1}+{1\over w_1}{R\over c_v} \left(w_4-{w_2^2+w_3^2\over 2 w_1}\right) -{R\over c_v}{w_3^2\over w_1^2} & {w_3\over w_1}+{R\over c_v}{w_3\over w_1} \\ \end{array} \right).
+\end{eqnarray}
+\normalsize
+
+\subsection{Rotational invariance}
+\label{sec:rot_inv}
+The rotational invariance of the Euler equations is represented by the relations
+\begin{eqnarray}
+\mc{P}\lo\bs{w},\bs{n}\ro & = & \sum_{s=1}^2\bs{f}_s\lo\bs{w}\ro n_s = \mathbb{Q}^{-1}\lo\bs{n}\ro\bs{f}_1\lo\mathbb{Q}\lo\bs{n}\ro\bs{w}\ro,\\
+\label{rot-P}\mathbb{P}\lo\bs{w},\bs{n}\ro & = & \sum_{s=1}^2\mathbb{A}_s\lo\bs{w}\ro n_s = \mathbb{Q}^{-1}\lo\bs{n}\ro\mathbb{A}_1\lo\mathbb{Q}\lo\bs{n}\ro\bs{w}\ro\mathbb{Q}\lo\bs{n}\ro,\\
+\bs{n} & = & \lo n_1, n_2\ro \in \mathbb{R}^2, \left|\bs{n}\right| = 1, \bs{w} \in D,
+\end{eqnarray}
+where
+\be
+\label{Q}
+\mathbb{Q}\lo\bs{n}\ro = \lo\begin{array}{cccc}
+1 & 0 & 0 & 0 \\
+0 & n_1 & n_2 & 0\\
+0 & -n_2 & n_1 & 0\\
+0 & 0 & 0 & 1
+\end{array}
+\ro.
+\ee
+
+\subsection{Diagonalization of the Jacobi matrix}
+We have
+\begin{eqnarray}
+\bs{f}_1\lo\bs{w}\ro = \lo w_1, w_2^2/w_1 +\lo \gamma - 1\ro\left[w_4 - \lo w_2^2 + w_3^2\ro/\lo 2w_1\ro\right],\right.\\\nonumber
+\left.w_2w_3/w_1,w_2\left[\gamma w_4 - \lo\gamma - 1\ro\lo w_2^2 + w_3^2\ro/\lo 2w_1\ro\right]/w_2\ro^T,
+\end{eqnarray}
+and, with the notation $\bs{v} = \lo u, v\ro$,
+\be
+\mathbb{A}_1\lo\bs{w}\ro = \lo\begin{array}{cccc}
+0 & 1 & 0 & 0\\
+\frac{\gamma - 1}{2}\left|\bs{v}\right|^2 - u^2 & \lo 3 - \gamma\ro u &\lo 1 - \gamma\ro v & 1 - \gamma \\
+-uv & v & u & 0\\
+u\lo\lo\gamma -1\ro\left|\bs{v}\right|^2 - \gamma\frac{E}{\rho}\ro & \gamma\frac{E}{\rho} - \lo\gamma - 1\ro u^2 - \frac{\gamma - 1}{2}\left|\bs{v}\right|^2 & \lo 1 - \gamma\ro u v & \gamma u
+\end{array}\ro.
+\ee
+The matrix $\mathbb{A}_1\lo\bs{w}\ro$ has eigenvalues
+\be
+\tilde \lambda_1\lo\bs{w}\ro = u - a, \tilde\lambda_2\lo\bs{w}\ro = \tilde\lambda_3\lo\bs{w}\ro = u, \tilde\lambda_4\lo\bs{w}\ro = u + a
+\ee
+and the corresponding eigenvectors are
+\begin{eqnarray}
+\bs{r}_1\lo\bs{w}\ro & = & \lo 1, u - a, v, \left|\bs{v}\right|^2/2 + a^2\lo\gamma - 1\ro - ua\ro^T,\\
+\bs{r}_2\lo\bs{w}\ro & = & \lo 1, u, v \left|\bs{v}\right|^2/2\ro^T,\\
+\bs{r}_3\lo\bs{w}\ro & = & \lo 1, u, v - a, \left|\bs{v}\right|^2/2-va\ro^T,\\
+\bs{r}_4\lo\bs{w}\ro & = & \lo 1, u + a, v, \left|\bs{v}\right|^2/2 + a^2\lo\gamma - 1\ro + ua\ro^T.
+\end{eqnarray}
+These calculations are possible to be verified. As the eigenvectors $\bs{r}_s\lo\bs{w}\ro, s = 1, ..., 4$ are linearly independent for each $\bs{w}\in D$, we can write
+\be
+\label{diagonalization}
+\tilde{\mathbb{T}}^{-1}\lo\bs{w}\ro\mathbb{A}_1\lo\bs{w}\ro\tilde{\mathbb{T}}\lo\bs{w}\ro = \tilde{\Lambda}\lo\bs{w}\ro,
+\ee
+where the matrix $\tilde{\mathbb{T}}\lo\bs{w}\ro$ has the vectors $\bs{r}_s\lo\bs{w}\ro, s = 1, ..., 4$ as its columns and
+\be
+\tilde{\Lambda}\lo\bs{w}\ro = \mathrm{diag}\lo\tilde\lambda_1\lo\bs{w}\ro, ..., \tilde\lambda_4\lo\bs{w}\ro\ro.
+\ee
+This means that the matrix $\mathbb{A}_1\lo\bs{w}\ro$ is diagonalizable.
+\paragraph{}
+Now we can show that the matrix $\mathbb{P}\lo\bs{w},\bs{n}\ro$ is diagonalizable too.
+By~\eqref{rot-P} and~\eqref{diagonalization}
+\be
+\label{final_p_diag}
+\mathbb{P}\lo\bs{w},\bs{n}\ro = \left|\bs{n}\right|\mathbb{Q}^{-1}\lo\bs{n}\ro\tilde{\mathbb{T}}\lo\mathbb{Q}\lo\bs{n}\ro\bs{w}\ro\tilde{\Lambda}\lo\mathbb{Q}\lo\bs{n}\ro\bs{w}\ro\tilde{\mathbb{T}}\lo\mathbb{Q}\lo\bs{n}\ro\bs{w}\ro^{-1}\mathbb{Q}\lo\bs{n}\ro.
+\ee
+Under the notation
+\begin{eqnarray}
+\nonumber
+\Lambda\lo\bs{w},\bs{n}\ro = \left|\bs{n}\right|\tilde{\Lambda}\lo\mathbb{Q}\lo\bs{n}\ro\bs{w}\ro = \mathrm{diag}\left|\bs{n}\right|\lo\tilde{\Lambda_1}\lo\mathbb{Q}\lo\bs{n}\ro\bs{w}\ro, ..., \tilde{\Lambda_4}\lo\mathbb{Q}\lo\bs{n}\ro\bs{w}\ro\ro,\\
+\mathbb{T}\lo\bs{w},\bs{n}\ro = \mathbb{Q}^{-1}\lo\bs{n}\ro\tilde{\mathbb{T}}\lo\mathbb{Q}\lo\bs{n}\ro\bs{w}\ro,
+\end{eqnarray}
+we see that the matrix $\mathbb{P}\lo\bs{w},\bs{n}\ro$ satisfies the relation $\mathbb{T}^{-1}\mathbb{P}\mathbb{T} = \Lambda\lo\bs{w},\bs{n}\ro = \mathrm{diag}\lo \lambda_1, ..., \lambda_4\ro$ and thus $\mathbb{T}$ diagonalizes the matrix $\mathbb{P}$.

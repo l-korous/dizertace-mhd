@@ -1,0 +1,151 @@
+\chapter{Dicontinuous Galerkin discretization of the Euler equations}
+ For what follows, we introduce the following notation. By $\varphi|_{\Gamma_{ij}}$ and $\varphi|_{\Gamma_{ji}}$ we denote the values of $\varphi$ on $\Gamma_{ij}$ considered from the interior and the exterior of $K_i$ respectively. The symbols
+  \be
+  \left<\varphi\right>_{ij} = \frac12\lo\varphi|_{\Gamma_{ij}} + \varphi|_{\Gamma_{ij}}\ro,\ \ \left[\varphi\right]_{ij} = \varphi|_{\Gamma_{ij}} - \varphi|_{\Gamma_{ji}}
+  \ee
+  stand for the average of the two values $\varphi|_{\Gamma_{ij}}$ and $\varphi|_{\Gamma_{ji}}$, and their difference (i.e. jump of $\varphi$ on $\Gamma_{ij}$) respectively.
+\section{Numerical Fluxes}
+  The DGFEM discretization of the Euler equations in their conservative form follows the principles of the section~\ref{sec:DG}. We take the equations in the form~\eqref{conservative_form}. We leave the time derivative for now, and we need to find suitable numerical fluxes to approximate the fluxes $\partial{\bs{f}}_x, \partial{\bs{f}}_y$ through the faces $\Gamma_{ij}$. The numerical fluxes will be sought so that the requirements from the subsection~\ref{subsec:numflux_properties} are met.
+\paragraph{Construction of some numerical fluxes}
+The following type of numerical fluxes are usually called \emph{flux vector splitting schemes} and we use the knowledge from the section~\ref{sec:euler_properties}, namely~\eqref{P_definition},~\eqref{first_homo}, ..., and~\eqref{final_p_diag}. On the basis of~\eqref{final_p_diag} we define the matrices
+\be
+\Lambda^{\pm} = \text{diag}\lo\lambda_1^{\pm}, ..., \lambda_m^{\pm}\ro,\ \ |\Lambda| = \text{diag}\lo|\lambda_1|, ..., |\lambda_m|\ro.
+\ee
+Also we define
+\be
+\mathbb{P}^{\pm} = \mathbb{P} \Lambda^{\pm} \mathbb{P}^{-1},\ \ |\mathbb{P}| = \mathbb{P} |\Lambda| \mathbb{P}^{-1}.
+\ee
+These matrices depend on $\bs{w}\in D$ and $\bs{n}\in\mc{S}_1$. Now we define the following two schemes that will later be used in the numerical examples.
+\begin{enumerate}
+\item \emph{The Steger-Warming scheme} has the numerical flux:
+$$ \bs{H}_{SW}\lo\bs{u},\bs{v},\bs{n}\ro = \mathbb{P}^+\lo\bs{u},\bs{n}\ro\bs{u} + \mathbb{P}^-\lo\bs{v},\bs{n}\ro\bs{v},\ \ \bs{u},\bs{v}\in D,\ \bs{n}\in\mc{S}_1.$$
+This scheme is rather diffusive, so another scheme is preferred.
+\item  \emph{The Vijayasundaram scheme} has the numerical flux:
+$$ \bs{H}_{V}\lo\bs{u},\bs{v},\bs{n}\ro = \mathbb{P}^+\lo\frac{\bs{u} + \bs{v}}{2},\bs{n}\ro\bs{u} + \mathbb{P}^-\lo\frac{\bs{u} + \bs{v}}{2},\bs{n}\ro\bs{v},\ \ \bs{u},\bs{v}\in D,\ \bs{n}\in\mc{S}_1.$$
+\end{enumerate}
+
+This scheme contains a \emph{partial upwinding}, where the flux is computed at the point $x_{i + \frac{1}{2}}\ \lo x_{i - \frac{1}{2}}\ro$ with the use of the value $\bs{w}_i^k$ or $\bs{w}_{i+1}^k \lo \bs{w}_{i-1}^k \text{ or } \bs{w}_i^k\ro$ corresponding to the mesh point located in the upwind direction wrt. the propagation speed given by the eigenvalues $\lambda_i$. In the Steger-Warming scheme we speak of a \emph{full upwinding}.
+\paragraph{}
+Another possible construction of the numerical flux is based on the rotational invariance of the Euler equations, see Section~\ref{sec:rot_inv}. We introduce a new Cartesian coordinate szstem $\tilde{x}_1, ..., \tilde{x}_N$ with the origin at the midpoint of the face $\Gamma$, the coordinate $\tilde{x}_1$ oriented in the direction of the normal $\bs{n}$ and $\tilde{x}_2, ..., \tilde{x}_N$ tangent to $\Gamma$. The rotational invariance of the Euler equations implies that these equations have the form
+\be
+\frac{\partial\bs{q}}{\partial t} + \sum_{s = 1}^2\frac{\partial\bs{f}_s\lo\bs{q}\ro}{\partial\tilde{x}_s} = 0,
+\ee
+where
+$$
+\bs{q} = \mathbb{Q}\lo\bs{n}\ro\bs{w}
+$$
+with matrix $\mathbb{Q}\lo\bs{n}\ro$ defined in~\eqref{Q}. The tangential derivatives are neglected, and only the system with one space variable is considered:
+\be
+\label{one_variable_system}
+\frac{\partial\bs{q}}{\partial t} + \frac{\partial\bs{f}_1\lo\bs{q}\ro}{\partial\tilde{x}_1} = 0.
+\ee
+Then the numerical flux is defined in the form
+\be
+\bf{H}\lo\bs{u}, \bs{v}, \bs{n}\ro = \mathbb{Q}^{-1}\lo\bs{n}\ro\bs{g}_R\lo\mathbb{Q}\lo\bs{n}\ro\bs{u},\mathbb{Q}\lo\bs{n}\ro\bs{v}\ro,
+\ee
+where $\bs{g}_R = \bs{g}_R\lo\bs{q}_1, \bs{q}_2\ro$ is a numerical flux (so-called \emph{approximate Riemann solver}, see~\cite{feistauer}) for the system~\eqref{one_variable_system} with one space variable.
+This numerical flux is complicated to be linearized, and because we wanted to employ a semi-implicit method for time integration, we opted for the Vijayasundaram numerical flux in most cases.
+
+\section{Time discretization}
+This section closely follows~\cite{DF04}. Using numerical fluxes we can introduce new forms
+\begin{eqnarray}
+\nonumber
+\lo\bs{w}_h,\boldsymbol{\varphi}_h\ro & = & \int_{\Omega}\bs{w}_h\lo\bs{x}\ro\cdot\boldsymbol{\varphi}_h\lo\bs{x}\ro d\bs{x},\\
+\label{tilde_b}
+\tilde{b}_h\lo\bs{w}_h,\boldsymbol{\varphi}_h\ro & = &-\sum_{K\in\mc{T}_h}\int_K\sum_{s=1}^2\bs{f}_s\lo\bs{w}_h\lo\bs{x}\ro\ro\cdot\frac{\partial\boldsymbol{\varphi}_h\lo\bs{x}\ro}{\partial x_s} d\bs{x} \\ \nonumber
+& + & \sum_{K_i\in\mc{T}_h}\sum_{j\in\mc{S}\lo i\ro} \int_{\Gamma_{ij}}\bs{H}\lo\bs{w}\lo t\ro|_{\Gamma_{ij}}, \bs{w}\lo\bs{x}\ro|_{\Gamma_{ji}},\bs{n}_{ij}\ro\cdot \boldsymbol{\varphi}_h\lo\bs{x}\ro dS
+\end{eqnarray}
+
+for $\bs{w}_h, \boldsymbol{\varphi}_h\in \left[V_h\right]^4$. We say that $\bs{w}_h$ is the approximate solution of~\eqref{conservative_form} in $Q_T = \Omega\times\lo 0,T\ro$,
+if it satisfies the conditions
+\begin{enumerate}
+\item \be\bs{w}_h\in\mc{C}^1\lo\left[0,T\right],\left[V_h\right]^4\ro\ee,
+\item \be\label{approx_sol} \frac{d}{dt}\lo\bs{w}\lo t\ro,\boldsymbol{\varphi}_h\ro + \tilde{b}_h\lo\bs{w}_h\lo t \ro, \boldsymbol{\varphi}_h\ro = 0\ \ \forall\boldsymbol{\varphi}_h\in\left[V_h\right]^4\forall t\in\lo 0,T\ro\ee,
+\item \be\bs{w}_h\lo 0\ro = \Pi_h\bs{w}^0\ee,
+\end{enumerate}
+where $\Pi_h\bs{w}^0$ is the $L^2$-projeftion of the initial condition $\bs{w}^0$ onto the space $\left[V_h\right]^4$. If we set $p=0$, then we obviously obtain the finite volume method.
+\paragraph{}
+Relations~\eqref{approx_sol} represent a system of ordinary differential equations which can be solved by a suitable numerical method. Since we are interested in applying the Rothe's method, we now want to discretize the time derivative. In order to do so, we consider a partition $0 = t_0 < t_1 < t_2 < ...$ of the time interval $\lo 0, T\ro$ and set $\tau_k = t_{k+1} - t_k$. We use the notation $\bs{w}_h^k$ for the approximation of $\bs{w}_h\lo t_k\ro$. Then we apply the simple implicit \emph{backward Euler method} and our \emph{discrete problem} reads: for each $k\geq 0$ find $\bs{w}_h^{k+1}$ such that
+\begin{enumerate}
+\item \be\bs{w}_h^{k+1}\in\left[V_h\right]^4\ee,
+\item \be\label{approx_sol_discretized} \lo\frac{\bs{w}_h^{k+1} - w_h^k}{\tau_k},\boldsymbol{\varphi}_h\ro + \tilde{b}_h\lo\bs{w}_h^{k+1}, \boldsymbol{\varphi}_h\ro = 0\ \ \forall\boldsymbol{\varphi}_h\in\left[V_h\right]^4,\ k = 0, 1, ...\ee
+\item \be\bs{w}_h^0 = \Pi_h\bs{w}^0\ee.
+\end{enumerate}
+This scheme leads to a system of highly nonlinear algebraic equations whose numerical solution is rather complicated. In order to simplify the problem, in the following we shall linearize relations~\eqref{approx_sol_discretized} and obtain a linear system.
+\subsection{Linearization}
+By~\eqref{tilde_b}, for $\bs{w}_h^{k+1},\boldsymbol{\varphi}_h\in\left[V_h\right]^4$ we have
+\begin{eqnarray}
+\tilde{b}_h\lo\bs{w}_h^{k+1},\boldsymbol{\varphi}_h\ro & = &-\sum_{K\in\mc{T}_h}\int_K\sum_{s=1}^2\bs{f}_s\lo\bs{w}_h^{k+1}\lo\bs{x}\ro\ro\cdot\frac{\partial\boldsymbol{\varphi}\lo\bs{x}\ro}{\partial x_s} d\bs{x} \ \ (=: \tilde{\sigma}_1)\\
++ \sum_{K_i\in\mc{T}_h}\sum_{j\in{S}\lo i\ro} & & \int_{\Gamma_{ij}} \bs{H}\lo\bs{w}_h^{k+1}|_{\Gamma_{ij}}, \bs{w}_h^{k+1}|_{\Gamma_{ji}},\bs{n}_{ij}\ro\cdot \boldsymbol{\varphi}_h\lo\bs{x}\ro dS \ \ (=: \tilde{\sigma}_2)
+\end{eqnarray}
+The terms $\tilde{\sigma}_1$, and $\tilde{\sigma}_2$ are linearized as follows. We set
+\be
+\tilde{\sigma}_1\approx\sigma_1 = \sum_{K\in\mc{T}_h}\int_K\sum_{s=1}^2\mathbb{A}_s\lo\bs{w}_h^k\lo\bs{x}\ro\ro\bs{w}_h^{k+1}\lo\bs{x}\ro\cdot\frac{\partial\boldsymbol{\varphi}_h\lo\bs{x}\ro}{\partial x_s}d\bs{x}
+\ee
+and
+\begin{eqnarray}
+\tilde{\sigma}_2\approx\sigma_2 = \sum_{K_i\in\mc{T}_h}\sum_{j\in s\lo i \ro}\int_{\Gamma_{ij}}\left[\mc{P}^+\lo \left<\bs{w}_h^k\right>_{ij},\bs{n}_{ij}\ro\bs{w}_h^{k+1}|_{\Gamma_{ij}} \right. \\+ \left. \mc{P}^-\lo \left<\bs{w}_h^k\right>_{ij},\bs{n}_{ij}\ro\bs{w}_h^{k+1}|_{\Gamma_{ji}}\right] \cdot \boldsymbol{\varphi}_h dS \\+ 
+\sum_{K_i\in\mc{T}_h}\sum_{j\in{S}\lo i\ro\backslash s\lo i \ro} \int_{\Gamma_{ij}}\bs{H}\lo\bs{w}_h^{k+1}|_{\Gamma_{ij}}, \bs{w}_h^{k+1}|_{\Gamma_{ji}},\bs{n}_{ij}\ro\cdot \boldsymbol{\varphi}_h\lo\bs{x}\ro dS.
+\end{eqnarray}
+We omit the linearization of the fluxes across domain boundaries, for details see~\cite{DF04}. Finally, we define the form
+\be
+b_h\lo\bs{w}_h^k,\bs{w}_h^{k+1},\boldsymbol{\varphi}_h\ro = -\sigma_1 + \sigma_2.
+\ee
+The form is linear wrt. the second and third variable. Using this form we come to the following \emph{semi-implicit linearized numerical scheme}: for each $k\geq 0$ find $\bs{w}_h^{k+1}$ such that
+\begin{enumerate}
+\item \be\bs{w}_h^{k+1}\in\left[V_h\right]^4\ee,
+\item \be\lo\bs{w}_h^{k+1},\boldsymbol{\varphi}_h\ro + \tau_k {b}_h\lo\bs{w}_h^k, \bs{w}_h^{k+1},\boldsymbol{\varphi}_h\ro = \lo\bs{w}_h^k, \boldsymbol{\varphi}_h\ro\ \ \forall\boldsymbol{\varphi}_h\in\left[V_h\right]^4,\ k = 0, 1, ...\ee
+\item \be\bs{w}_h^0 = \Pi_h\bs{w}^0\ee.
+\end{enumerate}
+
+\section{Boundary conditions}
+In all examples in the next chapter, the boundary of the computational domain $\Omega$ is divided into three parts.
+\begin{enumerate}
+\item On a fixed impermeable wall $\Gamma_W\subset\partial\Omega$ we use the condition $\bs{v}\cdot\bs{n} = 0$. Then the flux $\mc{P}\lo\bs{w},\bs{n}\ro$ has the form
+\begin{eqnarray}
+\mc{P}\lo\bs{w},\bs{n}\ro & = & \sum_{s=1}^2\bs{f}_s\lo\bs{w}\ro n_s \\ & = & \lo\bs{v}\cdot\bs{n}\ro\bs{w} + p \lo 0, n_1, n_2, \bs{v}\cdot\bs{n}\ro^T \\ & = & p\lo 0, n_1, n_2, 0\ro^T,
+\end{eqnarray}
+which is uniquely determined on $\Gamma_W$ by the extrapolated value of the pressure, i.e. by $p_j^k := p_i^k$. Therefore, on the part $\Gamma_W$ of the boundary we define the numerical flux
+\be
+\bs{H}\lo\bs{w}_i^k, \bs{w}_j^k, \bs{n}\ro = p_i^k\lo 0, n1, n2, 0\ro^T.
+\ee
+We can see that on the impermeable part of the boundary, 2 eigenvalues $\lambda_2, \lambda_3$ are zero, and the eigenvalue $\lambda_1$ is negative, and the eigenvalue $\lambda_4$ is positive. We prescribe only $\bs{v}\cdot\bs{n} = 0$, and extrapolate the pressure.
+\item
+On the inlet
+$$
+\Gamma_I\lo t \ro = \left\{x\in\partial\Omega; \bs{v}\lo x, t\ro \cdot \bs{n}\lo x \ro < 0\right\}
+$$
+and the outlet
+$$
+\Gamma_O\lo t \ro = \left\{x\in\partial\Omega; \bs{v}\lo x, t\ro \cdot \bs{n}\lo x \ro > 0\right\}
+$$
+parts of the boundary it is necessary to use nonreflecting boundary conditions. In this case we used the so-called \emph{characteristics-based} bounadry conditions, according to~\cite{sbornik konference HYP06}.
+Using the rotational invariance, we tranform the Euler equations to the coordinates $\tilde{x}_1$, in the direction of the outer normal $\bs{n}$ to the boundary, and $\tilde{x}_2$, tangential to the boundary and linearize the resulting system around the state $\bs{q}_{ij} = \mathbb{Q}\lo\bs{n}_{ij}\ro$. Then we obtain the linear system
+\be
+\frac{\partial\bs{q}}{\partial t} +\mathbb{A}_1\lo\bs{q}_{ij}\ro\frac{\partial\bs{q}}{\partial\tilde{x}_1} = 0,
+\ee
+for the vector-valued function $\bs{q} = \mathbb{Q}\lo\bs{n}_{ij}\ro\bs{w}$, considered in the set $\lo -\infty,0\ro\times\lo 0,\infty\ro$ and equipped with the initial and boundary conditions
+\begin{eqnarray}
+\bs{q}\lo\tilde{x}_1,0\ro & = & \bs{q}_{ij},\ \ \tilde{x}_1 < 0,\\
+\bs{q}\lo 0,t\ro & = & \bs{q}_{ij},\ \ t > 0.
+\end{eqnarray}
+The goal is to choose $\bs{q}_{ij}$ in such a way that this initial-boundary value problem is well-posed, i.e. has a unique solutions. The method of characteristics leads to the following process:
+\paragraph{}
+Let us put $\bs{q}^*_{ji} = \mathbb{Q}\lo\bs{n}_{ij}\ro\bs{w}_{ji}^*$, where $\bs{w}_{ji}$ is a prescribed boundary state at the inlet or outlet. We calculate eigenvectors $\bs{r}_s$ corresponding to the eigenvalues $\lambda_1, ..., \lambda_4$, of the matrix $\mathbb{A}_1\lo\bs{q}_{ij}\ro$, arrange them as columns in the matrix $\mathbb{T}$ and calculate $\mathbb{T}^{-1}$ (explicit formulae can be found in~\cite{FFS03}, section 3.1). Now we set
+\be
+\alpha = \mathbb{T}^{-1}\bs{q}_{ij},\ \beta = \mathbb{T}^{-1}\bs{q}^*_{ji}.
+\ee
+and define the state $\bs{q}_{ji}$ by the relations
+\be
+\bs{q}_{ji} := \sum_{s = 1}^4\gamma_s\bs{r}_s,\ \gamma_s = 
+\begin{cases}
+	\alpha_s,\ \ \lambda_s \geq 0,\\
+	\beta_s,\ \ \lambda_s < 0.
+\end{cases}
+\ee
+Finally, the sought boundary state $\bs{w}_{ji}$ is defined as
+\be
+\bs{w}|_{\Gamma_{ji}} = \bs{w}_{ji} = \mathbb{Q}^{-1}\lo\bs{n}_{ij}\ro\bs{q}_{ji}.
+\ee
+\end{enumerate}
+\section{Shock capturing}

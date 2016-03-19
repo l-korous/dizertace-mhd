@@ -1,0 +1,7 @@
+http://arxiv.org/abs/1404.3257
+
+http://arxiv.org/abs/1310.2531
+
+http://onlinelibrary.wiley.com/doi/10.1002/2015SW001308/full
+
+https://www.researchgate.net/publication/236935462_A_discontinuous_Galerkin_method_for_solving_the_fluid_and_MHD_equations_in_astrophysical_simulations

@@ -1,0 +1,171 @@
+\addcontentsline{toc}{chapter}{Appendix}
+\begin{flushleft}
+{\LARGE{\textbf{{Appendix}}}}
+\end{flushleft}
+
+\addcontentsline{toc}{section}{Appendix 1}
+\begin{flushleft}
+{\Large{\textbf{{Appendix 1}}}}
+\end{flushleft}
+
+\paragraph{Finding all neighbors of an element - algorithm}
+\begin{lstlisting}
+ void find_neighbors(Element* element, int edge)
+ {
+ // Try to get a neighbor directly from the structure (as explained above)
+  neighb_el = element->get_neighbor(edge);
+  // If successful, this is the easy case.
+  if (neighb_el != NULL)
+  {
+   // There is only one neighbor in this case.
+   n_neighbors = 1;
+   neighbors.push_back(neighb_el);
+  }
+  else
+  {
+   // Peek the vertex in the middle of the active edge
+   // (if there is none, vertex will be NULL).
+   Node* vertex = mesh->peek_vertex_node(element->en[edge]->p1,
+   element->en[edge]->p2);
+   // There is no vertex in the middle of the active edge,
+   // from the point of view of this element.
+   // We call this case the "way up".
+   if (vertex == NULL)
+   {
+    // Get the parent element.
+    Element* parent = central_el->parent;
+    // Array of middle-point vertices of the intermediate parent
+    // edges that we climb up to the correct parent element.
+    Node** par_mid_vertices = new Node*[max_level];
+    // Number of visited intermediate parents.
+    int n_parents = 0;
+    // Function will be displayed later, it looks for an active element going up.
+    find_act_elem_up(parent, orig_vertex_id, par_mid_vertices, n_parents);
+   }
+   // There is a vertex in the middle of the current element's current edge.
+   // We call this the "way down".
+   else
+   {
+    // An array of virtual sons of the element visited on the way down
+    // to the neighbor.
+    int sons[Transformations::max_level]; 
+    // Number of used transformations.
+    int n_sons = 0;
+    // Start the search by going down to the first son.
+    // Function will be displayed later.
+    find_act_elem_down( vertex, orig_vertex_id, sons, n_sons + 1);
+   }
+  }
+ }
+
+ void find_act_elem_up(Element* elem, int* orig_vertex_id,
+ Node** par_mid_vertices, int n_parents)
+ {
+  // IDs of vertices bounding the current intermediate parent edge.
+  int p1 = elem->vn[edge]->id;
+  int p2 = elem->vn[(edge + 1) \% elem->get_num_surf()]->id;
+
+  // Find if p1 and p2 bound a used edge (used by the neighbor element).
+  common_edge = mesh->peek_edge_node(p1, p2);
+
+  // Add the vertex in the middle of the parent edge to the array
+  // of intermediate parent vertices. This is for consequent transformation
+  // of functions on neighbor element.
+  vertex = mesh->peek_vertex_node(p1, p2);
+  if(vertex != NULL)
+  {
+   if (n_parents == 0)
+    par_mid_vertices[n_parents++] = vertex;
+   else
+    if(par_mid_vertices[n_parents - 1]->id != vertex->id)
+     par_mid_vertices[n_parents++] = vertex;
+  }
+
+  if ((common_edge == NULL) || (central_el->en[edge]->id == common_edge->id))
+  {
+   // We have not yet found the parent of the central element completely
+   // adjacent to the neighbor.
+   find_act_elem_up(elem->parent, orig_vertex_id, par_mid_vertices, n_parents);
+  }
+  else
+  {
+   for (int i = 0; i < 2; i++)
+   {
+    // Get a pointer to the active neighbor element.
+    if ((edge->elem[i] != NULL) && (edge->elem[i]->active == 1))
+    {
+     neighb_el = edge->elem[i];
+     Node* n = NULL;
+
+     // Go back through the intermediate inactive parents down to the central
+     // element and stack corresponding neighbor_transformations into the array
+     // 'neighbor_transformations'.
+     for(int j = n_parents - 1; j > 0; j--)
+     {
+      n = mesh->peek_vertex_node(par_mid_vertices[j]->id, p1);
+      if(n == NULL)
+       p1 = par_mid_vertices[j]->id;
+      else
+      {
+       if(n->id == par_mid_vertices[j-1]->id)
+        p2 = par_mid_vertices[j]->id;
+       else
+        p1 = par_mid_vertices[j]->id;
+      }
+     }
+     // There is only one neighbor, ...
+     n_neighbors = 1;
+     // ...add it to the vector of neighbors.
+     neighbors.push_back(neighb_el);
+    }
+   }
+  }
+ }
+
+ find_act_elem_down( Node* vertex, int* bounding_verts_id,
+ int* sons, unsigned int n_sons)
+ {
+  // We are looking for neighboring elements on both halves of the edge.
+  for (int i = 0; i < 2; i++)
+  {
+   // Store the current element's transformation.
+   sons[n_sons-1] = (edge + i) \% central_el->get_num_surf();
+   // Try to get a pointer to the edge between the middle vertex and
+   // one of the vertices bounding the previously tested segment.
+   Node* common_edge = mesh->peek_edge_node(mid_vert, bnd_verts[i]);
+   // If the edge is not used, i.e. there is no active element on either side.
+   if (common_edge == NULL) 
+   {
+    // Get the middle vertex of this edge and try again on the segments
+    // into which this vertex splits the edge.
+    Node * n = mesh->peek_vertex_node(mid_vert, bnd_verts[i]);
+    // Choose the correct bounding vertices for the current half of the edge.
+    if(i == 0)
+     bounding_verts_id[1] = mid_vert;
+    else
+     bounding_verts_id[0] = mid_vert;
+    // Recursively call the function.
+    find_act_elem_down( n, bounding_verts_id, sons, n_sons + 1);
+    // Fix the recursion.
+    bounding_verts_id[0] = bnd_verts[0];
+    bounding_verts_id[1] = bnd_verts[1];
+   }
+   // We have found a used edge.
+   else
+   {
+    // Try both halves and see if the neighboring elements are active
+    // (not refined further).
+    for (int j = 0; j < 2; j++)
+    {
+     if ((edge->elem[j] != NULL) && (edge->elem[j]->active == 1))
+     {
+      neighb_el = mesh->get_element(common_edge->elem[j]->id);
+      // Append the new neighbor.
+      n_neighbors++;
+      neighbors.push_back(neighb_el);
+     }
+    }
+   }
+  }
+ }
+\end{lstlisting}

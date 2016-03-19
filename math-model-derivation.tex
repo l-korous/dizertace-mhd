@@ -51,7 +51,7 @@ U=\frac{p}{\gamma-1}+\frac{1}{2}\rho u^2+\frac{B^2}{2\mu_0}\\
 u\cdot\vct B)}{\mu_0}\vct B+\frac{\eta}{\mu_0}\vct j\times\vct B \;.
 \end{eqnarray}
 In the (almost) collision-less plasma, we are mostly interested in, the classical resistivity plays usually a small role. Instead of that, various microscopical
-(kinetic) effects influence the plasma dynamics via other terms in the generalized Ohms law (see \citet{Buchner+Elkina:2006}). In order to mimic these
+(kinetic) effects influence the plasma dynamics via other terms in the generalized Ohms law (see \cite{Buchner+Elkina:2006}). In order to mimic these
 processes, whose modeling is beyond the scope of the MHD approach, we re-consider the parameter $\eta$ as a generalized resistivity, including the effects like
 wave-particle interactions or off-diagonal components in the electron pressure tensor into it. As such effects are -- in general -- observed in the highly
 filamented, intense current sheets we model the anomalous generalized resistivity as follows
@@ -74,7 +74,7 @@ exceeds the critical threshold $v_\mathrm{cr}$, which corresponds to the thickne
 In order to solve the Eqs.~(\ref{eq:mhd}) numerically, it is convenient to rescale all the quantities to the dimensionless units. Thus, all the spatial
 coordinates are expressed in the characteristic size $L_0$ and times in Alfv\'en transit time $\tau_{\rm A}=L_0/v_{\rm A}$, where $v_{\rm A}=B_0/\sqrt{\rho_0}$
 is a typical Alfv\'en speed. Magnetic field strength $\vct B$ and plasma density $\rho$ are given in the units of their characteristic values $B_0$ and $\rho_0$
-and similar scaling holds for the other quantities -- see \citet{Kliem+:2000} or \citet{Barta+:2011a} for details. The normalization of MHD quantities is
+and similar scaling holds for the other quantities -- see \cite{Kliem+:2000} or \cite{Barta+:2011a} for details. The normalization of MHD quantities is
 summarized in the table \ref{Tab:MHDNormalization}.
 
 \begin{table}[ht]
@@ -111,7 +111,7 @@ summarized in the table \ref{Tab:MHDNormalization}.
   \label{Tab:MHDNormalization}
 \end{table}
 
-In order to utilize more universal LSFEM implementation for the more general form of equations (see \citet{Lukin:2008}) the set of MHD
+In order to utilize more universal LSFEM implementation for the more general form of equations (see \cite{Lukin:2008}) the set of MHD
 Eqs.~(\ref{eq:mhd}) is rewritten into the conservative (flux/source) formulation (for the expanded form see Appendix~\ref{sec:exp3DMHDeq})
 \begin{equation}
 \label{eq:MHDcons}

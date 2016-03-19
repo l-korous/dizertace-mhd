@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:ns0="http://www.iki.fi/pav/software/textext/"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2428"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docname="refdomain3.svg"
+   sodipodi:docbase="/home/lenka/latex/lenka-thesis/fig"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.8"
+     inkscape:cx="129.19622"
+     inkscape:cy="940.18686"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1125"
+     inkscape:window-x="0"
+     inkscape:window-y="25">
+    <inkscape:grid
+       id="grid6093"
+       type="xygrid" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2430">
+    <inkscape:perspective
+       id="perspective101"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <marker
+       style="overflow:visible;"
+       id="Arrow1Lend"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend">
+      <path
+         transform="scale(0.8) rotate(180) translate(12.5,0)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path3224" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow1Mend"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend">
+      <path
+         transform="scale(0.4) rotate(180) translate(10,0)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path3597" />
+    </marker>
+  </defs>
+  <metadata
+     id="metadata2433">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <path
+       sodipodi:nodetypes="cccc"
+       id="path2438"
+       d="M 119,54.362183 L 119,194.36218 L 258.54569,194.61472 L 119,54.362183 z"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <path
+       sodipodi:nodetypes="cc"
+       id="path2442"
+       d="M 188,224.36218 L 189,29.362183"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <path
+       sodipodi:nodetypes="cc"
+       id="path2444"
+       d="M 84,124.36218 L 284,124.36218"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <path
+       id="path2483"
+       d="M 259.17857,121.86218 L 259.17857,126.86218"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       id="path2485"
+       d="M 186.5,54.540755 L 191.5,54.540755"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <g
+       ns0:preamble="/home/lenka/Documents/textext-preamble.tex"
+       ns0:text="$\\hat{K}$"
+       word-spacing="normal"
+       letter-spacing="normal"
+       font-size-adjust="none"
+       font-stretch="normal"
+       font-weight="normal"
+       font-variant="normal"
+       font-style="normal"
+       fill-rule="even-odd"
+       stroke-miterlimit="10.433"
+       xml:space="preserve"
+       transform="matrix(2,0,0,-2,-289.93405,1573.5261)"
+       id="content"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1">
+<polygon
+   id="polygon3546"
+   points="227.4,716.09 226.16,714.42 226.51,714.42 227.71,715.45 228.92,714.42 229.27,714.42 228.02,716.09 227.4,716.09 "
+   style="fill:#000000;stroke:none;stroke-width:0" />
+<path
+   id="path3548"
+   d="M 227.26,713.74 L 227.29,714.02 L 227.05,714.02 L 226.16,713.99 C 226,713.99 225.82,713.99 225.39,714 L 224.75,714.02 L 224.72,713.74 L 225.19,713.72 C 225.43,713.71 225.54,713.63 225.54,713.45 C 225.54,713.31 225.51,713.02 225.45,712.69 L 224.72,708.37 C 224.55,707.45 224.54,707.44 224.15,707.4 L 223.74,707.37 L 223.7,707.09 L 224.12,707.1 C 224.59,707.11 224.82,707.12 225.01,707.12 L 225.98,707.09 L 226.24,707.09 L 226.27,707.37 L 225.78,707.4 C 225.51,707.42 225.42,707.49 225.42,707.69 C 225.42,707.75 225.43,707.86 225.44,707.9 L 225.87,710.51 C 227.36,708.81 227.59,708.52 228.64,707.09 L 229.33,707.12 C 229.68,707.11 229.74,707.1 230,707.09 L 230,707.39 L 229.8,707.39 C 229.57,707.39 229.38,707.51 229.17,707.77 L 226.72,710.78 L 229.62,713.5 C 229.78,713.65 229.99,713.75 230.16,713.75 L 230.37,713.75 L 230.37,714.02 L 230.14,714.01 C 229.93,714 229.77,713.99 229.7,713.99 C 229.6,713.99 229.43,714 229.23,714.01 L 229.03,714.02 L 229.03,713.73 C 229.03,713.65 228.93,713.52 228.65,713.24 L 227.37,711.94 C 226.93,711.5 226.53,711.14 225.89,710.64 L 226.34,713.23 C 226.41,713.61 226.48,713.68 226.85,713.71 L 227.26,713.74 z"
+   style="fill:#000000;stroke:none;stroke-width:0" />
+</g>    <g
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="g4615"
+       transform="matrix(1,0,0,-1,39.612443,827.93008)"
+       xml:space="preserve"
+       stroke-miterlimit="10.433"
+       fill-rule="even-odd"
+       font-style="normal"
+       font-variant="normal"
+       font-weight="normal"
+       font-stretch="normal"
+       font-size-adjust="none"
+       letter-spacing="normal"
+       word-spacing="normal"
+       ns0:text="1"
+       ns0:preamble="/home/lenka/Documents/textext-preamble.tex">
+<path
+   style="fill:#000000;stroke:none;stroke-width:0"
+   d="M 224.1,712.65 L 224.2,712.65 L 225.49,713.23 C 225.49,713.24 225.51,713.24 225.51,713.24 C 225.57,713.24 225.59,713.15 225.59,712.91 L 225.59,708.08 C 225.59,707.56 225.49,707.45 224.95,707.42 L 224.39,707.39 L 224.39,707.09 C 225.92,707.12 225.92,707.12 226.03,707.12 C 226.16,707.12 226.38,707.12 226.72,707.11 C 226.84,707.1 227.19,707.1 227.6,707.09 L 227.6,707.39 L 227.08,707.42 C 226.53,707.45 226.43,707.56 226.43,708.08 L 226.43,713.99 L 226.29,714.04 C 225.64,713.7 224.94,713.4 224.03,713.08 L 224.1,712.65 z"
+   id="path4617" />
+</g>    <g
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="g4619"
+       transform="matrix(1,0,0,-1,-28.572107,766.45515)"
+       xml:space="preserve"
+       stroke-miterlimit="10.433"
+       fill-rule="even-odd"
+       font-style="normal"
+       font-variant="normal"
+       font-weight="normal"
+       font-stretch="normal"
+       font-size-adjust="none"
+       letter-spacing="normal"
+       word-spacing="normal"
+       ns0:text="1"
+       ns0:preamble="/home/lenka/Documents/textext-preamble.tex">
+<path
+   style="fill:#000000;stroke-width:0"
+   d="M 224.1,712.65 L 224.2,712.65 L 225.49,713.23 C 225.49,713.24 225.51,713.24 225.51,713.24 C 225.57,713.24 225.59,713.15 225.59,712.91 L 225.59,708.08 C 225.59,707.56 225.49,707.45 224.95,707.42 L 224.39,707.39 L 224.39,707.09 C 225.92,707.12 225.92,707.12 226.03,707.12 C 226.16,707.12 226.38,707.12 226.72,707.11 C 226.84,707.1 227.19,707.1 227.6,707.09 L 227.6,707.39 L 227.08,707.42 C 226.53,707.45 226.43,707.56 226.43,708.08 L 226.43,713.99 L 226.29,714.04 C 225.64,713.7 224.94,713.4 224.03,713.08 L 224.1,712.65 z"
+   id="path4621" />
+</g>    <g
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="g4623"
+       transform="matrix(1,0,0,-1,-30.401927,827.66779)"
+       xml:space="preserve"
+       stroke-miterlimit="10.433"
+       fill-rule="even-odd"
+       font-style="normal"
+       font-variant="normal"
+       font-weight="normal"
+       font-stretch="normal"
+       font-size-adjust="none"
+       letter-spacing="normal"
+       word-spacing="normal"
+       ns0:text="0"
+       ns0:preamble="/home/lenka/Documents/textext-preamble.tex">
+<path
+   style="fill:#000000;stroke:none;stroke-width:0"
+   d="M 226.05,713.99 L 225.91,713.98 L 225.77,713.97 L 225.64,713.95 L 225.51,713.93 L 225.38,713.9 L 225.26,713.86 L 225.15,713.81 L 225.04,713.76 L 224.93,713.7 L 224.83,713.63 L 224.73,713.55 L 224.64,713.47 L 224.55,713.38 L 224.46,713.29 L 224.38,713.18 L 224.31,713.07 L 224.24,712.96 L 224.17,712.83 L 224.11,712.7 L 224.05,712.56 L 224,712.41 L 223.95,712.26 L 223.91,712.1 L 223.87,711.94 L 223.83,711.76 L 223.8,711.58 L 223.78,711.39 L 223.76,711.2 L 223.74,711 L 223.73,710.79 L 223.72,710.57 L 223.72,710.35 C 223.72,709.18 223.93,708.18 224.28,707.69 C 224.63,707.2 225.19,706.92 225.8,706.92 L 225.93,707.27 C 224.97,707.27 224.56,708.28 224.56,710.71 C 224.56,712.81 224.93,713.64 225.87,713.64 L 225.87,713.64 C 226.84,713.64 227.23,712.66 227.23,710.27 C 227.23,708.15 226.85,707.27 225.93,707.27 L 225.8,706.92 C 227.31,706.92 228.07,708.22 228.07,710.77 C 228.07,712.95 227.42,713.99 226.05,713.99 z"
+   id="path4625" />
+</g>    <g
+       ns0:preamble="/home/lenka/Documents/textext-preamble.tex"
+       ns0:text="-1"
+       word-spacing="normal"
+       letter-spacing="normal"
+       font-size-adjust="none"
+       font-stretch="normal"
+       font-weight="normal"
+       font-variant="normal"
+       font-style="normal"
+       fill-rule="even-odd"
+       stroke-miterlimit="10.433"
+       xml:space="preserve"
+       transform="matrix(1,0,0,-1,-115.90407,842.63422)"
+       id="g4627"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1">
+<polygon
+   id="polygon4629"
+   points="226.24,709.26 226.54,709.93 226.49,709.98 223.87,709.98 223.6,709.31 223.65,709.26 226.24,709.26 "
+   style="fill:#000000;stroke:none;stroke-width:0" />
+<path
+   id="path4631"
+   d="M 227.41,712.65 L 227.51,712.65 L 228.8,713.23 C 228.81,713.24 228.82,713.24 228.83,713.24 C 228.89,713.24 228.91,713.15 228.91,712.91 L 228.91,708.08 C 228.91,707.56 228.8,707.45 228.26,707.42 L 227.7,707.39 L 227.7,707.09 C 229.24,707.12 229.24,707.12 229.35,707.12 C 229.48,707.12 229.7,707.12 230.04,707.11 C 230.15,707.1 230.5,707.1 230.91,707.09 L 230.91,707.39 L 230.39,707.42 C 229.85,707.45 229.75,707.56 229.75,708.08 L 229.75,713.99 L 229.61,714.04 C 228.96,713.7 228.25,713.4 227.35,713.08 L 227.41,712.65 z"
+   style="fill:#000000;stroke:none;stroke-width:0" />
+</g>    <g
+       ns0:preamble="/home/lenka/Documents/textext-preamble.tex"
+       ns0:text="-1"
+       word-spacing="normal"
+       letter-spacing="normal"
+       font-size-adjust="none"
+       font-stretch="normal"
+       font-weight="normal"
+       font-variant="normal"
+       font-style="normal"
+       fill-rule="even-odd"
+       stroke-miterlimit="10.433"
+       xml:space="preserve"
+       transform="matrix(1,0,0,-1,-44.955186,911.91992)"
+       id="g4633"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1">
+<polygon
+   id="polygon4635"
+   points="226.24,709.26 226.54,709.93 226.49,709.98 223.87,709.98 223.6,709.31 223.65,709.26 226.24,709.26 "
+   style="fill:#000000;stroke:none;stroke-width:0" />
+<path
+   id="path4637"
+   d="M 227.41,712.65 L 227.51,712.65 L 228.8,713.23 C 228.81,713.24 228.82,713.24 228.83,713.24 C 228.89,713.24 228.91,713.15 228.91,712.91 L 228.91,708.08 C 228.91,707.56 228.8,707.45 228.26,707.42 L 227.7,707.39 L 227.7,707.09 C 229.24,707.12 229.24,707.12 229.35,707.12 C 229.48,707.12 229.7,707.12 230.04,707.11 C 230.15,707.1 230.5,707.1 230.91,707.09 L 230.91,707.39 L 230.39,707.42 C 229.85,707.45 229.75,707.56 229.75,708.08 L 229.75,713.99 L 229.61,714.04 C 228.96,713.7 228.25,713.4 227.35,713.08 L 227.41,712.65 z"
+   style="fill:#000000;stroke:none;stroke-width:0" />
+</g>    <g
+       ns0:preamble="/home/lenka/Documents/textext-preamble.tex"
+       ns0:text="$\\xi_2$"
+       word-spacing="normal"
+       letter-spacing="normal"
+       font-size-adjust="none"
+       font-stretch="normal"
+       font-weight="normal"
+       font-variant="normal"
+       font-style="normal"
+       fill-rule="even-odd"
+       stroke-miterlimit="10.433"
+       xml:space="preserve"
+       transform="matrix(2,0,0,-2,-281.40288,1463.6505)"
+       id="g3259"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1">
+<path
+   id="path3261"
+   d="M 224.76,712.89 L 224.98,712.89 L 225.27,713.47 C 225.44,713.51 225.53,713.52 225.66,713.52 C 225.8,713.52 225.91,713.51 226.11,713.47 C 226.47,713.4 226.72,713.37 226.95,713.37 C 226.49,713.04 226.21,712.74 226.21,712.37 C 226.21,712.18 226.26,712.03 226.37,711.91 C 225.92,711.86 225.27,711.51 224.77,711.06 C 224.23,710.57 223.85,709.52 223.85,708.48 C 223.85,707.52 224.27,707.01 225.06,707.01 C 225.29,707.01 226.11,707.11 226.41,707.11 C 226.75,707.11 226.92,706.93 226.92,706.59 C 226.92,706.53 226.91,706.47 226.9,706.39 C 226.66,705.68 226.16,705.29 225.72,705.29 C 225.37,705.29 225.1,705.56 225.1,705.91 C 225.1,705.96 225.11,706.04 225.12,706.13 L 225.02,706.17 L 224.55,705.83 C 224.54,705.76 224.54,705.7 224.54,705.65 C 224.54,705.22 224.9,704.87 225.35,704.87 C 225.91,704.87 226.6,705.35 227.05,705.92 C 227.41,706.36 227.48,706.86 227.48,707.21 C 227.48,707.3 227.45,707.38 227.39,707.44 C 227.25,707.6 226.96,707.62 226.75,707.62 C 226.46,707.62 225.77,707.52 225.44,707.52 C 224.88,707.52 224.61,707.92 224.61,708.71 C 224.61,709.78 224.96,710.82 225.44,711.2 C 225.65,711.36 225.91,711.49 226.22,711.49 C 226.45,711.49 226.64,711.43 226.82,711.37 C 226.91,711.34 227.2,711.29 227.29,711.29 C 227.42,711.29 227.66,711.29 227.7,711.3 C 227.7,711.35 227.77,711.59 227.84,711.68 C 227.84,711.73 227.83,711.77 227.82,711.82 C 227.3,711.79 226.82,712.12 226.82,712.62 C 226.82,713.17 227.7,713.53 228.12,713.69 L 228.42,713.8 L 228.48,714.12 L 228.39,714.21 L 228.16,713.98 C 228.06,713.88 227.96,713.84 227.82,713.84 C 227.49,713.84 226.97,713.92 226.49,714.05 L 226.31,714.1 C 226.03,714.17 225.83,714.21 225.69,714.21 C 225.52,714.21 225.32,714.18 225.08,714.11 L 224.76,712.89 z"
+   style="fill:#000000;stroke:none;stroke-width:0" />
+<path
+   id="path3263"
+   d="M 228.57,705.56 L 228.57,705.36 C 229.99,705.38 229.99,705.38 230.26,705.38 C 230.53,705.38 230.53,705.38 231.99,705.36 C 231.98,705.52 231.98,705.59 231.98,705.7 C 231.98,705.8 231.98,705.88 231.99,706.04 C 231.12,706 230.77,706 229.37,705.97 L 230.75,707.43 C 231.49,708.21 231.71,708.62 231.71,709.19 C 231.71,710.06 231.12,710.6 230.16,710.6 C 229.62,710.6 229.24,710.45 228.87,710.07 L 228.74,709.04 L 228.96,709.04 L 229.06,709.39 C 229.18,709.83 229.46,710.02 229.96,710.02 C 230.62,710.02 231.03,709.61 231.03,708.96 C 231.03,708.4 230.71,707.84 229.86,706.93 L 228.57,705.56 z"
+   style="fill:#000000;stroke:none;stroke-width:0" />
+</g>    <g
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="g3557"
+       transform="matrix(2,0,0,-2,-181.07728,1556.9112)"
+       xml:space="preserve"
+       stroke-miterlimit="10.433"
+       fill-rule="even-odd"
+       font-style="normal"
+       font-variant="normal"
+       font-weight="normal"
+       font-stretch="normal"
+       font-size-adjust="none"
+       letter-spacing="normal"
+       word-spacing="normal"
+       ns0:text="$\\xi_1$"
+       ns0:preamble="/home/lenka/Documents/textext-preamble.tex">
+<path
+   style="fill:#000000;stroke:none;stroke-width:0"
+   d="M 224.76,712.89 L 224.98,712.89 L 225.27,713.47 C 225.44,713.51 225.53,713.52 225.66,713.52 C 225.8,713.52 225.91,713.51 226.11,713.47 C 226.47,713.4 226.72,713.37 226.95,713.37 C 226.49,713.04 226.21,712.74 226.21,712.37 C 226.21,712.18 226.26,712.03 226.37,711.91 C 225.92,711.86 225.27,711.51 224.77,711.06 C 224.23,710.57 223.85,709.52 223.85,708.48 C 223.85,707.52 224.27,707.01 225.06,707.01 C 225.29,707.01 226.11,707.11 226.41,707.11 C 226.75,707.11 226.92,706.93 226.92,706.59 C 226.92,706.53 226.91,706.47 226.9,706.39 C 226.66,705.68 226.16,705.29 225.72,705.29 C 225.37,705.29 225.1,705.56 225.1,705.91 C 225.1,705.96 225.11,706.04 225.12,706.13 L 225.02,706.17 L 224.55,705.83 C 224.54,705.76 224.54,705.7 224.54,705.65 C 224.54,705.22 224.9,704.87 225.35,704.87 C 225.91,704.87 226.6,705.35 227.05,705.92 C 227.41,706.36 227.48,706.86 227.48,707.21 C 227.48,707.3 227.45,707.38 227.39,707.44 C 227.25,707.6 226.96,707.62 226.75,707.62 C 226.46,707.62 225.77,707.52 225.44,707.52 C 224.88,707.52 224.61,707.92 224.61,708.71 C 224.61,709.78 224.96,710.82 225.44,711.2 C 225.65,711.36 225.91,711.49 226.22,711.49 C 226.45,711.49 226.64,711.43 226.82,711.37 C 226.91,711.34 227.2,711.29 227.29,711.29 C 227.42,711.29 227.66,711.29 227.7,711.3 C 227.7,711.35 227.77,711.59 227.84,711.68 C 227.84,711.73 227.83,711.77 227.82,711.82 C 227.3,711.79 226.82,712.12 226.82,712.62 C 226.82,713.17 227.7,713.53 228.12,713.69 L 228.42,713.8 L 228.48,714.12 L 228.39,714.21 L 228.16,713.98 C 228.06,713.88 227.96,713.84 227.82,713.84 C 227.49,713.84 226.97,713.92 226.49,714.05 L 226.31,714.1 C 226.03,714.17 225.83,714.21 225.69,714.21 C 225.52,714.21 225.32,714.18 225.08,714.11 L 224.76,712.89 z"
+   id="path3415" />
+<path
+   style="fill:#000000;stroke:none;stroke-width:0"
+   d="M 228.96,709.47 L 229.03,709.47 L 230.01,709.91 C 230.02,709.92 230.02,709.92 230.03,709.92 C 230.08,709.92 230.09,709.85 230.09,709.67 L 230.09,706 C 230.09,705.6 230.01,705.52 229.6,705.5 L 229.18,705.47 L 229.18,705.25 C 230.34,705.27 230.34,705.27 230.43,705.27 C 230.52,705.27 230.69,705.27 230.95,705.26 C 231.04,705.26 231.3,705.26 231.62,705.25 L 231.62,705.47 L 231.22,705.5 C 230.8,705.52 230.73,705.6 230.73,706 L 230.73,710.49 L 230.62,710.53 C 230.13,710.27 229.59,710.04 228.9,709.8 L 228.96,709.47 z"
+   id="path3417" />
+</g>    <path
+       id="path5684"
+       d="M 135,187.36218 L 230,187.36218"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.6;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;marker-end:url(#Arrow1Mend)" />
+    <path
+       sodipodi:nodetypes="cc"
+       id="path6728"
+       d="M 225,172.36218 L 140,87.362183"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.6;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;marker-end:url(#Arrow1Mend)" />
+    <path
+       id="path7251"
+       d="M 125,82.362183 L 125,177.36218"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.6;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;marker-end:url(#Arrow1Mend)" />
+    <g
+       id="g7887"
+       transform="translate(165.71429,118.21429)">
+      <path
+         id="path7816"
+         d="M 40.245,62.655 L 39.885,62.91 C 39.09,63.48 38.37,63.78 37.83,63.78 C 37.14,63.78 36.705,63.225 36.705,62.325 C 36.705,61.95 36.75,61.545 36.825,61.11 L 36.9,60.78 L 37.035,60.225 C 37.275,59.19 37.575,58.545 38.01,58.155 C 38.28,57.915 38.745,57.735 39.105,57.735 C 39.54,57.735 39.825,58.035 39.825,58.515 C 39.825,59.175 39.3,59.88 38.52,60.255 C 38.1,60.465 37.56,60.63 36.9,60.78 L 36.825,61.11 L 38.04,60.825 C 38.295,60.765 38.7,60.615 39.075,60.45 C 40.35,59.895 40.935,59.205 40.935,58.275 C 40.935,57.57 40.425,57.12 39.675,57.12 C 38.7,57.12 37.05,58.14 36.465,59.1 C 36.015,59.85 35.565,61.62 35.565,62.625 C 35.565,63.795 36.225,64.485 37.305,64.485 C 38.145,64.485 38.985,64.065 40.365,62.94 L 40.245,62.655 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <path
+         id="path7818"
+         d="M 42.015,60.795 L 42.135,60.795 L 43.605,60.135 C 43.605,60.12 43.62,60.12 43.635,60.12 C 43.695,60.12 43.725,60.225 43.725,60.495 L 43.725,66 C 43.725,66.6 43.605,66.72 42.99,66.75 L 42.345,66.795 L 42.345,67.125 C 44.1,67.095 44.1,67.095 44.22,67.095 C 44.37,67.095 44.625,67.095 45,67.11 C 45.135,67.11 45.54,67.11 46.005,67.125 L 46.005,66.795 L 45.42,66.75 C 44.79,66.72 44.67,66.6 44.67,66 L 44.67,59.265 L 44.52,59.205 C 43.785,59.595 42.975,59.94 41.94,60.3 L 42.015,60.795 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       id="g7883"
+       transform="translate(103.92857,52.857143)">
+      <path
+         id="path7820"
+         d="M 52.77,62.655 L 52.41,62.91 C 51.63,63.48 50.91,63.78 50.37,63.78 C 49.665,63.78 49.23,63.225 49.23,62.325 C 49.23,61.95 49.275,61.545 49.35,61.11 L 49.425,60.78 L 49.56,60.225 C 49.815,59.19 50.115,58.545 50.55,58.155 C 50.82,57.915 51.285,57.735 51.645,57.735 C 52.065,57.735 52.35,58.035 52.35,58.515 C 52.35,59.175 51.825,59.88 51.06,60.255 C 50.64,60.465 50.1,60.63 49.425,60.78 L 49.35,61.11 L 50.58,60.825 C 50.835,60.765 51.24,60.615 51.615,60.45 C 52.875,59.895 53.46,59.205 53.46,58.275 C 53.46,57.57 52.95,57.12 52.2,57.12 C 51.24,57.12 49.575,58.14 48.99,59.1 C 48.54,59.85 48.09,61.62 48.09,62.625 C 48.09,63.795 48.75,64.485 49.83,64.485 C 50.685,64.485 51.525,64.065 52.89,62.94 L 52.77,62.655 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <path
+         id="path7822"
+         d="M 53.985,66.66 L 53.985,66.96 C 56.1,66.93 56.1,66.93 56.52,66.93 C 56.925,66.93 56.925,66.93 59.115,66.96 C 59.1,66.72 59.1,66.615 59.1,66.45 C 59.1,66.3 59.1,66.18 59.115,65.94 C 57.81,66 57.285,66 55.185,66.045 L 57.255,63.855 C 58.35,62.685 58.695,62.07 58.695,61.215 C 58.695,59.91 57.81,59.1 56.37,59.1 C 55.545,59.1 54.99,59.325 54.435,59.895 L 54.24,61.44 L 54.57,61.44 L 54.72,60.915 C 54.9,60.255 55.32,59.97 56.07,59.97 C 57.045,59.97 57.675,60.585 57.675,61.56 C 57.675,62.4 57.195,63.24 55.92,64.605 L 53.985,66.66 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       id="g7879"
+       transform="translate(66.428571,78.571429)">
+      <path
+         id="path7824"
+         d="M 65.31,62.655 L 64.965,62.91 C 64.17,63.48 63.45,63.78 62.91,63.78 C 62.205,63.78 61.77,63.225 61.77,62.325 C 61.77,61.95 61.815,61.545 61.89,61.11 L 61.965,60.78 L 62.1,60.225 C 62.355,59.19 62.655,58.545 63.09,58.155 C 63.36,57.915 63.825,57.735 64.185,57.735 C 64.62,57.735 64.905,58.035 64.905,58.515 C 64.905,59.175 64.38,59.88 63.6,60.255 C 63.18,60.465 62.64,60.63 61.965,60.78 L 61.89,61.11 L 63.12,60.825 C 63.375,60.765 63.78,60.615 64.155,60.45 C 65.43,59.895 66,59.205 66,58.275 C 66,57.57 65.49,57.12 64.755,57.12 C 63.78,57.12 62.115,58.14 61.53,59.1 C 61.095,59.85 60.645,61.62 60.645,62.625 C 60.645,63.795 61.305,64.485 62.37,64.485 C 63.225,64.485 64.065,64.065 65.43,62.94 L 65.31,62.655 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <path
+         id="path7826"
+         d="M 66.825,61.275 L 67.17,61.275 L 67.38,60.63 C 67.5,60.24 68.22,59.865 68.805,59.865 C 69.555,59.865 70.155,60.465 70.155,61.185 C 70.155,62.025 69.48,62.745 68.67,62.745 C 68.58,62.745 68.46,62.73 68.31,62.73 L 68.145,62.715 L 68.01,63.315 L 68.085,63.39 C 68.52,63.195 68.73,63.135 69.03,63.135 C 69.975,63.135 70.53,63.735 70.53,64.77 C 70.53,65.925 69.825,66.69 68.775,66.69 C 68.25,66.69 67.785,66.51 67.44,66.195 C 67.17,65.955 67.02,65.685 66.81,65.07 L 66.51,65.19 C 66.735,65.88 66.84,66.285 66.9,66.855 C 67.5,67.065 68.01,67.155 68.43,67.155 C 69.33,67.155 70.38,66.645 70.995,65.88 C 71.385,65.415 71.58,64.92 71.58,64.38 C 71.58,63.84 71.355,63.36 70.95,63.075 C 70.665,62.865 70.395,62.775 69.825,62.685 C 70.74,61.98 71.085,61.455 71.085,60.78 C 71.085,59.775 70.245,59.1 68.985,59.1 C 68.205,59.1 67.695,59.31 67.155,59.865 L 66.825,61.275 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+  </g>
+</svg>

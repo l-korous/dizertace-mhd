@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg8907"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docname="sodium-P-a.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <defs
+     id="defs8909">
+    <mask
+       maskUnits="userSpaceOnUse"
+       x="0"
+       y="0"
+       width="1"
+       height="1"
+       id="mask8837"
+       maskTransform="scale(800,100)">
+      <image
+         width="1"
+         height="1"
+         xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAABkCAAAAABbOgtTAAAAAXNCSVQI5gpbmQAAARdJREFUeJzt07EBABAAwDD8/zMX6MqQXNClcw/gZr0OgJ8ZBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBw1jgHH417pgwAAAABJRU5ErkJggg=="
+         id="image8839" />
+    </mask>
+    <mask
+       maskUnits="userSpaceOnUse"
+       x="0"
+       y="0"
+       width="1"
+       height="1"
+       id="mask8821"
+       maskTransform="scale(800,100)">
+      <image
+         width="1"
+         height="1"
+         xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAABkCAAAAABbOgtTAAAAAXNCSVQI5gpbmQAAARdJREFUeJzt07EBABAAwDD8/zMX6MqQXNClcw/gZr0OgJ8ZBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBw1jgHH417pgwAAAABJRU5ErkJggg=="
+         id="image8823" />
+    </mask>
+    <mask
+       maskUnits="userSpaceOnUse"
+       x="0"
+       y="0"
+       width="1"
+       height="1"
+       id="mask8805"
+       maskTransform="scale(800,100)">
+      <image
+         width="1"
+         height="1"
+         xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAABkCAAAAABbOgtTAAAAAXNCSVQI5gpbmQAAARdJREFUeJzt07EBABAAwDD8/zMX6MqQXNClcw/gZr0OgJ8ZBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBw1jgHH417pgwAAAABJRU5ErkJggg=="
+         id="image8807" />
+    </mask>
+    <mask
+       maskUnits="userSpaceOnUse"
+       x="0"
+       y="0"
+       width="1"
+       height="1"
+       id="mask8789"
+       maskTransform="scale(800,100)">
+      <image
+         width="1"
+         height="1"
+         xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAABkCAAAAABbOgtTAAAAAXNCSVQI5gpbmQAAARdJREFUeJzt07EBABAAwDD8/zMX6MqQXNClcw/gZr0OgJ8ZBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBw1jgHH417pgwAAAABJRU5ErkJggg=="
+         id="image8791" />
+    </mask>
+    <mask
+       maskUnits="userSpaceOnUse"
+       x="0"
+       y="0"
+       width="1"
+       height="1"
+       id="mask8773"
+       maskTransform="scale(800,100)">
+      <image
+         width="1"
+         height="1"
+         xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAABkCAAAAABbOgtTAAAAAXNCSVQI5gpbmQAAARdJREFUeJzt07EBABAAwDD8/zMX6MqQXNClcw/gZr0OgJ8ZBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBw1jgHH417pgwAAAABJRU5ErkJggg=="
+         id="image8775" />
+    </mask>
+    <mask
+       maskUnits="userSpaceOnUse"
+       x="0"
+       y="0"
+       width="1"
+       height="1"
+       id="mask8757"
+       maskTransform="scale(800,100)">
+      <image
+         width="1"
+         height="1"
+         xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAABkCAAAAABbOgtTAAAAAXNCSVQI5gpbmQAAARdJREFUeJzt07EBABAAwDD8/zMX6MqQXNClcw/gZr0OgJ8ZBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBw1jgHH417pgwAAAABJRU5ErkJggg=="
+         id="image8759" />
+    </mask>
+    <mask
+       maskUnits="userSpaceOnUse"
+       x="0"
+       y="0"
+       width="1"
+       height="1"
+       id="mask8741"
+       maskTransform="scale(800,100)">
+      <image
+         width="1"
+         height="1"
+         xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAABkCAAAAABbOgtTAAAAAXNCSVQI5gpbmQAAARdJREFUeJzt07EBABAAwDD8/zMX6MqQXNClcw/gZr0OgJ8ZBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBw1jgHH417pgwAAAABJRU5ErkJggg=="
+         id="image8743" />
+    </mask>
+    <mask
+       maskUnits="userSpaceOnUse"
+       x="0"
+       y="0"
+       width="1"
+       height="1"
+       id="mask8725"
+       maskTransform="scale(800,100)">
+      <image
+         width="1"
+         height="1"
+         xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAABkCAAAAABbOgtTAAAAAXNCSVQI5gpbmQAAARdJREFUeJzt07EBABAAwDD8/zMX6MqQXNClcw/gZr0OgJ8ZBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBgEgkEgGASCQSAYBIJBIBw1jgHH417pgwAAAABJRU5ErkJggg=="
+         id="image8727" />
+    </mask>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective8915" />
+    <inkscape:perspective
+       id="perspective2593"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2606"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2619"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2632"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2645"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4710"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="184.19877"
+     inkscape:cy="572.24077"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1125"
+     inkscape:window-x="0"
+     inkscape:window-y="25" />
+  <metadata
+     id="metadata8912">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g4753"
+       transform="translate(-0.436015,0)">
+      <image
+         xlink:href="step-P0.5.png"
+         sodipodi:absref="/home/lenka/vysledky/sodium-disertace/step-P0.5.png"
+         width="574"
+         height="71.75"
+         id="image2595"
+         x="98.740135"
+         y="181.10635" />
+      <path
+         d="M 109.85416,199.47321 L 236.50222,199.53696 L 260.36722,204.39821 L 512.39972,204.52446 L 536.13847,199.47321 L 662.29097,199.79946"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path8733" />
+      <path
+         d="M 511.64222,199.22071 L 535.38097,194.67571 L 661.90222,194.42321 L 661.90222,194.42321"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path8737" />
+      <path
+         d="M 109.34879,234.82946 L 662.40847,234.82946 L 661.90222,133.81446 L 109.85416,133.81446 L 109.34879,234.82946 z"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path8731" />
+      <path
+         d="M 109.60122,193.91821 L 236.12347,194.42321 L 260.11472,199.22071 L 511.64222,199.22071 L 511.89472,184.06946 L 260.36722,184.06946 L 260.36722,199.22071"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path8735" />
+    </g>
+    <g
+       id="g4760"
+       transform="translate(-0.436015,-0.1513062)">
+      <g
+         id="g4658">
+        <image
+           y="291.08411"
+           x="98.740135"
+           id="image2608"
+           height="71.75"
+           width="574"
+           sodipodi:absref="/home/lenka/vysledky/sodium-disertace/step-P1.0.png"
+           xlink:href="step-P1.0.png" />
+        <path
+           id="path8747"
+           style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+           d="M 109.34879,344.83446 L 662.40847,344.83446 L 661.90222,243.81946 L 109.85416,243.81946 L 109.34879,344.83446 z" />
+      </g>
+      <path
+         d="M 109.85416,309.47821 L 236.50222,309.54196 L 260.36722,314.40321 L 512.39972,314.52946 L 536.13847,309.47946 L 662.29097,309.80571"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path8749" />
+      <path
+         d="M 109.60122,303.92321 L 236.12347,304.42821 L 260.11472,309.22696 L 511.64222,309.22696 L 511.89472,294.07321 L 260.36722,294.07321 L 260.36722,309.22696"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path8751" />
+      <path
+         d="M 511.64222,309.22696 L 535.38097,304.68071 L 661.90222,304.42821 L 661.90222,304.42821"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path8753" />
+    </g>
+    <g
+       id="g4768"
+       transform="translate(-0.436015,-0.2138672)">
+      <g
+         id="g4654">
+        <image
+           y="401.06186"
+           x="98.740135"
+           id="image2621"
+           height="71.75"
+           width="574"
+           sodipodi:absref="/home/lenka/vysledky/sodium-disertace/step-P1.5.png"
+           xlink:href="step-P1.5.png" />
+        <path
+           id="path8763"
+           style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+           d="M 109.34879,454.66071 L 662.40847,454.66071 L 661.90222,353.64696 L 109.85416,353.64696 L 109.34879,454.66071 z" />
+      </g>
+      <path
+         d="M 109.85416,419.30571 L 236.50222,419.36946 L 260.36722,424.23071 L 512.39972,424.35696 L 536.13847,419.30571 L 662.29097,419.63196"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path8765" />
+      <path
+         d="M 109.60122,413.74946 L 236.12347,414.25446 L 260.11472,419.05321 L 511.64222,419.05321 L 511.89472,403.90071 L 260.36722,403.90071 L 260.36722,419.05321"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path8767" />
+      <path
+         d="M 511.64222,419.05321 L 535.38097,414.50696 L 661.90222,414.25446 L 661.90222,414.25446"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path8769" />
+    </g>
+    <g
+       id="g4776"
+       transform="translate(-0.436015,-0.3120117)">
+      <g
+         id="g4745">
+        <g
+           id="g4650">
+          <image
+             xlink:href="step-P2.0.png"
+             sodipodi:absref="/home/lenka/vysledky/sodium-disertace/step-P2.0.png"
+             width="574"
+             height="71.75"
+             id="image2634"
+             x="98.740135"
+             y="511.03964" />
+          <path
+             d="M 109.34879,564.55946 L 662.40847,564.55946 L 661.90222,463.54571 L 109.85416,463.54571 L 109.34879,564.55946 z"
+             style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+             id="path8779" />
+        </g>
+        <path
+           id="path8781"
+           style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+           d="M 109.85416,529.20446 L 236.50222,529.26821 L 260.36722,534.12946 L 512.39972,534.25571 L 536.13847,529.20446 L 662.29097,529.53071" />
+        <path
+           id="path8783"
+           style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+           d="M 109.60122,523.64946 L 236.12347,524.15321 L 260.11472,528.95196 L 511.64222,528.95196 L 511.89472,513.79946 L 260.36722,513.79946 L 260.36722,528.95196" />
+        <path
+           id="path8785"
+           style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+           d="M 511.64222,528.95196 L 535.38097,524.40571 L 661.90222,524.15321 L 661.90222,524.15321" />
+      </g>
+    </g>
+    <g
+       id="g4736"
+       transform="translate(-0.436015,-0.4101872)">
+      <g
+         id="g4728">
+        <g
+           id="g4646">
+          <image
+             xlink:href="step-P2.5.png"
+             sodipodi:absref="/home/lenka/vysledky/sodium-disertace/step-P2.5.png"
+             width="574"
+             height="71.75"
+             id="image2647"
+             x="98.740135"
+             y="621.0174" />
+          <path
+             d="M 109.34879,674.45824 L 662.40847,674.45824 L 661.90222,573.44446 L 109.85416,573.44446 L 109.34879,674.45824 z"
+             style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+             id="path8795" />
+        </g>
+        <path
+           id="path8797"
+           style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+           d="M 109.85416,639.10194 L 236.50222,639.16574 L 260.36722,644.02694 L 512.39972,644.15444 L 536.13847,639.10324 L 662.29097,639.42944" />
+        <path
+           id="path8799"
+           style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+           d="M 109.60122,633.54694 L 236.12347,634.05194 L 260.11472,638.85074 L 511.64222,638.85074 L 511.89472,623.69824 L 260.36722,623.69824 L 260.36722,638.85074" />
+        <path
+           id="path8801"
+           style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+           d="M 511.64222,638.85074 L 535.38097,634.30444 L 661.90222,634.05194 L 661.90222,634.05194" />
+      </g>
+    </g>
+    <g
+       id="g4716"
+       transform="translate(-0.5741375,-11.091373)">
+      <image
+         xlink:href="step-P3.0.png"
+         sodipodi:absref="/home/lenka/vysledky/sodium-disertace/step-P3.0.png"
+         width="574"
+         height="71.75"
+         id="image4712"
+         x="98.878258"
+         y="741.74603" />
+      <g
+         transform="translate(11.581629,630.6559)"
+         id="g4366">
+        <g
+           id="g4368">
+          <g
+             transform="translate(-24.748737,-15.152288)"
+             id="g4370">
+            <path
+               id="path4372"
+               style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+               d="M 122.51607,179.26936 L 675.57469,179.26936 L 675.06969,78.25474 L 123.02144,78.25474 L 122.51607,179.26936 z" />
+            <path
+               sodipodi:nodetypes="cccccc"
+               id="path4374"
+               style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+               d="M 123.02144,143.91386 L 249.66873,143.9772 L 273.53469,148.83868 L 525.56719,148.96474 L 549.30571,143.91407 L 675.45755,144.24017" />
+            <path
+               id="path4376"
+               style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+               d="M 122.76857,138.35824 L 249.29094,138.86311 L 273.28219,143.66149 L 524.80969,143.66149 L 525.06219,128.50912 L 273.53469,128.50912 L 273.53469,143.66149" />
+            <path
+               id="path4378"
+               style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+               d="M 524.80969,143.66149 L 548.54844,139.11561 L 675.06969,138.86311 L 675.06969,138.86311" />
+          </g>
+        </g>
+      </g>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="133.86896"
+       y="96.943085"
+       id="text5303"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5305"
+         x="133.86896"
+         y="96.943085">-8.0</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="615.34375"
+       y="96.943085"
+       id="text5307"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5309"
+         x="615.34375"
+         y="96.943085">5.0</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="324.11154"
+       y="96.943085"
+       id="text5311"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5313"
+         x="324.11154"
+         y="96.943085">-2.8</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="228.91165"
+       y="96.8508"
+       id="text5315"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5317"
+         x="228.91165"
+         y="96.8508">-5.4</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="424.00073"
+       y="96.943085"
+       id="text5319"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5321"
+         x="424.00073"
+         y="96.943085">0.2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       x="519.47058"
+       y="97.042206"
+       id="text5323"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5325"
+         x="519.47058"
+         y="97.042206">2.4</tspan></text>
+    <image
+       y="-643.73541"
+       x="100.39835"
+       id="image7530"
+       height="515.71429"
+       width="17.857864"
+       sodipodi:absref="/home/lenka/vysledky/sodium-disertace/scale-color.png"
+       xlink:href="scale-color.png"
+       transform="matrix(0,1,-1,0,0,0)" />
+  </g>
+</svg>
