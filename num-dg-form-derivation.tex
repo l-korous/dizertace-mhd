@@ -1,9 +1,111 @@
 \section{Discontinuous Galerkin method}
 
-\input{num-dg-introduction}
+\subsection{Motivation}
+For complex problems of compressible flow, and of course for even more complex problems of compressible MHD, there has been a number of attempts to use standard and well known Finite Element Methods that replace the spaces defined in \ref{Bochner} with finite-dimension spaces with bases formed by continuous piecewise polynomial functions. These attempts struggled with a common problem of spurious oscillations appearing in the solution - the origin of which is the lack of "stabilization", provided by the second-order terms in elliptic equations. Solution to these problems is the application of stabilization techniques, that usually introduce some sort of artificial diffusion (the second-order term), all of which are non-physical, and generally involve "magical" numbers - constants that are of pure computational nature (not a part of the physical description) or even worse are problem-specific.
 
-\input{num-dg-derivation-integrals}
+\subsection{Overview of the DG method}
+Due to this reason, there  was an effort to develop methods which would not need such stabilization techniques, and would still offer reasonable resolution of shockwaves, boundary and interior layers, and steep gradients without exhibiting spurious oscillations in the approximate solutions. The approach taken here is based on the idea to combine Finite Volume and Finite Element Methods leading to the so-called \emph{discontinuous Galerkin finite element method (DGFEM, DG)}. Here we shall derive and analyze DG for our equations. Let $T_h$ be a triangulation of $\Omega$. For each $K\in T_h$ we introduce the notation
+\begin{eqnarray}
+\partial K^- & = & \left\{x\in\partial K;\beta\lo\bs{x}\ro\cdot\bfn\lo\bs{x}\ro <0\right\},\\
+\partial K^+ & = & \left\{x\in\partial K;\beta\lo\bs{x}\ro\cdot\bfn\lo\bs{x}\ro \geq 0\right\}.
+\end{eqnarray}
+By $H^1\lo\Omega, T_h\ro$ we denote the so-called \textit{broken Sobolev space}:
+\be
+\label{BrokenSobolev} H^1\lo\Omega,T_h\ro = \left\{v\in L^2\lo\Omega\ro;\ v|_K\in H^1\lo K\ro \forall K\in T_h\right\}.
+\ee
+This space is an approximation of the space defined in \ref{Sobolev}, but it contains functions that are discontinuous on element interfaces $\Gamma_ij$.
+\paragraph{}
+For $u\in H^1\lo\Omega,T_h\ro$ we set
+\be
+\label{PlusDef} u_K^+ = \text{trace of } u|_K \text{ on }\partial K
+\ee
+(i.e. the interior trace of $u$ on $\partial K$). For each edge $E\subset\partial K\backslash\Gamma$ of $K$, there exists $K'\neq K,\ K'\in T_h$, adjacent to $E$ from the opposite side than $K$. Then we put
+\be
+\label{MinusDef} u_K^- = \text{trace of } u|_{K'} \text{ on } E.
+\ee
+In this way we obtain the exterior trace $u_K^-$ of $u$ on $\partial K\backslash\Gamma$ and define the jump of $u$ on $\partial K\backslash\Gamma$:
+\be
+[u]_K = u_K^+ - u_K^-.
+\ee
+\subsubsection{Approximation of the broken Sobolev space}
+Let the domain $\Omega$ be covered with a mesh $T_h = 
+\{ K_1,$ $K_2, \dots, K_M \}$ where each element $K_m$ carries an arbitrary
+polynomial degree $1 \leq p_m$, $\forall m = 1, 2, \dots, M$. The broken Sobolev space 
+$H^1\lo\Omega,T_h\ro$ will be approximated by a finite-dimensional space of picewise-polynomial functions
+\be
+\label{VH} V_{h} = \{ v \in L^2(\Omega); \ v|_{K_m} \in P^{p_m}(K_m)\ \mbox{for all}\ 1 \leq m \leq M \}
+\ee
+where $P^{p}$ is defined as
+\bd
+P^{p} = \mbox{span}\{\sum_{\substack{0\leq i, j, k \leq p \\i+j+k\leq p}}\alpha_i\ x_1^i\ x_2^j\ x_3^k,\ \ \alpha_i\in\mathbb{R} \}.
+\ed
 
-\input{num-dg-derivation-algebra}
-
-\input{num-dg-fluxes}
+\subsection{DG formulation of MHD equations}
+Although the resulting system will look very similar to the weak formulation \ref{WeakFinal}, the derivation makes more sense to be done starting with the \ref{conservativeGeneric}.
+\paragraph{}
+As stated in \ref{section:triangulation}, at this point we will discretize the problem in space, and leave the time-derivative untouched.
+The approximate solution will be sought at each time instant $t$ as an element of the finite-dimensional space
+$$
+\left[V_h\right]^8,
+$$
+where $V_h$ is defined in \ref{VH}. Functions
+$$
+\mrvh \in \left[V_h\right]^8\approx \left[H^1\lo\Omega,T_h\ro\right]^8,
+$$
+where $H^1\lo\Omega,T_h\ro$ is defined in \ref{BrokenSobolev}, are in general discontinuous on interfaces $\Gamma_{ij}$.
+By $\mrvh|_{ij}$ and $\mrvh|_{ji}$ we denote the values of $\mrvh$ on $\Gamma_{ij}$ considered from the
+interior and the exterior of $K_i$, respectively. The symbols
+$$
+\left<\mrvh\right>_{ij} = \frac12 \lo \mrvh |_{ij} + \mrvh |_{ji}\ro,\ \left[\mrvh\right]_{ij} = \mrvh |_{ij} - \mrvh |_{ji}
+$$
+denote the average and jump of a function $\mrvh$ on $\Gamma_{ij}$.
+In order to derive the discrete problem, we multiply \ref{conservativeGeneric} by a test function $\mrvh \in \left[V_h\right]^8$ in a component-wise fashion, integrate over any element $K_i \in T_h$, apply Green's theorem and sum over all $i \in I$, where $I$ is defined in \ref{Idef}:
+\be
+\label{DG1} \int_{\Omega_{t}} \pds{{\mrPsi_h}}{t} \mrvh - \sum_{K_i \in T_h}\int_{K_i}\mrF\lo{\mrPsi_h}\ro \lo\nabla \cdot \mrvh\ro + \sum_{K_i\in T_h} \sum_{j\in s_i} \int_{\Gamma_{ij}} \lo \mrF\lo{\mrPsi_h}\ro \cdot \bfn_{ij} \ro \mrvh = \int_{\Omega_{t}} \mathrm{S} \mrvh,
+\ee
+where $\bfn_{ij}$ is the unit outer normal to $\Gamma_{ij}$.
+Now, the term
+\be
+\label{NonUniqueTerm} \int_{\Gamma_{ij}} \mrF\lo{\mrPsi_h}\ro \cdot \bfn_{ij} \mrvh
+\ee
+is problematic, because the value of ${\mrPsi_h}$ on $\Gamma_{ij}$ is not unique - we have two values:
+\begin{itemize}
+    \item ${\mrPsi_h}|_{ij}$ - which is the value of ${\mrPsi_h}$ on $\Gamma_{ij}$ considered from the element $K_i$,
+    \item ${\mrPsi_h}|_{ji}$ - which is the value of ${\mrPsi_h}$ on $\Gamma_{ij}$ considered from the element $K_j$.
+\end{itemize}
+\textbf{Note: }This corresponds to the notation set in \ref{PlusDef}, \ref{MinusDef} - if we take $K_i$ as the element at hand, we have
+$$
+{\mrPsi_h}|_{ij} = {\mrPsi_h}_{K_i}^+,\ \ {\mrPsi_h}|_{ji} = {\mrPsi_h}_{K_i}^-
+$$
+\paragraph{}
+Now, because of this non-uniqueness of the values, we replace the term \ref{NonUniqueTerm} with the so-called \textit{numerical flux} $\mrH = \mrH\lo\mrvh, \mrw, \bfn\ro$ in the following fashion:
+\be
+\label{NumFluxDef}
+\lo\mrF\lo{\mrPsi_h}\ro \cdot \bfn_{ij}\ro \mrvh \approx \mrH\lo{\mrPsi_h}|_{ij}, {\mrPsi_h}|_{ji}, \bfn_{ij}\ro \mrvh.
+\ee
+We impose the following requirements on the numerical flux:
+\begin{enumerate}
+ \item $\mrH\lo \mrvh, \mrw, \bfn\ro$ is defined and continuous on $\mc{D} \times \mc{D} \times \mc{S}_1$, where $\mc{D}$ is the domain of definition of the flux $\mrF$ and $\mc{S}_1$ is the unit sphere in $\mathbb{R}^3$.
+ \item $\mrH$ is $consistent$:
+ $$
+ \mrH\lo \mrvh, \mrvh, \bfn\ro = \mrF\lo \mrvh\ro \bfn,\ \mrvh\in\mc{D},\ \bfn\in\mc{S}_1.
+ $$
+ \item $\mrH$ is $conservative$:
+ $$
+ \mrH\lo \mrvh, \mrw, \bfn\ro = -\mrH\lo \mrw, \mrvh, -\bfn\ro,\ \mrvh, \mrw\in\mc{D},\ \bfn\in\mc{S}_1.
+ $$
+ \end{enumerate}
+And using these properties of the numerical flux, we can rewrite \ref{DG1} as:
+\be
+\label{DG2} \int_{\Omega_{t}} \pds{{\mrPsi_h}}{t} \mrvh - \sum_{K_i \in T_h}\int_{K_i}\mrF\lo{\mrPsi_h}\ro \lo\nabla \cdot \mrvh\ro + \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h}|_{ij}, {\mrPsi_h}|_{ji}, \bfn_{ij}\ro \mrvh = \int_{\Omega_{t}} \mathrm{S} \mrvh,
+\ee
+where we used the definition of \ref{InternalEdges} on the page \pageref{InternalEdges}.
+\paragraph{}
+Now we can formulate the definition of the \textit{discrete solution ${\mrPsi_h} = {\mrPsi_h}\lo(t, \bfx\ro)$ of MHD equations \ref{conservativeGeneric}} as
+\begin{enumerate}
+    \label{discreteSlnDef}
+    \item ${\mrPsi_h} \in W$ defined in $C^{1}\lo\lo0, T\ro, \left[V_h\right]^8\ro$,
+    \item \ref{DG2} holds for all $t\in\lo0, T\ro$, and all $\mathrm{v}\in \left[V_h\right]^8$.
+    \item ${\mrPsi_h}\lo(0, \bfx\ro) = \Pi_h \mrPsi^0$,
+\end{enumerate}
+where $\Pi_h$ is a projection of the initial condition $\mrPsi^0$ onto $\left[V_h\right]^8$.
