@@ -19,7 +19,7 @@ For $u\in H^1\lo\Omega,T_h\ro$ we set
 \be
 \label{PlusDef} u_K^+ = \text{trace of } u|_K \text{ on }\partial K
 \ee
-(i.e. the interior trace of $u$ on $\partial K$). For each edge $E\subset\partial K\backslash\Gamma$ of $K$, there exists $K'\neq K,\ K'\in T_h$, adjacent to $E$ from the opposite side than $K$. Then we put
+(i.e. the interior trace of $u$ on $\partial K$). For each face $E\subset\partial K\backslash\Gamma$ of $K$, there exists $K'\neq K,\ K'\in T_h$, adjacent to $E$ from the opposite side than $K$. Then we put
 \be
 \label{MinusDef} u_K^- = \text{trace of } u|_{K'} \text{ on } E.
 \ee
@@ -87,25 +87,63 @@ We impose the following requirements on the numerical flux:
 \begin{enumerate}
  \item $\mrH\lo \mrvh, \mrw, \bfn\ro$ is defined and continuous on $\mc{D} \times \mc{D} \times \mc{S}_1$, where $\mc{D}$ is the domain of definition of the flux $\mrF$ and $\mc{S}_1$ is the unit sphere in $\mathbb{R}^3$.
  \item $\mrH$ is $consistent$:
- $$
- \mrH\lo \mrvh, \mrvh, \bfn\ro = \mrF\lo \mrvh\ro \bfn,\ \mrvh\in\mc{D},\ \bfn\in\mc{S}_1.
- $$
+\be
+\label{FluxConsistent} \mrH\lo \mrvh, \mrvh, \bfn\ro = \mrF\lo \mrvh\ro \bfn,\ \mrvh\in\mc{D},\ \bfn\in\mc{S}_1.
+ \ee
  \item $\mrH$ is $conservative$:
  $$
  \mrH\lo \mrvh, \mrw, \bfn\ro = -\mrH\lo \mrw, \mrvh, -\bfn\ro,\ \mrvh, \mrw\in\mc{D},\ \bfn\in\mc{S}_1.
  $$
  \end{enumerate}
 And using these properties of the numerical flux, we can rewrite \ref{DG1} as:
-\be
-\label{DG2} \int_{\Omega_{t}} \pds{{\mrPsi_h}}{t} \mrvh - \sum_{K_i \in T_h}\int_{K_i}\mrF\lo{\mrPsi_h}\ro \lo\nabla \cdot \mrvh\ro + \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h}|_{ij}, {\mrPsi_h}|_{ji}, \bfn_{ij}\ro \mrvh = \int_{\Omega_{t}} \mathrm{S} \mrvh,
-\ee
+\begin{eqnarray}
+\label{DG2} \int_{\Omega_{t}} \pds{{\mrPsi_h}}{t} \mrvh & - & \sum_{K_i \in T_h}\int_{K_i}\mrF\lo{\mrPsi_h}\ro \lo\nabla \cdot \mrvh\ro\\ \nonumber & + & \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h}|_{ij}, {\mrPsi_h}|_{ji}, \bfn_{ij}\ro \mrvh = \int_{\Omega_{t}} \mathrm{S} \mrvh,
+\end{eqnarray}
 where we used the definition of \ref{InternalEdges} on the page \pageref{InternalEdges}.
+\subsection{HLLD numerical flux}
+The abbreviation \textbf{HLLD} stands for Harten-Lax-van Leer (HLL) approximate Riemann solver, and \textbf{D} stands for Discontinuities.
+This particular numerical flux has been introduced in \cite{hlld} and has been shown to be very suitable for the studied problems.
+TODO: doplnit
+\subsection{Numerical handling of boundary conditions}
+In what follows, we are only interested in using flux-induced inflow and outflow boundary conditions (see Section \ref{section:bcs}).
+To account for these boundary conditions, we need to investigate the term
+$$
+\int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h}|_{ij}, {\mrPsi_h}|_{ji}, \bfn_{ij}\ro \mrvh
+$$
+for $\Gamma_{ij} \in \Gamma_B$ (see \ref{BndEdges} on page \pageref{BndEdges}).
+This term is used in \ref{DG2} for faces in $\Gamma_I$ which are internal and always have 2 values connected to them - $\mrPsi_h|_{ij}, {\mrPsi_h}|_{ji}$ - which induces the notation. On a boundary face, the corresponding value to ${\mrPsi_h}|_{ij}$ can be defined correspondingly as in the case of $\Gamma_I$, but ${\mrPsi_h}|_{ji}$ needs to be defined.
+\subsubsection{Inflow boundary condition}
+First, if we want to prescribe an inflow boundary condition (i.e. we know what values should the state vector $\mrPsi_h$ have on ${\Gamma_{ij}}\in\Gamma_B$), we define
+\be
+\label{BC1} \overline{{\mrPsi_h}|_{ji}}
+\ee
+to be the prescribed value.
+
+\subsubsection{Outflow boundary condition}
+If we want to model an outflow boundary condition (i.e. do nothing condition), we may use the \textit{consistency} of the numerical flux $\mrH$ defined in \ref{FluxConsistent}, and define
+\be
+\label{BC2} \overline{{\mrPsi_h}|_{ji}} = {\mrPsi_h}|_{ij},
+\ee
+which is a suitable definition for the outflow boundary condition.
+Now, taking \ref{BC1} and \ref{BC2}, we can enhance \ref{DG2} with an additional term, that will add the boundary conditions into the equation:
+$$
+\sum_{\Gamma_{ij}\in\Gamma_B} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h}|_{ij}, \overline{{\mrPsi_h}|_{ji}}, \bfn_{ij}\ro \mrvh,
+$$
+so that the complete semi-discrete problem reads:
+\begin{eqnarray}
+\label{DG3} \int_{\Omega_{t}} \pds{{\mrPsi_h}}{t} \mrvh & - & \sum_{K_i \in T_h}\int_{K_i}\mrF\lo{\mrPsi_h}\ro \lo\nabla \cdot \mrvh\ro\\ \nonumber & + & \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h}|_{ij}, {\mrPsi_h}|_{ji}, \bfn_{ij}\ro \mrvh\\\nonumber
+ & + & \sum_{\Gamma_{ij}\in\Gamma_B} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h}|_{ij}, \overline{{\mrPsi_h}|_{ji}}, \bfn_{ij}\ro \mrvh\\\nonumber
+ & = & \int_{\Omega_{t}} \mathrm{S} \mrvh,
+\end{eqnarray}
+
 \paragraph{}
-Now we can formulate the definition of the \textit{discrete solution ${\mrPsi_h} = {\mrPsi_h}\lo(t, \bfx\ro)$ of MHD equations \ref{conservativeGeneric}} as
+Now we can formulate the definition of the \textit{semi-discrete solution ${\mrPsi_h} = {\mrPsi_h}\lo(t, \bfx\ro)$ of MHD equations \ref{conservativeGeneric}} as
 \begin{enumerate}
     \label{discreteSlnDef}
-    \item ${\mrPsi_h} \in W$ defined in $C^{1}\lo\lo0, T\ro, \left[V_h\right]^8\ro$,
-    \item \ref{DG2} holds for all $t\in\lo0, T\ro$, and all $\mathrm{v}\in \left[V_h\right]^8$.
-    \item ${\mrPsi_h}\lo(0, \bfx\ro) = \Pi_h \mrPsi^0$,
+    \item ${\mrPsi_h} \in C^{1}\lo\lo0, T\ro, \left[V_h\right]^8\ro$,
+    \item \ref{DG3} holds for all $t\in\lo0, T\ro$, and all $\mathrm{v}\in \left[V_h\right]^8$,
+    \item ${\mrPsi_h}\lo0, \bfx\ro = \Pi_h \mrPsi^0\lo\bfx\ro$,
 \end{enumerate}
 where $\Pi_h$ is a projection of the initial condition $\mrPsi^0$ onto $\left[V_h\right]^8$.
+
+

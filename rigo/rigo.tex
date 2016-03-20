@@ -1,0 +1,53 @@
+\documentclass[11pt,a4paper,oneside,footinclude=true,headinclude=true]{scrbook}
+
+\usepackage[czech]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lipsum}
+\usepackage[linedheaders,pdfspacing]{classicthesis/classicthesis} % ,parts,manychapters
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{multirow}
+\usepackage{enumerate}
+
+\textwidth 400pt
+
+\hypersetup{pdfborder = {0 0 0}}
+
+\input{mathdef}
+
+\newcommand{\note}[1]{\noindent \textbf{POZNÁMKA}: #1}
+\newcommand{\todo}[1]{\noindent \textbf{DOPLNIT}: #1}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\makeatletter
+	\renewcommand{\fnum@figure}[1]{\centering Obr.~\thefigure: }
+	\renewcommand{\fnum@table}[1]{\centering Tab.~\thetable: }
+\makeatother
+
+\hyphenation{mikro-ak-tu-á-to-ry ma-te-ri-á-lem mag-ne-ti-cký opti-ma-li-za-ci opti-ma-li-za-ce li-ne-ár-ní vy-u-ži-tí a-na-lý-zy pa-ra-me-tri-cká od-bor-né díl-čích vý-ho-dou zá-klad-ní zá-klad je-dno-du-chá zjed-no-du-še-ní po-u-ži-tím o-bla-sti de-fi-ni-ční prů-bě-hu spo-čte-ny vy-so-ké do-cí-le-no ře-še-ní na-vrh-nout vzdu-cho-vé o-pa-ko-va-ný ob-las-ti me-to-dy vy-u-ží-va-jí čle-nem kro-cích o-me-ze-ní}
+
+\begin{document}
+
+\pagenumbering{roman}
+\input{titulni_strana}
+\input{uvod/anotace.tex}
+\tableofcontents
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\input{uvod/uvod.tex}
+\input{matematicky_model/matematicky_model.tex}
+\input{ilustrativni_priklad/ilustrativni_priklad.tex}
+\input{metody_reseni/metody_reseni.tex}
+\input{metody_navrhu/metody_navrhu.tex}
+\input{zaver/zaver.tex}
+
+\bibliography{literatura}
+\bibliographystyle{unsrt}
+
+\end{document}

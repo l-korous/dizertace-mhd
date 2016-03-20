@@ -1,4 +1,4 @@
-\documentclass[12pt,notitlepage]{report}
+\documentclass[11pt,a4paper,oneside,footinclude=true,headinclude=true]{scrbook}
 \usepackage[algoruled, noend]{algorithm2e}
 \usepackage{a4wide}
 \usepackage{graphicx}
@@ -35,15 +35,7 @@
 \author{Lukas Korous} 
 \renewcommand{\sectionmark}[1]{\markright{#1}{}}
 
-\frenchspacing
-\pagenumbering{arabic}
-\oddsidemargin  0.3in	% levy okraj stranky; pripocte se 1 inch
-\evensidemargin 0.2in	% pravy okraj stranky; pripocte se 1 inch
-\textwidth      5.8in	% sirka textu
-\headheight     0.0in	% vyska hlavicky
-\topmargin      0.2in	% horni okraj
-\textheight     8.5in	% vyska textu
-
+\pagenumbering{gobble}
 \begin{document}
 
 \input{commands}

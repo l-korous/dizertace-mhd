@@ -1,1 +1,17 @@
 \section{Discretization in time}
+Relations \ref{DG2} represent a system of ordinary differential equations which can be solved by a suitable numerical method. Since we are interested in applying the Rothe's method (as opposed to the method of lines, which switches the order of discretization in time and space), we now want to discretize the time derivative. In order to do so, we consider a partition $0 = t_0 < t_1 < t_2 < ...$ of the time interval $\lo 0, T\ro$ and set $\tau_k = t_{k+1} - t_k$. We use the notation $\bfw_h^k$ for the approximation of $\bfw_h\lo t_k\ro$.
+
+\subsection{Discrete problem}
+\label{section:discreteProblem}
+Then we apply the simple implicit \emph{backward Euler method} and our \emph{fully discrete problem} reads: for each $k > 0$ find $\bfw_h^{k+1}$ such that
+\begin{enumerate}
+    \item ${\mrPsi_h}^{k+1} \in \left[V_h\right]^8$,
+    \item For all test functions $\mrvh\in\left[V_h\right]^8$:
+    \begin{eqnarray}
+    \label{DiscretizedFull} \int_{\Omega_{t}} \frac{{\mrPsi_h}^{k+1} - {\mrPsi_h}^{k}}{\tau} \mrvh & - & \sum_{K_i \in T_h}\int_{K_i}\mrF\lo{\mrPsi_h^{k+1}}\ro \lo\nabla \cdot \mrvh\ro\\ \nonumber & + & \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h^{k+1}}|_{ij}, {\mrPsi_h^{k+1}}|_{ji}, \bfn_{ij}\ro \mrvh \\\nonumber
+     & + & \sum_{\Gamma_{ij}\in\Gamma_B} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h^{k+1}}|_{ij}, \overline{{\mrPsi_h^{k+1}}|_{ji}}, \bfn_{ij}\ro \mrvh\\\nonumber
+     & = & \int_{\Omega_{t}} \mathrm{S} \mrvh,
+    \end{eqnarray}
+    \item ${\mrPsi_h}^{0}\lo\bfx\ro = \Pi_h \mrPsi^0\lo\bfx\ro$,
+\end{enumerate}
+where $\Pi_h$ is a projection of the initial condition $\mrPsi^0$ onto $\left[V_h\right]^8$.

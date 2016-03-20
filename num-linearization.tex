@@ -1,0 +1,31 @@
+This scheme leads to a system of highly nonlinear algebraic equations whose numerical solution is rather complicated. In order to simplify the problem, in the following we shall linearize relations \ref{DiscretizedFull} and obtain a linear system.
+\subsection{Linearization}
+We need to linearize the two nonlinear terms in \ref{DiscretizedFull}. We shall linearize the first term
+$$
+\mrF\lo{\mrPsi_h^{k+1}}\ro \lo\nabla \cdot \mrvh\ro
+$$
+Using the Jacobian matrices $\mrAi$ of the fluxes $\mrFi$
+$$
+\mrAi\lo{\mrPsi}\ro = \frac{d\mrFi\lo{\mrPsi}\ro}{\mrPsi},\,i = 1, 2, 3
+$$
+whose existence can be proven, we can linearize this term in the following way:
+$$
+\mrFi\lo{\mrPsi_h^{k+1}}\ro \lo\nabla \cdot \mrvh\ro\,\rightarrow \mrAi\lo{\mrPsi_h^{k}}\ro \mrPsi_h^{k+1} \lo\nabla \cdot \mrvh\ro,
+$$
+which is a term linear with respect to $\mrPsi_h^{k+1}$.
+
+\paragraph{}
+The second nonlinear term,
+$$
+\mrH\lo{\mrPsi_h^{k+1}}|_{ij}, {\mrPsi_h^{k+1}}|_{ji}, \bfn_{ij}\ro \mrvh,
+$$
+where $\mrH$ used in our implementation is the HLLD numerical flux (\cite{hlld}), is much harder to be linearized, and we will handle it by taking the values from the previous time-step:
+$$
+\mrH\lo{\mrPsi_h^{k+1}}|_{ij}, {\mrPsi_h^{k+1}}|_{ji}, \bfn_{ij}\ro \mrvh\,\approx  \mrH\lo{\mrPsi_h^{k}}|_{ij}, {\mrPsi_h^{k}}|_{ji}, \bfn_{ij}\ro \mrvh.
+$$
+With this linearization approach, we obtain the following \textit{linearized semi-implicit fully discrete scheme}:
+\begin{eqnarray}
+\label{DiscretizedLinear} \int_{\Omega_{t}} \frac{{\mrPsi_h}^{k+1} - {\mrPsi_h}^{k}}{\tau} \mrvh & - & \sum_{K_i \in T_h}\int_{K_i}\mrA\lo{\mrPsi_h^{k}}\ro \mrPsi_h^{k+1} \lo\nabla \cdot \mrvh\ro\\\nonumber & = & \int_{\Omega_{t}} \mathrm{S} \mrvh\\\nonumber & - &\sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}}\mrH\lo{\mrPsi_h^{k}}|_{ij}, {\mrPsi_h^{k}}|_{ji}, \bfn_{ij}\ro \mrvh
+\\\nonumber & - &\sum_{\Gamma_{ij}\in\Gamma_B} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h^{k}}|_{ij}, \overline{{\mrPsi_h^{k}}|_{ji}}, \bfn_{ij}\ro \mrvh,
+\end{eqnarray}
+which substitutes \ref{DiscretizedFull} in the definition of discrete problem (\ref{section:discreteProblem} on page \pageref{section:discreteProblem}).

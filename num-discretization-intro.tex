@@ -43,9 +43,13 @@ Obviously, $s\lo i \ro \cup\gamma\lo i\ro = \emptyset$ for all $i\in I$. If we w
 $$
 \partial K_i = \cup_{j\in S\lo i \ro}\Gamma_{ij},\ \ \ \partial K_i\cap\partial{\Omega} = \cup_{j\in\gamma\lo i \ro}\Gamma_{ij}.
 $$
-Furthermore we define the set of internal (i.e. not lying on the boundary $\partial\Omega$) edges as:
+Furthermore we define the set of internal (i.e. not lying on the boundary $\partial\Omega$) edges as
 \be
-\label{InternalEdges} \Gamma_I = \cup_{i\in I} \cup_{j \notin \gamma\lo i \ro} \Gamma_{ij}
+\label{InternalEdges} \Gamma_I = \cup_{i\in I} \cup_{j \notin \gamma\lo i \ro} \Gamma_{ij},
+\ee
+and the set of boundary (i.e. lying on the boundary $\partial\Omega$) edges as
+\be
+\label{BndEdges} \Gamma_B = \cup_{i\in I} \cup_{j \in \gamma\lo i \ro} \Gamma_{ij}.
 \ee
 \paragraph{Note}
 If we were to use not $\Omega\subset\mathbb{R}^3$, but rather $\Omega\subset\mathbb{R}^4$, we may just employ the following machinery also to the time-derivative - this is not an uncommon approach. Why the approach described in this work is favored by the author is twofold:
