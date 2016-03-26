@@ -15,3 +15,19 @@ Then we apply the simple implicit \emph{backward Euler method} and our \emph{ful
     \item ${\mrPsi_h}^{0}\lo\bfx\ro = \Pi_h \mrPsi^0\lo\bfx\ro$,
 \end{enumerate}
 where $\Pi_h$ is a projection of the initial condition $\mrPsi^0$ onto $\left[V_h\right]^8$.
+\subsection{Time step length}
+Time step length is an important attribute of the discretization. If it is too small, the calculation might be taking too long to finish, with unnecessary precision with respect to time. If it is too large, we may end up with unstable calculation and obtain results with nonphysical oscillations, or without a solution whatsoever. That is why we need to take extra care to derive the proper value. From the stability perspective, we have a condition for the upper bound of the time step - this condition is called the \textit{Courant-Friedrichs-Lewy} condition. This condition is of the following form:
+\be
+\tau_{max} = \text{min}\left\{\frac{{\Delta_{x}}_{min}}{v_{max}}, \frac{{\Delta_{x}}_{min}^2}{2 \eta_{max}}\right\},
+\ee
+where
+${\Delta_{x}}_{min}$ is the smallest dimension of any element, $\eta_{max}$ highest resistivity in the domain, and $v_{max}$ highest velocity in the domain, where the following velocities are taken into account:
+\begin{eqnarray}
+c_s & = & \sqrt{\frac{\gamma\lo\gamma-1\ro}{\rho}\lo U - \rho v^2-U_B\ro},\\
+v_A & = & \sqrt{\frac{B^2}{\rho}},\\
+v & = & \frac{\sqrt{\pi^2}}{\rho},
+\end{eqnarray}
+where $c_s$ is the speed of sound, $v_A$ is the Alfvén speed, and $v$ is the speed of plasma. We then take
+$$
+v_{max} = \text{max}\left\{c_s, v_A, v \right\}.
+$$
