@@ -16,6 +16,7 @@ Then we apply the simple implicit \emph{backward Euler method} and our \emph{ful
 \end{enumerate}
 where $\Pi_h$ is a projection of the initial condition $\mrPsi^0$ onto $\left[V_h\right]^8$.
 \subsection{Time step length}
+\label{section:CFL}
 Time step length is an important attribute of the discretization. If it is too small, the calculation might be taking too long to finish, with unnecessary precision with respect to time. If it is too large, we may end up with unstable calculation and obtain results with nonphysical oscillations, or without a solution whatsoever. That is why we need to take extra care to derive the proper value. From the stability perspective, we have a condition for the upper bound of the time step - this condition is called the \textit{Courant-Friedrichs-Lewy} condition. This condition is of the following form:
 \be
 \tau_{max} = \text{min}\left\{\frac{{\Delta_{x}}_{min}}{v_{max}}, \frac{{\Delta_{x}}_{min}^2}{2 \eta_{max}}\right\},

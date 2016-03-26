@@ -53,7 +53,7 @@ J_\Gamma & : & \Gamma \leftrightarrow \Gamma_{ref}.
 \end{eqnarray}
 
 
-\subsection{Assembling the algebraic problem}
+\section{Assembling the algebraic problem}
 Now we have a clear expression how to evaluate the integral values \ref{Linear1}, \ref{Linear2} using \ref{singleNumIntA}, \ref{singleNumIntB}, but we need to construct the matrix $A$ (\ref{Linear3}), and the right-hand-side vector $b$ (\ref{Linear4}) in an effective manner.
 This is generally achieved through a \textit{element-wise} assembling of these structures. Key to this is to create a data structure that identifies for a particular element $K_i$ all the test functions $\mrvhl$ that make sense to be evaluated (have non-empty support) on $K_i$, i.e. we are looking for the set
 \be
@@ -63,9 +63,9 @@ and do the same for the faces $\Gamma_i$ (both boundary, and internal):
 \be
 \mrvh \lo \Gamma_i \ro = \left\{\mrvh \in V_h : supp\lo\mrvh\ro \cap \Gamma_i \neq \emptyset \right\}.
 \ee
-Now the assembling procedure looks like this:\\
+Now the assembling procedure looks like this (note that as we are using a semi-implicit scheme described in \ref{DiscretizedLinear} we only evaluate terms $b_l$ on edges):\\
 \begin{algorithm}[H]
-    \# Loop over elements\\
+    \# 1 - Loop over elements\\
     \ForEach{$K\in T_h$}{
        \KwData{Integration points $\left\{\bfx_1, ..., \bfx_{n}\right\}$}
        \KwData{Jacobian of the mapping $J_K$}
@@ -83,14 +83,30 @@ Now the assembling procedure looks like this:\\
                         $a_{lm} += JxW_{\bfj} \ a_{lm K \bfj}$
                     }
 
-                $b_{l} += JxW_{\bfj} \ b_{l K \bfj}$
-        }
-                            
+                $b_{l} += JxW_{\bfj} \ b_{l K \bfj}|_{volumetric}$
+        }                
         }
     }
+Note: $b_{l K \bfj}|_{volumetric}$ means that we are evaluating the volumetric(3d) integrals from $b_{l K \bfj}$ (see \ref{Linear2} , \ref{singleNumIntB} )\\\ \\
+    
+        \# 2 - Loop over edges\\
+        \ForEach{$\Gamma\in T_h$}{
+            \KwData{Integration points $\left\{\bfx_1, ..., \bfx_{n}\right\}$}
+            \KwData{Jacobian of the mapping $J_{K^+} = J_{K^-}$ (equal for all points on $\Gamma$), where $K^+, K^-$ are elements adjacent to $\Gamma$ if this is an internal edge, or $K^+ = K^-$ if this is a boundary edge.}
+            \KwData{Integration weights $\left\{w_1, ..., w_{\bfn}\right\}$}
+            \# Loop over integration points\\
+            \ForEach{$\bfj \in \left\{1, ..., \bfn\right\}$}{
+                \textbf{Set: }$JxW_{\bfj} = {J_K}^{+}\lo\bfx_{\bfj}\ro \times w_{\bfj}\ $ \# Here it does not matter if we choose $J_{K^+}$ or $J_{K^-}$\\
+                \# Loop over test functions\\
+                \ForEach{$v\in v_h \lo K \ro$}{
+                    \KwData{$l$ - index of $v$ in the global system, i.e. row in \ref{Linear3} - \ref{Linear5}}
+                    
+                    $b_{l} += JxW_{\bfj} \ b_{l K \bfj}|_{edge}$
+                }
+            }
+        }
+        Note: $b_{l K \bfj}|_{edge}$ means that we are evaluating the surface(2d) integrals from $b_{l K \bfj}$ (see \ref{Linear2} , \ref{singleNumIntB} )\\\ \\
+        
 \caption{Asembling of the algebraic problem \ref{Alg}}
 \label{algorithm:singleTimeStep}
 \end{algorithm}
-
-
-
