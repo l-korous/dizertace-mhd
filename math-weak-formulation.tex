@@ -1,12 +1,18 @@
 \section{Weak formulation of the problem}
-The DG method is defined by first considering the weak formulation of the equations \ref{conservativeGeneric} obtained by multiplying the equations at every time instance $t$ by a (vector-valued) test function $\mathrm{v}\in W_t$, where $W_t$ is a suitable space of (vector-valued) functions $W_t = \lo W_1, ..., W_8\ro$, integrating over the space domain $\Omega_{t}$, and performing integration by parts:
-\begin{eqnarray}
-\pds{\mrPsi}{t} + \nabla \cdot \mathrm{F}\lo\mrPsi\ro & = &\mathrm{S},\\
-\pds{\mrPsi}{t} \mathrm{v} + \lo\nabla \cdot \mathrm{F}\lo\mrPsi\ro\ro \mathrm{v} & = &\mathrm{S} \mathrm{v},\\
-\int_{\Omega_{t}} \pds{\mrPsi}{t} \mathrm{v} + \int_{\Omega_{t}} \lo\nabla \cdot \mathrm{F}\lo\mrPsi\ro\ro \mathrm{v} & = & \int_{\Omega_{t}} \mathrm{S} \mathrm{v},\\
-\label{WeakFinal} \int_{\Omega_{t}} \pds{\mrPsi}{t} \mathrm{v} - \int_{\Omega_{t}}\mathrm{F}\lo\mrPsi\ro \lo\nabla \cdot \mathrm{v}\ro + \int_{\partial\Omega_{t}} \lo\mathrm{F}\lo\mrPsi\ro \cdot \bfn \ro\mathrm{v} & = & \int_{\Omega_{t}} \mathrm{S} \mathrm{v},
-\end{eqnarray}
-where the terms $\mathrm{F}\lo\mrPsi\ro \lo\nabla \cdot \mathrm{v}\ro; \lo\mathrm{F}\lo\mrPsi\ro \cdot \bfn \ro\mathrm{v}$ in the last equality are meant as a component-wise multiplication.
+The DG method is defined by first considering the weak formulation of the equations \ref{conservativeGeneric} obtained by multiplying the equations at every time instance $t$ by a (vector-valued) test function $\mathrm{v}\in W_t$, where $W_t$ is a suitable space of (vector-valued) functions $W_t = \lo W_1, ..., W_8\ro$, integrating over the space domain $\Omega_{t}$, and performing integration by parts.
+We start with multiplying \ref{conservativeGeneric} by a test function:
+\be
+\pds{\mrPsi}{t} \mathrm{v} + \lo\nabla \cdot \mathrm{F}\lo\mrPsi\ro\ro \mathrm{v} = \mathrm{S} \mathrm{v},
+\ee
+then we integrate over $\Omega_{t}$:
+\be
+\int_{\Omega_{t}} \pds{\mrPsi}{t} \mathrm{v} + \int_{\Omega_{t}} \lo\nabla \cdot \mathrm{F}\lo\mrPsi\ro\ro \mathrm{v} = \int_{\Omega_{t}} \mathrm{S} \mathrm{v},
+\ee
+and finally we integrate by parts:
+\be
+\label{WeakFinal} \int_{\Omega_{t}} \pds{\mrPsi}{t} \mathrm{v} - \int_{\Omega_{t}}\mathrm{F}\lo\mrPsi\ro \lo\nabla \cdot \mathrm{v}\ro + \int_{\partial\Omega_{t}} \lo\mathrm{F}\lo\mrPsi\ro \cdot \bfn \ro\mathrm{v} = \int_{\Omega_{t}} \mathrm{S} \mathrm{v},
+\ee
+where the terms $\mathrm{F}\lo\mrPsi\ro \lo\nabla \cdot \mathrm{v}\ro; \lo\mathrm{F}\lo\mrPsi\ro \cdot \bfn \ro\mathrm{v}$ are meant as a component-wise multiplication.
 \paragraph{}
 Now without going into detail, we can conclude, that a suitable space $W$ would be
 \be
@@ -17,7 +23,7 @@ and we shall look for a solution to the \ref{WeakFinal} in the same space $W_t$ 
 \label{Bochner} W = C^{1}\lo\lo0, T\ro, W_t\ro.
 \ee
 
-To sum up we can define the \textit{weak solution $\mrPsi = \mrPsi\lo(t, \bfx\ro)$ of MHD equations \ref{conservativeGeneric}} as
+To sum up we can define the \textit{weak solution $\mrPsi = \mrPsi\lo(t, \bfx\ro)$} of MHD equations \ref{conservativeGeneric} as
 \begin{enumerate}
     \label{weakSlnDef}
     \item $\mrPsi\lo(t, \bfx\ro) \in W$ defined in \ref{Bochner}

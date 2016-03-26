@@ -1,58 +1,3 @@
-\subsection{Notation}
-In the entire work, we use the notation specified in \ref{table:notation} on page \pageref{table:notation}.
-
-\begin{table}
-    \centering
-    \begin{tabular}{ |c|c| } 
-        \hline
-        Symbol & Meaning \\ 
-        \hline
-        $a$ & a scalar quantity "a"\\
-        $\bfa$ & a 3-element vector "a"\\
-        $a_i$ & the i-th component of a vector $\bfa$ \\
-        $\mathrm{A}$ & an 8-element vector "A" \\
-        \hline
-        $\rho$ & Density \\ 
-        $\bfpi$ & Momentum \\ 
-        $\mu$ & Permeability \\ 
-        $\mu_0$ & Permeability of vacuum\\ 
-        $t$ & Time variable\\ 
-        $\bfx$ & Space variable \\ 
-        $p$ & Pressure \\ 
-        $\bfu$ & Velocity \\ 
-        $u$ & $|\bfu|$ \\ 
-        $\bfB$ & Magnetic field \\ 
-        $\bfJ$ & Current density, $\bfJ = \nabla \times \bfB$ \\ 
-        $B$ & $|\bfB|$ \\ 
-        $\bfE$ & Electric field\\ 
-        $e$ & Internal energy density \\ 
-        $c$ & Speed of light\\ 
-        $\bfg$ & Gravitational acceleration\\ 
-        $\sigma$ & Conductivity, $\sigma = \frac{1}{\eta}$\\ 
-        $\eta$ & Electrical restisistivity, $\eta = \frac{1}{\sigma}$\\
-        $c_v$ & Specific heat at constant volume\\
-        $c_p$ & Specific heat at constant pressure\\
-        $\gamma$ & Poisson adiabatic constant\\
-        $\theta$ & Absolute temperature\\
-        $\bfq$ & Heat flux\\
-        $q$ & Electric charge\\
-        $\bff$ & Density of force acting on fluid\\
-        $\bfF_L$ & Lorentz force, $\bfF_L = q\lo\bfE + \bfu\times\bfB\ro$\\
-        $\bff_L$ & Lorentz force density, $\bff_L = q\bfE + \bfJ\times\bfB$\\
-        $\epsilon$ & Electrical permittivity\\
-        $\epsilon_0$ & Electrical permittivity of vacuum\\
-        $\rho_q$ & Charge density\\
-        $U_k$ & Kinetic energy, $U_k = \rho\frac{u^2}{2}$ \\ 
-        $U_m$ & Magnetic energy, $U_m = \frac{B^2}{2{}\mu_0}$ \\ 
-        $U$ & Total energy, $U = U_k + U_m + \rho e$ \\ 
-        $\tilde{U}$ & Hydrodynamic energy, $\tilde{U} = U - U_m$ \\ 
-        $\bfn$ & Unit outer normal \\ 
-        \hline
-    \end{tabular}
-    \caption{Notation}
-    \label{table:notation}
-\end{table}
-
 \subsection{Initial setup}
 
 We consider a time interval $\left(0,T\right)$ and space domain $\Omega_{t}\subset \mathbb{R}^3$ occupied by a fluid at time $t$.
@@ -71,10 +16,11 @@ When dealing with MHD phenomena in plasma, the following rules apply
     \begin{equation}\label{start_therm}
     p = R\theta\rho,
     \end{equation}
-    where $R$ is the \textit{gas constant}, which is defined as 
+    where $\rho$ denotes density, $\theta$ denotes the absolute temperature, and $R$ is the \textit{gas constant}, which is defined as 
     \begin{equation}
     R = c_p - c_v.
-    \end{equation} 
+    \end{equation}
+    In the above, $c_p, c_v$ are specific heat at constant pressure, and at constant volume.
 \end{itemize}
 
 \subsection{Euler's equations of compressible flow}
@@ -113,12 +59,12 @@ $$
 
 
 \subsection{Maxwell's equations of electromagnetism}
-This system of equation reads
+In this work, we use Maxwell's equations with the assumption of constant electrical permittivity, and constant permeability. This system of equation reads
 \begin{eqnarray}
+\label{Ampere} \nabla \times \bfB & = & \mu_0 \lo \bfJ + \varepsilon_0 \pds{\bfE}{t}\ro\\\
 \label{Faraday} \nabla \times \bfE & = & -\pds{\bfB}{t}\\
-\label{Ampere} \nabla \times \bfB & = & \mu_0 \lo \bfJ + \epsilon_0 \pds{\bfE}{t}\ro\\\
-\label{GaussMag} \nabla \cdot \bfB & = &0\\
-\label{Gauss} \nabla \cdot \bfE & = & \frac{\rho_q}{\epsilon_0}.
+\label{Gauss} \nabla \cdot \bfE & = & \frac{\rho_q}{\varepsilon_0}\\
+\label{GaussMag} \nabla \cdot \bfB & = &0.
 \end{eqnarray}
 The individual equations are known as Faraday's law(\ref{Faraday}), Ampere's law(\ref{Ampere}), and Gauss's laws(\ref{Gauss}, \ref{GaussMag}).
 
@@ -126,16 +72,16 @@ The individual equations are known as Faraday's law(\ref{Faraday}), Ampere's law
 \subsection{Derived relations between electromagnetic quantities}
 Further relations that are useful when deriving the MHD equations are:
 \begin{eqnarray}
-\label{U_mEq} \frac{d}{dt} U_m & = & \frac{1}{\mu_0}\nabla \cdot \lo \bfB\times\bfE\ro - \bfE\cdot\bfJ\\
+\label{U_mEq} \frac{\text{d}}{\text{d}t} U_m & = & \frac{1}{\mu_0}\nabla \cdot \lo \bfB\times\bfE\ro - \bfE\cdot\bfJ\\
 \label{Ohm} \bfE & = & -u \times \bfB + \frac{\eta}{\mu_0}\bfJ\\
 \label{InductionEq} \pds{\bfB}{t} + \nabla \times \lo \bfB \times \bfu \ro & = & -\frac{1}{\mu_0} \nabla \times \lo \eta \nabla \times \bfB \ro
 \end{eqnarray}
-The equation \ref{Ohm} is called the \textit{Ohm's law}, the equation \ref{InductionEq} the \textit{Induction equation}.
+The equation \ref{Ohm} is the differential form of the \textit{Ohm's law}, the equation \ref{InductionEq} is the \textit{induction equation}.
 
 Applying now \ref{ForceEq} to \ref{NSEq}, \ref{EnergyEq}, we obtain:
 \begin{eqnarray}
-\label{NSEq1} \pds{\bfpi}{t} + \nabla\cdot\left(\bfpi\otimes\bfu\right)& = & q\bfE + \bfJ\times\bfB + \rho\bfg - \nabla\,p,\\
-\label{EnergyEq1} \pds{\tilde{U}}{t} + \nabla\cdot\lo{\tilde{U}}\bfu\ro & = & q\bfE\cdot\bfu + \bfJ\times\bfB\cdot\bfu + \rho\bfg\cdot\bfu \,-\,\nabla\cdot\lo{p}\bfu\ro + \nabla\cdot\bfq.
+\label{NSEq1} \pds{\bfpi}{t} + \nabla\cdot\left(\bfpi\otimes\bfu\right)& = & \rho_q\bfE + \bfJ\times\bfB + \rho\bfg - \nabla\,p,\\
+\label{EnergyEq1} \pds{\tilde{U}}{t} + \nabla\cdot\lo{\tilde{U}}\bfu\ro & = & \rho_q\bfE\cdot\bfu + \bfJ\times\bfB\cdot\bfu + \rho\bfg\cdot\bfu \,-\,\nabla\cdot\lo{p}\bfu\ro + \nabla\cdot\bfq.
 \end{eqnarray}
 The adjusted energy equation \ref{EnergyEq1} does not include the magnetic energy $U_m$, which we do want to include in the MHD equations. To achieve this, we employ \ref{U_mEq} - \ref{InductionEq} and rearrange and we obtain the final energy equation
 \be
@@ -143,11 +89,12 @@ The adjusted energy equation \ref{EnergyEq1} does not include the magnetic energ
 \ee
 
 \subsection{Simplifying assumptions}
-\subsubsection{Negligible time derivative of Electric field}
-For the time increments that we are concerned with, the time derivative in \ref{Ampere} is
+In what follows, we will make several simplifying assumptions, according to which we will get a system of equations that will adequately respect the physical model, yet will be easier to be solved.
+\subsubsection{Negligible time derivative of electric field}
+For the time increments that we are concerned with, the time derivative in \ref{Ampere} (the so-called \textit{Maxwell's displacement current})is
 very small. To estimate the minimum time increment value $\tau$ which would allow us to neglect the derivative, take the ratio of the two terms on the right hand side of \ref{Ampere}:
 \begin{equation}
-\epsilon_0 \frac{\pds{\bfE}{t}}{\bfJ} \approx \frac{\frac{\epsilon_0 \bfE}{\tau}}{\sigma\bfE} \approx \frac{\epsilon_0}{\sigma \tau} \approx \frac{10^{-11}}{\tau}.
+\varepsilon_0 \frac{\pds{\bfE}{t}}{\bfJ} \approx \frac{\frac{\varepsilon_0 \bfE}{\tau}}{\sigma\bfE} \approx \frac{\varepsilon_0}{\sigma \tau} \approx \frac{10^{-11}}{\tau}.
 \end{equation}
 This means for time scales much greater than $10^{-11}$ seconds, the time derivative of $\bfE$ can be neglected. As a consequence Equation \ref{Ampere} can be written as:
 \begin{equation}
@@ -162,8 +109,8 @@ where the last equality comes from \ref{GaussMag}. And using \ref{Asssumption11}
 \label{NSEq2} \pds{\bfpi}{t} + \nabla\cdot\left(\bfpi\otimes\bfu\right) =  q\bfE + \nabla\cdot\lo\frac{1}{\mu_0}\bfB\bfB - \frac{B^2}{2}\mathrm{I}\ro + \rho\bfg - \nabla\,p
 \ee
 
-\subsubsection{Negligible Electric field in the Navier-Stokes equations}
-The magnitude of electric field is smaller than the magnetic field by the factor $\frac{u^2}{c^2}$, so we can neglect the term $q\bfE$ on the right-hand-side of \ref{NSEq2}.
+\subsubsection{Negligible electric field in the Navier-Stokes equations}
+The magnitude of electric field is smaller than the magnetic field by the factor $\frac{u^2}{c^2}$, so we can neglect the term $\rho_q\bfE$ on the right-hand-side of \ref{NSEq2}.
 
 \subsubsection{Negligible heat fluxes}
 Since the heat transfer accounts for a negligible contribution to the overall energy transfer, we neglect the heat flux terms, i.e. we set $\bfq = \mathbf{0}$ in the energy equation \ref{EnergyEqPrefinal}.
@@ -192,7 +139,7 @@ where $\mathrm{\Psi}$ is the so-called \textit{state vector}, $\mathrm{F}_i,\ i 
 Rewriting the system of equations \ref{ContinuityEqFinal} - \ref{InductionFinal} to the form \ref{conservativeGeneric} is fairly straightforward.
 We obtain the following:
 \begin{eqnarray}
-\mathrm{\Psi} & = & \lo\begin{array}{c}\rho \\ \pi_1 \\ \pi_2 \\ \pi_3 \\ U \\ B_1 \\ B_2 \\ B_3 \\ \end{array}\ro,\\\mathrm{F}_i & = & \lo\begin{array}{c} \pi_i \\ \frac{\pi_1 \pi_i}{\rho} - B_1 B_i + \frac12 \delta_{1i} \lo p + U_m\ro \\ \frac{\pi_2 \pi_i}{\rho} - B_1 B_i + \frac12 \delta_{2i} \lo p + U_m\ro \\ \frac{\pi_3 \pi_i}{\rho} - B_1 B_i + \frac12 \delta_{3i} \lo p + U_m\ro \\ \frac{\pi_i}{\rho} \lo \frac{\gamma}{\gamma - 1} p + U_k\ro + 2\eta\epsilon_{ijk} J_j B_k + \frac{2}{\rho} \epsilon_{ijk} \lo \pi_k B_i - \pi_i B_k\ro B_k  \\ \frac{\pi_i B_1 - \pi_1 B_i}{\rho} + \eta \epsilon_{1ij} J_j \\ \frac{\pi_i B_2 - \pi_2 B_i}{\rho} + \eta \epsilon_{2ij} J_j \\ \frac{\pi_i B_3 - \pi_3 B_i}{\rho} + \eta \epsilon_{3ij} J_j \\ \end{array}\ro,\\
+\mathrm{\Psi} & = & \lo\begin{array}{c}\rho \\ \pi_1 \\ \pi_2 \\ \pi_3 \\ U \\ B_1 \\ B_2 \\ B_3 \\ \end{array}\ro,\\\mathrm{F}_i & = & \lo\begin{array}{c} \pi_i \\ \frac{\pi_1 \pi_i}{\rho} - B_1 B_i + \frac12 \delta_{1i} \lo p + U_m\ro \\ \frac{\pi_2 \pi_i}{\rho} - B_1 B_i + \frac12 \delta_{2i} \lo p + U_m\ro \\ \frac{\pi_3 \pi_i}{\rho} - B_1 B_i + \frac12 \delta_{3i} \lo p + U_m\ro \\ \frac{\pi_i}{\rho} \lo \frac{\gamma}{\gamma - 1} p + U_k\ro + 2\eta\varepsilon_{ijk} J_j B_k + \frac{2}{\rho} \varepsilon_{ijk} \lo \pi_k B_i - \pi_i B_k\ro B_k  \\ \frac{\pi_i B_1 - \pi_1 B_i}{\rho} + \eta \varepsilon_{1ij} J_j \\ \frac{\pi_i B_2 - \pi_2 B_i}{\rho} + \eta \varepsilon_{2ij} J_j \\ \frac{\pi_i B_3 - \pi_3 B_i}{\rho} + \eta \varepsilon_{3ij} J_j \\ \end{array}\ro,\\
 \mathrm{S} & = & \lo\begin{array}{c}0 \\ \rho g_1 \\ \rho g_2 \\ \rho g_3 \\ \bfpi \cdot \bfg \\ 0 \\ 0 \\ 0 \\ \end{array}\ro,
 \end{eqnarray}
 where $J_j = \lo\nabla\times\bfB\ro_j$.
