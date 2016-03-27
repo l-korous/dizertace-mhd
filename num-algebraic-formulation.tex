@@ -4,7 +4,7 @@ Last step in the DG method discretization is to transform the system of equation
 First, we rearrange the system in the following manner:
 \begin{eqnarray}
 \label{RewrittenLinearSystem} \sum_{K_i \in T_h}\int_{K_i} \left[\mrvh - \tau\mrA\lo{\mrPsi_h^{k}}\ro \lo\nabla \cdot \mrvh\ro\right] {\mrPsi_h}^{k+1} & = &
-\sum_{K_i \in T_h}\int_{K_i} \left[{\mrPsi_h}^{k} + \tau\mathrm{S}\right] \mrvh \\\nonumber& - &\sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}}\mrH\lo{\mrPsi_h^{k}}|_{ij}, {\mrPsi_h^{k}}|_{ji}, \bfn_{ij}\ro \mrvh
+\sum_{K_i \in T_h}\int_{K_i} \left[{\mrPsi_h}^{k} + \tau\mrS\right] \mrvh \\\nonumber& - &\sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}}\mrH\lo{\mrPsi_h^{k}}|_{ij}, {\mrPsi_h^{k}}|_{ji}, \bfn_{ij}\ro \mrvh
 \\\nonumber& - &\sum_{\Gamma_{ij}\in\Gamma_B} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h^{k}}|_{ij}, \overline{{\mrPsi_h^{k}}|_{ji}}, \bfn_{ij}\ro \mrvh.
 \end{eqnarray}
 Now
@@ -17,7 +17,7 @@ Next, since $\mrPsi_h^{k}$, $\tau$, $S$, $\mrA$ (and the basis) are all known, w
 \label{Linear1}
 a_{lm} & = & \sum_{K_i \in T_h}\int_{K_i} \left[\mrvhl - \tau\mrA\lo{\mrPsi_h^{k}}\ro \lo\nabla \cdot \mrvhl\ro\right] \mrvhm, \\
 \label{Linear2}
-b_{l} & = & \sum_{K_i \in T_h}\int_{K_i} \left[{\mrPsi_h}^{k} + \tau\mathrm{S}\right] \mrvhl\\\nonumber & - &\sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}}\mrH\lo{\mrPsi_h^{k}}|_{ij}, {\mrPsi_h^{k}}|_{ji}, \bfn_{ij}\ro \mrvhl\\\nonumber& - &
+b_{l} & = & \sum_{K_i \in T_h}\int_{K_i} \left[{\mrPsi_h}^{k} + \tau\mrS\right] \mrvhl\\\nonumber & - &\sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}}\mrH\lo{\mrPsi_h^{k}}|_{ij}, {\mrPsi_h^{k}}|_{ji}, \bfn_{ij}\ro \mrvhl\\\nonumber& - &
 \sum_{\Gamma_{ij}\in\Gamma_B} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h^{k}}|_{ij}, \overline{{\mrPsi_h^{k}}|_{ji}}, \bfn_{ij}\ro \mrvhl,\\
 \label{Linear3}
 A & = & \left\{a_{lm}\right\}_{l,m = 1}^{l,m = L},\\

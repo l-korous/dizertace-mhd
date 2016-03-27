@@ -61,7 +61,7 @@ $$
 denote the average and jump of a function $\mrvh$ on $\Gamma_{ij}$.
 In order to derive the discrete problem, we multiply \ref{conservativeGeneric} by a test function $\mrvh \in \left[V_h\right]^8$ in a component-wise fashion, integrate over any element $K_i \in T_h$, apply Green's theorem and sum over all $i \in I$, where $I$ is defined in \ref{Idef}:
 \be
-\label{DG1} \int_{\Omega_{t}} \pds{{\mrPsi_h}}{t} \mrvh - \sum_{K_i \in T_h}\int_{K_i}\mrF\lo{\mrPsi_h}\ro \lo\nabla \cdot \mrvh\ro + \sum_{K_i\in T_h} \sum_{j\in s_i} \int_{\Gamma_{ij}} \lo \mrF\lo{\mrPsi_h}\ro \cdot \bfn_{ij} \ro \mrvh = \int_{\Omega_{t}} \mathrm{S} \mrvh,
+\label{DG1} \int_{\Omega_{t}} \pds{{\mrPsi_h}}{t} \mrvh - \sum_{K_i \in T_h}\int_{K_i}\mrF\lo{\mrPsi_h}\ro \lo\nabla \cdot \mrvh\ro + \sum_{K_i\in T_h} \sum_{j\in s_i} \int_{\Gamma_{ij}} \lo \mrF\lo{\mrPsi_h}\ro \cdot \bfn_{ij} \ro \mrvh = \int_{\Omega_{t}} \mrS \mrvh,
 \ee
 where $\bfn_{ij}$ is the unit outer normal to $\Gamma_{ij}$.
 Now, the term
@@ -97,7 +97,7 @@ We impose the following requirements on the numerical flux:
  \end{enumerate}
 And using these properties of the numerical flux, we can rewrite \ref{DG1} as:
 \begin{eqnarray}
-\label{DG2} \int_{\Omega_{t}} \pds{{\mrPsi_h}}{t} \mrvh & - & \sum_{K_i \in T_h}\int_{K_i}\mrF\lo{\mrPsi_h}\ro \lo\nabla \cdot \mrvh\ro\\ \nonumber & + & \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h}|_{ij}, {\mrPsi_h}|_{ji}, \bfn_{ij}\ro \mrvh = \int_{\Omega_{t}} \mathrm{S} \mrvh,
+\label{DG2} \int_{\Omega_{t}} \pds{{\mrPsi_h}}{t} \mrvh & - & \sum_{K_i \in T_h}\int_{K_i}\mrF\lo{\mrPsi_h}\ro \lo\nabla \cdot \mrvh\ro\\ \nonumber & + & \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h}|_{ij}, {\mrPsi_h}|_{ji}, \bfn_{ij}\ro \mrvh = \int_{\Omega_{t}} \mrS \mrvh,
 \end{eqnarray}
 where we used the definition of \ref{InternalEdges} on the page \pageref{InternalEdges}.
 \subsection{HLLD numerical flux}
@@ -133,7 +133,7 @@ so that the complete semi-discrete problem reads:
 \begin{eqnarray}
 \label{DG3} \int_{\Omega_{t}} \pds{{\mrPsi_h}}{t} \mrvh & - & \sum_{K_i \in T_h}\int_{K_i}\mrF\lo{\mrPsi_h}\ro \lo\nabla \cdot \mrvh\ro\\ \nonumber & + & \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h}|_{ij}, {\mrPsi_h}|_{ji}, \bfn_{ij}\ro \mrvh\\\nonumber
  & + & \sum_{\Gamma_{ij}\in\Gamma_B} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h}|_{ij}, \overline{{\mrPsi_h}|_{ji}}, \bfn_{ij}\ro \mrvh\\\nonumber
- & = & \int_{\Omega_{t}} \mathrm{S} \mrvh,
+ & = & \int_{\Omega_{t}} \mrS \mrvh,
 \end{eqnarray}
 
 \paragraph{}
@@ -141,7 +141,7 @@ Now we can formulate the definition of the \textit{semi-discrete solution ${\mrP
 \begin{enumerate}
     \label{discreteSlnDef}
     \item ${\mrPsi_h} \in C^{1}\lo\lo0, T\ro, \left[V_h\right]^8\ro$,
-    \item \ref{DG3} holds for all $t\in\lo0, T\ro$, and all $\mathrm{v}\in \left[V_h\right]^8$,
+    \item \ref{DG3} holds for all $t\in\lo0, T\ro$, and all $\mrv\in \left[V_h\right]^8$,
     \item ${\mrPsi_h}\lo0, \bfx\ro = \Pi_h \mrPsi^0\lo\bfx\ro$,
 \end{enumerate}
 where $\Pi_h$ is a projection of the initial condition $\mrPsi^0$ onto $\left[V_h\right]^8$.

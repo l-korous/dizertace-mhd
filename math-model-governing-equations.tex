@@ -132,22 +132,22 @@ This form suggests that rewriting these equations into a more suitable (for nume
 \subsection{Conservative form of the MHD equations}
 A conservative form of a system of equations takes the form of
 \be
-\label{conservativeGeneric} \pds{\mathrm{\Psi}}{t} + \nabla \cdot \mathrm{F}\lo\mathrm{\Psi}\ro = \mathrm{S},
+\label{conservativeGeneric} \pds{\mrPsi}{t} + \nabla \cdot \mrF\lo\mrPsi\ro = \mrS,
 \ee
-where $\mathrm{\Psi}$ is the so-called \textit{state vector}, $\mathrm{F}_i,\ i = 1, 2, 3$ are the so-called \textit{fluxes}, and $\mathrm{S}$ is the so-called \textit{source term}.
+where $\mrPsi$ is the so-called \textit{state vector}, $\mrF_i,\ i = 1, 2, 3$ are the so-called \textit{fluxes}, and $\mrS$ is the so-called \textit{source term}.
 \paragraph{}
 Rewriting the system of equations \ref{ContinuityEqFinal} - \ref{InductionFinal} to the form \ref{conservativeGeneric} is fairly straightforward.
 We obtain the following:
 \begin{eqnarray}
-\mathrm{\Psi} & = & \lo\begin{array}{c}\rho \\ \pi_1 \\ \pi_2 \\ \pi_3 \\ U \\ B_1 \\ B_2 \\ B_3 \\ \end{array}\ro,\\\mathrm{F}_i & = & \lo\begin{array}{c} \pi_i \\ \frac{\pi_1 \pi_i}{\rho} - B_1 B_i + \frac12 \delta_{1i} \lo p + U_m\ro \\ \frac{\pi_2 \pi_i}{\rho} - B_1 B_i + \frac12 \delta_{2i} \lo p + U_m\ro \\ \frac{\pi_3 \pi_i}{\rho} - B_1 B_i + \frac12 \delta_{3i} \lo p + U_m\ro \\ \frac{\pi_i}{\rho} \lo \frac{\gamma}{\gamma - 1} p + U_k\ro + 2\eta\varepsilon_{ijk} J_j B_k + \frac{2}{\rho} \varepsilon_{ijk} \lo \pi_k B_i - \pi_i B_k\ro B_k  \\ \frac{\pi_i B_1 - \pi_1 B_i}{\rho} + \eta \varepsilon_{1ij} J_j \\ \frac{\pi_i B_2 - \pi_2 B_i}{\rho} + \eta \varepsilon_{2ij} J_j \\ \frac{\pi_i B_3 - \pi_3 B_i}{\rho} + \eta \varepsilon_{3ij} J_j \\ \end{array}\ro,\\
-\mathrm{S} & = & \lo\begin{array}{c}0 \\ \rho g_1 \\ \rho g_2 \\ \rho g_3 \\ \bfpi \cdot \bfg \\ 0 \\ 0 \\ 0 \\ \end{array}\ro,
+\mrPsi & = & \lo\begin{array}{c}\rho \\ \pi_1 \\ \pi_2 \\ \pi_3 \\ U \\ B_1 \\ B_2 \\ B_3 \\ \end{array}\ro,\\\mrF_i & = & \lo\begin{array}{c} \pi_i \\ \frac{\pi_1 \pi_i}{\rho} - B_1 B_i + \frac12 \delta_{1i} \lo p + U_m\ro \\ \frac{\pi_2 \pi_i}{\rho} - B_1 B_i + \frac12 \delta_{2i} \lo p + U_m\ro \\ \frac{\pi_3 \pi_i}{\rho} - B_1 B_i + \frac12 \delta_{3i} \lo p + U_m\ro \\ \frac{\pi_i}{\rho} \lo \frac{\gamma}{\gamma - 1} p + U_k\ro + 2\eta\varepsilon_{ijk} J_j B_k + \frac{2}{\rho} \varepsilon_{ijk} \lo \pi_k B_i - \pi_i B_k\ro B_k  \\ \frac{\pi_i B_1 - \pi_1 B_i}{\rho} + \eta \varepsilon_{1ij} J_j \\ \frac{\pi_i B_2 - \pi_2 B_i}{\rho} + \eta \varepsilon_{2ij} J_j \\ \frac{\pi_i B_3 - \pi_3 B_i}{\rho} + \eta \varepsilon_{3ij} J_j \\ \end{array}\ro,\\
+\mrS & = & \lo\begin{array}{c}0 \\ \rho g_1 \\ \rho g_2 \\ \rho g_3 \\ \bfpi \cdot \bfg \\ 0 \\ 0 \\ 0 \\ \end{array}\ro,
 \end{eqnarray}
 where $J_j = \lo\nabla\times\bfB\ro_j$.
 \subsection{Solution considerations}
 For mathematical clarity, we should state, that the solution to the equations \ref{conservativeGeneric} is such a function
 \be
-\label{HardSln} \mathrm{\Psi}\in C^1\lo\lo0, T\ro, \left[C^1\lo\Omega_{t}\ro\right]^8\ro;\ \mathrm{\Psi_i}\in C^1\lo\lo0, T\ro, C^2\lo\Omega_{t}\ro\ro,\,i = 6, 7, 8,
+\label{HardSln} \mrPsi\in C^1\lo\lo0, T\ro, \left[C^1\lo\Omega_{t}\ro\right]^8\ro;\ \mrPsii\in C^1\lo\lo0, T\ro, C^2\lo\Omega_{t}\ro\ro,\,i = 6, 7, 8,
 \ee
 for which \ref{conservativeGeneric} holds for all $\bfx\in\Omega_t,\ t\in\lo 0, T\ro$. The kind of spaces we used in the definition is called a Bochner space.
 \paragraph{}
-Because such a requirement on the solution $\mathrm{\Psi}$ is rather strong, we shall instead look for a so-called \textit{weak solution}, which is specified in the coming sections.
+Because such a requirement on the solution $\mrPsi$ is rather strong, we shall instead look for a so-called \textit{weak solution}, which is specified in the coming sections.
