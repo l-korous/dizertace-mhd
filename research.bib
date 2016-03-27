@@ -41,8 +41,7 @@
           number={1},
           pages={508},
           url={http://stacks.iop.org/0004-637X/530/i=1/a=508},
-          year={2000},
-          abstract={A general method for constructing high-order upwind schemes for multidimensional magnetohydrodynamics (MHD), having as a main built-in condition the divergence-free constraint ? ##IMG## [http://ej.iop.org/icons/Entities/bdot.gif] {bold dot} ##IMG## [http://ej.iop.org/images/0004-637X/530/1/508/img1.gif] {img1.gif} = 0 for the magnetic field vector ##IMG## [http://ej.iop.org/images/0004-637X/530/1/508/img2.gif] {img2.gif} , is proposed. The suggested procedure is based on consistency arguments, by taking into account the specific operator structure of MHD equations with respect to the reference Euler equations of gasdynamics. This approach leads in a natural way to a staggered representation of the ##IMG## [http://ej.iop.org/images/0004-637X/530/1/508/img2.gif] {img2.gif} field numerical data in which the divergence-free condition in the cell-averaged form, corresponding to second-order accurate numerical derivatives, is exactly fulfilled. To extend this property to higher order schemes, we then give general prescriptions to satisfy a ( r + 1)th order accurate ? ##IMG## [http://ej.iop.org/icons/Entities/bdot.gif] {bold dot} ##IMG## [http://ej.iop.org/images/0004-637X/530/1/508/img1.gif] {img1.gif} = 0 relation for any numerical ##IMG## [http://ej.iop.org/images/0004-637X/530/1/508/img2.gif] {img2.gif} field having a r th order interpolation accuracy. Consistency arguments lead also to a proper formulation of the upwind procedures needed to integrate the induction equations, assuring the exact conservation in time of the divergence-free condition and the related continuity properties for the ##IMG## [http://ej.iop.org/images/0004-637X/530/1/508/img2.gif] {img2.gif} vector components. As an application, a third-order code to simulate multidimensional MHD flows of astrophysical interest is developed using essentially nonoscillatory-based reconstruction algorithms. Several test problems to illustrate and validate the proposed approach are finally presented.}
+          year={2000}
         }
         
 @ARTICLE{blast2,
@@ -67,6 +66,141 @@
           number={1},
           pages={24},
           url={http://stacks.iop.org/0004-637X/737/i=1/a=24},
-          year={2011},
-          abstract={Magnetic reconnection is commonly considered to be a mechanism of solar (eruptive) flares. A deeper study of this scenario reveals, however, a number of open issues. Among them is the fundamental question of how the magnetic energy is transferred from large, accumulation scales to plasma scales where its actual dissipation takes place. In order to investigate this transfer over a broad range of scales, we address this question by means of a high-resolution MHD simulation. The simulation results indicate that the magnetic-energy transfer to small scales is realized via a cascade of consecutively smaller and smaller flux ropes (plasmoids), analogous to the vortex-tube cascade in (incompressible) fluid dynamics. Both tearing and (driven) "fragmenting coalescence" processes are equally important for the consecutive fragmentation of the magnetic field (and associated current density) into smaller elements. At the later stages, a dynamic balance between tearing and coalescence processes reveals a steady (power-law) scaling typical of cascading processes. It is shown that cascading reconnection also addresses other open issues in solar-flare research, such as the duality between the regular large-scale picture of (eruptive) flares and the observed signatures of fragmented (chaotic) energy release, as well as the huge number of accelerated particles. Indeed, spontaneous current-layer fragmentation and the formation of multiple channelized dissipative/acceleration regions embedded in the current layer appear to be intrinsic to the cascading process. The multiple small-scale current sheets may also facilitate the acceleration of a large number of particles. The structure, distribution, and dynamics of the embedded potential acceleration regions in a current layer fragmented by cascading reconnection are studied and discussed.}
+          year={2011}
         }
+
+
+@article{ honzaFD,
+    author = {{Skála, J.} and {Baruffa, F.} and {Büchner, J.} and {Rampp, M.}},
+    title = {The 3D MHD code GOEMHD3 for astrophysical plasmas  with large Reynolds numbers},
+    DOI= "10.1051/0004-6361/201425274",
+    url= "http://dx.doi.org/10.1051/0004-6361/201425274",
+    journal = {A\&A},
+    year = 2015,
+    volume = 580,
+    pages = "A48",
+    month = "",
+}
+
+@ARTICLE{mhdDg,
+    author = {{Rossmanith}, J.~A.},
+    title = "{High-Order Discontinuous Galerkin Finite Element Methods with Globally Divergence-Free Constrained Transport for Ideal MHD}",
+    journal = {ArXiv e-prints},
+    archivePrefix = "arXiv",
+    eprint = {1310.4251},
+    primaryClass = "math.NA",
+    keywords = {Mathematics - Numerical Analysis, Physics - Plasma Physics, 35L65, 65M08, 65M20, 65M60, 76W05},
+    year = 2013,
+    month = oct,
+    adsurl = {http://adsabs.harvard.edu/abs/2013arXiv1310.4251R},
+    adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}
+
+
+@ARTICLE{honzaFem,
+    author = {{Skala}, J. and {Barta}, M.},
+    title = "{LSFEM implementation of MHD numerical solver}",
+    journal = {ArXiv e-prints},
+    archivePrefix = "arXiv",
+    eprint = {1206.2730},
+    primaryClass = "physics.comp-ph",
+    keywords = {Physics - Computational Physics},
+    year = 2012,
+    month = jun,
+    adsurl = {http://adsabs.harvard.edu/abs/2012arXiv1206.2730S},
+    adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}
+
+@ARTICLE{mhdDg2,
+    author = {{Mocz}, P. and {Vogelsberger}, M. and {Sijacki}, D. and {Pakmor}, R. and 
+    {Hernquist}, L.},
+    title = "{A discontinuous Galerkin method for solving the fluid and magnetohydrodynamic equations in astrophysical simulations}",
+    journal = {mnras},
+    archivePrefix = "arXiv",
+    eprint = {1305.5536},
+    primaryClass = "physics.comp-ph",
+    keywords = {MHD, methods: numerical},
+    year = 2014,
+    month = jan,
+    volume = 437,
+    pages = {397-414},
+    doi = {10.1093/mnras/stt1890},
+    adsurl = {http://adsabs.harvard.edu/abs/2014MNRAS.437..397M},
+    adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}
+
+
+@article{ja1,
+    title = "Hermes2D, a C++ library for rapid development of adaptive -FEM and -DG solvers ",
+    journal = "Journal of Computational and Applied Mathematics ",
+    volume = "270",
+    number = "",
+    pages = "152 - 165",
+    year = "2014",
+    note = "Fourth International Conference on Finite Element Methods in Engineering and Sciences (FEMTEC 2013) ",
+    issn = "0377-0427",
+    doi = "http://dx.doi.org/10.1016/j.cam.2014.02.007",
+    url = "http://www.sciencedirect.com/science/article/pii/S0377042714000831",
+    author = "Pavel Solin and Lukas Korous and Pavel Kus",
+    keywords = "Finite element method",
+    keywords = "Discontinuous Galerkin method",
+    keywords = "Automatic adaptivity",
+    keywords = "Multiphysics coupled problems",
+    keywords = "Time-dependent problems",
+    keywords = "Software "
+}
+
+@article{ja2,
+    title = "Solving a suite of \{NIST\} benchmark problems for adaptive \{FEM\} with the Hermes library ",
+    journal = "Journal of Computational and Applied Mathematics ",
+    volume = "236",
+    number = "18",
+    pages = "4846 - 4861",
+    year = "2012",
+    note = "\{FEMTEC\} 2011: 3rd International Conference on Computational Methods in Engineering and Science, May 9–13, 2011 ",
+    issn = "0377-0427",
+    doi = "http://dx.doi.org/10.1016/j.cam.2012.02.004",
+    url = "http://www.sciencedirect.com/science/article/pii/S0377042712000611",
+    author = "Zhonghua Ma and Lukas Korous and Erick Santiago",
+    keywords = "Finite element method",
+    keywords = "Automatic adaptivity",
+    keywords = "Benchmark problem",
+    keywords = "Reproducible research "
+}
+
+@Article{ja3,
+    author="Korous, Lukas
+    and Solin, Pavel",
+    title="An adaptive                                                                   \$\$hp\$\$              -DG method with dynamically-changing meshes for non-stationary compressible Euler equations",
+    journal="Computing",
+    year="2012",
+    volume="95",
+    number="1",
+    pages="425--444",
+    issn="1436-5057",
+    doi="10.1007/s00607-012-0257-1",
+    url="http://dx.doi.org/10.1007/s00607-012-0257-1"
+}
+
+@article{deal,
+    title = {The \texttt{deal.II} Library, Version 8.4},
+    author = {W. Bangerth and D. Davydov and T. Heister and L. Heltai
+    and G. Kanschat and M. Kronbichler
+    and M. Maier and B. Turcksin and D. Wells},
+    journal = {preprint},
+}
+
+
+
+
+@book{umfpack,
+    author = {Davis, T.},
+    title = {Direct Methods for Sparse Linear Systems},
+    publisher = {Society for Industrial and Applied Mathematics},
+    year = {2006},
+    doi = {10.1137/1.9780898718881},
+    address = {},
+    edition   = {},
+    URL = {http://epubs.siam.org/doi/abs/10.1137/1.9780898718881},
+    eprint = {http://epubs.siam.org/doi/pdf/10.1137/1.9780898718881}
+}  
