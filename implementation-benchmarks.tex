@@ -22,7 +22,47 @@ Different authors set this problem up in different ways. We took the form that w
 
 \subsubsection{Calculation specification}
 A mesh $T_h$ formed by 400 x 600 x 1 rectangular parallelepipeds was used.
-The value of the time step $\tau$ used was set according to the CFL condition (\ref{section:CFL}) and was $\approx 10^{-5}$.
+The value of the time step $\tau$ used was set according to the CFL condition (\ref{section:CFL}) and was $\approx 10^{-7}$.
+Illustration of the obtained results follows below - these results were obtained using one node of the department's computational cluster with these parameters:
+\begin{itemize}
+    \item CPU: 2 x Intel(R) Xeon(R) CPU E5-2680 v3 @ 2.50GHz
+    \item \# of Cores: 48
+    \item Vectorization support: AVX2
+    \item Parallelization implemented: Intel TBB
+    \item RAM: 512 GB
+    \item OS: Ubuntu 15.10
+\end{itemize}
 
-\subsubsection{Results, conclusions}
-Results are satisfactory in terms of both qualitative and quantitative evaluation. They show good agreement with the expected results. The implementation has been proven to be working in an efficient manner, but challenges of real world large-scale problems lie ahead. There is still room for performance improvement, and for implementation of improved algorithms alike.
+\subsubsection{Results}
+The results show distribution of plasma - $\rho$ in the domain.
+\begin{figure}[H]
+\begin{center}
+    \includegraphics[width=0.4\textwidth]{img/0-density.png}
+    \includegraphics[width=0.4\textwidth]{img/5-density.png}
+\end{center} 
+\caption{Plasma density in $t = 0$ and $t = 0.03s$.}
+\end{figure} 
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=0.4\textwidth]{img/10-density.png}
+        \includegraphics[width=0.4\textwidth]{img/13-density.png}
+    \end{center} 
+    \caption{Plasma density in $t = 0.12s$ and $t = 0.16s$.}
+\end{figure} 
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=0.4\textwidth]{img/16-density.png}
+        \includegraphics[width=0.4\textwidth]{img/18-density.png}
+    \end{center} 
+    \caption{Plasma density in $t = 0.19s$ and $t = 0.21s$.}
+\end{figure} 
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=0.4\textwidth]{img/20-density.png}
+        \includegraphics[width=0.4\textwidth]{img/21-density.png}
+    \end{center} 
+    \caption{Plasma density in $t = 0.32s$ and $t = 0.37s$.}
+\end{figure} 
+
+\subsection{Conclusions}
+Results are satisfactory in terms of both qualitative and quantitative evaluation. Some non-physical instabilities are present - which will be subject to further study. Generally, results show good agreement with the expected results. The implementation has been proven to be working in an efficient manner, but challenges of real world large-scale problems lie ahead. There is still room for performance improvement, and for implementation of improved algorithms alike, especially with focus on stabilization of the implemented algorithm.

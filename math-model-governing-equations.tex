@@ -31,7 +31,7 @@ This system of equation reads
 \label{NSEq} \pds{\bfpi}{t} + \nabla\cdot\left(\bfpi\otimes\bfu\right)& = & \rho\bff - \nabla\,p,\\
 \label{EnergyEq} \pds{\tilde{U}}{t} + \nabla\cdot\lo{\tilde{U}}\bfu\ro & = & \rho\bff\cdot\bfu \,-\,\nabla\cdot\lo{p}\bfu\ro + \nabla\cdot\bfq,
 \end{eqnarray}
-where $\otimes$ denotes the \textit{tensor product}:
+where $\bfpi$ is momentum, $p$ pressure, $U$ total energy. Moreover, $\bfu$ denotes velocity, $\bff$ density of the force acting on the fluid, and $\bfq$ is the heat flux. By $\otimes$, we denote the \textit{tensor product}:
 \begin{displaymath}
 \bs{a}\otimes\bs{b} =
 \left(
@@ -64,18 +64,20 @@ In this work, we use Maxwell's equations with the assumption of constant electri
 \label{Ampere} \nabla \times \bfB & = & \mu_0 \lo \bfJ + \varepsilon_0 \pds{\bfE}{t}\ro\\\
 \label{Faraday} \nabla \times \bfE & = & -\pds{\bfB}{t}\\
 \label{Gauss} \nabla \cdot \bfE & = & \frac{\rho_q}{\varepsilon_0}\\
-\label{GaussMag} \nabla \cdot \bfB & = &0.
+\label{GaussMag} \nabla \cdot \bfB & = &0,
 \end{eqnarray}
+where $\bfB$ denotes magnetic flux density, $\bfE$ denotes electric field, $\bfJ$ denotes current density, $\varepsilon_0$ is permittivity of vacuum, and $\rho_q$ is electric charge density.
 The individual equations are known as Faraday's law(\ref{Faraday}), Ampere's law(\ref{Ampere}), and Gauss's laws(\ref{Gauss}, \ref{GaussMag}).
 
 
 \subsection{Derived relations between electromagnetic quantities}
 Further relations that are useful when deriving the MHD equations are:
 \begin{eqnarray}
-\label{U_mEq} \frac{\text{d}}{\text{d}t} U_m & = & \frac{1}{\mu_0}\nabla \cdot \lo \bfB\times\bfE\ro - \bfE\cdot\bfJ\\
-\label{Ohm} \bfE & = & -u \times \bfB + \frac{\eta}{\mu_0}\bfJ\\
-\label{InductionEq} \pds{\bfB}{t} + \nabla \times \lo \bfB \times \bfu \ro & = & -\frac{1}{\mu_0} \nabla \times \lo \eta \nabla \times \bfB \ro
+\label{U_mEq} \frac{\text{d}}{\text{d}t} U_m & = & \frac{1}{\mu_0}\nabla \cdot \lo \bfB\times\bfE\ro - \bfE\cdot\bfJ,\\
+\label{Ohm} \bfE & = & -u \times \bfB + \frac{\eta}{\mu_0}\bfJ,\\
+\label{InductionEq} \pds{\bfB}{t} + \nabla \times \lo \bfB \times \bfu \ro & = & -\frac{1}{\mu_0} \nabla \times \lo \eta \nabla \times \bfB \ro,
 \end{eqnarray}
+where $\mu_0$ denotes permeability of vacuum, $\eta$ is resistivity, and $U_m$ is magnetic energy.
 The equation \ref{Ohm} is the differential form of the \textit{Ohm's law}, the equation \ref{InductionEq} is the \textit{induction equation}.
 
 Applying now \ref{ForceEq} to \ref{NSEq}, \ref{EnergyEq}, we obtain:
