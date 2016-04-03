@@ -1,2 +1,41 @@
 \chapter{Conclusion, outlook}
-Further work will focus on real-world industrial and astrophysical problems, mainly study of the magnetic field reconnection - \citep{reconnection}, and other phenomena occurring both in solar physics and in industrial applications of plasma flow. Next step is solidification of the implemented algorithm, and comparison of several numerical fluxes. After the implementation is stable for the benchmark presented here, and as well as additional benchmarks (such as Orszag-Tang Vortex - \citep{vortex}), next step is distributed calculation of larger real-world problems and further work on performance improvements. Step after that is adding of additional physics into the implementation, mainly in the form of magnetic reconnection models.
+Further work will focus on real-world industrial and astrophysical problems, mainly study of the magnetic field reconnection - \citep{reconnection}, and other phenomena occurring both in solar physics and in industrial applications of plasma flow.
+Before the implemented software package is ready to be used for solution of such problems, it needs to be improved in several ways - first, the benchmark shown in this work clearly showed, that a more stable numerical scheme needs to be implemented. Second, the performance needs to be tweaked by the use of distributed computations. This will need to employ some of the following techniques:
+\begin{itemize}
+	\item Second-order scheme for the discretization of the time derivative
+	\item Adaptive algorithm for the discretization of the time derivative
+	\item Shock-capturing for high-order DG scheme to prevent non-physical oscillations
+	\item Adaptive algorithm for the discretization of the space derivatives communication
+	\item A specific shapeset of basis and test functions based on Taylor expansions.
+\end{itemize}
+
+The above steps should lead to solidification of the implemented algorithm, moreover, comparison of several numerical fluxes should be carried out in order to identify the one best suitable for the solved problems. Particularly an extension of the Vijayasundaram numerical flux known from compressible flow (the Euler equations) shall be evaluated if it is suitable, as one of the advantages is the possibility of its implicit (more stable) implementation.
+
+After the implementation is stable for the benchmark presented here, and as well as additional benchmarks (such as Orszag-Tang Vortex - \citep{vortex}), next steps are distributed calculation of larger real-world problems and further work on performance improvements. Performance improvements will include some of the following:
+\begin{itemize}
+	\item Caching of values that are necessary in multiple spaces of the algorithm (utilizing the RAM)
+	\item Further use of vectorization for evaluation of integral quantities
+	\item Distributed computation using the Message Passing Interface
+	\item Optimal selection of both solver, and preconditioner for the solution of the resulting algebraic problems
+\end{itemize}
+
+Step after that is adding of additional physics into the implementation, mainly in the form of magnetic reconnection models. From the implementation point of view, additional physics usually implies extending the matrix assembly routines by evaluating more physical quantities, possibly in a different setup (e.g. point values, particle-based quantities, etc.), or either post-processing or iterating the results in order to add some new rules and relations that must hold for the solution.
+\\\\\
+Plan of work:
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{||c|p{5cm}||} 
+		\hline
+		Quarter & Activities \\
+		\hline\hline
+		Q2/2016 & Stabilize the algorithm, achieve both stable, reliable, and fast calculation of 2 - 3 benchmarks\\
+		\hline
+		Q3/2016 &  Implementing more numerical fluxes, performance improvements \\
+		\hline
+		Q4/2016 & Adding physics (e.g. magnetic reconnection), start with real-world problems  \\
+		\hline
+		Q1+Q2/2017 & Distributed computations, adaptive algorithms \\
+		\hline
+	\end{tabular}
+\end{table}
+
