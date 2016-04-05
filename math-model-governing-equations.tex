@@ -20,7 +20,7 @@ When dealing with MHD phenomena in plasma, the following rules apply
     \begin{equation}
     R = c_p - c_v.
     \end{equation}
-    In the above, $c_p, c_v$ are specific heat at constant pressure, and at constant volume.
+    In the above, $c_p, c_v$ are specific heats at constant pressure, and at constant volume.
 \end{itemize}
 
 \subsection{Euler's equations of compressible flow}
@@ -85,7 +85,7 @@ Applying now \ref{ForceEq} to \ref{NSEq}, \ref{EnergyEq}, we obtain:
 \label{NSEq1} \pds{\bfpi}{t} + \nabla\cdot\left(\bfpi\otimes\bfu\right)& = & \rho_q\bfE + \bfJ\times\bfB + \rho\bfg - \nabla\,p,\\
 \label{EnergyEq1} \pds{\tilde{U}}{t} + \nabla\cdot\lo{\tilde{U}}\bfu\ro & = & \rho_q\bfE\cdot\bfu + \bfJ\times\bfB\cdot\bfu + \rho\bfg\cdot\bfu \,-\,\nabla\cdot\lo{p}\bfu\ro + \nabla\cdot\bfq.
 \end{eqnarray}
-The adjusted energy equation \ref{EnergyEq1} does not include the magnetic energy $U_m$, which we do want to include in the MHD equations. To achieve this, we employ \ref{U_mEq} - \ref{InductionEq} and rearrange and we obtain the final energy equation
+The adjusted energy equation \ref{EnergyEq1} does not include the magnetic energy $U_m$, which we do want to include in the MHD equations. To achieve this, we employ \ref{U_mEq} - \ref{InductionEq} and rearrange. After rearranging we obtain
 \be
 \label{EnergyEqPrefinal} \pds{U}{t} = -\nabla\cdot\left[\bfpi\lo \frac{u^2}{2} + e\ro + p \bfu - \frac{1}{\mu_0}\bfB\times\bfE\right] + \rho \bfg \cdot \bfu + \nabla\cdot\bfq.
 \ee
@@ -93,7 +93,7 @@ The adjusted energy equation \ref{EnergyEq1} does not include the magnetic energ
 \subsection{Simplifying assumptions}
 In what follows, we will make several simplifying assumptions, according to which we will get a system of equations that will adequately respect the physical model, yet will be easier to be solved.
 \subsubsection{Negligible time derivative of electric field}
-For the time increments that we are concerned with, the time derivative in \ref{Ampere} (the so-called \textit{Maxwell's displacement current})is
+For the time increments that we are concerned with, the time derivative in \ref{Ampere} (the so-called \textit{Maxwell's displacement current}) is
 very small. To estimate the minimum time increment value $\tau$ which would allow us to neglect the derivative, take the ratio of the two terms on the right hand side of \ref{Ampere}:
 \begin{equation}
 \varepsilon_0 \frac{\pds{\bfE}{t}}{\bfJ} \approx \frac{\frac{\varepsilon_0 \bfE}{\tau}}{\sigma\bfE} \approx \frac{\varepsilon_0}{\sigma \tau} \approx \frac{10^{-11}}{\tau}.
@@ -150,6 +150,6 @@ For mathematical clarity, we should state, that the solution to the equations \r
 \be
 \label{HardSln} \mrPsi\in C^1\lo\lo0, T\ro, \left[C^1\lo\Omega_{t}\ro\right]^8\ro;\ \mrPsii\in C^1\lo\lo0, T\ro, C^2\lo\Omega_{t}\ro\ro,\,i = 6, 7, 8,
 \ee
-for which \ref{conservativeGeneric} holds for all $\bfx\in\Omega_t,\ t\in\lo 0, T\ro$. The kind of spaces we used in the definition is called a Bochner space.
+for which \ref{conservativeGeneric} holds for all $\bfx\in\Omega_t,\ t\in\lo 0, T\ro$. The kind of spaces we used in the definition is called the Bochner spaces.
 \paragraph{}
 Because such a requirement on the solution $\mrPsi$ is rather strong, we shall instead look for a so-called \textit{weak solution}, which is specified in the coming sections.
