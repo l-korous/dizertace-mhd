@@ -13,7 +13,26 @@
         \\[3em]
         
         {\Large Mgr. Lukáš \textsc{Korous}}
-        \vfill
+				\end{center}
+				\ \\ TODO
+				\\ - popsat numerical flux, ze je non-differentiable, ze se vyhodnocuje na hranach a ze to je challenging z pohledu adaptivity, paralelismu a periodickych podminek
+				\\ - obecne MHD num fluxy, kolik je tam vlastnich cisel, cili kolik mezistavu, jake jsou ruzne toky a proc se nepouziva presny resic
+				\\ - HLLD, presny popis, proc ne ten flux s jeste vice stavy (drahy)
+				\\\ 
+				\\ do uvodu napsat vice o state-of-the-art, odkaz na Mirovo clanek, ukazat tam ty FD vysledky, ze je chceme nahradit a ze je tam hodne dulezita adaptivity
+				\\ pak teda popsat az tam z toho budu davat vysledky, tak vykopirovat nejaky rovnice IC / BC z clanku, jak se to implementuje, atd.
+				\\ srovnani
+				\\\ 
+				\\ adaptivita - ukazat na 2d prikladu z Hermesu co to je referencni reseni, co to je ||zprojektovane - presne|| (v dealu?), co to je tohle bez normy, zminka o distribuovanosti, ze musim napocitat nejaky thresholdy mapReducem, atd.
+				\\ napsat pak algoritmus tedy cely, kde je casovy krok, adaptivita (ze se vraci casovy krok po zjemneni / zhrubeni, aby se neztracela informace), atd.
+				\\ \ \\
+				\\ popis a vysledky Blastu, O-T
+				\\ - odkazy na clanky, popis
+				\\ - bez adaptivity jen "pocita to"
+				\\ - s adaptivitou "a navic tak presne to spoctu a usetrim 80\% dofu"
+				\\ -- tohle ukazovat na rezech hustotou - bylo by fajn nejaky najit
+				\vfill
+				\begin{center}
         {\large 2016}
     \end{center}
 \end{titlepage}
