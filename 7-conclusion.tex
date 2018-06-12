@@ -9,8 +9,6 @@ Before the implemented software package is ready to be used for solution of such
 	\item A specific shapeset of basis and test functions based on Taylor expansions.
 \end{itemize}
 
-The above steps should lead to solidification of the implemented algorithm, moreover, comparison of several numerical fluxes should be carried out in order to identify the one best suitable for the solved problems. Particularly an extension of the Vijayasundaram numerical flux known from compressible flow (the Euler equations) shall be evaluated if it is suitable, as one of the advantages is the possibility of its implicit (more stable) implementation.
-
 After the implementation is stable for the benchmark presented here, and as well as additional benchmarks (such as Orszag-Tang Vortex - \citep{vortex}), next steps are distributed calculation of larger real-world problems and further work on performance improvements. Performance improvements will include some of the following:
 \begin{itemize}
 	\item Caching of values that are necessary in multiple spaces of the algorithm (utilizing the RAM)
