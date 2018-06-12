@@ -1,9 +1,0 @@
-\subsection{Vectorization}
-Similarly as in section \ref{section:parallel}, the goal here is to be able to solve the discretized problem in the most efficient (fastest) way possible. One of the features that (modern) hardware offers is to employ vectorization instructions - i.e. unary or binary instructions that operate on $N, N > 1$ values (in case of unary instructions), or $N, N > 1$ pairs of values (in case of binary instructions) at the same time - the number $N$ depends on the capabilities of the CPU, and on the precision (single or double). On the hardware that was available to perform calculations for this thesis (and based on always-used double precision), $N = \left\{4, 8\right\}$, using such instructions requires both using them in the code (one has to specify that these instructions shall be generated explicitly), and having the compiler aware of these, and able to utilize them in the generated machine code - both compilers used for work on this thesis (GNU gcc, and Microsoft Visual Studio) support vectorization instructions (SSE, SSE2, AVX, AVX2).
-\paragraph{}
-Vectorization helps heavily with respect to CPU time spent on calculation. In the algorithm \ref{algorithm:singleTimeStep}, vectorized instructions are used in:
-\begin{itemize}
-    \item evaluation of the expressions $a_{lm} += JxW_{\bfj} \ a_{lm K \bfj}$
-    \item evaluation of expressions $b_{l} += JxW_{\bfj} \ b_{l K \bfj}|_{edge|volumetric}$
-    \item calculation of $JxW_{\bfj}$
-\end{itemize}

@@ -1,7 +1,0 @@
-\chapter{Adaptivite algorithms}
-In computational fluid dynamics we are interested in the computation of sufficiently accurate solutions of various flow problems. The goal of the design of any numerical method is \emph{reliability} and \emph{efficiency}. Reliability means that the computational error is controlled at a given tolerance level. The efficiency means that the cost of the computation of a solution within a given tolerance is as small as possible. These two requirements are usually achieved with the aid of mesh refinement techniques. The goal is to achieve reliability either in the sense that the numerical solution approximates the exact solution in a given norm within a given tolerance, or in the sense that some physically relevant quantities (e.g. flux through a part of a boundary, drag, lift) are computed within a given tolerance.
-\paragraph{}
-Standard h-adaptive FEM, where (adaptive) mesh refinement is used, is a well known, and well spread method. Sometimes, much faster convergence
-can be achieved by increasing the polynomial degree of the elements instead
-($p$-refinement). Such approach is far more efficient for elements where
-the solution is smooth. In the following section, a brief description of this technique is presented.

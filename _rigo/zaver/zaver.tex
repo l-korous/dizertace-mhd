@@ -1,0 +1,41 @@
+\chapter{Zhodnocení a vytyčení dalších směru práce}
+V~rámci předložené práce byly diskutovány specifika návrhu lineárních elektromagnetických aktuátorů a byl sestaven obecný matematický model, který je možné využít k~základnímu návrhu nebo analýze konkrétních zařízení. Značná pozornost byla dále věnována specifickým oblastem numerického řešení formulovaného modelu pomocí metody konečných prvků. Mezi tyto oblasti patří
+\begin{enumerate}[a]
+    \item řešení nelineárních magnetických polí a
+    \item výpočty silového působení magnetického pole na feromagnetická tělesa.
+\end{enumerate}
+
+Výhody a úskalí diskutovaných metod řešení byly demonstrovány na konkrétním příkladu lineárního elektromagnetického aktuátoru. Ten byl navržen na základě již dříve provedené parametrické studie konstrukce aktuátoru s~ohledem na snahu dosáhnout velkého pracovního rozsahu a také možnost ovlivnit tvar statické charakteristiky provedením tvaru jádra. Aktuátor byl na základě návrhu zkonstruován a experimentálně byla ověřena jeho funkčnost. Výsledky měření statické charakteristiky a teploty byly následně využity pro verifikaci použitého matematického modelu a numerických metod jeho řešení.
+
+Práce byla dále věnována demonstraci moderním přístupům k~návrhu, které umožňují velmi komplexní přístup k~dané problematice. Diskutovanými metodami jsou citlivostní analýza a tvarová optimalizace.
+
+\section{Směr dalších prací}
+Další práce v blízké budoucnosti lze rozdělit do dvou směru. První směr bude zaměřen na implementaci modelu napájecího elektrického obvodu do magnetického modulu aplikace Agros2D, jeho testování a následnou analýzu. Dále bude pokračovat vývoj automatického návrhového systému pro aplikaci Agros2D, který umožní snadné vytvoření geometrie navrhovaného lineárního elektromagnetického aktuátoru dle jeho typu a základních parametrů, definici problému, řešení a následnou analýzu návrhu.
+
+Cílem druhého směru prací bude konstrukce nového typu bistabilního elektromagnetického ventilu. Základní koncepce ventilu je v~porovnání s~prakticky používanými zařízeními značně inovativní a přináší mnohé výhody. Základní uspořádání nového zařízení je zobrazeno na obr.\ref{obr:ventil}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics{zaver/koncept.pdf}
+  \caption{Základní koncept navrhovaného elektromagnetického ventilu}
+  \label{obr:ventil}
+\end{figure}
+
+Hlavní myšlenkou koncepce je využití dutého jádra, kterým řízená kapalina protéká. Navržená koncepce využívá dvou oddělených magnetických obvodů. Magnetický tok vyvolaný budící cívkou v~primárním magnetickém obvodu slouží k~posunutí pohyblivého jádra do otevřeného stavu a uvolnění toku kapaliny. Magnetický indukční tok v~sekundárním obvodu je vytvořen silným permanentním magnetem a slouží k~uzavření ventilu v~případě vypnutí budící cívky.
+
+Mezi hlavní výhody uvedené koncepce patří:
+\begin{itemize}
+    \item bistabilní režim aktuátoru zajišťující bezpečné uzavření ventilu v~případě ztráty napájecího napětí,
+    \item absence konstrukčních prvků pro převod sílového působení, které komplikují čištění ventilu,
+    \item využití oddělených magnetických obvodů, která zajišťuje dvě cesty magnetického indukčního toku a je tak zamezeno nežádoucí demagnetizaci permanentního magnetu.
+\end{itemize}
+
+\section{Harmonogram dalších prací}
+\begin{itemize}
+    \item červen 2014: dokončení a zhodnocení koncepční studie pro návrh lineárních elektromagnetických aktuátorů
+    \item srpen 2014: dokončení implementace modelu elektrických obvodů do magnetického modulu aplikace Agros2D
+    \item září 2014: uzavření návrhu a analýzy elektromagnetického ventilu, dokončení vývoje automatického návrhového systému
+    \item říjen 2014: experimentální ověření a diagnostika navrženého ventilu
+    \item prosinec 2014: dokončení a odevzdání dizertační práce
+    \item březen 2015: obhajoba dizertační práce
+\end{itemize}

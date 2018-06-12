@@ -1,0 +1,25 @@
+\chapter{Numerical approach}
+The weak formulation of the problem we obtained in \ref{weakSlnDef} still posses a problematic attribute - the space defined in \ref{Bochner} is of infinite dimension, and therefore we would need to employ analytical methods to find the solution \ref{weakSlnDef} in such a space. The equation \ref{WeakFinal} is however rather impossible to be solved analytically, and we have to utilize some sort of numerical simulation - which in turn needs to operate on finite-dimensional spaces. But we need to make sure that the simplifying (reducing) assumptions we make on the way to the numerical model are acceptable so that the numerical solution we obtain converges (as we reduce the discretization size) to the solution defined in \ref{weakSlnDef}.
+
+\paragraph{}
+In this chapter we shall consider that $\Omega_t = \Omega\, \forall t \in \lo 0, T\ro $, i.e. the computational domain does not change with respect to time. There are approaches to numerical simulation of MHD phenomena without this condition in place, which utilize the exact same general approach described in this work plus they add additional steps in the algorithm. These are outside of the scope of this work. Also, we always take $\Omega \subset \mathbb{R}^3$.
+
+\input{4-numapproach/triangulation}
+
+\input{4-numapproach/dg}
+
+\input{4-numapproach/slope-limiter}
+
+\input{4-numapproach/div-free-space}
+
+\input{4-numapproach/time-stepping}
+
+\input{4-numapproach/numerical-integration}
+
+\input{4-numapproach/algebraic-formulation}
+
+\input{4-numapproach/calculation-considerations}
+
+\input{4-numapproach/implementation-time-stepping}
+
+\input{4-numapproach/performance}

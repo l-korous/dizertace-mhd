@@ -1,0 +1,44 @@
+\begin{titlepage}
+    \begin{center}
+        
+        \vspace*{3em}
+        \textsc{\LARGE University of West Bohemia in Pilsen}\\[0.5em]
+        \textsc{\LARGE Faculty of Electrical Engineering}\\[5em]
+        
+        {\Large Doctoral thesis}\vspace*{1em}
+        \rule{\linewidth}{0.5mm}
+        \\[1em]
+        {\huge \textsc{Large-scale Numerical Simulations of Magneto-Hydrodynamics Phenomena in Astrophysics} \\[0.4cm]}
+        \rule{\linewidth}{0.5mm}
+        \\[3em]
+        
+        {\Large Mgr. Lukáš \textsc{Korous}}
+				\end{center}
+				\ \\ TODO
+				\\ \ \\
+				Check ze mam CFL podminky a flux dobre - vlastni cisla nejsou s hybnosti, ale s rychlosti\\ \ \\
+				$[Vh]^8$ tak neni kdyz mam ten spesl prostor\\ \ \\
+				smazal jsem linearizaci, jeste smazat vsechny zminky o implicitni\\ \ \\
+				doplnit citace na Trilinos, P4EST, Intel Parallel Studio\\ \ \\
+				Mam nejak divne rovnice pro energii - $varepsilon_{ijk}$ je divny, a taky poresit jestli je $p + U_m s \frac12$ predtim nebo ne\\ \ \\
+				\\ - popsat numerical flux, ze je non-differentiable, ze se vyhodnocuje na hranach a ze to je challenging z pohledu adaptivity, paralelismu a periodickych podminek
+				\\ - obecne MHD num fluxy, kolik je tam vlastnich cisel, cili kolik mezistavu, jake jsou ruzne toky a proc se nepouziva presny resic
+				\\ - HLLD, presny popis, proc ne ten flux s jeste vice stavy (drahy)
+				\\\ 
+				\\ do uvodu napsat vice o state-of-the-art, odkaz na Mirovo clanek, ukazat tam ty FD vysledky, ze je chceme nahradit a ze je tam hodne dulezita adaptivity
+				\\ pak teda popsat az tam z toho budu davat vysledky, tak vykopirovat nejaky rovnice IC / BC z clanku, jak se to implementuje, atd.
+				\\ srovnani
+				\\\ 
+				\\ adaptivita - ukazat na 2d prikladu z Hermesu co to je referencni reseni, co to je ||zprojektovane - presne|| (v dealu?), co to je tohle bez normy, zminka o distribuovanosti, ze musim napocitat nejaky thresholdy mapReducem, atd.
+				\\ napsat pak algoritmus tedy cely, kde je casovy krok, adaptivita (ze se vraci casovy krok po zjemneni / zhrubeni, aby se neztracela informace), atd.
+				\\ \ \\
+				\\ popis a vysledky Blastu, O-T
+				\\ - odkazy na clanky, popis
+				\\ - bez adaptivity jen "pocita to"
+				\\ - s adaptivitou "a navic tak presne to spoctu a usetrim 80\% dofu"
+				\\ -- tohle ukazovat na rezech hustotou - bylo by fajn nejaky najit
+				\vfill
+				\begin{center}
+        {\large 2016}
+    \end{center}
+\end{titlepage}
