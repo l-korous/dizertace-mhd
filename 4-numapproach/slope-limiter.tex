@@ -20,7 +20,7 @@ The sought parameter $\alpha_e$ is the parameter (correction factor) that determ
 1,\ \ \ \ \ \  \  \  \   if\ u_i - u_c = 0,\\
 \min\left\{1, \frac{u_e^{min} - u_c}{u_i - u_c}\right\},\ if\ \ u_i - u_c < 0,\end{array}\right.
 \ee
-where $u_i = u_c + \lo\nabla u\ro_c \cdot\lo x_i - x_c\ro$ is the unconstrained solution value at the vertex $x_i$, and $u_e^{min, max}$ are the minimum and maximum cell averages of all elements sharing a common edge with the element $e$.
+where $u_i = u_c + \lo\nabla u\ro_c \cdot\lo x_i - x_c\ro$ is the unconstrained solution value at the vertex $x_i$, and $u_e^{min}, u_e^{max}$ are the minimum and maximum cell averages of all elements sharing a common edge with the element $e$.
 \paragraph{}
 
 However, using this limiting technique, there are two suboptimal behavior features - the bounds for the limited solution are set on one hand too tight - solution values from elements meeting at a vertex but having no common edge/face are not taken into account (they might extend the interval for the admissible correction factor $\alpha_e$, and on the other hand too loose - solution values on elements that share a common edge may extend the admissible interval for $\alpha_e$ based on the value at a vertex that does not belong to that particular common edge.
@@ -35,7 +35,7 @@ Introduced by D. Kuzmin in \cite{KuzminVertex}, the Vertex-based limiter aims at
 1,\ \ \ \ \  \  \  \  if\ u_i - u_c = 0,\\
 \min\left\{1, \frac{u_i^{min} - u_c}{u_i - u_c}\right\},\ if\ \ u_i - u_c < 0,\end{array}\right.
 \ee
-where in this case $u_i^{max, min}$ are defined in such a way that for each of the vertices they are initialized with a small and a large constant, respectively, and then in the loop over all elements that contain the $i-$th vertex, the values are updated as:
+where in this case $u_i^{min}, u_i^{min}$ are defined in such a way that for each of the vertices they are initialized with a small and a large constant, respectively, and then in the loop over all elements that contain the $i-$th vertex, the values are updated as:
 \be
 u_i^{max} = \max\left\{u_c, u_i^{max}\right\},\ \ u_i^{min} = \min\left\{u_c, u_i^{min}\right\}.
 \ee

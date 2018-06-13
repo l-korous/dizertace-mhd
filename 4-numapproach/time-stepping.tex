@@ -8,7 +8,7 @@ Then we apply a time discretization scheme, for example, the simple explicit \em
     \item ${\mrPsi_h}^{k+1} \in \left[V_h\right]^8$,
     \item For all test functions $\mrvh\in\left[V_h\right]^8$:
     \begin{eqnarray}
-    \label{DiscretizedFull} \int_{\Omega_{t}} \frac{{\mrPsi_h}^{k+1} - {\mrPsi_h}^{k}}{\tau} \mrvh & - & \sum_{K_i \in T_h}\int_{K_i}\mrF\lo{\mrPsi_h^{k}}\ro \lo\nabla \cdot \mrvh\ro\\ \nonumber & + & \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h^{k}}|_{ij}, {\mrPsi_h^{k+1}}|_{ji}, \bfn_{ij}\ro \mrvh \\\nonumber
+    \label{DiscretizedFull} \int_{\Omega_{t}} \frac{{\mrPsi_h}^{k+1} - {\mrPsi_h}^{k}}{\tau} \mrvh & - & \sum_{K_i \in T_h}\int_{K_i}\mrF\lo{\mrPsi_h^{k}}\ro \lo\nabla \cdot \mrvh\ro\\ \nonumber & + & \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h^{k}}|_{ij}, {\mrPsi_h^{k}}|_{ji}, \bfn_{ij}\ro \mrvh \\\nonumber
      & + & \sum_{\Gamma_{ij}\in\Gamma_B} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h^{k}}|_{ij}, \overline{{\mrPsi_h^{k}}|_{ji}}, \bfn_{ij}\ro \mrvh\\\nonumber
      & = & \int_{\Omega_{t}} \mrS \mrvh,
     \end{eqnarray}

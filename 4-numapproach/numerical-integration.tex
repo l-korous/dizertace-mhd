@@ -25,7 +25,7 @@ $$
 $$
 Taking now e.g. \ref{Linear1}, and using the transformation, we can write (omitting the operand $\bfx = \lo x_1, x_2, x_3\ro$):
 \begin{eqnarray}
-a_{lm} & = & \sum_{K_i \in T_h}\int_{K_i} \left[\mrvhl - \tau\mrA\lo{\mrPsi_h^{k}}\ro \lo\nabla \cdot \mrvhl\ro\right] \mrvhm, \\
+a_{lm} & = & \sum_{K_i \in T_h}\int_{K_i} \mrvhl \mrvhm, \\
 a_{lm} & := & \sum_{K_i \in T_h}\int_{K_i} f\lo\mrvhl\lo\bfx\ro, \mrvhm\lo\bfx\ro\ro , \\
 a_{lm} & \approx & \sum_{K_i \in T_h} \sum_{\bfj=\overrightarrow{1}}^{\overrightarrow{n}} f\lo\mrvhl\lo\bfx_{\bfj}\ro, \mrvhm\lo\bfx_{\bfj}\ro\ro\,w_{\bfj},\label{Final_Integration_Fn}
 \end{eqnarray}
@@ -50,7 +50,7 @@ and do the same for the faces $\Gamma_i$ (both boundary, and internal):
 \be
 \mrvh \lo \Gamma_i \ro = \left\{\mrvh \in V_h : supp\lo\mrvh\ro \cap \Gamma_i \neq \emptyset \right\}.
 \ee
-Now the assembling procedure looks like this (note that as we are using a semi-implicit scheme described in \ref{DiscretizedLinear} we only evaluate terms $b_l$ on edges):\\
+Now the assembling procedure looks like this:\\
 \begin{algorithm}[H]
     \# 1 - Loop over elements\\
     \ForEach{$K\in T_h$}{
@@ -97,3 +97,4 @@ Note: $b_{l K \bfj}|_{volumetric}$ means that we are evaluating the volumetric(3
 \caption{Asembling of the algebraic problem \ref{Alg}}
 \label{algorithm:singleTimeStep}
 \end{algorithm}
+Note that in this algorithm, periodic boundary conditions are not specifically handled, as they are only a programatically more complex case of internal edges.
