@@ -2,9 +2,9 @@ In the implementation, we take the elements $K \in T_h$, of the triangulation $T
 \section{Numerical integration}
 Evaluation of the integral values in \ref{Linear1}, \ref{Linear2} is performed using the \textit{Gaussian numerical quadrature}. A quadrature rule approximates the integral values by replacing the integral as a weighted sum of integrand values at specified points in the domain of integration. The Gaussian quadrature is constructed so that the approximation is exact for polynomials of degree 2\textit{n} - 1 (and less). This is acceptable, as our space $V_h$ is constructed using polynomials - see section \ref{section:Vh} on the page \pageref{section:Vh}. We only need to take the value $n$ to be corresponding to the value of $p_m$ for the element $K_m$. The rule for both a 2-dimensional element face $\Gamma$, and a 3-dimensional cube $K$ is derived from a one-dimensional approximation (where the interval $\left[-1, 1\right]$ is a convention):
 $$
-\int_{-1}^1 f(x)\,dx = \sum_{i=1}^n w_i f(x_i)
+\int_{-1}^1 f(x)\,dx = \sum_{i=1}^n w_i f(x_i),
 $$
-in the following way:
+where the numbers $w_i > 0$ are the \textit{quadrature weights}, and the points (numbers in this case) $x_i$ are the \textit{quadrature points}, in the following way:
 $$
 \int_{\Gamma} f\lo\bfx\ro\,dx = \int_{-1}^{1}\int_{-1}^{1} f\lo x_1, x_2\ro\,dx \approx \sum_{i=1}^n\sum_{j=1}^n w_i w_j f\lo x_{1i}, x_{2j}\ro,
 $$
@@ -23,25 +23,32 @@ And the transformations in higher dimensions follow naturally. For $\Gamma = \le
 $$
 \int_{\Gamma} f(x)\,d\bfx \approx \frac{b_2-a_2}{2}\frac{b_1-a_1}{2} \sum_{i=1}^n \sum_{j=1}^n w_i w_j f\lo\frac{b_1-a_1}{2}x_i + \frac{a_1+b_1}{2},\frac{b_2-a_2}{2}x_j + \frac{a_2+b_2}{2}\ro.
 $$
-Taking now e.g. \ref{Linear1}, and using the transformation, we can write (omitting the operand $\bfx = \lo x_1, x_2, x_3\ro$):
+Taking now e.g. \ref{Linear1}, and notation for quadrature points and weights, we can write (omitting the operand $\bfx = \lo x_1, x_2, x_3\ro$):
 \begin{eqnarray}
 a_{lm} & = & \sum_{K_i \in T_h}\int_{K_i} \mrvhl \mrvhm, \\
-a_{lm} & := & \sum_{K_i \in T_h}\int_{K_i} f\lo\mrvhl\lo\bfx\ro, \mrvhm\lo\bfx\ro\ro , \\
-a_{lm} & \approx & \sum_{K_i \in T_h} \sum_{\bfj=\overrightarrow{1}}^{\overrightarrow{n}} f\lo\mrvhl\lo\bfx_{\bfj}\ro, \mrvhm\lo\bfx_{\bfj}\ro\ro\,w_{\bfj},\label{Final_Integration_Fn}
+a_{lm} & := & \sum_{K_i \in T_h}\int_{K_i} f\lo\mrvhl, \mrvhm\ro , \\
+a_{lm} & \approx & \sum_{K_i \in T_h} \sum_{\bfj=\overrightarrow{1}}^{\overrightarrow{n}} f\lo\mrvhl\lo\bfx_{\bfj}^i\ro, \mrvhm\lo\bfx_{\bfj}^i\ro\ro\,w_{\bfj},\label{Final_Integration_Fn}
 \end{eqnarray}
-where $\bfj$ is a multi-index representing sum over integration points $\bfx_j$ in three dimensions.
-
-Based on this, we can define
+where $\bfj$ is a multi-index used in sum over (volumetric) quadrature points $\bfx_{\bfj}^i \in K_i$.
+Similarly for the right-hand side (\ref{Linear2}):
+\begin{eqnarray}
+b_{l} & = & \sum_{K_i \in T_h}\int_{K_i} \left[{\mrPsi_h}^{k} + \tau\mrS + \tau\mrA\lo{\mrPsi_h^{k}}\ro \lo\nabla \cdot \mrvhl\ro\right] \mrvhl\\\nonumber & - &\sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}}\mrH\lo{\mrPsi_h^{k}}|_{ij}, {\mrPsi_h^{k}}|_{ji}, \bfn_{ij}\ro \mrvhl\\\nonumber& - &\sum_{\Gamma_{ij}\in\Gamma_B} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h^{k}}|_{ij}, \overline{{\mrPsi_h^{k}}|_{ji}}, \bfn_{ij}\ro \mrvhl,\\
+b_{l} & := & \sum_{K_i \in T_h}\int_{K_i} g\lo\mrvhl\ro - \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}}g^{'}\lo\mrvhl\ro - \sum_{\Gamma_{ij}\in\Gamma_B} \int_{\Gamma_{ij}} g^{''}\lo\mrvhl\ro \\
+b_{l} & \approx & \sum_{K_i \in T_h} \sum_{\bfj=\overrightarrow{1}}^{\overrightarrow{n}} g\lo\mrvhl\lo\bfx_{\bfj}^i\ro\ro\,w_{\bfj}\\\nonumber & - & \sum_{\Gamma_{ij}\in\Gamma_I} \sum_{\bfj_f=\overrightarrow{1}}^{\overrightarrow{n_f}} g^{'}\lo\mrvhl\lo\bfx^{ij}_{\bfj_{f}}\ro\ro\,w_{\bfj_{f}}\\\nonumber & - & \sum_{\Gamma_{ij}\in\Gamma_B} \sum_{\bfj_{f}=\overrightarrow{1}}^{\overrightarrow{n_f}} g^{''}\lo\mrvhl\lo\bfx^{ij}_{\bfj_{f}}\ro\ro\,w_{\bfj_{f}},
+\label{Final_Integration_Fn_b}
+\end{eqnarray}
+where in addition to $\bfj$ as explained before, $\bfj_{f}$ is a multi-index used sum over face quadrature points $\bfx_{\bfj_f}^{ij} \in \Gamma_{ij}$. Based on this, we can define
 \begin{eqnarray}
 \label{singleNumIntA}
-a_{lm K_i \bfj} & = & f\lo\mrvhl\lo\bfx_{\bfj}\ro, \mrvhm\lo\bfx_{\bfj}\ro\ro\,w_{\bfj},\\
+a_{lmi \bfj} & = & f\lo\mrvhl\lo\bfx^i_{\bfj}\ro, \mrvhm\lo\bfx^i_{\bfj}\ro\ro\,w_{\bfj},\\
 \label{singleNumIntB}
-b_{l K_i \bfj} & = & g\lo\mrvhl\lo\bfx_{\bfj}\ro\ro\,w_{\bfj},
+b_{li \bfj} & = & g\lo\mrvhl\lo\bfx^i_{\bfj}\ro\ro\,w_{\bfj},\\
+\label{singleNumIntBface}
+b^{'}_{lij \bfj_f} & = & \left\{\begin{array}{c} g^{'}\lo\mrvhl\lo\bfx^{ij}_{\bfj_f}\ro\ro\,w_{\bfj}\ \ if\ \Gamma_{ij}\in \Gamma_I \\ g^{''}\lo\mrvhl\lo\bfx^{ij}_{\bfj_f}\ro\ro\,w_{\bfj}\ \ if\ \Gamma_{ij}\in \Gamma_B \end{array}\right. .
 \end{eqnarray}
-where $g$ for $b_l$ can be defined similarly as $f$ for $a_lm$ in \ref{Final_Integration_Fn}.
 
 \section{Assembling the algebraic problem}
-Now we have a clear expression how to evaluate the integral values \ref{Linear1}, \ref{Linear2} using \ref{singleNumIntA}, \ref{singleNumIntB}, but we need to construct the matrix $A$ (\ref{Linear3}), and the right-hand-side vector $b$ (\ref{Linear4}) in an effective manner.
+Now we have a clear expression how to evaluate the integral values \ref{Linear1}, \ref{Linear2} using \ref{singleNumIntA}, \ref{singleNumIntB}, \ref{singleNumIntBface}, but we need to construct the matrix $A$ (\ref{Linear3}), and the right-hand-side vector $b$ (\ref{Linear4}) in an effective manner.
 This is generally achieved through a \textit{element-wise} assembling of these structures. Key to this is to create a data structure that identifies for a particular element $K_i$ all the test functions $\mrvhl$ that make sense to be evaluated (have non-empty support) on $K_i$, i.e. we are looking for the set
 \be
 \mrvh \lo K_i \ro = \left\{\mrvh \in V_h : supp\lo\mrvh\ro \cap K_i \neq \emptyset \right\},
@@ -53,47 +60,44 @@ and do the same for the faces $\Gamma_i$ (both boundary, and internal):
 Now the assembling procedure looks like this:\\
 \begin{algorithm}[H]
     \# 1 - Loop over elements\\
-    \ForEach{$K\in T_h$}{
-       \KwData{Integration points $\left\{\bfx_1, ..., \bfx_{n}\right\}$}
-       \KwData{Jacobian of the mapping $J_K$}
-       \KwData{Integration weights $\left\{w_1, ..., w_{\bfn}\right\}$}
-                   \# Loop over integration points\\
+    \ForEach{$K_i\in T_h$}{
+       \KwData{Quadrature points $\left\{\bfx^i_1, ..., \bfx^i_{\bfn}\right\}$}
+       \KwData{Jacobian of the mapping $J_{K_i}$ mapping the reference element (unit cube) to the actual element}
+       \KwData{Quadrature weights $\left\{w_1, ..., w_{\bfn}\right\}$}
+                   \# Loop over quadrature points\\
        \ForEach{$\bfj \in \left\{1, ..., \bfn\right\}$}{
-           \textbf{Set: }$JxW_{\bfj} = J_K\lo\bfx_{\bfj}\ro \times w_{\bfj}$\\
+           \textbf{Set: }$\lo JxW\ro_{\bfj} = J_{K_i} \times w_{\bfj}$\\
             \# Loop over test functions\\
-        \ForEach{$v\in v_h \lo K \ro$}{
+        \ForEach{$v\in v_h \lo {K_i} \ro$}{
        \KwData{$l$ - index of $v$ in the global system, i.e. row in \ref{Linear3} - \ref{Linear5}}
                         \# Loop over basis functions\\
-            \ForEach{$u\in v_h \lo K \ro$}{
+            \ForEach{$u\in v_h \lo {K_i} \ro$}{
        \KwData{$m$ - index of $u$ in the global system, i.e. column in \ref{Linear3}}
                 
-                        $a_{lm} += JxW_{\bfj} \ a_{lm K \bfj}$
+                        $a_{lm}\ \ +=\ \ \lo JxW\ro_{\bfj} \ a_{lmi \bfj}$
                     }
 
-                $b_{l} += JxW_{\bfj} \ b_{l K \bfj}|_{volumetric}$
+                $b_{l}\ \ +=\ \ \lo JxW\ro_{\bfj} \ b_{li \bfj}$
         }                
         }
     }
-Note: $b_{l K \bfj}|_{volumetric}$ means that we are evaluating the volumetric(3d) integrals from $b_{l K \bfj}$ (see \ref{Linear2} , \ref{singleNumIntB} )\\\ \\
-    
+\ \\
         \# 2 - Loop over edges\\
-        \ForEach{$\Gamma\in T_h$}{
-            \KwData{Integration points $\left\{\bfx_1, ..., \bfx_{n}\right\}$}
-            \KwData{Jacobian of the mapping $J_{K^+} = J_{K^-}$ (equal for all points on $\Gamma$), where $K^+, K^-$ are elements adjacent to $\Gamma$ if this is an internal edge, or $K^+ = K^-$ if this is a boundary edge.}
-            \KwData{Integration weights $\left\{w_1, ..., w_{\bfn}\right\}$}
-            \# Loop over integration points\\
-            \ForEach{$\bfj \in \left\{1, ..., \bfn\right\}$}{
-                \textbf{Set: }$JxW_{\bfj} = {J_K}^{+}\lo\bfx_{\bfj}\ro \times w_{\bfj}\ $ \# Here it does not matter if we choose $J_{K^+}$ or $J_{K^-}$\\
+        \ForEach{$\Gamma_{ij}\in T_h$}{
+            \KwData{Quadrature points $\left\{\bfx^{ij}_1, ..., \bfx^{ij}_{\bfn_f}\right\}$}
+            \KwData{Jacobian of the mapping $J_{K^+} = J_{K^-}$ mapping the reference face (unit square) to the actual face, where $K^+, K^-$ are elements adjacent to $\Gamma_{ij}$ if this is an internal edge, or $K^+ = K^-$ if this is a boundary edge.}
+            \KwData{Quadrature weights $\left\{w_1, ..., w_{\bfn_f}\right\}$}
+            \# Loop over quadrature points\\
+            \ForEach{$\bfj_f \in \left\{1, ..., \bfn_f\right\}$}{
+                \textbf{Set: }$\lo JxW\ro_{\bfj_f} = {J_K}^{+} \times w_{\bfj_f}\ $ \# Here it does not matter if we choose $J_{K^+}$ or $J_{K^-}$\\
                 \# Loop over test functions\\
-                \ForEach{$v\in v_h \lo K \ro$}{
+                \ForEach{$v\in v_h \lo K^+ \ro$}{
                     \KwData{$l$ - index of $v$ in the global system, i.e. row in \ref{Linear3} - \ref{Linear5}}
                     
-                    $b_{l} += JxW_{\bfj} \ b_{l K \bfj}|_{edge}$
+                    $b_{l}\ \ +=\ \ \lo JxW\ro_{\bfj_f} \ b^{'}_{lij \bfj_f}$
                 }
             }
         }
-        Note: $b_{l K \bfj}|_{edge}$ means that we are evaluating the surface(2d) integrals from $b_{l K \bfj}$ (see \ref{Linear2} , \ref{singleNumIntB} )\\\ \\
-        
 \caption{Asembling of the algebraic problem \ref{Alg}}
 \label{algorithm:singleTimeStep}
 \end{algorithm}
