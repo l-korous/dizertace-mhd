@@ -45,13 +45,15 @@ Although the resulting system will look very similar to the weak formulation \re
 \paragraph{}
 As stated in \ref{section:triangulation}, at this point we will discretize the problem in space, and leave the time-derivative untouched.
 The approximate solution will be sought at each time instant $t$ as an element of the finite-dimensional space
-$$
+\be
+\label{feSpaceDef}
 \left[V_h\right]^8,
-$$
+\ee
 where $V_h$ is defined in \ref{VH}. Functions
-$$
+\be
+\label{feSpaceBasis}
 \mrvh \in \left[V_h\right]^8\approx \left[H^1\lo\Omega,T_h\ro\right]^8,
-$$
+\ee
 where $H^1\lo\Omega,T_h\ro$ is defined in \ref{BrokenSobolev}, are in general discontinuous on interfaces $\Gamma_{ij}$.
 By $\mrvh|_{ij}$ and $\mrvh|_{ji}$ we denote the values of $\mrvh$ on $\Gamma_{ij}$ considered from the
 interior and the exterior of $K_i$, respectively. The symbols
@@ -151,6 +153,11 @@ If we want to model an outflow boundary condition (i.e. do nothing condition), w
 \ee
 which is a suitable definition for the outflow boundary condition. It is important to mention, that setting the inflow boundary condition does not imply that solution values on this boundary equal to these prescribed value. This follows from the definition of broken Sobolev space (\ref{BrokenSobolev}). Moreover the values of the solution on the boundary also depend on the numerical flux used, as the values on the boundary are merely one of the input parameters for the flux (See \ref{NumFluxDef}).
 
+\subsubsection{Periodic boundary conditions}
+\label{sec:periodicDg}
+Periodic boundary conditions come in the form described in \ref{periodicBCs}, for pair of points on the boundary (\ref{periodicMapping}). The point mapping is the main complication encountered, namely in the distributed computations, and moreover if AMR is used in distributed computations (see \ref{amrPer}). Otherwise, from the integral evaluation perspective, an edge on a periodic boundary is approached in the very same way as internal edges (we have values from both sides, and we evaluate the numerical flux in quadrature points).
+
+\subsubsection{DG full problem statement}
 Now, taking \ref{BC1} and \ref{BC2}, we can enhance \ref{DG2} with an additional term, that will add the boundary conditions into the equation:
 $$
 \sum_{\Gamma_{ij}\in\Gamma_B} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h}|_{ij}, \overline{{\mrPsi_h}|_{ji}}, \bfn_{ij}\ro \mrvh,

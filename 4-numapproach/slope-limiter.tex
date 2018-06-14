@@ -30,6 +30,7 @@ Both these two problems are solved in the slope limiting technique chosen for th
 Introduced by D. Kuzmin in \cite{KuzminVertex}, the Vertex-based limiter aims at being an improvement over the Barth-Jespersen limiter. It also considers the solution in the form \ref{slopeLimSln}, but the definition of the correction factor $\alpha_e$ differs:
 
 \be
+\label{vertexBasedAlpha}
 \alpha_e = \min_i\left\{\begin{array}{c}
 \min\left\{1, \frac{u_i^{max} - u_c}{u_i - u_c}\right\},\ if\ \ u_i - u_c > 0,\\
 1,\ \ \ \ \  \  \  \  if\ u_i - u_c = 0,\\

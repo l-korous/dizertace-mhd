@@ -101,4 +101,11 @@ Now the assembling procedure looks like this:\\
 \caption{Asembling of the algebraic problem \ref{Alg}}
 \label{algorithm:singleTimeStep}
 \end{algorithm}
-Note that in this algorithm, periodic boundary conditions are not specifically handled, as they are only a programatically more complex case of internal edges.
+An important remark needs to be added here, with respect to the fact, that we aim for a distributed computation. As stated before, the domain decomposition approach leads to each of the processors $P_i \in \left\{P_0, ..., P_N\right\}$ of the total number of processors employed for the computation owning only a subset of elements $\left\{K \in T\right\}_i$. If the processor $P_i$ did not have any data about other elements, we would not be able to perform the evaluation involving $b^{'}$ defined in \ref{singleNumIntBface}, or more precisely $g^{'}$ defined in \ref{Final_Integration_Fn_b} as the values ${\mrPsi_h^{k}}|_{ji}$ for edges $\Gamma_{ij}$ of elements from $\left\{K \in T\right\}_i$ will not always be there.
+\paragraph{}
+To amend this situation, in the distributed triangulation, each processor holds not only the mesh element data it owns, but also data for mesh elements it needs - in Discontinuous Galerkin method, for exactly the purposes of internal face integral evaluation described in the previous paragraph. This data is called \textit{ghost elements}, or \textit{ghost cells}, as these are only copies provided by other processors which own the particular elements.
+
+TODO obrazek domain decomposition s ghost cell layer
+
+\paragraph{}
+Note that in the described algorithm, and also with respect to the remarks in the previous paragraphs, periodic boundary conditions are not specifically handled, as they are only a programatically more complex case of internal edges (both from the perspective of necessity of utilizing ghost cells, and from the perspective of evaluating $b_{l}$ in \ref{algorithm:singleTimeStep}.

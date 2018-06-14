@@ -16,10 +16,12 @@ $$
 
 \subsection{Periodic boundary conditions}
 Periodic boundary condition is always specified on two parts $\Gamma_1, \Gamma_2$ of the domain boundary that share the bijection mapping between points:
-$$
+\be
+\label{periodicMapping}
 \left[x_1, y_1, z_1\right] \leftrightarrow \left[x_2, y_2, z_2\right] \forall \left[x_1, y_1, z_1\right] \in \Gamma_1,\ \forall \left[x_2, y_2, z_2\right] \in \Gamma_2,
-$$
+\ee
 so that for each pair of related points $\left[x_1, y_1, z_1\right] \leftrightarrow \left[x_2, y_2, z_2\right]$, the values must be the same:
-$$
+\be
+\label{periodicBCs}
 u\left(\left[x_1, y_1, z_1\right]\right) = u\left(\left[x_2, y_2, z_2\right]\right) \forall \left[x_1, y_1, z_1\right] \in \Gamma_1,\ \forall \left[x_2, y_2, z_2\right] \in \Gamma_2:\, \left[x_1, y_1, z_1\right] \leftrightarrow \left[x_2, y_2, z_2\right].
-$$
+\ee
