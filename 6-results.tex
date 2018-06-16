@@ -9,4 +9,33 @@ The benchmarks presented in this Section do not have an exact analytical solutio
 
 \subsection{Orszag-Tang vortex}
 
+TODO - ze clanku papers- Londrillo.pdf vzit stranu 30 a napocitat to stejny
+
 \section{Flux rope eruption model}
+This model is based on the original Titov-Demoulin model from \cite{td}, as used in \cite{miraClanek}.
+
+The model parameters are as follows. Note that $k_B$ is the Boltzmann constant $k_B = 1.38064852 \times 10^{-23} \frac{\mathrm{J}}{\mathrm{K}}$, $m_p$ is the plasma mass, and $g$ gravitational acceleration.
+
+\begin{eqnarray}
+\beta & = & 0.05\ \ \ \ ...\ \text{Plasma beta}\\
+L_G & = & 2.0\ k_B \frac{T_{ext}}{\lo m_p g \ro} = 1.2 \times 10^8 \left[\text{m}\right]\\
+L_G & = & 20.0 \ \ \ \ ...\ \text{Coronal height scale in dimension-less units}\\
+\\
+& !!! & \text{TODO - Proc je v kodu} L_G = 0.0 \ ?\
+\\ \\
+N_t & = &-3.0\ \ \ \ ...\ \text{Torus winding number}\\
+R & = &4.0\ \ \ \ ...\ \text{Torus major radius}\\
+2L & = & 4.0\ \ \ \ ...\ \text{Magnetic charge separation distance}\\
+d & = & 2.0\ \ \ \ ...\ \text{Geometrical factor}\\
+q_{mag} & = & \left| \frac{\ln\lo 8.0 e^{-5/4} R\ro}{4} N_t \lo\frac{L}{R}\ro^2\left[1 + \lo\frac{R}{L}\ro^2\right]^{3/2}\right|\\
+q_{mag} & \approx & \text{Normalised magnetic charge corresponding to global equilibrium}\\
+q_{mag} & = & \frac{ \ln\lo 8R \ro - \frac{5}{4}}{4} \left| N_t \right| \frac{\lo 1 + \lo\frac{L}{R}\ro^2\ro \sqrt{1 + \lo\frac{L}{R}\ro^2}}{\frac{L}{R}}\\
+\\
+& !!! & \text{TODO - Neni toto spatne nakodene?}
+\\\ \\
+H & = & 2.0\ \frac{N_t^2}{R^2}\ \ \ \ ...\ \text{"Helicity" factor inside tho loop}\\
+\frac{ T_{ext} }{T_{in}} & = & 10.0\ \ \ \ ...\ \text{Coronal/prominence temperature ratio}\\
+\\
+& !!! & \text{TODO - Proc je v kodu Tc2Tp = 1.0?}
+\\\ \\
+\end{eqnarray}

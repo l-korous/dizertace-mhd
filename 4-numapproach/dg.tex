@@ -109,7 +109,7 @@ Another complication arising from evaluation of numerical fluxes on element inte
 \subsubsection{Lax-Friedrichs numerical flux}
 This is the most straightforward numerical flux satisfying \ref{FluxConsistent}, and \ref{FluxConservative} and is defined as follows:
 \be
-\mrH_{LF}\lo \mrv, \mrw, \bfn\ro = \frac12\left[\mrF\lo\mrv\ro + \mrF\lo\mrw\ro\right] - \frac{\alpha}{2}\lo \mrw - \mrv\ro
+\mrH_{LF}\lo \mrv, \mrw, \bfn\ro = \frac12\left[\mrF\lo\mrv\ro + \mrF\lo\mrw\ro\right] - \frac{\alpha}{2}\lo \mrw - \mrv\ro,
 \ee
 where the parameter $\alpha$ is the so-called \textit{stabilization parameter}, which in order for the solution to be stable needs to fulfill $\alpha < \frac{\Delta t}{\Delta x}$, where $\Delta t, \Delta x$ need to satisfy the CFL condition \ref{CFLcond}. Now, this numerical flux is very sensitive to the choice of $\alpha$ - for larger values, it tends to be very diffusive, but for lower values, it is unstable and produces oscillations in the vicinity of shocks \cite{lfunstable}. In this work it is primarily used for implementation verification purposes, as due to its simplicity, the risk of errors in its implementation is rather negligible.
 
