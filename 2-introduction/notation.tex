@@ -16,7 +16,7 @@
         $\mu$ & Permeability \\ 
         $\mu_0$ & Permeability of vacuum\\ 
         $t$ & Time variable\\ 
-        $\bfx$ & Space variable \\ 
+        $\bfx = \lo x, y, z\ro$ & Space variable \\ 
         $p$ & Pressure \\ 
         $\bfu$ & Velocity \\ 
         $u$ & Magnitude of velocity, i.e. $|\bfu|$ \\ 
@@ -45,10 +45,25 @@
         $U_m$ & Magnetic energy, $U_m = \frac{B^2}{2{}\mu_0}$ \\ 
         $U$ & Total energy, $U = U_k + U_m + \rho e$ \\ 
         $\tilde{U}$ & Hydrodynamic energy, $\tilde{U} = U - U_m$ \\ 
-        $\bfn$ & Unit outer normal \\ 
+        $\bfn$ & Unit outer normal, \\ 
         \hline
     \end{tabular}
     \caption{Notation}
     \label{table:notation}
 \end{table}
-
+where
+\be
+\label{magU}
+U_m\lo\bfx, t\ro = \frac12 \sum_{i = 1}{3}\bfB_i\lo\bfx, t\ro
+\ee
+is the magnetic energy,
+\be
+\label{kinU}
+U_k\lo\bfx, t\ro = \frac12 \sum_{i = 1}{3}\bfu_i\lo\bfx, t\ro
+\ee
+is the kinetic energy, and the relationship between the Total energy $U$ and pressure $p$ reads
+\be
+\label{presU}
+U\lo\bfx, t\ro = \frac{p\lo\bfx, t\ro}{\gamma - 1} + U_m\lo\bfx, t\ro + U_k\lo\bfx, t\ro.
+\ee
+Note that in the text, indices $1, 2, 3$, and $x, y, z$ will be used interchangeably.
