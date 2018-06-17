@@ -1,6 +1,7 @@
 \section{Derivation of the mathematical model}
-TODO - tady neco musi byt, nemuze hned byt subsekce
+In order to derive the mathematical model, we first need to establish the basics - time-space frame (\ref{subsec:init}), assumptions (\ref{subsec:assump}), then we will start with the known Euler equations of compressible flow (\ref{subsec:euler}, derivation of which is given e.g. in \cite{diplomka}), and by adding the Maxwell's equations (\ref{subsec:maxwell}), we will derive the mathematical model for Magnetyhodrodynamics in the complexity needed  for handling problems presented in the introduction.
 \subsection{Initial setup}
+\label{subsec:init}
 
 We consider a time interval $\left(0,T\right)$ and space domain $\Omega_{t}\subset \mathbb{R}^3$ occupied by a fluid at time $t$.
 By $\mathcal{M}$ we denote the space-time domain in consideration: 
@@ -10,6 +11,7 @@ By $\mathcal{M}$ we denote the space-time domain in consideration:
 Moreover we assume that $\mathcal{M}$ is an open set.
 
 \subsubsection{Assumptions}
+\label{subsec:assump}
 When dealing with MHD phenomena in plasma, the following rules apply
 \begin{itemize}
     \item We assume that the fluid is inviscid.
@@ -26,6 +28,7 @@ When dealing with MHD phenomena in plasma, the following rules apply
 \end{itemize}
 
 \subsection{Euler's equations of compressible flow}
+\label{subsec:euler}
 This system of equation reads
 
 \begin{eqnarray}
@@ -61,6 +64,7 @@ $$
 
 
 \subsection{Maxwell's equations of electromagnetism}
+\label{subsec:maxwell}
 In this work, we use Maxwell's equations with the assumption of constant electrical permittivity, and constant permeability. This system of equation reads
 \begin{eqnarray}
 \label{Ampere} \nabla \times \bfB & = & \mu_0 \lo \bfJ + \varepsilon_0 \pds{\bfE}{t}\ro\\\
