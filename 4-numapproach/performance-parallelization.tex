@@ -2,7 +2,7 @@
 \label{section:parallel}
 To be able to perform any large scale calculations, we need to be able to utilize the performance of hardware at maximum. Being able to use modern, multi-core computers is an absolute must to achieve good performance, as the execution time when using parallel execution can decrease by a factor of corresponding to the number of cores - and modern machines have tens of cores available.
 
-The parallelization is possible at several places in the overall algorithm \ref{algorithm:singleTimeStep}. But it makes most sense to parallelize the outer-most loop over elements, and over edges.
+The parallelization is possible at several places in the overall algorithm \Cref{algorithm:singleTimeStep}. But it makes most sense to parallelize the outer-most loop over elements, and over edges.
 
 \paragraph{}
-Another point for parallelization is the algebraic solver. As explained in \ref{note:solvers}, we rely on existing software packages for finding the solution of the algebraic system \ref{Alg} - all the used solvers support and heavily utilize parallelization.
+Another point for parallelization is the algebraic solver. As explained in \Cref{note:solvers}, we rely on existing software packages for finding the solution of the algebraic system \Cref{Alg} - all the used solvers support and heavily utilize parallelization.

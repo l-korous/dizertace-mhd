@@ -58,7 +58,8 @@ If we were to use not $\Omega\subset\mathbb{R}^3$, but rather $\Omega\subset\mat
     \item The dependency on time and space may (and usually does) vary a lot for physical phenomena - to have a separate approach is therefore beneficial
 \end{itemize}
 \subsection{Distributed triangulation}
+\label{section:ditributedTria}
 The standard approach to handle large problems that are impossible to be calculated on a single processor in mesh-based numerical simulations (such as Discontinuous Galerkin method) is to employ a \textit{domain decomposition} method, where each of the processors on which the simulation runs holds data about a subset of elements of the mesh $T$.
-Consequently, also the matrix and vector assembly (described in ~\ref{algorithm:singleTimeStep}), the linear problem solution, slope limiting, and AMR procedures are performed by all processors using data they have available. The aim here is not to go into deep technical details of distributing data, etc.
+Consequently, also the matrix and vector assembly (described in ~\Cref{algorithm:singleTimeStep}), the linear problem solution, slope limiting, and AMR procedures are performed by all processors using data they have available. The aim here is not to go into deep technical details of distributing data, etc.
 
 TODO Add pictures of domain decomposition

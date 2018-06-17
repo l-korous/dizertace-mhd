@@ -1,5 +1,5 @@
 \section{Derivation of the mathematical model}
-In order to derive the mathematical model, we first need to establish the basics - time-space frame (\ref{subsec:init}), assumptions (\ref{subsec:assump}), then we will start with the known Euler equations of compressible flow (\ref{subsec:euler}, derivation of which is given e.g. in \cite{diplomka}), and by adding the Maxwell's equations (\ref{subsec:maxwell}), we will derive the mathematical model for Magnetyhodrodynamics in the complexity needed  for handling problems presented in the introduction.
+In order to derive the mathematical model, we first need to establish the basics - time-space frame (\Cref{subsec:init}), assumptions (\Cref{subsec:assump}), then we will start with the known Euler equations of compressible flow (\Cref{subsec:euler}, derivation of which is given e.g. in \cite{diplomka}), and by adding the Maxwell's equations (\Cref{subsec:maxwell}), we will derive the mathematical model for Magnetyhodrodynamics in the complexity needed  for handling problems presented in the introduction.
 \subsection{Initial setup}
 \label{subsec:init}
 
@@ -31,11 +31,11 @@ When dealing with MHD phenomena in plasma, the following rules apply
 \label{subsec:euler}
 This system of equation reads
 
-\begin{eqnarray}
-\label{ContinuityEq} \pds{\rho}{t} + \nabla\cdot\left(\bfpi\right) & = & 0\\
-\label{NSEq} \pds{\bfpi}{t} + \nabla\cdot\left(\bfpi\otimes\bfu\right)& = & \rho\bff - \nabla\,p,\\
-\label{EnergyEq} \pds{\tilde{U}}{t} + \nabla\cdot\lo{\tilde{U}}\bfu\ro & = & \rho\bff\cdot\bfu \,-\,\nabla\cdot\lo{p}\bfu\ro + \nabla\cdot\bfq,
-\end{eqnarray}
+\begin{align}
+\label{ContinuityEq} \pds{\rho}{t} + \nabla\cdot\left(\bfpi\right) & =  0\\
+\label{NSEq} \pds{\bfpi}{t} + \nabla\cdot\left(\bfpi\otimes\bfu\right)& =  \rho\bff - \nabla\,p,\\
+\label{EnergyEq} \pds{\tilde{U}}{t} + \nabla\cdot\lo{\tilde{U}}\bfu\ro & =  \rho\bff\cdot\bfu \,-\,\nabla\cdot\lo{p}\bfu\ro + \nabla\cdot\bfq,
+\end{align}
 where $\bfpi$ is momentum, $p$ pressure, $U$ total energy. Moreover, $\bfu$ denotes velocity, $\bff$ density of the force acting on the fluid, and $\bfq$ is the heat flux. By $\otimes$, we denote the \textit{tensor product}:
 \begin{displaymath}
 \bs{a}\otimes\bs{b} =
@@ -49,13 +49,13 @@ a_3b_1 & a_3b_2 & a_3b_3
 \end{displaymath}
 
 Moreover, the following relations hold:
-\begin{eqnarray}
-\tilde{U} & = & \rho e + U_k,\\
-p & = & \lo{}\gamma-1\ro\lo{\tilde{U}}-U_k\ro, \label{therm_1}\\
-\theta & = & \lo{\tilde{U}}/{\rho}-\left|\bfu\right|^2/2\ro/{c_v}.
-\end{eqnarray}
+\begin{align}
+\tilde{U} & =  \rho e + U_k,\\
+p & =  \lo{}\gamma-1\ro\lo{\tilde{U}}-U_k\ro, \label{therm_1}\\
+\theta & =  \lo{\tilde{U}}/{\rho}-\left|\bfu\right|^2/2\ro/{c_v}.
+\end{align}
 
-This system is simply called the \textit{compressible Euler equations} for a heat-conductive perfect gas. The individual equations are called the \textit{continuity equation}(\ref{ContinuityEq}), the \textit{Navier-Stokes equations} (\ref{NSEq}), and the \textit{energy equation} (\ref{EnergyEq}).
+This system is simply called the \textit{compressible Euler equations} for a heat-conductive perfect gas. The individual equations are called the \textit{continuity equation}(\Cref{ContinuityEq}), the \textit{Navier-Stokes equations} (\Cref{NSEq}), and the \textit{energy equation} (\Cref{EnergyEq}).
 
 For the force density $f$ we assume that only the Lorentz force and gravity act upon the fluid:
 $$
@@ -66,32 +66,32 @@ $$
 \subsection{Maxwell's equations of electromagnetism}
 \label{subsec:maxwell}
 In this work, we use Maxwell's equations with the assumption of constant electrical permittivity, and constant permeability. This system of equation reads
-\begin{eqnarray}
-\label{Ampere} \nabla \times \bfB & = & \mu_0 \lo \bfJ + \varepsilon_0 \pds{\bfE}{t}\ro\\\
-\label{Faraday} \nabla \times \bfE & = & -\pds{\bfB}{t}\\
-\label{Gauss} \nabla \cdot \bfE & = & \frac{\rho_q}{\varepsilon_0}\\
-\label{GaussMag} \nabla \cdot \bfB & = &0,
-\end{eqnarray}
+\begin{align}
+\label{Ampere} \nabla \times \bfB & =  \mu_0 \lo \bfJ + \varepsilon_0 \pds{\bfE}{t}\ro\\\
+\label{Faraday} \nabla \times \bfE & =  -\pds{\bfB}{t}\\
+\label{Gauss} \nabla \cdot \bfE & =  \frac{\rho_q}{\varepsilon_0}\\
+\label{GaussMag} \nabla \cdot \bfB & = 0,
+\end{align}
 where $\bfB$ denotes magnetic flux density, $\bfE$ denotes electric field, $\bfJ$ denotes current density, $\varepsilon_0$ is permittivity of vacuum, and $\rho_q$ is electric charge density.
-The individual equations are known as Faraday's law(\ref{Faraday}), Ampere's law(\ref{Ampere}), and Gauss's laws(\ref{Gauss}, \ref{GaussMag}).
+The individual equations are known as Faraday's law(\Cref{Faraday}), Ampere's law(\Cref{Ampere}), and Gauss's laws(\Cref{Gauss}, \Cref{GaussMag}).
 
 
 \subsection{Derived relations between electromagnetic quantities}
 Further relations that are useful when deriving the MHD equations are:
-\begin{eqnarray}
-\label{U_mEq} \frac{\text{d}}{\text{d}t} U_m & = & \frac{1}{\mu_0}\nabla \cdot \lo \bfB\times\bfE\ro - \bfE\cdot\bfJ,\\
-\label{Ohm} \bfE & = & -u \times \bfB + \frac{\eta}{\mu_0}\bfJ,\\
-\label{InductionEq} \pds{\bfB}{t} + \nabla \times \lo \bfB \times \bfu \ro & = & -\frac{1}{\mu_0} \nabla \times \lo \eta \nabla \times \bfB \ro,
-\end{eqnarray}
+\begin{align}
+\label{U_mEq} \frac{\text{d}}{\text{d}t} U_m & =  \frac{1}{\mu_0}\nabla \cdot \lo \bfB\times\bfE\ro - \bfE\cdot\bfJ,\\
+\label{Ohm} \bfE & =  -u \times \bfB + \frac{\eta}{\mu_0}\bfJ,\\
+\label{InductionEq} \pds{\bfB}{t} + \nabla \times \lo \bfB \times \bfu \ro & =  -\frac{1}{\mu_0} \nabla \times \lo \eta \nabla \times \bfB \ro,
+\end{align}
 where $\mu_0$ denotes permeability of vacuum, $\eta$ is resistivity, and $U_m$ is magnetic energy.
-The equation \ref{Ohm} is the differential form of the \textit{Ohm's law}, the equation \ref{InductionEq} is the \textit{induction equation}.
+The equation \Cref{Ohm} is the differential form of the \textit{Ohm's law}, the equation \Cref{InductionEq} is the \textit{induction equation}.
 
-Applying now \ref{ForceEq} to \ref{NSEq}, \ref{EnergyEq}, we obtain:
-\begin{eqnarray}
-\label{NSEq1} \pds{\bfpi}{t} + \nabla\cdot\left(\bfpi\otimes\bfu\right)& = & \rho_q\bfE + \bfJ\times\bfB + \rho\bfg - \nabla\,p,\\
-\label{EnergyEq1} \pds{\tilde{U}}{t} + \nabla\cdot\lo{\tilde{U}}\bfu\ro & = & \rho_q\bfE\cdot\bfu + \bfJ\times\bfB\cdot\bfu + \rho\bfg\cdot\bfu \,-\,\nabla\cdot\lo{p}\bfu\ro + \nabla\cdot\bfq.
-\end{eqnarray}
-The adjusted energy equation \ref{EnergyEq1} does not include the magnetic energy $U_m$, which we do want to include in the MHD equations. To achieve this, we employ \ref{U_mEq} - \ref{InductionEq} and rearrange. After rearranging we obtain
+Applying now \Cref{ForceEq} to \Cref{NSEq}, \Cref{EnergyEq}, we obtain:
+\begin{align}
+\label{NSEq1} \pds{\bfpi}{t} + \nabla\cdot\left(\bfpi\otimes\bfu\right)& =  \rho_q\bfE + \bfJ\times\bfB + \rho\bfg - \nabla\,p,\\
+\label{EnergyEq1} \pds{\tilde{U}}{t} + \nabla\cdot\lo{\tilde{U}}\bfu\ro & =  \rho_q\bfE\cdot\bfu + \bfJ\times\bfB\cdot\bfu + \rho\bfg\cdot\bfu \,-\,\nabla\cdot\lo{p}\bfu\ro + \nabla\cdot\bfq.
+\end{align}
+The adjusted energy equation \Cref{EnergyEq1} does not include the magnetic energy $U_m$, which we do want to include in the MHD equations. To achieve this, we employ \Cref{U_mEq} - \Cref{InductionEq} and rearrange. After rearranging we obtain
 \be
 \label{EnergyEqPrefinal} \pds{U}{t} = -\nabla\cdot\left[\bfpi\lo \frac{u^2}{2} + e\ro + p \bfu - \frac{1}{\mu_0}\bfB\times\bfE\right] + \rho \bfg \cdot \bfu + \nabla\cdot\bfq.
 \ee
@@ -99,43 +99,43 @@ The adjusted energy equation \ref{EnergyEq1} does not include the magnetic energ
 \subsection{Simplifying assumptions}
 In what follows, we will make several simplifying assumptions, according to which we will get a system of equations that will adequately respect the physical model, yet will be easier to be solved.
 \subsubsection{Negligible time derivative of electric field}
-For the time increments that we are concerned with, the time derivative in \ref{Ampere} (the so-called \textit{Maxwell's displacement current}) is
-very small. To estimate the minimum time increment value $\tau$ which would allow us to neglect the derivative, take the ratio of the two terms on the right hand side of \ref{Ampere}:
+For the time increments that we are concerned with, the time derivative in \Cref{Ampere} (the so-called \textit{Maxwell's displacement current}) is
+very small. To estimate the minimum time increment value $\tau$ which would allow us to neglect the derivative, take the ratio of the two terms on the right hand side of \Cref{Ampere}:
 \begin{equation}
 \varepsilon_0 \frac{\pds{\bfE}{t}}{\bfJ} \approx \frac{\frac{\varepsilon_0 \bfE}{\tau}}{\sigma\bfE} \approx \frac{\varepsilon_0}{\sigma \tau} \approx \frac{10^{-11}}{\tau}.
 \end{equation}
-This means for time scales much greater than $10^{-11}$ seconds, the time derivative of $\bfE$ can be neglected. As a consequence Equation \ref{Ampere} can be written as:
+This means for time scales much greater than $10^{-11}$ seconds, the time derivative of $\bfE$ can be neglected. As a consequence Equation \Cref{Ampere} can be written as:
 \begin{equation}
 \label{Assumption1} \nabla \times \bfB = \mu_0 \bfJ.
 \end{equation}
-Using \ref{Assumption1}, we can write
+Using \Cref{Assumption1}, we can write
 \begin{equation}
 \label{Asssumption11} \mu_0 \bfJ \times \bfB = \lo\bfB\cdot\nabla\ro\bfB - \nabla\frac{B^2}{2} = \nabla\cdot\lo\bfB\bfB\ro - \nabla\frac{B^2}{2},
 \end{equation}
-where the last equality comes from \ref{GaussMag}. And using \ref{Asssumption11} we can rewrite \ref{NSEq1} as
+where the last equality comes from \Cref{GaussMag}. And using \Cref{Asssumption11} we can rewrite \Cref{NSEq1} as
 \be
 \label{NSEq2} \pds{\bfpi}{t} + \nabla\cdot\left(\bfpi\otimes\bfu\right) =  q\bfE + \nabla\cdot\lo\frac{1}{\mu_0}\bfB\bfB - \frac{B^2}{2}\mathrm{I}\ro + \rho\bfg - \nabla\,p
 \ee
 
 \subsubsection{Negligible electric field in the Navier-Stokes equations}
-The magnitude of electric field is smaller than the magnetic field by the factor $\frac{u^2}{c^2}$, so we can neglect the term $\rho_q\bfE$ on the right-hand-side of \ref{NSEq2}.
+The magnitude of electric field is smaller than the magnetic field by the factor $\frac{u^2}{c^2}$, so we can neglect the term $\rho_q\bfE$ on the right-hand-side of \Cref{NSEq2}.
 
 \subsubsection{Negligible heat fluxes}
-Since the heat transfer accounts for a negligible contribution to the overall energy transfer, we neglect the heat flux terms, i.e. we set $\bfq = \mathbf{0}$ in the energy equation \ref{EnergyEqPrefinal}.
+Since the heat transfer accounts for a negligible contribution to the overall energy transfer, we neglect the heat flux terms, i.e. we set $\bfq = \mathbf{0}$ in the energy equation \Cref{EnergyEqPrefinal}.
 
 \subsection{Adding the induction equation}
-The induction equation \ref{InductionEq} can be rearranged in the following way:
-\begin{eqnarray}
-\pds{\bfB}{t} + \nabla \times \lo \bfB \times \bfu \ro & = & -\frac{1}{\mu_0} \nabla \times \lo \eta \nabla \times \bfB \ro\\
-\label{InductionPreFinal} \pds{\bfB}{t} & = & - \nabla \times \lo \bfu \otimes \bfB - \bfB \otimes \bfu \ro + \frac{1}{\mu_{0}\sigma} \lo \nabla^2 \bfB \ro.
-\end{eqnarray}
+The induction equation \Cref{InductionEq} can be rearranged in the following way:
+\begin{align}
+\pds{\bfB}{t} + \nabla \times \lo \bfB \times \bfu \ro & =  -\frac{1}{\mu_0} \nabla \times \lo \eta \nabla \times \bfB \ro\\
+\label{InductionPreFinal} \pds{\bfB}{t} & =  - \nabla \times \lo \bfu \otimes \bfB - \bfB \otimes \bfu \ro + \frac{1}{\mu_{0}\sigma} \lo \nabla^2 \bfB \ro.
+\end{align}
 Now we can form the system of MHD equations:
-\begin{eqnarray}
-\label{ContinuityEqFinal} \pds{\rho}{t} & = & - \nabla\cdot\left(\bfpi\right),\\
-\label{NSEqFinal} \pds{\bfpi}{t} & = & - \nabla\cdot\left(\bfpi\otimes\bfu\right) + \nabla\cdot\lo\frac{1}{\mu_0}\bfB\bfB - \frac{B^2}{2}\mathrm{I}\ro + \rho\bfg - \nabla\,p,\\
-\label{EnergyEqFinal} \pds{U}{t} & = & -\nabla\cdot\left[\bfpi\lo \frac{u^2}{2} + e\ro + p \bfu - \frac{1}{\mu_0}\bfB\times\bfE\right] + \rho \bfg \cdot \bfu\\
-\label{InductionFinal} \pds{\bfB}{t} & = & - \nabla \times \lo \bfu \otimes \bfB - \bfB \otimes \bfu \ro + \frac{1}{\mu_{0}\sigma} \lo \nabla^2 \bfB \ro.
-\end{eqnarray}
+\begin{align}
+\label{ContinuityEqFinal} \pds{\rho}{t} & =  - \nabla\cdot\left(\bfpi\right),\\
+\label{NSEqFinal} \pds{\bfpi}{t} & =  - \nabla\cdot\left(\bfpi\otimes\bfu\right) + \nabla\cdot\lo\frac{1}{\mu_0}\bfB\bfB - \frac{B^2}{2}\mathrm{I}\ro + \rho\bfg - \nabla\,p,\\
+\label{EnergyEqFinal} \pds{U}{t} & =  -\nabla\cdot\left[\bfpi\lo \frac{u^2}{2} + e\ro + p \bfu - \frac{1}{\mu_0}\bfB\times\bfE\right] + \rho \bfg \cdot \bfu\\
+\label{InductionFinal} \pds{\bfB}{t} & =  - \nabla \times \lo \bfu \otimes \bfB - \bfB \otimes \bfu \ro + \frac{1}{\mu_{0}\sigma} \lo \nabla^2 \bfB \ro.
+\end{align}
 This form suggests that rewriting these equations into a more suitable (for numerical calculations) conservative form shall be possible.
 \subsection{Conservative form of the MHD equations}
 A conservative form of a system of equations takes the form of
@@ -144,18 +144,18 @@ A conservative form of a system of equations takes the form of
 \ee
 where $\mrPsi$ is the so-called \textit{state vector}, $\mrF_i,\ i = 1, 2, 3$ are the so-called \textit{fluxes}, and $\mrS$ is the so-called \textit{source term}.
 \paragraph{}
-Rewriting the system of equations \ref{ContinuityEqFinal} - \ref{InductionFinal} to the form \ref{conservativeGeneric} is fairly straightforward.
+Rewriting the system of equations \Cref{ContinuityEqFinal} - \Cref{InductionFinal} to the form \Cref{conservativeGeneric} is fairly straightforward.
 We obtain the following:
-\begin{eqnarray}
-\mrPsi & = & \lo\begin{array}{c}\rho \\ \pi_1 \\ \pi_2 \\ \pi_3 \\ U \\ B_1 \\ B_2 \\ B_3 \\ \end{array}\ro,\\\mrF_i & = & \lo\begin{array}{c} \pi_i \\ \frac{\pi_1 \pi_i}{\rho} - B_1 B_i + \frac12 \delta_{1i} \lo p + U_m\ro \\ \frac{\pi_2 \pi_i}{\rho} - B_1 B_i + \frac12 \delta_{2i} \lo p + U_m\ro \\ \frac{\pi_3 \pi_i}{\rho} - B_1 B_i + \frac12 \delta_{3i} \lo p + U_m\ro \\ \frac{\pi_i}{\rho} \lo \frac{\gamma}{\gamma - 1} p + U_k\ro + 2\eta\varepsilon_{ijk} J_j B_k + \frac{2}{\rho} \varepsilon_{ijk} \lo \pi_k B_i - \pi_i B_k\ro B_k  \\ \frac{\pi_i B_1 - \pi_1 B_i}{\rho} + \eta \varepsilon_{1ij} J_j \\ \frac{\pi_i B_2 - \pi_2 B_i}{\rho} + \eta \varepsilon_{2ij} J_j \\ \frac{\pi_i B_3 - \pi_3 B_i}{\rho} + \eta \varepsilon_{3ij} J_j \\ \end{array}\ro,\\
-\mrS & = & \lo\begin{array}{c}0 \\ \rho g_1 \\ \rho g_2 \\ \rho g_3 \\ \bfpi \cdot \bfg \\ 0 \\ 0 \\ 0 \\ \end{array}\ro,
-\end{eqnarray}
+\begin{align}
+\mrPsi & =  \lo\begin{array}{c}\rho \\ \pi_1 \\ \pi_2 \\ \pi_3 \\ U \\ B_1 \\ B_2 \\ B_3 \\ \end{array}\ro,\\\mrF_i & =  \lo\begin{array}{c} \pi_i \\ \frac{\pi_1 \pi_i}{\rho} - B_1 B_i + \frac12 \delta_{1i} \lo p + U_m\ro \\ \frac{\pi_2 \pi_i}{\rho} - B_1 B_i + \frac12 \delta_{2i} \lo p + U_m\ro \\ \frac{\pi_3 \pi_i}{\rho} - B_1 B_i + \frac12 \delta_{3i} \lo p + U_m\ro \\ \frac{\pi_i}{\rho} \lo \frac{\gamma}{\gamma - 1} p + U_k\ro + 2\eta\varepsilon_{ijk} J_j B_k + \frac{2}{\rho} \varepsilon_{ijk} \lo \pi_k B_i - \pi_i B_k\ro B_k  \\ \frac{\pi_i B_1 - \pi_1 B_i}{\rho} + \eta \varepsilon_{1ij} J_j \\ \frac{\pi_i B_2 - \pi_2 B_i}{\rho} + \eta \varepsilon_{2ij} J_j \\ \frac{\pi_i B_3 - \pi_3 B_i}{\rho} + \eta \varepsilon_{3ij} J_j \\ \end{array}\ro,\\
+\mrS & =  \lo\begin{array}{c}0 \\ \rho g_1 \\ \rho g_2 \\ \rho g_3 \\ \bfpi \cdot \bfg \\ 0 \\ 0 \\ 0 \\ \end{array}\ro,
+\end{align}
 where $J_j = \lo\nabla\times\bfB\ro_j$.
 \subsection{Solution considerations}
-For mathematical clarity, we should state, that the solution to the equations \ref{conservativeGeneric} is such a function
+For mathematical clarity, we should state, that the solution to the equations \Cref{conservativeGeneric} is such a function
 \be
 \label{HardSln} \mrPsi\in C^1\lo\lo0, T\ro, \left[C^1\lo\Omega_{t}\ro\right]^8\ro;\ \mrPsii\in C^1\lo\lo0, T\ro, C^2\lo\Omega_{t}\ro\ro,\,i = 6, 7, 8,
 \ee
-for which \ref{conservativeGeneric} holds for all $\bfx\in\Omega_t,\ t\in\lo 0, T\ro$. The kind of spaces we used in the definition is called the Bochner spaces.
+for which \Cref{conservativeGeneric} holds for all $\bfx\in\Omega_t,\ t\in\lo 0, T\ro$. The kind of spaces we used in the definition is called the Bochner spaces.
 \paragraph{}
 Because such a requirement on the solution $\mrPsi$ is rather strong, we shall instead look for a so-called \textit{weak solution}, which is specified in the coming sections.

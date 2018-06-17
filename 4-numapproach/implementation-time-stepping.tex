@@ -1,7 +1,7 @@
 \section{Time-stepping and linearization}
 
 \subsection{Time-stepping}
-The simple time discretization scheme that we use in \ref{section:discreteProblem} on the page \pageref{section:discreteProblem} allows us to simply implement the time-stepping in the following fashion:\\
+The simple time discretization scheme that we use in \Cref{section:discreteProblem} on the page \pageref{section:discreteProblem} allows us to simply implement the time-stepping in the following fashion:\\
 \begin{algorithm}[H]
 \textbf{    Set: }$y_0 =\ $ (initial solution)\\
 \textbf{    Set: }$ts = 1 $ \# initial time step\\
@@ -9,7 +9,7 @@ The simple time discretization scheme that we use in \ref{section:discreteProble
     \# Loop over time steps\\
     \For{$;\ t < T;\ t = t+\tau,\ ts = ts + 1$}{
         \KwData{Solution from the previous time step $y^{ts - 1}$}
-1.Call procedure \ref{algorithm:singleTimeStep} to obtain $A, b\lo y^{ts - 1}\ro$\\
+1.Call procedure \Cref{algorithm:singleTimeStep} to obtain $A, b\lo y^{ts - 1}\ro$\\
 2.Solve the problem $Ay^{ts} = b\lo y^{ts - 1}\ro\ $ \# See note below\\
 3.(If necessary) postprocess $y^{ts}$\\
 4.Calculate updated value of $\tau$\\

@@ -1,18 +1,18 @@
 \section{Boundary conditions}
 \label{section:bcs}
-For the problem of finding the solution \ref{weakSlnDef} to be complete, we need to specify the proper boundary conditions.
+For the problem of finding the solution \Cref{weakSlnDef} to be complete, we need to specify the proper boundary conditions.
 \subsection{Essential (inflow) boundary conditions}
 
-Since the solution \ref{weakSlnDef} of the problem specified in \ref{WeakFinal} is not influenced by its values on the boundary $\Omega_t$, we are not able to employ standard essential boundary conditions of the form $\bfu\left(x, y, z\right) = \bfu_D\left(x, y, z\right)$ with a known $\bfu_D$.
-If such a condition is required from the physical nature of the described phenomenon (as often is the case), it is only implied by the use of fluxes - as one can see in the last integrand $\mrF\lo\mrPsi\ro \mrv$ in \ref{WeakFinal}.
+Since the solution \Cref{weakSlnDef} of the problem specified in \Cref{WeakFinal} is not influenced by its values on the boundary $\Omega_t$, we are not able to employ standard essential boundary conditions of the form $\bfu\left(x, y, z\right) = \bfu_D\left(x, y, z\right)$ with a known $\bfu_D$.
+If such a condition is required from the physical nature of the described phenomenon (as often is the case), it is only implied by a correct definition of fluxes at the boundary - as one can see in the last integrand $\lo\mrF\lo\mrPsi\ro \cdot \bfn \ro\mrv$ in \Cref{WeakFinal}. We shall see how that is numerically handled in later chapters.
 
 
 \subsection{Outflow (do-nothing) boundary conditions}
-If we want to model free boundary, that is not in any way present as an actual physical boundary or interface, this is usually achieved by specifying the fluxes through the boundary $\mrF\lo\mrPsi\ro \mrv$ in \ref{WeakFinal} to be zero:
-$$
-\mrF\lo\mrPsi\lo\bfx\ro\ro = 0\ \forall\bfx\in\partial\Omega_t\, \forall t\in \lo0, T\ro.
-$$
-
+If a particular boundary is only present in the numerical model (representing e.g. an "outer" boundary that is there to limit the size of the computation to the area of interest), that is, a free boundary, that is not in any way present as an actual physical boundary or interface, this is achieved by specifying that values of $\mrPsi$ do not change through the boundary in \Cref{WeakFinal}:
+\be
+\label{bcoutdef}
+\frac{\partial\mrPsi}{\partial\bfn} = 0.
+\ee
 
 \subsection{Periodic boundary conditions}
 Periodic boundary condition is always specified on two parts $\Gamma_1, \Gamma_2$ of the domain boundary that share the bijection mapping between points:

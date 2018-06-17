@@ -27,7 +27,7 @@ However, using this limiting technique, there are two suboptimal behavior featur
 \paragraph{}
 Both these two problems are solved in the slope limiting technique chosen for this work
 \subsection{Vertex-based limiter}
-Introduced by D. Kuzmin in \cite{KuzminVertex}, the Vertex-based limiter aims at being an improvement over the Barth-Jespersen limiter. It also considers the solution in the form \ref{slopeLimSln}, but the definition of the correction factor $\alpha_e$ differs:
+Introduced by D. Kuzmin in \cite{KuzminVertex}, the Vertex-based limiter aims at being an improvement over the Barth-Jespersen limiter. It also considers the solution in the form \Cref{slopeLimSln}, but the definition of the correction factor $\alpha_e$ differs:
 
 \be
 \label{vertexBasedAlpha}
@@ -40,7 +40,7 @@ where in this case $u_i^{min}, u_i^{min}$ are defined in such a way that for eac
 \be
 u_i^{max} = \max\left\{u_c, u_i^{max}\right\},\ \ u_i^{min} = \min\left\{u_c, u_i^{min}\right\}.
 \ee
-This slope limiting technique proves to have all the required attributes from the perspective of this work. The algorithm implementing this technique looks is presented in \ref{algorithm:limiter}
+This slope limiting technique proves to have all the required attributes from the perspective of this work. The algorithm implementing this technique looks is presented in \Cref{algorithm:limiter}
 TODO algoritmus - tohle je jen placeholder
 
 \begin{algorithm}[H]
@@ -54,10 +54,10 @@ TODO algoritmus - tohle je jen placeholder
            \textbf{Set: }$\lo JxW\ro_{\bfj} = J_{K_i} \times w_{\bfj}$\\
             \# Loop over test functions\\
         \ForEach{$v\in v_h \lo {K_i} \ro$}{
-       \KwData{$l$ - index of $v$ in the global system, i.e. row in \ref{Linear3} - \ref{Linear5}}
+       \KwData{$l$ - index of $v$ in the global system, i.e. row in \Cref{Linear3} - \Cref{Linear5}}
                         \# Loop over basis functions\\
             \ForEach{$u\in v_h \lo {K_i} \ro$}{
-       \KwData{$m$ - index of $u$ in the global system, i.e. column in \ref{Linear3}}
+       \KwData{$m$ - index of $u$ in the global system, i.e. column in \Cref{Linear3}}
                 
                         $a_{lm}\ \ +=\ \ \lo JxW\ro_{\bfj} \ a_{lmi \bfj}$
                     }
@@ -77,17 +77,17 @@ TODO algoritmus - tohle je jen placeholder
                 \textbf{Set: }$\lo JxW\ro_{\bfj_f} = {J_K}^{+} \times w_{\bfj_f}\ $ \# Here it does not matter if we choose $J_{K^+}$ or $J_{K^-}$\\
                 \# Loop over test functions\\
                 \ForEach{$v\in v_h \lo K^+ \ro$}{
-                    \KwData{$l$ - index of $v$ in the global system, i.e. row in \ref{Linear3} - \ref{Linear5}}
+                    \KwData{$l$ - index of $v$ in the global system, i.e. row in \Cref{Linear3} - \Cref{Linear5}}
                     
                     $b_{l}\ \ +=\ \ \lo JxW\ro_{\bfj_f} \ b^{'}_{lij \bfj_f}$
                 }
             }
         }
-\caption{Assembling of the algebraic problem \ref{Alg}}
+\caption{Assembling of the algebraic problem \Cref{Alg}}
 \label{algorithm:limiter}
 \end{algorithm}
 \subsubsection{Comparison of limited and unlimited solution}
-For illustration, the same problem as in \ref{subsec:numfluxcomp} is considered, which is suitable for illustrating the undershoots and overshoots, as the problem contains a sharp front where this behavior is clearly visible.
+For illustration, the same problem as in \Cref{subsec:numfluxcomp} is considered, which is suitable for illustrating the undershoots and overshoots, as the problem contains a sharp front where this behavior is clearly visible.
 In the next Figures, first several snapshots of an unlimited solution, and then several snapshot of a limited solution are presented. Note that the unlimited solution can't progress beyond a certain point, as the undershoots and overshoots get so large that the density values get to be negative, therefore e.g. calculating its square root needed for the speed of sound evaluation is impossible. Even before that, we get to non-physical regime, and e.g. the energy values start growing beyond limit.
 \begin{figure}[H]
 		\begin{center}

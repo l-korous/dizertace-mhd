@@ -1,5 +1,5 @@
 \section{Discretization in time}
-Relations \ref{DG2} represent a system of ordinary differential equations which can be solved by a suitable numerical method. Since we are interested in applying the Rothe's method (as opposed to the method of lines, which switches the order of discretization in time and space), we now want to discretize the time derivative. In order to do so, we consider a partition $0 = t_0 < t_1 < t_2 < ...$ of the time interval $\lo 0, T\ro$ and set $\tau_k = t_{k+1} - t_k$. We use the notation $\bfw_h^k$ for the approximation of $\bfw_h\lo t_k\ro$.
+Relations \Cref{DG2} represent a system of ordinary differential equations which can be solved by a suitable numerical method. Since we are interested in applying the Rothe's method (as opposed to the method of lines, which switches the order of discretization in time and space), we now want to discretize the time derivative. In order to do so, we consider a partition $0 = t_0 < t_1 < t_2 < ...$ of the time interval $\lo 0, T\ro$ and set $\tau_k = t_{k+1} - t_k$. We use the notation $\bfw_h^k$ for the approximation of $\bfw_h\lo t_k\ro$.
 
 \subsection{Discrete problem}
 \label{section:discreteProblem}
@@ -7,11 +7,12 @@ Then we apply a time discretization scheme, for example, the simple explicit \em
 \begin{enumerate}
     \item ${\mrPsi_h}^{k+1} \in \left[V_h\right]^8$,
     \item For all test functions $\mrvh\in\left[V_h\right]^8$:
-    \begin{eqnarray}
-    \label{DiscretizedFull} \int_{\Omega_{t}} \frac{{\mrPsi_h}^{k+1} - {\mrPsi_h}^{k}}{\tau} \mrvh & - & \sum_{K_i \in T_h}\int_{K_i}\mrF\lo{\mrPsi_h^{k}}\ro \lo\nabla \cdot \mrvh\ro\\ \nonumber & + & \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h^{k}}|_{ij}, {\mrPsi_h^{k}}|_{ji}, \bfn_{ij}\ro \mrvh \\\nonumber
-     & + & \sum_{\Gamma_{ij}\in\Gamma_B} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h^{k}}|_{ij}, \overline{{\mrPsi_h^{k}}|_{ji}}, \bfn_{ij}\ro \mrvh\\\nonumber
-     & = & \int_{\Omega_{t}} \mrS \mrvh,
-    \end{eqnarray}
+			\begin{align}
+			\label{DiscretizedFull} \int_{\Omega_{t}} \frac{{\mrPsi_h}^{k+1} - {\mrPsi_h}^{k}}{\tau} \mrvh & - \sum_{K_i \in T_h}\int_{K_i}\mrF\lo{\mrPsi_h^{k}}\ro \lo\nabla \cdot \mrvh\ro\\
+			\nonumber & + \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h^{k}}|_{ij}, {\mrPsi_h^{k}}|_{ji}, \bfn_{ij}\ro \mrvh \\
+			\nonumber & + \sum_{\Gamma_{ij}\in\Gamma_B} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h^{k}}|_{ij}, \overline{{\mrPsi_h^{k}}|_{ji}}, \bfn_{ij}\ro \mrvh\\
+			\nonumber & = \int_{\Omega_{t}} \mrS \mrvh,
+			\end{align}
     \item ${\mrPsi_h}^{0}\lo\bfx\ro = \Pi_h \mrPsi^0\lo\bfx\ro$,
 \end{enumerate}
 where $\Pi_h$ is a projection of the initial condition $\mrPsi^0$ onto $\left[V_h\right]^8$.
@@ -24,11 +25,11 @@ Time step length is an important attribute of the discretization. If it is too s
 \ee
 where
 ${\Delta_{x}}_{min}$ is the smallest dimension of any element, $\eta_{max}$ highest resistivity in the domain, and $v_{max}$ highest velocity in the domain, where the following velocities are taken into account:
-\begin{eqnarray}
-c_s & = & \sqrt{\frac{\gamma\lo\gamma-1\ro}{\rho}\lo U - \rho v^2-U_B\ro},\\
-c_a & = & \sqrt{\frac{B^2}{\rho}},\\
+\begin{align}
+c_s & =  \sqrt{\frac{\gamma\lo\gamma-1\ro}{\rho}\lo U - \rho v^2-U_B\ro},\\
+c_a & =  \sqrt{\frac{B^2}{\rho}},\\
 u,
-\end{eqnarray}
+\end{align}
 where $c_s$ is the speed of sound, $c_a$ is the Alfvén speed, and $u$ is the speed of plasma. We then take
 $$
 c_{max} = \text{max}\left\{c_s, c_a, u \right\}.

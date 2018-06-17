@@ -18,10 +18,10 @@ The general schema of any Adaptive Mesh Refinement algorithm is described here:
  }
  \caption{Generic AMR algorithm}
 \end{algorithm}
-In \ref{AMRGen}, \textit{solution acceptance criteria} is usually either spatial error estimate threshold, or number of elements, etc. In the same description, the note that there might be other elements $K \notin T^{r}_i$ refined in order to maintain some desired attributes of the mesh, such as 1-irregularity (the refinement level difference of two elements sharing a common edge / face is at most one), smoothness of mesh (there is e.g. no unrefined elements for which all, or a majority of neighboring elements would be refined), etc.
+In \Cref{AMRGen}, \textit{solution acceptance criteria} is usually either spatial error estimate threshold, or number of elements, etc. In the same description, the note that there might be other elements $K \notin T^{r}_i$ refined in order to maintain some desired attributes of the mesh, such as 1-irregularity (the refinement level difference of two elements sharing a common edge / face is at most one), smoothness of mesh (there is e.g. no unrefined elements for which all, or a majority of neighboring elements would be refined), etc.
 
 \paragraph{}
-Since we are dealing with evolution equations, it is necessary to specify how the AMR algorithm relates with the non-AMR solution algorithm \ref{algorithm:timeStepping}. There are several points we need to take into considerations:
+Since we are dealing with evolution equations, it is necessary to specify how the AMR algorithm relates with the non-AMR solution algorithm \Cref{algorithm:timeStepping}. There are several points we need to take into considerations:
 \begin{itemize}
 	\item slope limiting as a postprocessing step after the solution must not be omitted in case of higher-order (e.g. linear) basis functions
 	\item the solution needs to be transferred to the refined mesh in order to be able to assemble the matrix and the right-hand side on the refined mesh in the next adaptivity iteration
@@ -38,7 +38,7 @@ The algorithm looks like this:
 			\KwData{Solution from the previous time step $y^{ts - 1}$ expressed on the mesh $T^{ts}_0$}
 			 i = 0\\
 			 \While{true}{
-				call procedure \ref{algorithm:singleTimeStep} to obtain $A_{i}, b_{i}\lo y^{ts - 1}_{i}\ro$ on the mesh $T^{ts}_i$\\
+				call procedure \Cref{algorithm:singleTimeStep} to obtain $A_{i}, b_{i}\lo y^{ts - 1}_{i}\ro$ on the mesh $T^{ts}_i$\\
 				solve the problem $A_i y^{ts}_i = b_{i}\lo y^{ts - 1}_i\ro$\\
 				postprocess the solution $y^{ts}_i$\\
 				evaluate solution $y^{ts}_i$ acceptance criteria\\
