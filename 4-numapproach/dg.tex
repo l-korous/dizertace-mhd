@@ -129,19 +129,60 @@ and where due to the divergence free condition $\nabla\cdot \bfB = 0$ of the mag
 \paragraph{}
 These equations (\Cref{Riemann}) have seven eigenvalues which correspond to two Alfve'n waves ($\lambda_{2, 6}$), two slow magneto-acoustic waves ($\lambda_{3, 5}$), and two fast magneto-acoustic waves ($\lambda_{1, 7}$), and one entropy wave ($\lambda_{4}$):
 \begin{align}
-\lambda_{2, 6} = \frac{\pi_1}{\rho} \mp c_a,\\
-\lambda_{3, 5} = \frac{\pi_1}{\rho} \mp c_s,\\
-\lambda_{1, 7} = \frac{\pi_1}{\rho} \mp c_f,\\
-\lambda_{4} = \frac{\pi_1}{\rho},
+\lambda_{2, 6} = x + c_a,\\
+\lambda_{3, 5} = t + c_s,\\
+\lambda_{1, 7} = \bfu_x + c_f,\\
+\lambda_{2, 6} = \bfu_x - c_a,\\
+\lambda_{3, 5} = \bfu_x - c_s,\\
+\lambda_{1, 7} = \bfu_x - c_f,\\
+\lambda_{4} = \bfu_x,
 \end{align}
 where $c_a = \sqrt{\frac{B_1^2}{rho}}$, $c_{s, f} = \left\{\frac{\gamma p + |B|^2 \mp \sqrt{\left(\gamma p + |B|^2\right)^{\frac12} - 4\gamma p B_1^2}}{2\rho}\right\}^{\frac12}$.
 \paragraph{}
-For MHD equations, there is no exact solver of the Riemann problem across the element boundary, and therefore, approximate solvers are used. One instance of the derived numerical flux based on the solution at $x = 0$ of \Cref{Riemann} is described in the next section.
+From this, it follows, that there are theoretically as many as 9 intermediate states (that is states between characteristics corresponding to the eigenvalues $\lambda_1, ..., \lambda_7$) - see \Cref{figure:allRiemannStates}. Unfortunately, for MHD equations, there is no exact solver of the Riemann problem across the element boundary, and therefore, approximate solvers are used. One instance of the derived numerical flux based on the solution at $x = 0$ of \Cref{Riemann} is described in the next section.
 	
-\subsubsection{HLLD numerical flux}
-The abbreviation \textbf{HLLD} stands for Harten-Lax-van Leer (HLL) approximate Riemann solver, and \textbf{D} stands for Discontinuities.
-This particular numerical flux has been introduced in \citep{hlld} and has been shown to be very suitable for the studied problems.
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=0.4\textwidth]{img/riemann/allStates.jpg}
+		\vspace{-3mm}
+	\caption{Characteristics corresponding to eigenvalues of \Cref{Riemann}.}
+	\label{figure:allRiemannStates}
+\end{figure}
 
+\subsubsection{HLLD numerical flux}
+The abbreviation \textbf{HLLD} stands for Harten-Lax-van Leer (HLL) approximate Riemann solver, and \textbf{D} stands for Discontinuities. It is an extension of HLLC Riemann solver for the Euler equations (\cite{hllc}). It divides the Riemann fan into 6 states as illustrated in \Cref{figure:hlldStates}. This particular numerical flux has been introduced in \cite{hlld} and has been shown to be very suitable for the studied problems. HLLD is an approximate nonlinear solution of the MHD Riemann problem, and is algebraically derived in \cite{hlld} under the assumptions that the normal velocity and the background potential magnetic field in the Riemann fan are constant.
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=0.4\textwidth]{img/riemann/hlldStates.jpg}
+		\vspace{-3mm}
+	\caption{Six states considered in the definition of HLLD flux.}
+	\label{figure:hlldRiemannStates}
+\end{figure}
+
+The HLLD flux according to its definition in \cite{hlld} defines 6 total (4 intermediate) states. These are:
+
+TODO fill
+
+\begin{align}
+F_{HLLD} = ..
+\end{align}
+
+These are derived using the assumptions mentioned earlier, that:
+
+\begin{align}
+u_L & = ...
+p^*_{T_L} & = ...,
+\end{align}
+
+where $p_T$ is the total pressure as defined in \Cref{presT}, and
+
+\begin{align}
+S_M\\
+S_L\\
+S_R\\
+S^{*}_L..
+\end{align}
 
 
 \subsubsection{Numerical fluxes comparison}
