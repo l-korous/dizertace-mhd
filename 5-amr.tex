@@ -1,4 +1,5 @@
 \chapter{Adaptive Mesh Refinement}
+\label{chapter:amr}
 As the Adaptive Mesh Refinement (AMR) is a very important algorithm in the overall numerical solution, handling the multi-scale aspect of the studied problems, in this chapter, a description of what needs to be taken care of for the DG method, in the distributed settings, and what concrete decisions were made during this work, and justification of these in light of the requirements on the numerical solution.
 \paragraph{}
 Note that in what follows, the symbol $T$ or $T_{i\in\left\{0, 1, 2, ...\right\}}$ shall denote a general computational mesh and a particular mesh in the series of refined meshes respectively. We shall drop the subscript $h$ from $T_h$ referring to the dimension (maximum of diameters of all elements) of the mesh where possible.

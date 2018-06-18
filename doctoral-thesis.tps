@@ -10,15 +10,15 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=41
-NormalPos.right=3249
-NormalPos.bottom=1250
+NormalPos.top=32
+NormalPos.right=2152
+NormalPos.bottom=809
 Class=LaTeXView
-Document=commands.tex
+Document=0-titlepage.tex
 
 [Frame0_View0,0]
-TopLine=135
-Cursor=5803
+TopLine=8
+Cursor=596
 
 [Frame1]
 Flags=0
@@ -28,15 +28,15 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=41
-NormalPos.right=3249
-NormalPos.bottom=1250
+NormalPos.top=32
+NormalPos.right=2152
+NormalPos.bottom=809
 Class=LaTeXView
-Document=0-titlepage.tex
+Document=6-results.tex
 
 [Frame1_View0,0]
-TopLine=0
-Cursor=0
+TopLine=144
+Cursor=7493
 
 [Frame2]
 Flags=0
@@ -46,15 +46,15 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=41
-NormalPos.right=3249
-NormalPos.bottom=1250
+NormalPos.top=32
+NormalPos.right=2152
+NormalPos.bottom=809
 Class=LaTeXView
-Document=4-numapproach\slope-limiter.tex
+Document=4-numapproach\dg.tex
 
 [Frame2_View0,0]
-TopLine=0
-Cursor=0
+TopLine=167
+Cursor=12847
 
 [Frame3]
 Flags=0
@@ -64,15 +64,15 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=41
-NormalPos.right=3249
-NormalPos.bottom=1250
+NormalPos.top=32
+NormalPos.right=2152
+NormalPos.bottom=809
 Class=LaTeXView
-Document=main.tex
+Document=4-numapproach\time-stepping.tex
 
 [Frame3_View0,0]
-TopLine=0
-Cursor=654
+TopLine=17
+Cursor=2865
 
 [Frame4]
 Flags=0
@@ -82,15 +82,15 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=41
-NormalPos.right=3249
-NormalPos.bottom=1250
+NormalPos.top=32
+NormalPos.right=2152
+NormalPos.bottom=809
 Class=LaTeXView
-Document=4-numapproach\triangulation.tex
+Document=5-amr\overview.tex
 
 [Frame4_View0,0]
-TopLine=10
-Cursor=4144
+TopLine=0
+Cursor=0
 
 [Frame5]
 Flags=0
@@ -100,15 +100,15 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=41
-NormalPos.right=3249
-NormalPos.bottom=1250
+NormalPos.top=32
+NormalPos.right=2152
+NormalPos.bottom=809
 Class=LaTeXView
-Document=4-numapproach\numerical-integration.tex
+Document=5-amr\refsln.tex
 
 [Frame5_View0,0]
-TopLine=78
-Cursor=9501
+TopLine=0
+Cursor=0
 
 [Frame6]
 Flags=0
@@ -118,15 +118,15 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=41
-NormalPos.right=3249
-NormalPos.bottom=1250
+NormalPos.top=32
+NormalPos.right=2152
+NormalPos.bottom=809
 Class=LaTeXView
-Document=3-mathmodel\weak-formulation.tex
+Document=5-amr\dg.tex
 
 [Frame6_View0,0]
 TopLine=0
-Cursor=2407
+Cursor=0
 
 [Frame7]
 Flags=0
@@ -136,15 +136,15 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=41
-NormalPos.right=3249
-NormalPos.bottom=1250
+NormalPos.top=32
+NormalPos.right=2152
+NormalPos.bottom=809
 Class=LaTeXView
-Document=4-numapproach\time-stepping.tex
+Document=4-numapproach\triangulation.tex
 
 [Frame7_View0,0]
-TopLine=0
-Cursor=2363
+TopLine=46
+Cursor=4093
 
 [Frame8]
 Flags=0
@@ -154,15 +154,15 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=41
-NormalPos.right=3249
-NormalPos.bottom=1250
+NormalPos.top=32
+NormalPos.right=2152
+NormalPos.bottom=809
 Class=LaTeXView
-Document=6-results.tex
+Document=4-numapproach\numerical-integration.tex
 
 [Frame8_View0,0]
-TopLine=143
-Cursor=8820
+TopLine=15
+Cursor=1616
 
 [Frame9]
 Flags=0
@@ -172,15 +172,15 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=41
-NormalPos.right=3249
-NormalPos.bottom=1250
-Class=LaTeXView
-Document=5-amr\overview.tex
+NormalPos.top=32
+NormalPos.right=2152
+NormalPos.bottom=809
+Class=BibTeXView
+Document=8-bibliography.bib
 
 [Frame9_View0,0]
-TopLine=0
-Cursor=0
+TopLine=434
+Cursor=16361
 
 [Frame10]
 Flags=0
@@ -190,15 +190,15 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=41
-NormalPos.right=3249
-NormalPos.bottom=1250
+NormalPos.top=32
+NormalPos.right=2152
+NormalPos.bottom=809
 Class=LaTeXView
-Document=3-mathmodel\model-derivation.tex
+Document=2-introduction\state.tex
 
 [Frame10_View0,0]
-TopLine=102
-Cursor=1874
+TopLine=14
+Cursor=2456
 
 [Frame11]
 Flags=0
@@ -208,15 +208,15 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=41
-NormalPos.right=3249
-NormalPos.bottom=1250
+NormalPos.top=32
+NormalPos.right=2152
+NormalPos.bottom=809
 Class=LaTeXView
-Document=3-mathmodel.tex
+Document=2-introduction\notation.tex
 
 [Frame11_View0,0]
-TopLine=0
-Cursor=301
+TopLine=35
+Cursor=1685
 
 [Frame12]
 Flags=0
@@ -226,15 +226,15 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=41
-NormalPos.right=3249
-NormalPos.bottom=1250
-Class=BibTeXView
-Document=8-bibliography.bib
+NormalPos.top=32
+NormalPos.right=2152
+NormalPos.bottom=809
+Class=LaTeXView
+Document=3-mathmodel\model-derivation.tex
 
 [Frame12_View0,0]
-TopLine=0
-Cursor=0
+TopLine=157
+Cursor=11308
 
 [Frame13]
 Flags=0
@@ -244,125 +244,17 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=41
-NormalPos.right=3249
-NormalPos.bottom=1250
+NormalPos.top=32
+NormalPos.right=2152
+NormalPos.bottom=809
 Class=LaTeXView
-Document=2-introduction\astrophysics.tex
+Document=5-amr.tex
 
 [Frame13_View0,0]
 TopLine=0
-Cursor=3230
-
-[Frame14]
-Flags=0
-ShowCmd=1
-MinPos.x=-1
-MinPos.y=-1
-MaxPos.x=-1
-MaxPos.y=-1
-NormalPos.left=4
-NormalPos.top=41
-NormalPos.right=3249
-NormalPos.bottom=1250
-Class=LaTeXView
-Document=4-numapproach\dg.tex
-
-[Frame14_View0,0]
-TopLine=153
-Cursor=12751
-
-[Frame15]
-Flags=0
-ShowCmd=1
-MinPos.x=-1
-MinPos.y=-1
-MaxPos.x=-1
-MaxPos.y=-1
-NormalPos.left=4
-NormalPos.top=41
-NormalPos.right=3249
-NormalPos.bottom=1250
-Class=LaTeXView
-Document=3-mathmodel\boundary-conditions.tex
-
-[Frame15_View0,0]
-TopLine=0
-Cursor=1611
-
-[Frame16]
-Flags=0
-ShowCmd=1
-MinPos.x=-1
-MinPos.y=-1
-MaxPos.x=-1
-MaxPos.y=-1
-NormalPos.left=4
-NormalPos.top=41
-NormalPos.right=3249
-NormalPos.bottom=1250
-Class=LaTeXView
-Document=4-numapproach\algebraic-formulation.tex
-
-[Frame16_View0,0]
-TopLine=0
-Cursor=2079
-
-[Frame17]
-Flags=0
-ShowCmd=1
-MinPos.x=-1
-MinPos.y=-1
-MaxPos.x=-1
-MaxPos.y=-1
-NormalPos.left=4
-NormalPos.top=41
-NormalPos.right=3249
-NormalPos.bottom=1250
-Class=LaTeXView
-Document=2-introduction\notation.tex
-
-[Frame17_View0,0]
-TopLine=0
-Cursor=2168
-
-[Frame18]
-Flags=0
-ShowCmd=1
-MinPos.x=-1
-MinPos.y=-1
-MaxPos.x=-1
-MaxPos.y=-1
-NormalPos.left=4
-NormalPos.top=41
-NormalPos.right=3249
-NormalPos.bottom=1250
-Class=LaTeXView
-Document=2-introduction.tex
-
-[Frame18_View0,0]
-TopLine=0
-Cursor=228
-
-[Frame19]
-Flags=0
-ShowCmd=1
-MinPos.x=-1
-MinPos.y=-1
-MaxPos.x=-1
-MaxPos.y=-1
-NormalPos.left=4
-NormalPos.top=41
-NormalPos.right=3249
-NormalPos.bottom=1250
-Class=LaTeXView
-Document=4-numapproach\div-free-space.tex
-
-[Frame19_View0,0]
-TopLine=0
-Cursor=0
+Cursor=43
 
 [SessionInfo]
-FrameCount=20
-ActiveFrame=14
+FrameCount=14
+ActiveFrame=1
 

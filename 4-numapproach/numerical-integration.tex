@@ -1,4 +1,4 @@
-In the implementation, we take the elements $K \in T_h$, of the triangulation $T_h$ to be rectangular hexahedra (rectangular parallelepipeds).
+In the implementation, we take the elements $K \in T_h$, of the triangulation $T_h$ to be hexahedra.
 \section{Numerical integration}
 Evaluation of the integral values in \Cref{Linear1}, \Cref{Linear2} is performed using the \textit{Gaussian numerical quadrature}. A quadrature rule approximates the integral values by replacing the integral as a weighted sum of integrand values at specified points in the domain of integration. The Gaussian quadrature is constructed so that the approximation is exact for polynomials of degree 2\textit{n} - 1 (and less). This is acceptable, as our space $V_h$ is constructed using polynomials - see section \Cref{section:Vh} on the page \pageref{section:Vh}. We only need to take the value $n$ to be corresponding to the value of $p_m$ for the element $K_m$. The rule for both a 2-dimensional element face $\Gamma$, and a 3-dimensional cube $K$ is derived from a one-dimensional approximation (where the interval $\left[-1, 1\right]$ is a convention):
 $$
@@ -11,7 +11,7 @@ $$
 $$
 \int_{K} f\lo\bfx\ro\,dx = \int_{-1}^{1}\int_{-1}^{1}\int_{-1}^{1} f\lo x_1, x_2, x_3\ro\,dx \approx \sum_{i=1}^n\sum_{j=1}^n\sum_{k=1}^n w_i w_j w_k f\lo x_{1i}, x_{2j}, x_{3k}\ro,
 $$
-and transformation to a generic rectangular hexahedron (rectangular parallelepiped) is performed using the transformation in one dimension:
+and transformation to a generic rectangular hexahedron is performed using the transformation in one dimension:
 $$
 \int_a^b f(x)\,dx \approx \frac{b-a}{2} \int_{-1}^1 f\left(\frac{b-a}{2}x + \frac{a+b}{2}\right)\,dx.
 $$

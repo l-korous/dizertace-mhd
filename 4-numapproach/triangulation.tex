@@ -14,7 +14,7 @@ First step in the process of the discretization is to divide the computational d
 In our case of the three-dimensional problem, we assume that the domain $\Omega$ is obtained as an approximation of the original computational domain (also denoted by $\Omega$), and the triangulation is chosen accordingly to the following attributes:
 \renewcommand{\labelenumi}{\Alph{enumi})}
 \begin{enumerate}
-    \item Each $K\in T_h$ is a closed rectangular parallelepiped, possibly with curved edges.
+    \item Each $K\in T_h$ is a closed rectangular hexahedron, possibly with curved edges.
     \item For $K_1,K_2\in T_h,\,K_1\neq{K}_2$ we have either $K_1\cap{K}_2 = \emptyset$ or $K_1,K_2$ share one edge (if the shared edge is a whole common edge, we call the triangulation \emph{regular}), or $K_1,K_2$ share one vertex, or $K_1,K_2$ share one face.
     \item$\cup_{K\in T_h}K\,=\,\overline{\Omega}.$
 \end{enumerate}

@@ -105,14 +105,15 @@ And using these properties of the numerical flux, we can rewrite \Cref{DG1} as:
 \end{align}
 where we used the definition of \Cref{InternalEdges} on the page \pageref{InternalEdges}.
 \subsection{Numerical flux}
-Generally, the numerical flux function can be a non-differentiable (or even discontinuous) function. That is challenging from the perspective of the usage of Newton's method to solve the resulting nonlinear problem arising when using implicit time-discretization.\ \\
+Generally, the numerical flux function can be a non-differentiable (or even discontinuous) function. That renders it impossible to directly employ Newton's method to solve the resulting nonlinear problem, and either linearization (e.g. a semi-implicit scheme - \cite{dolejsi2015}, chapter 5.1) or explicit time discretization (used in this work) needs to be used.
+\paragraph{}
 Another complication arising from evaluation of numerical fluxes on element interfaces exists in distributed solver, where we need to make sure that all processors have relevant data (e.g. previous solution values) from all cells that neighbor any cells assembled on the processor at hand. This issue gets worse when local mesh refinement (there are more neighbor elements of the current cell across the interface at hand), as well as if periodic boundary conditions are used (the neighbor graph is more complex).
 \subsubsection{Lax-Friedrichs numerical flux}
 This is the most straightforward numerical flux satisfying \Cref{FluxConsistent}, and \Cref{FluxConservative} and is defined as follows:
 \be
 \mrH_{LF}\lo \mrv, \mrw, \bfn\ro = \frac12\left[\mrF\lo\mrv\ro + \mrF\lo\mrw\ro\right] - \frac{\alpha}{2}\lo \mrw - \mrv\ro,
 \ee
-where the parameter $\alpha$ is the so-called \textit{stabilization parameter}, which in order for the solution to be stable needs to fulfill $\alpha < \frac{\Delta t}{\Delta x}$, where $\Delta t, \Delta x$ need to satisfy the CFL condition \Cref{CFLcond}. Now, this numerical flux is very sensitive to the choice of $\alpha$ - for larger values, it tends to be very diffusive, but for lower values, it is unstable and produces oscillations in the vicinity of shocks \cite{lfunstable}. In this work it is primarily used for implementation verification purposes, as due to its simplicity, the risk of errors in its implementation is rather negligible.
+where the parameter $\alpha$ is the so-called \textit{stabilization parameter}, which in order for the solution to be stable needs to fulfill $\alpha < \frac{\Delta t}{\Delta x}$, where $\Delta t, \Delta x$ need to satisfy the CFL condition \Cref{equation:CFLcond}. Now, this numerical flux is very sensitive to the choice of $\alpha$ - for larger values, it tends to be very diffusive, but for lower values, it is unstable and produces oscillations in the vicinity of shocks \cite{lfunstable}. In this work it is primarily used for implementation verification purposes, as due to its simplicity, the risk of errors in its implementation is rather negligible.
 
 \subsubsection{Riemann problem for MHD}
 For the class of numerical fluxes, known as the \textit{Godunov type fluxes}, the numerical flux across the element boundary is constructed as the flux $\mrF$ of a solution of the following Riemann problem (\Cref{Riemann}) at $x = 0$:
@@ -151,7 +152,7 @@ From this, it follows, that there are theoretically as many as 9 intermediate st
 \end{figure}
 
 \subsubsection{HLLD numerical flux}
-The abbreviation \textbf{HLLD} stands for Harten-Lax-van Leer (HLL) approximate Riemann solver, and \textbf{D} stands for Discontinuities. It is an extension of HLLC Riemann solver for the Euler equations (\cite{hllc}). It divides the Riemann fan into 6 states as illustrated in \Cref{figure:hlldStates}. This particular numerical flux has been introduced in \cite{hlld} and has been shown to be very suitable for the studied problems. HLLD is an approximate nonlinear solution of the MHD Riemann problem, and is algebraically derived in \cite{hlld} under the assumptions that the normal velocity and the background potential magnetic field in the Riemann fan are constant.
+The abbreviation \textbf{HLLD} stands for Harten-Lax-van Leer (HLL) approximate Riemann solver, and \textbf{D} stands for Discontinuities. It is an extension of HLLC Riemann solver for the Euler equations (\cite{hllc}). It divides the Riemann fan into 6 states as illustrated in \Cref{figure:hlldStates}. This particular numerical flux has been introduced in \cite{hlld} and has been shown to be very suitable for the studied problems. HLLD is an approximate nonlinear solution of the MHD Riemann problem, and is algebraically derived in \cite{hlld} under the assumptions that the normal velocity and the background potential magnetic field in the Riemann fan are constant. It follows from these assumptions, that 4 intermediate states are sufficient to resolve the Riemann problem in adequate manner (\cite{hlld}).
 
 \begin{figure}[H]
 	\centering
