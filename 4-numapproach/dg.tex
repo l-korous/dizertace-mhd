@@ -123,6 +123,7 @@ For the class of numerical fluxes, known as the \textit{Godunov type fluxes}, th
 \ee
 where
 \begin{align}
+\label{RiemannUDef}
 \mrU & =  \lo\begin{array}{c}\rho \\ \pi_1 \\ \pi_2 \\ \pi_3 \\ U \\ B_2 \\ B_3 \\ \end{array}\ro,\ \mrF = \lo\begin{array}{c} \pi_1 \\ \frac{\pi_1^2}{\rho} - B_1^2 + \frac12\lo p + U_m\ro \\ \frac{\pi_2 \pi_1}{\rho} - B_1 B_2 \\ \frac{\pi_3 \pi_1}{\rho} - B_1 B_3\\ \frac{\pi_1}{\rho} \lo \frac{\gamma}{\gamma - 1} p + U_k\ro + \frac{2}{\rho} \lo \pi_k B_1 - \pi_1 B_k\ro B_1  \\ \frac{\pi_1 B_2 - \pi_2 B_1}{\rho} \\ \frac{\pi_1 B_3 - \pi_3 B_1}{\rho} \\ \end{array}\ro,
 \end{align}
 and where due to the divergence free condition $\nabla\cdot \bfB = 0$ of the magnetic field), $B_1$ is given as constant.
@@ -160,28 +161,35 @@ The abbreviation \textbf{HLLD} stands for Harten-Lax-van Leer (HLL) approximate 
 	\label{figure:hlldRiemannStates}
 \end{figure}
 
-The HLLD flux according to its definition in \cite{hlld} defines 6 total (4 intermediate) states. These are:
+The HLLD flux according to its definition in \cite{hlld} defines 4 intermediate (starred) states $U_L^{*}, U_L^{**}, U_R^{*}, U_R^{**}$ and 2 outer states $U_L, U_R$ corresponding to states of $U$ defined in \Cref{RiemannUDef} for the left ($x < 0$) and right ($x > 0$) parts of the time-space domain illustrated in \Cref{figure:hlldRiemannStates}. Details of these states are given in \cite{hlld}. The resulting fluxes are:
 
-TODO fill
-
-\begin{align}
-F_{HLLD} = ..
-\end{align}
+\be
+F_{HLLD} = \left\{
+	\begin{array}{l}
+		F_L\ \text{if}\ S_L > 0,\\
+		F^{*}_L\ \text{if}\ S_L \leq 0 \leq S_L^{*},\\
+		F^{**}_L\ \text{if}\ S^{*}_L \leq 0 \leq S_M,\\
+		F^{**}_R\ \text{if}\ S_M \leq 0 \leq S_R^{*},\\
+		F^{*}_R\ \text{if}\ S_R^{*} \leq 0 \leq S_R,\\
+		F_R\ \text{if}\ S_R < 0
+	\end{array}\right. .
+\ee
 
 These are derived using the assumptions mentioned earlier, that:
 
 \begin{align}
-u_L & = ...
-p^*_{T_L} & = ...,
+u^{*}_L & = u_l^{**} = u_R^{**} = u_R^{*} = S_M\ & \text{normal velocity constant over the Riemann fan}\\
+p^{*}_{T_L} & = p^{**}_{T_L} = p^{**}_{T_R} = p^{*}_{T_R} = p^{*}_{T}\ & \text{total pressure constant over the Riemann fan},
 \end{align}
 
 where $p_T$ is the total pressure as defined in \Cref{presT}, and
 
 \begin{align}
-S_M\\
-S_L\\
-S_R\\
-S^{*}_L..
+S_M & \frac{\lo S_R -u_R\ro\rho_R u_R - \lo S_L - u_L\ro\rho_L u_L - p_{T_R} + p_{T_L}}{\lo S_R - u_R\ro\rho_R - \lo S_L - u_L\ro\rho_L},\\
+S_L & = \mathrm{min}\left[\lambda_1\lo U_L\ro, \lambda_1\lo U_R\ro\right],\\
+S_R & = \mathrm{max}\left[\lambda_7\lo U_L\ro, \lambda_7\lo U_R\ro\right],\\
+S^{*}_L & = S_M - \frac{\left|B_x\right|}{\sqrt{\rho_L^{*}}} = S_M - \frac{\left|B_x\right|}{\sqrt{\rho_L\frac{S_L - u_L}{S_L - S_M}}},\\
+S^{*}_R & = S_M + \frac{\left|B_x\right|}{\sqrt{\rho_R^{*}}} = S_M + \frac{\left|B_x\right|}{\sqrt{\rho_R\frac{S_R - u_R}{S_R - S_M}}}.
 \end{align}
 
 
