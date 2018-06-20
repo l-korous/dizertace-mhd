@@ -1,8 +1,27 @@
 \chapter{Results}
 In this section, results from the computation using the implemented software are presented. There are two classical benchmarks for 3-dimensional MHD equations, namely the MHD Blast \cite{blast1}, \cite{blast2}, and the Orszag-Tang vortex \cite{vortex}. And then the main section of this work contains results from the flux tube eruption model on and above the Sun's surface.
+\paragraph{}
+In most cases, we are interested in the distribution of plasma density $\rho$ and the magnetic field $B$ in the domain.
 
 \section{Benchmarks}
+
 The benchmarks presented in this Section do not have an exact analytical solution, but the formation of waves and discontinuities is well studied, and benchmarking is usually performed on the basis of comparing the structure and presence of non-physical attributes.
+\subsection{Hardware specification}
+For all following benchmarks, the setup described below was used. The computational mesh $T_h$ was formed in all cases by rectangular hexahedra.
+The value of the time step $\tau$ used was set according to the CFL condition (\Cref{section:CFL}).
+The Taylor basis functions (see \cite{vertex}) and Divergence-free basis functions (\Cref{tbl:divFreeBasis}) of order $0$ (piecewise constant functions) and $1$ (piecewise linear functions) were used.
+Where appropriate (for piecewise linear basis functions), the slope limiting technique from \Cref{sec:vertex} was used.
+Illustration of the obtained results follows below - these results were obtained using one node of the department's computational cluster with these parameters:
+\begin{itemize}
+    \item CPU: Intel(R) Xeon(R) CPU E5-2680 v3 @ 2.50GHz,
+    \item \# of Cores: 48 per node (nodes 1, 2), 16 per node (nodes 3, 4),
+    \item Vectorization support: AVX2,
+    \item Parallelization implemented: Intel TBB,
+    \item Distributed calculation implemented: OpenMPI,
+    \item RAM: 512 GB,
+    \item C/C++ Compiler: GNU gcc 5.4.0 .
+\end{itemize}
+
 \subsection{MHD Blast}
 \subsubsection{MHD Blast - original version}
 This benchmark has been used for decades - \cite{blast0}, \cite{blast1}, \cite{blast2} - in a variety of configurations and as a benchmark in software - e.g. \citep{athena}. The setup as described in \cite{blast0}, \cite{blast1} is defined (although in \cite{blast1} with interchanged $x-$ and $y-$ coordinates) by the initial conditions:
@@ -177,22 +196,8 @@ and
 \Gamma_2^{'} & = [-0.5, 0.5] \times \left\{0.75\right\}.
 \end{align}
 
-\subsubsection{Calculation specification}
-A mesh $T_h$ formed by rectangular hexahedra was used.
-The value of the time step $\tau$ used was set according to the CFL condition (\Cref{section:CFL}).
-Illustration of the obtained results follows below - these results were obtained using one node of the department's computational cluster with these parameters:
-\begin{itemize}
-    \item CPU: Intel(R) Xeon(R) CPU E5-2680 v3 @ 2.50GHz
-    \item \# of Cores: 48 per node (nodes 1, 2), 16 per node (nodes 3, 4)
-    \item Vectorization support: AVX2
-    \item Parallelization implemented: Intel TBB
-    \item Distributed calculation implemented: OpenMPI
-    \item RAM: 512 GB
-    \item OS: Ubuntu 15.10
-\end{itemize}
-
 \subsubsection{Results}
-The results show distribution of plasma - $\rho$ in the domain.
+
 
 TODO - moje vysledky Blastu\\
 TODO - moje vysledky Blastu s adaptivitou\\
@@ -227,9 +232,34 @@ As before, in order to compare with reference papers, figures are presented from
 \label{figure:otRef}
 \end{figure}
 
+Results obtained in the implemented software are presented in \Cref{figure:myOt1 - figure:myOt3}
 
-TODO - vysledky z cite otnew\\
-TODO - moje vysledky O-T\\
+\begin{figure}[H]
+\centering
+\subfigure{\includegraphics[width=0.45\textwidth]{img/ot/my1.jpg}}\hspace{12mm}
+\subfigure{\includegraphics[width=0.45\textwidth]{img/ot/my2.jpg}}
+\caption{$p$ distribution and $p$ along $y = 0.3125$, $t = 0.03$ (left), $t = 0.18$ (right)}
+\label{figure:myOt1}
+\end{figure}
+\vspace{-8mm}
+\begin{figure}[H]
+\centering
+\subfigure{\includegraphics[width=0.45\textwidth]{img/ot/my3.jpg}}\hspace{12mm}
+\subfigure{\includegraphics[width=0.45\textwidth]{img/ot/my4.jpg}}
+\caption{$p$ distribution and $p$ along $y = 0.3125$, $t = 0.28$ (left), $t = 0.38$ (right)}
+\label{figure:myOt2}
+\end{figure}
+\vspace{-8mm}
+\begin{figure}[H]
+\centering
+\subfigure{\includegraphics[width=0.45\textwidth]{img/ot/my5.jpg}}\hspace{12mm}
+\subfigure{\includegraphics[width=0.45\textwidth]{img/ot/my6.jpg}}
+\caption{$p$ distribution and $p$ along $y = 0.3125$, $t = 0.48$ (left), $t = 0.5$ (right)}
+\label{figure:myOt3}
+\end{figure}
+\vspace{-8mm}
+
+\ \\
 TODO - moje vysledky O-T s adaptivitou\\
 
 \section{Flux tube eruption model}

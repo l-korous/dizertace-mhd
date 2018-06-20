@@ -11,7 +11,7 @@ The Barth-Jespersen limiter considers the piecewise-linear solution in the form
 \label{slopeLimSln}
 u_h\lo x\ro = u_c + \alpha_e\lo\nabla u\ro_c \cdot \lo x - x_c\ro,\ 0 \leq \alpha_e\leq 1,
 \ee
-where $u_c$ is the cell average on the element $e$, and $\lo\nabla u\ro_c$ is the gradient of the solution on the element $e$.
+obtained using the linear Taylor basis functions (description of this shapeset is given in \cite{vertex}), where $u_c$ is the cell average on the element $e$, and $\lo\nabla u\ro_c$ is the gradient of the solution on the element $e$.
 \paragraph{}
 The sought parameter $\alpha_e$ is the parameter (correction factor) that determines the maximum admissible slope and is defined as:
 \be
@@ -27,6 +27,7 @@ However, using this limiting technique, there are two suboptimal behavior featur
 \paragraph{}
 Both these two problems are solved in the slope limiting technique chosen for this work
 \subsection{Vertex-based limiter}
+\label{sec:vertex}
 Introduced by D. Kuzmin in \cite{KuzminVertex}, the Vertex-based limiter aims at being an improvement over the Barth-Jespersen limiter. It also considers the solution in the form \Cref{slopeLimSln}, but the definition of the correction factor $\alpha_e$ differs:
 
 \be

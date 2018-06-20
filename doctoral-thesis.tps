@@ -10,14 +10,14 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=32
-NormalPos.right=2152
-NormalPos.bottom=809
+NormalPos.top=41
+NormalPos.right=3249
+NormalPos.bottom=1327
 Class=LaTeXView
 Document=0-titlepage.tex
 
 [Frame0_View0,0]
-TopLine=8
+TopLine=0
 Cursor=596
 
 [Frame1]
@@ -28,14 +28,14 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=32
-NormalPos.right=2152
-NormalPos.bottom=809
+NormalPos.top=41
+NormalPos.right=3249
+NormalPos.bottom=1327
 Class=LaTeXView
 Document=6-results.tex
 
 [Frame1_View0,0]
-TopLine=144
+TopLine=152
 Cursor=7493
 
 [Frame2]
@@ -46,14 +46,14 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=32
-NormalPos.right=2152
-NormalPos.bottom=809
+NormalPos.top=41
+NormalPos.right=3249
+NormalPos.bottom=1327
 Class=LaTeXView
 Document=4-numapproach\dg.tex
 
 [Frame2_View0,0]
-TopLine=167
+TopLine=174
 Cursor=12847
 
 [Frame3]
@@ -64,14 +64,14 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=32
-NormalPos.right=2152
-NormalPos.bottom=809
+NormalPos.top=41
+NormalPos.right=3249
+NormalPos.bottom=1327
 Class=LaTeXView
 Document=4-numapproach\time-stepping.tex
 
 [Frame3_View0,0]
-TopLine=17
+TopLine=0
 Cursor=2865
 
 [Frame4]
@@ -82,9 +82,9 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=32
-NormalPos.right=2152
-NormalPos.bottom=809
+NormalPos.top=41
+NormalPos.right=3249
+NormalPos.bottom=1327
 Class=LaTeXView
 Document=5-amr\overview.tex
 
@@ -100,9 +100,9 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=32
-NormalPos.right=2152
-NormalPos.bottom=809
+NormalPos.top=41
+NormalPos.right=3249
+NormalPos.bottom=1327
 Class=LaTeXView
 Document=5-amr\refsln.tex
 
@@ -118,9 +118,9 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=32
-NormalPos.right=2152
-NormalPos.bottom=809
+NormalPos.top=41
+NormalPos.right=3249
+NormalPos.bottom=1327
 Class=LaTeXView
 Document=5-amr\dg.tex
 
@@ -136,14 +136,14 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=32
-NormalPos.right=2152
-NormalPos.bottom=809
+NormalPos.top=41
+NormalPos.right=3249
+NormalPos.bottom=1327
 Class=LaTeXView
 Document=4-numapproach\triangulation.tex
 
 [Frame7_View0,0]
-TopLine=46
+TopLine=25
 Cursor=4093
 
 [Frame8]
@@ -154,9 +154,9 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=32
-NormalPos.right=2152
-NormalPos.bottom=809
+NormalPos.top=41
+NormalPos.right=3249
+NormalPos.bottom=1327
 Class=LaTeXView
 Document=4-numapproach\numerical-integration.tex
 
@@ -172,14 +172,14 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=32
-NormalPos.right=2152
-NormalPos.bottom=809
+NormalPos.top=41
+NormalPos.right=3249
+NormalPos.bottom=1327
 Class=BibTeXView
 Document=8-bibliography.bib
 
 [Frame9_View0,0]
-TopLine=434
+TopLine=412
 Cursor=16361
 
 [Frame10]
@@ -190,14 +190,14 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=32
-NormalPos.right=2152
-NormalPos.bottom=809
+NormalPos.top=41
+NormalPos.right=3249
+NormalPos.bottom=1327
 Class=LaTeXView
 Document=2-introduction\state.tex
 
 [Frame10_View0,0]
-TopLine=14
+TopLine=0
 Cursor=2456
 
 [Frame11]
@@ -208,14 +208,14 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=32
-NormalPos.right=2152
-NormalPos.bottom=809
+NormalPos.top=41
+NormalPos.right=3249
+NormalPos.bottom=1327
 Class=LaTeXView
 Document=2-introduction\notation.tex
 
 [Frame11_View0,0]
-TopLine=35
+TopLine=29
 Cursor=1685
 
 [Frame12]
@@ -226,14 +226,14 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=32
-NormalPos.right=2152
-NormalPos.bottom=809
+NormalPos.top=41
+NormalPos.right=3249
+NormalPos.bottom=1327
 Class=LaTeXView
 Document=3-mathmodel\model-derivation.tex
 
 [Frame12_View0,0]
-TopLine=157
+TopLine=120
 Cursor=11308
 
 [Frame13]
@@ -244,9 +244,9 @@ MinPos.y=-1
 MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
-NormalPos.top=32
-NormalPos.right=2152
-NormalPos.bottom=809
+NormalPos.top=41
+NormalPos.right=3249
+NormalPos.bottom=1327
 Class=LaTeXView
 Document=5-amr.tex
 
