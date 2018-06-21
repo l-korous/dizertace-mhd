@@ -25,18 +25,18 @@ $$
 $$
 Taking now e.g. \Cref{Linear1}, and notation for quadrature points and weights, we can write (omitting the operand $\bfx = \lo x_1, x_2, x_3\ro$):
 \begin{align}
-a_{lm} & =  \sum_{K_i \in T_h}\int_{K_i} \mrvhl \mrvhm, \\
-a_{lm} & := \sum_{K_i \in T_h}\int_{K_i} f\lo\mrvhl, \mrvhm\ro , \\
-a_{lm} & \approx \sum_{K_i \in T_h} \sum_{\bfj=\overrightarrow{1}}^{\overrightarrow{n}} f\lo\mrvhl\lo\bfx_{\bfj}^i\ro, \mrvhm\lo\bfx_{\bfj}^i\ro\ro\,w_{\bfj},\label{Final_Integration_Fn}
+a_{lm} & =  \sum_{K^i \in T_h}\int_{K^i} \mrvhl \mrvhm, \\
+a_{lm} & := \sum_{K^i \in T_h}\int_{K^i} f\lo\mrvhl, \mrvhm\ro , \\
+a_{lm} & \approx \sum_{K^i \in T_h} \sum_{\bfj=\overrightarrow{1}}^{\overrightarrow{n}} f\lo\mrvhl\lo\bfx_{\bfj}^i\ro, \mrvhm\lo\bfx_{\bfj}^i\ro\ro\,w_{\bfj},\label{Final_Integration_Fn}
 \end{align}
-where $\bfj$ is a multi-index used in sum over (volumetric) quadrature points $\bfx_{\bfj}^i \in K_i$.
+where $\bfj$ is a multi-index used in sum over (volumetric) quadrature points $\bfx_{\bfj}^i \in K^i$.
 Similarly for the right-hand side (\Cref{Linear2}):
 \begin{align}
-b_{l} & =  \sum_{K_i \in T_h}\int_{K_i} \left[{\mrPsi_h}^{k} + \tau\mrS + \tau\mrA\lo{\mrPsi_h^{k}}\ro \lo\nabla \cdot \mrvhl\ro\right] \mrvhl\\
+b_{l} & =  \sum_{K^i \in T_h}\int_{K^i} \left[{\mrPsi_h}^{k} + \tau\mrS + \tau\mrA\lo{\mrPsi_h^{k}}\ro \lo\nabla \cdot \mrvhl\ro\right] \mrvhl\\
 \nonumber & - \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}}\mrH\lo{\mrPsi_h^{k}}|_{ij}, {\mrPsi_h^{k}}|_{ji}, \bfn_{ij}\ro \mrvhl\\
 \nonumber& - \sum_{\Gamma_{ij}\in\Gamma_B} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h^{k}}|_{ij}, \overline{{\mrPsi_h^{k}}|_{ji}}, \bfn_{ij}\ro \mrvhl,\\
-\label{Final_Integration_Fn_b}   b_{l} & := \sum_{K_i \in T_h}\int_{K_i} g\lo\mrvhl\ro - \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}}g^{'}\lo\mrvhl\ro - \sum_{\Gamma_{ij}\in\Gamma_B} \int_{\Gamma_{ij}} g^{''}\lo\mrvhl\ro \\
-b_{l} & \approx \sum_{K_i \in T_h} \sum_{\bfj=\overrightarrow{1}}^{\overrightarrow{n}} g\lo\mrvhl\lo\bfx_{\bfj}^i\ro\ro\,w_{\bfj}\\
+\label{Final_Integration_Fn_b}   b_{l} & := \sum_{K^i \in T_h}\int_{K^i} g\lo\mrvhl\ro - \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}}g^{'}\lo\mrvhl\ro - \sum_{\Gamma_{ij}\in\Gamma_B} \int_{\Gamma_{ij}} g^{''}\lo\mrvhl\ro \\
+b_{l} & \approx \sum_{K^i \in T_h} \sum_{\bfj=\overrightarrow{1}}^{\overrightarrow{n}} g\lo\mrvhl\lo\bfx_{\bfj}^i\ro\ro\,w_{\bfj}\\
 \nonumber & -  \sum_{\Gamma_{ij}\in\Gamma_I} \sum_{\bfj_f=\overrightarrow{1}}^{\overrightarrow{n_f}} g^{'}\lo\mrvhl\lo\bfx^{ij}_{\bfj_{f}}\ro\ro\,w_{\bfj_{f}}\\
 \nonumber & -  \sum_{\Gamma_{ij}\in\Gamma_B} \sum_{\bfj_{f}=\overrightarrow{1}}^{\overrightarrow{n_f}} g^{''}\lo\mrvhl\lo\bfx^{ij}_{\bfj_{f}}\ro\ro\,w_{\bfj_{f}},
 \end{align}
@@ -49,9 +49,9 @@ where in addition to $\bfj$ as explained before, $\bfj_{f}$ is a multi-index use
 
 \section{Assembling the algebraic problem}
 Now we have a clear expression how to evaluate the integral values \Cref{Linear1}, \Cref{Linear2} using \Cref{singleNumIntA}, \Cref{singleNumIntB}, \Cref{singleNumIntBface}, but we need to construct the matrix $A$ (\Cref{Linear3}), and the right-hand-side vector $b$ (\Cref{Linear4}) in an effective manner.
-This is generally achieved through a \textit{element-wise} assembling of these structures. Key to this is to create a data structure that identifies for a particular element $K_i$ all the test functions $\mrvhl$ that make sense to be evaluated (have non-empty support) on $K_i$, i.e. we are looking for the set
+This is generally achieved through a \textit{element-wise} assembling of these structures. Key to this is to create a data structure that identifies for a particular element $K^i$ all the test functions $\mrvhl$ that make sense to be evaluated (have non-empty support) on $K^i$, i.e. we are looking for the set
 \be
-\mrvh \lo K_i \ro = \left\{\mrvh \in V_h : supp\lo\mrvh\ro \cap K_i \neq \emptyset \right\},
+\mrvh \lo K^i \ro = \left\{\mrvh \in V_h : supp\lo\mrvh\ro \cap K^i \neq \emptyset \right\},
 \ee
 and do the same for the faces $\Gamma_i$ (both boundary, and internal):
 \be
@@ -60,18 +60,18 @@ and do the same for the faces $\Gamma_i$ (both boundary, and internal):
 Now the assembling procedure looks like this:\\
 \begin{algorithm}[H]
     \# 1 - Loop over elements\\
-    \ForEach{$K_i\in T_h$}{
+    \ForEach{$K^i\in T_h$}{
        \KwData{Quadrature points $\left\{\bfx^i_1, ..., \bfx^i_{\bfn}\right\}$}
-       \KwData{Jacobian of the mapping $J_{K_i}$ mapping the reference element (unit cube) to the actual element}
+       \KwData{Jacobian of the mapping $J_{K^i}$ mapping the reference element (unit cube) to the actual element}
        \KwData{Quadrature weights $\left\{w_1, ..., w_{\bfn}\right\}$}
                    \# Loop over quadrature points\\
        \ForEach{$\bfj \in \left\{1, ..., \bfn\right\}$}{
-           \textbf{Set: }$\lo JxW\ro_{\bfj} = J_{K_i} \times w_{\bfj}$\\
+           \textbf{Set: }$\lo JxW\ro_{\bfj} = J_{K^i} \times w_{\bfj}$\\
             \# Loop over test functions\\
-        \ForEach{$v\in v_h \lo {K_i} \ro$}{
+        \ForEach{$v\in v_h \lo {K^i} \ro$}{
        \KwData{$l$ - index of $v$ in the global system, i.e. row in \Cref{Linear3} - \Cref{Linear5}}
                         \# Loop over basis functions\\
-            \ForEach{$u\in v_h \lo {K_i} \ro$}{
+            \ForEach{$u\in v_h \lo {K^i} \ro$}{
        \KwData{$m$ - index of $u$ in the global system, i.e. column in \Cref{Linear3}}
                 
                         $a_{lm}\ \ +=\ \ \lo JxW\ro_{\bfj} \ a_{lmi \bfj}$
@@ -82,16 +82,16 @@ Now the assembling procedure looks like this:\\
         }
     }
 \ \\
-        \# 2 - Loop over edges\\
+        \# 2 - Loop over faces\\
         \ForEach{$\Gamma_{ij}\in T_h$}{
             \KwData{Quadrature points $\left\{\bfx^{ij}_1, ..., \bfx^{ij}_{\bfn_f}\right\}$}
-            \KwData{Jacobian of the mapping $J_{K^+} = J_{K^-}$ mapping the reference face (unit square) to the actual face, where $K^+, K^-$ are elements adjacent to $\Gamma_{ij}$ if this is an internal edge, or $K^+ = K^-$ if this is a boundary edge.}
+            \KwData{Jacobian of the mapping $J_{K^i} = J_{K^-}$ mapping the reference face (unit square) to the actual face, where $K^i, K^j$ are elements adjacent to $\Gamma_{ij}$ if this is an internal face, or $K^i = K^j$ if this is a boundary face.}
             \KwData{Quadrature weights $\left\{w_1, ..., w_{\bfn_f}\right\}$}
             \# Loop over quadrature points\\
             \ForEach{$\bfj_f \in \left\{1, ..., \bfn_f\right\}$}{
-                \textbf{Set: }$\lo JxW\ro_{\bfj_f} = {J_K}^{+} \times w_{\bfj_f}\ $ \# Here it does not matter if we choose $J_{K^+}$ or $J_{K^-}$\\
+                \textbf{Set: }$\lo JxW\ro_{\bfj_f} = J_{K^i} \times w_{\bfj_f}\ $ \# Here it does not matter if we choose $J_{K^i}$ or $J_{K^j}$\\
                 \# Loop over test functions\\
-                \ForEach{$v\in v_h \lo K^+ \ro$}{
+                \ForEach{$v\in v_h \lo K^i \ro$}{
                     \KwData{$l$ - index of $v$ in the global system, i.e. row in \Cref{Linear3} - \Cref{Linear5}}
                     
                     $b_{l}\ \ +=\ \ \lo JxW\ro_{\bfj_f} \ b^{'}_{lij \bfj_f}$
@@ -101,11 +101,11 @@ Now the assembling procedure looks like this:\\
 \caption{Assembling of the algebraic problem \Cref{Alg}}
 \label{algorithm:singleTimeStep}
 \end{algorithm}
-An important remark needs to be added here, with respect to the fact, that we aim for a distributed computation. As stated before, the domain decomposition approach leads to each of the processors $P_i \in \left\{P_0, ..., P_N\right\}$ of the total number of processors employed for the computation owning only a subset of elements $\left\{K \in T\right\}_i$. If the processor $P_i$ did not have any data about other elements, we would not be able to perform the evaluation involving $b^{'}$ defined in \Cref{singleNumIntBface}, or more precisely $g^{'}$ defined in \Cref{Final_Integration_Fn_b} as the values ${\mrPsi_h^{k}}|_{ji}$ for edges $\Gamma_{ij}$ of elements from $\left\{K \in T\right\}_i$ will not always be there.
+An important remark needs to be added here, with respect to the fact, that we aim for a distributed computation. As stated before, the domain decomposition approach leads to each of the processors $P_i \in \left\{P_0, ..., P_N\right\}$ of the total number of processors employed for the computation owning only a subset of elements $\left\{K \in T\right\}_i$. If the processor $P_i$ did not have any data about other elements, we would not be able to perform the evaluation involving $b^{'}$ defined in \Cref{singleNumIntBface}, or more precisely $g^{'}$ defined in \Cref{Final_Integration_Fn_b} as the values ${\mrPsi_h^{k}}|_{ji}$ for faces $\Gamma_{ij}$ of elements from $\left\{K \in T\right\}_i$ will not always be there.
 \paragraph{}
 To amend this situation, in the distributed triangulation, each processor holds not only the mesh element data it owns, but also data for mesh elements it needs - in Discontinuous Galerkin method, for exactly the purposes of internal face integral evaluation described in the previous paragraph. This data is called \textit{ghost elements}, or \textit{ghost cells}, as these are only copies provided by other processors which own the particular elements.
 
 TODO obrazek domain decomposition s ghost cell layer
 
 \paragraph{}
-Note that in the described algorithm, and also with respect to the remarks in the previous paragraphs, periodic boundary conditions are not specifically handled, as they are only a technically more complex case of internal edges (both from the perspective of necessity of utilizing ghost cells, and from the perspective of evaluating $b_{l}$ in \Cref{algorithm:singleTimeStep}.
+Note that in the described algorithm, and also with respect to the remarks in the previous paragraphs, periodic boundary conditions are not specifically handled, as they are only a technically more complex case of internal faces (both from the perspective of necessity of utilizing ghost cells, and from the perspective of evaluating $b_{l}$ in \Cref{algorithm:singleTimeStep}.

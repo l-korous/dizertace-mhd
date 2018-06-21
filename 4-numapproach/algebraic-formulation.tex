@@ -3,8 +3,8 @@ Last step in the DG method discretization is to transform the system of equation
 \paragraph{}
 First, we rearrange the system in the following manner:
 \begin{align}
-\label{RewrittenLinearSystem} \sum_{K_i \in T_h}\int_{K_i} \mrvh {\mrPsi_h}^{k+1} & = 
-\sum_{K_i \in T_h}\int_{K_i} \left[{\mrPsi_h}^{k} + \tau\mrS + \tau\mrA\lo{\mrPsi_h^{k}}\ro \lo\nabla \cdot \mrvh\ro\right] \mrvh \\\nonumber& - \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}}\mrH\lo{\mrPsi_h^{k}}|_{ij}, {\mrPsi_h^{k}}|_{ji}, \bfn_{ij}\ro \mrvh
+\label{RewrittenLinearSystem} \sum_{K^i \in T_h}\int_{K^i} \mrvh {\mrPsi_h}^{k+1} & = 
+\sum_{K^i \in T_h}\int_{K^i} \left[{\mrPsi_h}^{k} + \tau\mrS + \tau\mrA\lo{\mrPsi_h^{k}}\ro \lo\nabla \cdot \mrvh\ro\right] \mrvh \\\nonumber& - \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}}\mrH\lo{\mrPsi_h^{k}}|_{ij}, {\mrPsi_h^{k}}|_{ji}, \bfn_{ij}\ro \mrvh
 \\\nonumber& - \sum_{\Gamma_{ij}\in\Gamma_B} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h^{k}}|_{ij}, \overline{{\mrPsi_h^{k}}|_{ji}}, \bfn_{ij}\ro \mrvh.
 \end{align}
 We can see that the left hand side does not depend on the previous solution values, so there is no need to recalculate the matrix entries in every time step (unless we employ AMR, in which case the mesh and therefore the set of basis functions changes).
@@ -16,9 +16,9 @@ for some (obviously finite) basis $\left\{{v_h}_1, ..., {v_h}_L\right\}$ of $\le
 Next, since $\mrPsi_h^{k}$, $\tau$, $S$, $\mrA$ (and the basis) are all known, we can define
 \begin{align}
 \label{Linear1}
-a_{lm} & =  \sum_{K_i \in T_h}\int_{K_i} \mrvhl \mrvhm, \\
+a_{lm} & =  \sum_{K^i \in T_h}\int_{K^i} \mrvhl \mrvhm, \\
 \label{Linear2}
-b_{l} & =  \sum_{K_i \in T_h}\int_{K_i} \left[{\mrPsi_h}^{k} + \tau\mrS + \tau\mrA\lo{\mrPsi_h^{k}}\ro \lo\nabla \cdot \mrvhl\ro\right] \mrvhl\\\nonumber & - \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}}\mrH\lo{\mrPsi_h^{k}}|_{ij}, {\mrPsi_h^{k}}|_{ji}, \bfn_{ij}\ro \mrvhl\\\nonumber& - 
+b_{l} & =  \sum_{K^i \in T_h}\int_{K^i} \left[{\mrPsi_h}^{k} + \tau\mrS + \tau\mrA\lo{\mrPsi_h^{k}}\ro \lo\nabla \cdot \mrvhl\ro\right] \mrvhl\\\nonumber & - \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}}\mrH\lo{\mrPsi_h^{k}}|_{ij}, {\mrPsi_h^{k}}|_{ji}, \bfn_{ij}\ro \mrvhl\\\nonumber& - 
 \sum_{\Gamma_{ij}\in\Gamma_B} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h^{k}}|_{ij}, \overline{{\mrPsi_h^{k}}|_{ji}}, \bfn_{ij}\ro \mrvhl,\\
 \label{Linear3}
 A & =  \left\{a_{lm}\right\}_{l,m = 1}^{l,m = L},\\

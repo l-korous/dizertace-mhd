@@ -3,35 +3,31 @@
 For complex problems of compressible flow, and of course for even more complex problems of compressible MHD, there has been a number of attempts to use standard and well known Finite Element Methods that replace the spaces defined in \Cref{Bochner} with finite-dimension spaces with bases formed by continuous piecewise polynomial functions. These attempts struggled with a common problem of spurious oscillations appearing in the solution - the origin of which is the lack of "stabilization", provided by the second-order terms in elliptic equations. Solution to these problems is the application of stabilization techniques, that usually introduce some sort of artificial diffusion (the second-order term), all of which are non-physical, and generally involve "magical" numbers - constants that are of pure computational nature (not a part of the physical description) or even worse are problem-specific.
 
 \subsection{Overview of the DG method}
-Due to this reason, there  was an effort to develop methods which would not need such stabilization techniques, and would still offer reasonable resolution of shockwaves, boundary and interior layers, and steep gradients without exhibiting spurious oscillations in the approximate solutions. The approach taken here is based on the idea to combine finite volume and Finite element methods leading to the so-called \emph{discontinuous Galerkin finite element method (DGFEM, DG)}. Here we shall derive and analyze DG for our equations. Let $T_h$ be a triangulation of $\Omega$. For each $K\in T_h$ we introduce the notation
-\begin{align}
-\partial K^- & =  \left\{x\in\partial K;\beta\lo\bs{x}\ro\cdot\bfn\lo\bs{x}\ro <0\right\},\\
-\partial K^+ & =  \left\{x\in\partial K;\beta\lo\bs{x}\ro\cdot\bfn\lo\bs{x}\ro \geq 0\right\}.
-\end{align}
+Due to this reason, there  was an effort to develop methods which would not need such stabilization techniques, and would still offer reasonable resolution of shockwaves, boundary and interior layers, and steep gradients without exhibiting spurious oscillations in the approximate solutions. The approach taken here is based on the idea to combine finite volume and Finite element methods leading to the so-called \emph{discontinuous Galerkin finite element method (DGFEM, DG)}. Here we shall derive and analyze DG for our equations. Let $T_h$ be a triangulation of $\Omega$.
 By $H^1\lo\Omega, T_h\ro$ we denote the so-called \textit{broken Sobolev space}:
 \be
 \label{BrokenSobolev} H^1\lo\Omega,T_h\ro = \left\{v\in L^2\lo\Omega\ro;\ v|_K\in H^1\lo K\ro \forall K\in T_h\right\}.
 \ee
-This space is an approximation of the space defined in \Cref{Sobolev}, but it contains functions that are discontinuous on element interfaces $\Gamma_ij$.
+This space is an approximation of the space defined in \Cref{Sobolev}, but it contains functions that are discontinuous on element interfaces $\Gamma_{ij}$ between elements $K^i and K^j$.
 \paragraph{}
 For $u\in H^1\lo\Omega,T_h\ro$ we set
 \be
-\label{PlusDef} u_K^+ = \text{trace of } u|_K \text{ on }\partial K
+\label{PlusDef} u_K^i = \text{trace of } u|_{K^i} \text{ on }\partial K^i
 \ee
-(i.e. the interior trace of $u$ on $\partial K$). For each face $E\subset\partial K\backslash\Gamma$ of $K$, there exists $K'\neq K,\ K'\in T_h$, adjacent to $E$ from the opposite side than $K$. Then we put
+(i.e. the interior trace of $u$ on $\partial K^i$). For each face $\Gamma_{ij}\subset\partial K\backslash\Gamma$ of $K^i$, there exists $K^j\neq K^i,\ K^j\in T_h$, adjacent to $\Gamma_{ij}$ from the opposite side than $K^i$. Then we put
 \be
-\label{MinusDef} u_K^- = \text{trace of } u|_{K'} \text{ on } E.
+\label{MinusDef} u_K^j = \text{trace of } u|_{K^j} \text{ on } \Gamma_{ij}.
 \ee
-In this way we obtain the exterior trace $u_K^-$ of $u$ on $\partial K\backslash\Gamma$ and define the jump of $u$ on $\partial K\backslash\Gamma$:
+In this way we obtain the exterior trace $u_K^j$ of $u$ on $\partial K^i\backslash\Gamma$ and define the jump of $u$ on $\partial K\backslash\Gamma$:
 \be
-[u]_K = u_K^+ - u_K^-.
+[u]_{\Gamma_{ij}} = u_K^i - u_K^j.
 \ee
 \subsubsection{Approximation of the broken Sobolev space}
 \label{section:Vh}
 Let the domain $\Omega$ be covered with a mesh $T_h = 
 \{ K_1,$ $K_2, \dots, K_M \}$ where each element $K_m$ carries an arbitrary
 polynomial degree $1 \leq p_m$, $\forall m = 1, 2, \dots, M$. The broken Sobolev space 
-$H^1\lo\Omega,T_h\ro$ will be approximated by a finite-dimensional space of picewise-polynomial functions
+$H^1\lo\Omega,T_h\ro$ will be approximated by a finite-dimensional space of piecewise-polynomial functions
 \be
 \label{VH} V_{h} = \{ v \in L^2(\Omega); \ v|_{K_m} \in P^{p_m}(K_m)\ \mbox{for all}\ 1 \leq m \leq M \}
 \ee
@@ -56,14 +52,14 @@ where $V_h$ is defined in \Cref{VH}. Functions
 \ee
 where $H^1\lo\Omega,T_h\ro$ is defined in \Cref{BrokenSobolev}, are in general discontinuous on interfaces $\Gamma_{ij}$.
 By $\mrvh|_{ij}$ and $\mrvh|_{ji}$ we denote the values of $\mrvh$ on $\Gamma_{ij}$ considered from the
-interior and the exterior of $K_i$, respectively. The symbols
+interior and the exterior of $K^i$, respectively. The symbols
 $$
 \left<\mrvh\right>_{ij} = \frac12 \lo \mrvh |_{ij} + \mrvh |_{ji}\ro,\ \left[\mrvh\right]_{ij} = \mrvh |_{ij} - \mrvh |_{ji}
 $$
 denote the average and jump of a function $\mrvh$ on $\Gamma_{ij}$.
-In order to derive the discrete problem, we multiply \Cref{conservativeGeneric} by a test function $\mrvh \in \left[V_h\right]^8$ in a component-wise fashion, integrate over any element $K_i \in T_h$, apply Green's theorem and sum over all $i \in I$, where $I$ is defined in \Cref{Idef}:
+In order to derive the discrete problem, we multiply \Cref{conservativeGeneric} by a test function $\mrvh \in \left[V_h\right]^8$ in a component-wise fashion, integrate over any element $K^i \in T_h$, apply Green's theorem and sum over all $i \in I$, where $I$ is defined in \Cref{Idef}:
 \be
-\label{DG1} \int_{\Omega_{t}} \pds{{\mrPsi_h}}{t} \mrvh - \sum_{K_i \in T_h}\int_{K_i}\mrF\lo{\mrPsi_h}\ro \lo\nabla \cdot \mrvh\ro + \sum_{K_i\in T_h} \sum_{j\in s_i} \int_{\Gamma_{ij}} \lo \mrF\lo{\mrPsi_h}\ro \cdot \bfn_{ij} \ro \mrvh = \int_{\Omega_{t}} \mrS \mrvh,
+\label{DG1} \int_{\Omega_{t}} \pds{{\mrPsi_h}}{t} \mrvh - \sum_{K^i \in T_h}\int_{K^i}\mrF\lo{\mrPsi_h}\ro \lo\nabla \cdot \mrvh\ro + \sum_{K^i\in T_h} \sum_{j\in s_i} \int_{\Gamma_{ij}} \lo \mrF\lo{\mrPsi_h}\ro \cdot \bfn_{ij} \ro \mrvh = \int_{\Omega_{t}} \mrS \mrvh,
 \ee
 where $\bfn_{ij}$ is the unit outer normal to $\Gamma_{ij}$.
 Now, the term
@@ -72,12 +68,12 @@ Now, the term
 \ee
 is problematic, because the value of ${\mrPsi_h}$ on $\Gamma_{ij}$ is not unique - we have two values:
 \begin{itemize}
-    \item ${\mrPsi_h}|_{ij}$ - which is the value of ${\mrPsi_h}$ on $\Gamma_{ij}$ considered from the element $K_i$,
-    \item ${\mrPsi_h}|_{ji}$ - which is the value of ${\mrPsi_h}$ on $\Gamma_{ij}$ considered from the element $K_j$.
+    \item ${\mrPsi_h}|_{ij}$ - which is the value of ${\mrPsi_h}$ on $\Gamma_{ij}$ considered from the element $K^i$,
+    \item ${\mrPsi_h}|_{ji}$ - which is the value of ${\mrPsi_h}$ on $\Gamma_{ij}$ considered from the element $K^j$.
 \end{itemize}
-\textbf{Note: }This corresponds to the notation set in \Cref{PlusDef}, \Cref{MinusDef} - if we take $K_i$ as the element at hand, we have
+\textbf{Note: }This corresponds to the notation set in \Cref{PlusDef}, \Cref{MinusDef} - if we take $K^i$ as the element at hand, we have
 $$
-{\mrPsi_h}|_{ij} = {\mrPsi_h}_{K_i}^+,\ \ {\mrPsi_h}|_{ji} = {\mrPsi_h}_{K_i}^-
+{\mrPsi_h}|_{ij} = {\mrPsi_h}_{K^i}^+,\ \ {\mrPsi_h}|_{ji} = {\mrPsi_h}_{K^i}^-
 $$
 \paragraph{}
 Now, because of this non-uniqueness of the values, we replace the term \Cref{NonUniqueTerm} with the so-called \textit{numerical flux} $\mrH = \mrH\lo\mrv, \mrw, \bfn\ro$ in the following fashion:
@@ -100,7 +96,7 @@ We impose the following requirements on the numerical flux:
 
 And using these properties of the numerical flux, we can rewrite \Cref{DG1} as:
 \begin{align}
-    \label{DG2} \int_{\Omega_{t}} \pds{{\mrPsi_h}}{t} \mrvh & - \sum_{K_i \in T_h}\int_{K_i}\mrF\lo{\mrPsi_h}\ro \lo\nabla \cdot \mrvh\ro\\
+    \label{DG2} \int_{\Omega_{t}} \pds{{\mrPsi_h}}{t} \mrvh & - \sum_{K^i \in T_h}\int_{K^i}\mrF\lo{\mrPsi_h}\ro \lo\nabla \cdot \mrvh\ro\\
     \nonumber & + \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h}|_{ij}, {\mrPsi_h}|_{ji}, \bfn_{ij}\ro \mrvh = \int_{\Omega_{t}} \mrS \mrvh,
 \end{align}
 where we used the definition of \Cref{InternalEdges} on the page \pageref{InternalEdges}.
@@ -300,7 +296,7 @@ The second observation could lead us to the conclusion that the Lax-Friedrichs f
 Second reason why for practical usage of the developed code, the HLLD flux is strongly recommended is, that it is parameter-free, as opposed to Lax-Friedrichs flux having the stabilization parameter $\alpha$ which makes it performing differently for different problems, as per the value of $\alpha$.
 
 \subsection{Numerical handling of boundary conditions}
-In what follows, we are interested in using flux-induced inflow and outflow boundary conditions (see Section \Cref{section:bcs}). Periodic boundary conditions are considered to be merely a special case of handling numerical fluxes across internal edges in $\Gamma_I$ .
+In what follows, we are interested in using flux-induced inflow and outflow boundary conditions (see Section \Cref{section:bcs}). Periodic boundary conditions are considered to be merely a special case of handling numerical fluxes across internal faces in $\Gamma_I$ .
 To account for these boundary conditions, we need to investigate the term
 $$
 \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h}|_{ij}, {\mrPsi_h}|_{ji}, \bfn_{ij}\ro \mrvh
@@ -323,7 +319,7 @@ which is a suitable definition for the outflow boundary condition. It is importa
 
 \subsubsection{Periodic boundary conditions}
 \label{sec:periodicDg}
-Periodic boundary conditions come in the form described in \Cref{periodicBCs}, for pair of points on the boundary (\Cref{periodicMapping}). The point mapping is the main complication encountered, namely in the distributed computations, and moreover if AMR is used in distributed computations (see \Cref{amrPer}). Otherwise, from the integral evaluation perspective, an edge on a periodic boundary is approached in the very same way as internal edges (we have values from both sides, and we evaluate the numerical flux in quadrature points).
+Periodic boundary conditions come in the form described in \Cref{periodicBCs}, for pair of points on the boundary (\Cref{periodicMapping}). The point mapping is the main complication encountered, namely in the distributed computations, and moreover if AMR is used in distributed computations (see \Cref{amrPer}). Otherwise, from the integral evaluation perspective, an face on a periodic boundary is approached in the very same way as internal faces (we have values from both sides, and we evaluate the numerical flux in quadrature points).
 
 \subsubsection{DG full problem statement}
 Now, taking \Cref{BC1} and \Cref{BC2}, we can enhance \Cref{DG2} with an additional term, that will add the boundary conditions into the equation:
@@ -332,7 +328,7 @@ $$
 $$
 so that the complete semi-discrete problem reads:
 \begin{align}
-\label{DG3} \int_{\Omega_{t}} \pds{{\mrPsi_h}}{t} \mrvh & -  \sum_{K_i \in T_h}\int_{K_i}\mrF\lo{\mrPsi_h}\ro \lo\nabla \cdot \mrvh\ro\\ \nonumber & + \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h}|_{ij}, {\mrPsi_h}|_{ji}, \bfn_{ij}\ro \mrvh\\
+\label{DG3} \int_{\Omega_{t}} \pds{{\mrPsi_h}}{t} \mrvh & -  \sum_{K^i \in T_h}\int_{K^i}\mrF\lo{\mrPsi_h}\ro \lo\nabla \cdot \mrvh\ro\\ \nonumber & + \sum_{\Gamma_{ij}\in\Gamma_I} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h}|_{ij}, {\mrPsi_h}|_{ji}, \bfn_{ij}\ro \mrvh\\
 \nonumber & + \sum_{\Gamma_{ij}\in\Gamma_B} \int_{\Gamma_{ij}} \mrH\lo{\mrPsi_h}|_{ij}, \overline{{\mrPsi_h}|_{ji}}, \bfn_{ij}\ro \mrvh\\
 \nonumber & = \int_{\Omega_{t}} \mrS \mrvh.
 \end{align}

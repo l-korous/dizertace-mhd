@@ -4,6 +4,6 @@ Similarly as in section \Cref{section:parallel}, the goal here is to be able to 
 Vectorization helps heavily with respect to CPU time spent on calculation. In the algorithm \Cref{algorithm:singleTimeStep}, vectorized instructions are used in:
 \begin{itemize}
     \item evaluation of the expressions $a_{lm} += JxW_{\bfj} \ a_{lm K \bfj}$
-    \item evaluation of expressions $b_{l} += JxW_{\bfj} \ b_{l K \bfj}|_{edge|volumetric}$
+    \item evaluation of expressions $b_{l} += JxW_{\bfj} \ b_{l K \bfj}|_{face|volumetric}$
     \item calculation of $JxW_{\bfj}$
 \end{itemize}

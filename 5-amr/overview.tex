@@ -18,7 +18,7 @@ The general schema of any Adaptive Mesh Refinement algorithm is described here:
  }
  \caption{Generic AMR algorithm}
 \end{algorithm}
-In \Cref{AMRGen}, \textit{solution acceptance criteria} is usually either spatial error estimate threshold, or number of elements, etc. In the same description, the note that there might be other elements $K \notin T^{r}_i$ refined in order to maintain some desired attributes of the mesh, such as 1-irregularity (the refinement level difference of two elements sharing a common edge / face is at most one), smoothness of mesh (there is e.g. no unrefined elements for which all, or a majority of neighboring elements would be refined), etc.
+In \Cref{AMRGen}, \textit{solution acceptance criteria} is usually either spatial error estimate threshold, or number of elements, etc. In the same description, the note that there might be other elements $K \notin T^{r}_i$ refined in order to maintain some desired attributes of the mesh, such as 1-irregularity (the refinement level difference of two elements sharing a common face is at most one), smoothness of mesh (there is e.g. no unrefined elements for which all, or a majority of neighboring elements would be refined), etc.
 
 \paragraph{}
 Since we are dealing with evolution equations, it is necessary to specify how the AMR algorithm relates with the non-AMR solution algorithm \Cref{algorithm:timeStepping}. There are several points we need to take into considerations:

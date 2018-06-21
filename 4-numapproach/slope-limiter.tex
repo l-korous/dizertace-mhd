@@ -20,10 +20,10 @@ The sought parameter $\alpha_e$ is the parameter (correction factor) that determ
 1,\ \ \ \ \ \  \  \  \   if\ u_i - u_c = 0,\\
 \min\left\{1, \frac{u_e^{min} - u_c}{u_i - u_c}\right\},\ if\ \ u_i - u_c < 0,\end{array}\right.
 \ee
-where $u_i = u_c + \lo\nabla u\ro_c \cdot\lo x_i - x_c\ro$ is the unconstrained solution value at the vertex $x_i$, and $u_e^{min}, u_e^{max}$ are the minimum and maximum cell averages of all elements sharing a common edge with the element $e$.
+where $u_i = u_c + \lo\nabla u\ro_c \cdot\lo x_i - x_c\ro$ is the unconstrained solution value at the vertex $x_i$, and $u_e^{min}, u_e^{max}$ are the minimum and maximum cell averages of all elements sharing a common face with the element $e$.
 \paragraph{}
 
-However, using this limiting technique, there are two suboptimal behavior features - the bounds for the limited solution are set on one hand too tight - solution values from elements meeting at a vertex but having no common edge/face are not taken into account (they might extend the interval for the admissible correction factor $\alpha_e$, and on the other hand too loose - solution values on elements that share a common edge may extend the admissible interval for $\alpha_e$ based on the value at a vertex that does not belong to that particular common edge.
+However, using this limiting technique, there are two suboptimal behavior features - the bounds for the limited solution are set on one hand too tight - solution values from elements meeting at a vertex but having no common face are not taken into account (they might extend the interval for the admissible correction factor $\alpha_e$, and on the other hand too loose - solution values on elements that share a common face may extend the admissible interval for $\alpha_e$ based on the value at a vertex that does not belong to that particular common face.
 \paragraph{}
 Both these two problems are solved in the slope limiting technique chosen for this work
 \subsection{Vertex-based limiter}
@@ -46,18 +46,18 @@ TODO algoritmus - tohle je jen placeholder
 
 \begin{algorithm}[H]
     \# 1 - Loop over elements\\
-    \ForEach{$K_i\in T_h$}{
+    \ForEach{$K^i\in T_h$}{
        \KwData{Quadrature points $\left\{\bfx^i_1, ..., \bfx^i_{\bfn}\right\}$}
-       \KwData{Jacobian of the mapping $J_{K_i}$ mapping the reference element (unit cube) to the actual element}
+       \KwData{Jacobian of the mapping $J_{K^i}$ mapping the reference element (unit cube) to the actual element}
        \KwData{Quadrature weights $\left\{w_1, ..., w_{\bfn}\right\}$}
                    \# Loop over quadrature points\\
        \ForEach{$\bfj \in \left\{1, ..., \bfn\right\}$}{
-           \textbf{Set: }$\lo JxW\ro_{\bfj} = J_{K_i} \times w_{\bfj}$\\
+           \textbf{Set: }$\lo JxW\ro_{\bfj} = J_{K^i} \times w_{\bfj}$\\
             \# Loop over test functions\\
-        \ForEach{$v\in v_h \lo {K_i} \ro$}{
+        \ForEach{$v\in v_h \lo {K^i} \ro$}{
        \KwData{$l$ - index of $v$ in the global system, i.e. row in \Cref{Linear3} - \Cref{Linear5}}
                         \# Loop over basis functions\\
-            \ForEach{$u\in v_h \lo {K_i} \ro$}{
+            \ForEach{$u\in v_h \lo {K^i} \ro$}{
        \KwData{$m$ - index of $u$ in the global system, i.e. column in \Cref{Linear3}}
                 
                         $a_{lm}\ \ +=\ \ \lo JxW\ro_{\bfj} \ a_{lmi \bfj}$
@@ -68,16 +68,16 @@ TODO algoritmus - tohle je jen placeholder
         }
     }
 \ \\
-        \# 2 - Loop over edges\\
+        \# 2 - Loop over faces\\
         \ForEach{$\Gamma_{ij}\in T_h$}{
             \KwData{Quadrature points $\left\{\bfx^{ij}_1, ..., \bfx^{ij}_{\bfn_f}\right\}$}
-            \KwData{Jacobian of the mapping $J_{K^+} = J_{K^-}$ mapping the reference face (unit square) to the actual face, where $K^+, K^-$ are elements adjacent to $\Gamma_{ij}$ if this is an internal edge, or $K^+ = K^-$ if this is a boundary edge.}
+            \KwData{Jacobian of the mapping $J_{K^+} = J_{K^-}$ mapping the reference face (unit square) to the actual face, where $K^i, K^j$ are elements adjacent to $\Gamma_{ij}$ if this is an internal face, or $K^i = K^j$ if this is a boundary face.}
             \KwData{Quadrature weights $\left\{w_1, ..., w_{\bfn_f}\right\}$}
             \# Loop over quadrature points\\
             \ForEach{$\bfj_f \in \left\{1, ..., \bfn_f\right\}$}{
-                \textbf{Set: }$\lo JxW\ro_{\bfj_f} = {J_K}^{+} \times w_{\bfj_f}\ $ \# Here it does not matter if we choose $J_{K^+}$ or $J_{K^-}$\\
+                \textbf{Set: }$\lo JxW\ro_{\bfj_f} = {J_K}^{i} \times w_{\bfj_f}\ $ \# Here it does not matter if we choose $J_{K^i}$ or $J_{K^j}$\\
                 \# Loop over test functions\\
-                \ForEach{$v\in v_h \lo K^+ \ro$}{
+                \ForEach{$v\in v_h \lo K^i \ro$}{
                     \KwData{$l$ - index of $v$ in the global system, i.e. row in \Cref{Linear3} - \Cref{Linear5}}
                     
                     $b_{l}\ \ +=\ \ \lo JxW\ro_{\bfj_f} \ b^{'}_{lij \bfj_f}$
