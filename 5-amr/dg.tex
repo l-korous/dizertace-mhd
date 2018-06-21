@@ -11,7 +11,7 @@ If the two neighboring elements are of the same size as in \Cref{TODO}, calculat
 \KwData{$K^i\in T_h$}
 \KwData{$\Gamma_{ij}\in \Gamma_I\ $ a face of $K^i$}
 \KwData{Quadrature points $\left\{\bfx^{ij}_1, ..., \bfx^{ij}_{\bfn_f}\right\}$}
-\# 1. Triangulation and DOFs handling
+\# \textbf{1}. Triangulation and DOFs handling\\
 Find the neighbor $K^j$ (querying data structures representing the mesh $T$)\\
 Find the set of degrees of freedom (basis functions) $v_h^i = v_h \lo K^i\ro$\\
 Find the set of degrees of freedom (basis functions) $v_h^j = v_h \lo K^j\ro$\\
@@ -19,11 +19,11 @@ Find the set of degrees of freedom (basis functions) $v_h^j = v_h \lo K^j\ro$\\
 \# Loop over quadrature points\\
 \ForEach{$\bfj_f \in \left\{1, ..., \bfn_f\right\}$}
 {
-	\# 2. Previous solution values
+	\# \textbf{2}. Previous solution values\\
 	Find previous solution value $\bfw_{\bfj_f}^{ip} = {\mrPsi_h^{k}}|_{ij}\lo\bfx_{\bfj_f}\ro$ on $K^i$\\
 	Find previous solution value $\bfw_{\bfj_f}^{jp} = {\mrPsi_h^{k}}|_{ij}\lo\bfx_{\bfj_f}\ro$ on $K^i$\\
 	Set: $\bfn_{\bfj_f} = \bfn_{ij}\lo\bfx_{\bfj_f}\ro$\\
-	\# 3. Numerical flux evaluation
+	\# \textbf{3}. Numerical flux evaluation\\
 	$\mrH\lo{\mrPsi_h^{k}}|_{ij}\lo\bfx\ro, {\mrPsi_h^{k}}|_{ji}\lo\bfx\ro, \bfn_{ij}\lo\bfx\ro\ro
 		= \mrH\lo\bfw_{\bfj_f}^{ip}, \bfw_{\bfj_f}^{jp}, \bfn_{\bfj_f}\ro$\\
 		
@@ -43,6 +43,8 @@ Handling with periodic boundary conditions with AMR is primarily difficult becau
 TODO - vyrobit vizualizaci ghost cells%https://www.dealii.org/8.5.0/doxygen/deal.II/classGridOut.html#a0c65940b5413c5a8d2f0dbac5c9273fc
 
 \subsection{Relationship with slope limiters}
-As a key step in the slope limiting algorithm \Cref{algorithm:limiter} is forming the set of all elements $K_{\bfv} = \left\{K^{'}\in T\ |\ \bfv \text{is a vertex of} K\right\}$ for a particular vertex $\bfv$, and as this step tends to be rather expensive for distributed triangulations (which have different topology than vertex-based), caching of the already obtained mappings between the vertex $\bfv$ and the set $K_{\bfv}$ is employed. Of course with every mesh refinement, a lot of these cached values need to be forgotten.
+As a key step in the slope limiting algorithm \Cref{algorithm:limiter} is forming the set of all elements $K_{\bfv} = \left\{K^{'}\in T\ |\ \bfv \text{ is a vertex of } K\right\}$ for a particular vertex $\bfv$, and as this step tends to be rather expensive for distributed triangulations (which have different topology than vertex-based), caching of the already obtained mappings between the vertex $\bfv$ and the set $K_{\bfv}$ is employed. Of course with every mesh refinement, a lot of these cached values need to be forgotten.
 \paragraph{}
-In reality, after each mesh refinement step, there follows a step of redistributing the mesh (to have roughly equal number of elements owned by each processors - that is to avoid bottlenecks where one processors would do a significant portion of all processing and other processors would idly wait for it to finish assembling). This means that carefully computing which entries in such a cache must be forgotten and which not would be very tedious and complex - that is why, for pragmatic reasons, after each refinement step, the entire cache is flushed. But in order not to suffer from slope limiting being a costly operation, the mesh refinement is performed only in every $n$-th time step. Another reason to do so is that with the unchanged mesh, the algebraic solver can keep the once computed matrix structures and data alike, which again saves computational time.
+In reality, after each mesh refinement step, there follows a step of redistributing the mesh (to have roughly equal number of elements owned by each processors - that is to avoid bottlenecks where one processors would do a significant portion of all processing and other processors would idly wait for it to finish assembling). This is illustrated in \Crefrange{figure:blastOldMyAdapt1}{figure:blastOldMyAdapt6}.
+\paragraph{}
+From this it follows, that carefully computing which entries in such a cache must be forgotten and which not would be very tedious and complex - that is why, for pragmatic reasons, after each refinement step, the entire cache is flushed. But in order not to suffer from slope limiting being a costly operation, the mesh refinement is performed only in every $n$-th time step. Another reason to do so is that with the unchanged mesh, the algebraic solver can keep the once computed matrix structures and data alike, which again saves computational time.
