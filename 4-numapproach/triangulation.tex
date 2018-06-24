@@ -61,5 +61,33 @@ If we were to use not $\Omega\subset\mathbb{R}^3$, but rather $\Omega\subset\mat
 \label{section:ditributedTria}
 The standard approach to handle large problems that are impossible to be calculated on a single processor in mesh-based numerical simulations (such as Discontinuous Galerkin method) is to employ a \textit{domain decomposition} method, where each of the processors on which the simulation runs holds data about a subset of elements of the mesh $T$.
 Consequently, also the matrix and vector assembly (described in ~\Cref{algorithm:singleTimeStep}), the linear problem solution, slope limiting, and AMR procedures are performed by all processors using data they have available. The aim here is not to go into deep technical details of distributing data, etc.
+\paragraph{}
+In \Cref{figure:domainDecomposition}{figure:ghost}, domain $\Omega = \left[0, 1\right] \times \left[0, 1\right] \times \left[0, 1\right]$ was used, it was triangulated by $10 \times 10 \times 10$ mesh elements and the domain was distributed among 5 processors labelled $0..4$.
 
-TODO Add pictures of domain decomposition
+\begin{figure}[H]
+		\begin{center}
+			\includegraphics[width=0.75\textwidth]{img/mesh/cube.jpg}
+			\vspace{-2mm}
+		\caption{Cubical domain $\Omega$ with color-coded processor-owned elements.}
+		\label{figure:domainDecomposition}
+		\end{center}
+	\end{figure}\vspace{-5mm}
+	
+\begin{figure}[H]
+		\begin{center}
+			\includegraphics[width=0.75\textwidth]{img/mesh/cubeSub.jpg}
+			\vspace{-2mm}
+		\caption{The same domain as in \Cref{figure:domainDecomposition}, with clearer indication of elements that belong to individual processors (0..4 left to right).}
+		\label{figure:domainDecomposition2}
+		\end{center}
+	\end{figure}\vspace{-5mm}
+	
+
+\begin{figure}[H]
+		\begin{center}
+			\includegraphics[width=0.75\textwidth]{img/mesh/cube-NONperiodic,ghost.jpg}
+			\vspace{-2mm}
+		\caption{Processor-owned elements (0..4 left to right), with color-coded ghost elements from other processors.}
+		\label{figure:ghost}
+		\end{center}
+	\end{figure}\vspace{-5mm}

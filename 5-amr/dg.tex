@@ -6,7 +6,7 @@ What needs to be evaluated is in fact the term
 \be
 \mrH\lo{\mrPsi_h^{k}}|_{ij}\lo\bfx\ro, {\mrPsi_h^{k}}|_{ji}\lo\bfx\ro, \bfn_{ij}\lo\bfx\ro\ro
 \ee
-If the two neighboring elements are of the same size as in \Cref{TODO}, calculation of this term from algorithmic perspective is performed as follows:\\
+If the two neighboring elements are of the same size as in \Cref{figure:simpleNeighbors}, calculation of this term from algorithmic perspective is performed as follows:\\
 \begin{algorithm}[H]
 \KwData{$K^i\in T_h$}
 \KwData{$\Gamma_{ij}\in \Gamma_I\ $ a face of $K^i$}
@@ -34,13 +34,45 @@ Find the set of degrees of freedom (basis functions) $v_h^j = v_h \lo K^j\ro$\\
 \label{algorithm:numFluxSimple}
 \end{algorithm}
 
-If however, the two neighboring elements are not of the same size, situation gets more complicated. Note that for this work, the level of uniform refinement of the hexahedron $K_i$ must differ from the level of uniform refinement of any neighboring element $K_j$ with which it shares a common face $\Gamma_{ij}$ at most by one. This means that the situation when neighboring elements are not of the same side looks always as in \Cref{TODO}, but $K_i$ can be on either side of $\Gamma_{ij}$ as indicated in \Cref{TODO}.
+\begin{figure}[H]
+		\begin{center}
+			\includegraphics[width=0.5\textwidth]{img/mesh/neighborsK.jpg}
+			\vspace{3mm}
+			\includegraphics[width=0.5\textwidth]{img/mesh/neighborsSepK.jpg}
+			\vspace{-5mm}
+		\caption{Neighbor elements $K_i, K_j$ in the mesh (above), transformed in order to view $\Gamma_{ij}$ (below).}
+		\label{figure:simpleNeighbors}
+		\end{center}
+	\end{figure}\vspace{-5mm}
+	
+If however, the two neighboring elements are not of the same size, situation gets more complicated. Note that for this work, the level of uniform refinement of the hexahedron $K_i$ must differ from the level of uniform refinement of any neighboring element $K_j$ with which it shares a common face $\Gamma_{ij}$ at most by one. This means that the situation when neighboring elements are not of the same side looks always as in \Cref{figure:worseNeighbors}, but $K_i$ can be on either side of $\Gamma_{ij}$ as indicated in \Cref{figure:worseNeighbors}. Note that the edge on the whole side of element $K_i$ is not physically stored anymore (at least not for assembling purposes).
+
+\begin{figure}[H]
+		\begin{center}
+			\includegraphics[width=0.5\textwidth]{img/mesh/neighborsOneLargerK.jpg}
+			\vspace{3mm}
+			\includegraphics[width=0.5\textwidth]{img/mesh/neighborsOneLargerSepK.jpg}
+			\vspace{-5mm}
+		\caption{Neighbor elements $K_i, K_j, K_j^{'}, ...$ in the mesh (above), transformed in order to view $\Gamma_{ij}, \Gamma_{i{j^{'}}}$ (below).}
+		\label{figure:worseNeighbors}
+		\end{center}
+	\end{figure}\vspace{-5mm}
 
 \subsection{Periodic boundary conditions}
 \label{amrPer}
-Handling with periodic boundary conditions with AMR is primarily difficult because of implications for mesh partitioning - additional ghost cells need to be added to cells on boundaries with the periodic condition - in order to perform steps 1 and 2 in \Cref{algorithm:numFluxSimple}.
+Handling with periodic boundary conditions with AMR is primarily difficult because of implications for mesh partitioning - additional ghost cells need to be added to cells on boundaries with the periodic condition - in order to perform steps 1 and 2 in \Cref{algorithm:numFluxSimple}. See \Cref{figure:ghostPer}, and compare to \Cref{figure:ghost}.
 
-TODO - vyrobit vizualizaci ghost cells%https://www.dealii.org/8.5.0/doxygen/deal.II/classGridOut.html#a0c65940b5413c5a8d2f0dbac5c9273fc
+\paragraph{}
+The setup here is the same one used in \Cref{section:ditributedTria}, but periodic boundary conditions were added to the left-right and top-bottom boundary part pairs.
+
+\begin{figure}[H]
+		\begin{center}
+			\includegraphics[width=0.75\textwidth]{img/mesh/cube-periodic,ghost.jpg}
+			\vspace{-2mm}
+		\caption{Processor-owned elements (0..4 left to right), with color-coded ghost elements from other processors. Ghost cells that have to be present here are dictated by fluxes - both across internal edges, and across periodic boundaries.}
+		\label{figure:ghostPer}
+		\end{center}
+	\end{figure}\vspace{-5mm}
 
 \subsection{Relationship with slope limiters}
 As a key step in the slope limiting algorithm \Cref{algorithm:limiter} is forming the set of all elements $K_{\bfv} = \left\{K^{'}\in T\ |\ \bfv \text{ is a vertex of } K\right\}$ for a particular vertex $\bfv$, and as this step tends to be rather expensive for distributed triangulations (which have different topology than vertex-based), caching of the already obtained mappings between the vertex $\bfv$ and the set $K_{\bfv}$ is employed. Of course with every mesh refinement, a lot of these cached values need to be forgotten.
