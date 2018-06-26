@@ -9,7 +9,7 @@ The benchmarks presented in this Section do not have an exact analytical solutio
 \subsection{Hardware specification}
 For all following benchmarks, the setup described below was used. The computational mesh $T_h$ was formed in all cases by rectangular hexahedra.
 The value of the time step $\tau$ used was set according to the CFL condition (\Cref{section:CFL}).
-The Taylor basis functions (see \cite{vertex}) and Divergence-free basis functions (\Cref{tbl:divFreeBasis}) of order $0$ (piecewise constant functions) and $1$ (piecewise linear functions) were used.
+The Taylor basis functions (see \cite{KuzminVertex}) and Divergence-free basis functions (\Cref{tbl:divFreeBasis}) of order $0$ (piecewise constant functions) and $1$ (piecewise linear functions) were used.
 Where appropriate (for piecewise linear basis functions), the slope limiting technique from \Cref{sec:vertex} was used.
 Illustration of the obtained results follows below - these results were obtained using one node of the department's computational cluster with these parameters:
 \begin{itemize}
@@ -232,7 +232,7 @@ As before, in order to compare with reference papers, figures are presented from
 \label{figure:otRef}
 \end{figure}
 
-Results obtained in the implemented software are presented in \Cref{figure:myOt1 - figure:myOt3}. The result on \Cref{figure:myOt3} on the right is obviously in almost exact accordance with \Cref{figure:otRef}.
+Results obtained in the implemented software are presented in \Cref{figure:myOt1}{figure:myOt3}. The result on \Cref{figure:myOt3} on the right is obviously in almost exact accordance with \Cref{figure:otRef}.
 
 \begin{figure}[H]
 \centering
@@ -265,28 +265,24 @@ TODO - moje vysledky O-T s adaptivitou\\
 \section{Flux tube eruption model}
 This model is based on the original Titov-Demoulin model from \cite{td}, as used in \cite{miraClanek}.
 
-The model parameters are as follows. Note that $k_B$ is the Boltzmann constant $k_B = 1.38064852 \times 10^{-23} \frac{\mathrm{J}}{\mathrm{K}}$, $m_p$ is the plasma mass, and $g$ gravitational acceleration.
-
+The model parameters are as follows. Note that $k_B$ is the Boltzmann constant $k_B = 1.38064852 \times 10^{-23} \frac{\mathrm{J}}{\mathrm{K}}$, $m_p$ is the plasma mass, and $g$ gravitational acceleration. Parameter values read
 \begin{align}
-\beta & =  0.05\ \ \ \ ...\ \text{Plasma beta}\\
-L_G & =  2\ k_B \frac{T_{ext}}{\lo m_p g \ro} = 1.2 \times 10^8 \left[\text{m}\right]\\
-L_G & =  20 \ \ \ \ ...\ \text{Coronal height scale in dimension-less units}\\
-\\
-& !!! & \text{TODO - Proc je v kodu} L_G = 0.0 \ ?\
-\\ \\
-N_t & = -3\ \ \ \ ...\ \text{Torus winding number}\\
-R & = 4\ \ \ \ ...\ \text{Torus major radius}\\
-2L & =  4\ \ \ \ ...\ \text{Magnetic charge separation distance}\\
-d & =  2\ \ \ \ ...\ \text{Geometrical factor}\\
-q_{mag} & =  \left| \frac{\ln\lo 8 e^{-5/4} R\ro}{4} N_t \lo\frac{L}{R}\ro^2\left[1 + \lo\frac{R}{L}\ro^2\right]^{3/2}\right|\\
-q_{mag} & \approx & \text{Normalised magnetic charge corresponding to global equilibrium}\\
-q_{mag} & =  \frac{ \ln\lo 8R \ro - \frac{5}{4}}{4} \left| N_t \right| \frac{\lo 1 + \lo\frac{L}{R}\ro^2\ro \sqrt{1 + \lo\frac{L}{R}\ro^2}}{\frac{L}{R}}\\
-\\
-& !!! & \text{TODO - Neni toto spatne nakodene?}
-\\\ \\
-H & =  2\ \frac{N_t^2}{R^2}\ \ \ \ ...\ \text{"Helicity" factor inside tho loop}\\
-\frac{ T_{ext} }{T_{in}} & =  10\ \ \ \ ...\ \text{Coronal/prominence temperature ratio}\\
-\\
-& !!! & \text{TODO - Proc je v kodu Tc2Tp = 1?}
-\\\ \\
+\nonumber \beta & =  0.05\ \ \ \ ...\ \text{Plasma beta},\\
+\nonumber L_G & =  2\ k_B \frac{T_{ext}}{\lo m_p g \ro} = 1.2 \times 10^8 \left[\text{m}\right],\\
+\nonumber L_G & =  20 \ \ \ \ ...\ \text{Coronal height scale in dimension-less units},\\
+\nonumber N_t & = 5\ \ \ \ ...\ \text{Torus winding number},\\
+\nonumber R & = 4\ \ \ \ ...\ \text{Torus major radius},\\
+\nonumber L & = 1.5\ \ \ \ ...\ \text{Magnetic charge separation distance},\\
+\nonumber d & =  1.5\ \ \ \ ...\ \text{Geometrical factor},\\
+\nonumber q & =  \frac{\ln\lo 8 e^{-5/4} R\ro}{4} N_t \lo\frac{L}{R}\ro^2\left[1 + \lo\frac{R}{L}\ro^2\right]^{3/2},\\
+\nonumber q & \approx \text{Normalised magnetic charge corresponding to global equilibrium},\\
+\nonumber H & = 2\ \frac{N_t^2}{R^2}\ \ \ \ ...\ \text{"Helicity" factor inside tho loop},\\
+\nonumber \frac{ T_{ext} }{T_{in}} & =  10\ \ \ \ ...\ \text{Coronal/prominence temperature ratio}.\\
 \end{align}
+The domain $\Omega$ is taken as $\left[-2.5, 2.5\right] \times \left[-5, 5\right] \times \left[0, 5\right]$, and the model is equipped with boundary conditions:
+\begin{align}
+... & = \Gamma_{ij} \text{on the left, right, front, back, and top boundary},\ z > 0,\\
+... & = \Gamma_{ij} \text{on the bottom boundary},\ z = 0.
+\end{align}
+TODO add proper description of the example
+TODO add comparison with the article

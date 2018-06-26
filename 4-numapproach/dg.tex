@@ -148,7 +148,7 @@ From this, it follows, that there are theoretically as many as 9 intermediate st
 \end{figure}
 
 \subsubsection{HLLD numerical flux}
-The abbreviation \textbf{HLLD} stands for Harten-Lax-van Leer (HLL) approximate Riemann solver, and \textbf{D} stands for Discontinuities. It is an extension of HLLC Riemann solver for the Euler equations (\cite{hllc}). It divides the Riemann fan into 6 states as illustrated in \Cref{figure:hlldStates}. This particular numerical flux has been introduced in \cite{hlld} and has been shown to be very suitable for the studied problems. HLLD is an approximate nonlinear solution of the MHD Riemann problem, and is algebraically derived in \cite{hlld} under the assumptions that the normal velocity and the background potential magnetic field in the Riemann fan are constant. It follows from these assumptions, that 4 intermediate states are sufficient to resolve the Riemann problem in adequate manner (\cite{hlld}).
+The abbreviation \textbf{HLLD} stands for Harten-Lax-van Leer (HLL) approximate Riemann solver, and \textbf{D} stands for Discontinuities. It is an extension of HLLC Riemann solver for the Euler equations (\cite{hllc}). It divides the Riemann fan into 6 states as illustrated in \Cref{figure:hlldRiemannStates}. This particular numerical flux has been introduced in \cite{hlld} and has been shown to be very suitable for the studied problems. HLLD is an approximate nonlinear solution of the MHD Riemann problem, and is algebraically derived in \cite{hlld} under the assumptions that the normal velocity and the background potential magnetic field in the Riemann fan are constant. It follows from these assumptions, that 4 intermediate states are sufficient to resolve the Riemann problem in adequate manner (\cite{hlld}).
 
 \begin{figure}[H]
 	\centering
@@ -192,7 +192,7 @@ S^{*}_R & = S_M + \frac{\left|B_x\right|}{\sqrt{\rho_R^{*}}} = S_M + \frac{\left
 
 \subsubsection{Numerical fluxes comparison}
 \label{subsec:numfluxcomp}
-For the comparison, a simple version of the benchmark described in \Cref{sec:blast} was used. In the next figures, there are snapshots of density solution component at several time steps for the Lax-Friedrichs flux for two values of $\alpha = 0.5,\ \alpha=1.5$, and for the HLLD flux. Please note that the results here are calculated with piecewise-constant functions.
+For the comparison, a simple version of the benchmark described in \Cref{sec:blastNew} was used. In the next figures, there are snapshots of density solution component at several time steps for the Lax-Friedrichs flux for two values of $\alpha = 0.5,\ \alpha=1.5$, and for the HLLD flux. Please note that the results here are calculated with piecewise-constant functions.
 	\begin{figure}[H]
 		\begin{center}
 			\includegraphics[width=0.82\textwidth]{img/numflux/lf1.jpg}

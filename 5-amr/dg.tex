@@ -63,11 +63,11 @@ If however, the two neighboring elements are not of the same size, situation get
 Handling with periodic boundary conditions with AMR is primarily difficult because of implications for mesh partitioning - additional ghost cells need to be added to cells on boundaries with the periodic condition - in order to perform steps 1 and 2 in \Cref{algorithm:numFluxSimple}. See \Cref{figure:ghostPer}, and compare to \Cref{figure:ghost}.
 
 \paragraph{}
-The setup here is the same one used in \Cref{section:ditributedTria}, but periodic boundary conditions were added to the left-right and top-bottom boundary part pairs.
+The setup here is the same one used in \Cref{section:ditributedTria}, showing ghost elements as in \Cref{figure:ghost}, but periodic boundary conditions were added to the left-right and top-bottom boundary part pairs. And the necessary elements were thusly added to ghost elements set for each affected processor (processor having any elements on the periodic boundaries).
 
 \begin{figure}[H]
 		\begin{center}
-			\includegraphics[width=0.75\textwidth]{img/mesh/cube-periodic,ghost.jpg}
+			\includegraphics[width=0.78\textwidth]{img/mesh/cube-periodic,ghost.jpg}
 			\vspace{-2mm}
 		\caption{Processor-owned elements (0..4 left to right), with color-coded ghost elements from other processors. Ghost cells that have to be present here are dictated by fluxes - both across internal edges, and across periodic boundaries.}
 		\label{figure:ghostPer}

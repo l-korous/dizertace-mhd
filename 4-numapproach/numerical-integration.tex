@@ -103,9 +103,16 @@ Now the assembling procedure looks like this:\\
 \end{algorithm}
 An important remark needs to be added here, with respect to the fact, that we aim for a distributed computation. As stated before, the domain decomposition approach leads to each of the processors $P_i \in \left\{P_0, ..., P_N\right\}$ of the total number of processors employed for the computation owning only a subset of elements $\left\{K \in T\right\}_i$. If the processor $P_i$ did not have any data about other elements, we would not be able to perform the evaluation involving $b^{'}$ defined in \Cref{singleNumIntBface}, or more precisely $g^{'}$ defined in \Cref{Final_Integration_Fn_b} as the values ${\mrPsi_h^{k}}|_{ji}$ for faces $\Gamma_{ij}$ of elements from $\left\{K \in T\right\}_i$ will not always be there.
 \paragraph{}
-To amend this situation, in the distributed triangulation, each processor holds not only the mesh element data it owns, but also data for mesh elements it needs - in Discontinuous Galerkin method, for exactly the purposes of internal face integral evaluation described in the previous paragraph. This data is called \textit{ghost elements}, or \textit{ghost cells}, as these are only copies provided by other processors which own the particular elements.
+To amend this situation, in the distributed triangulation, each processor holds not only the mesh element data it owns, but also data for mesh elements it needs - in Discontinuous Galerkin method, for exactly the purposes of internal face integral evaluation described in the previous paragraph. This data is called \textit{ghost elements}, or \textit{ghost cells}, as these are only copies provided by other processors which own the particular elements. This is illustrated in \Cref{figure:ghost}, which is the same case of distributed triangulation as shown in \Cref{figure:domainDecomposition}.
 
-TODO obrazek domain decomposition s ghost cell layer
+\begin{figure}[H]
+		\begin{center}
+			\includegraphics[width=0.78\textwidth]{img/mesh/cube-NONperiodic,ghost.jpg}
+			\vspace{-2mm}
+		\caption{Processor-owned elements (0..4 left to right), with color-coded ghost elements from other processors.}
+		\label{figure:ghost}
+		\end{center}
+	\end{figure}\vspace{-5mm}
 
 \paragraph{}
 Note that in the described algorithm, and also with respect to the remarks in the previous paragraphs, periodic boundary conditions are not specifically handled, as they are only a technically more complex case of internal faces (both from the perspective of necessity of utilizing ghost cells, and from the perspective of evaluating $b_{l}$ in \Cref{algorithm:singleTimeStep}.
