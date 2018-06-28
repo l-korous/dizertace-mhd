@@ -52,7 +52,7 @@ This slope limiting technique proves to have all the required attributes from th
 			\KwData{Center value of the solution $u_c^K = u\lo x^K_c \ro$ at point $x^K_c$ which is the center of $K$}
 			\KwData{Set of linear basis functions coefficients obtained as:}
 			\# Loop over basis functions for the component $k$\\
-			\ForEach{$v\in \left\{v\in v_h \lo {K} \ro, \text{component of } v = k,\ v \text{ piecewise linear} \right\}$}{
+			\ForEach{$v_1^k := v\in \left\{v\in v_h \lo {K} \ro, \text{component of } v = k,\ v \text{ piecewise linear} \right\}$}{
 				\KwData{$l\lo v \ro$ - index of $v$ in the global system, i.e. row in \Cref{Linear3} - \Cref{Linear5}}
 				\KwData{$u_{l\lo v \ro}$ - solution coefficient for $\lo v \ro$}
 			}
@@ -71,7 +71,7 @@ This slope limiting technique proves to have all the required attributes from th
 			}
 			\ \\
 			\# Loop over basis functions for the component $k$\\
-			\ForEach{$v\in \left\{v\in v_h \lo {K} \ro, \text{component of } v = k\right\}$}{
+			\ForEach{$v \in v_1^k$}{
 					$u_{l\lo v \ro} = \alpha_K u_{l\lo v \ro}$
 			}
 		}

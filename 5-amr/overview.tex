@@ -40,7 +40,7 @@ The algorithm looks like this:
 			 \While{true}{
 				call procedure \Cref{algorithm:singleTimeStep} to obtain $A_{i}, b_{i}\lo y^{ts - 1}_{i}\ro$ on the mesh $T^{ts}_i$\\
 				solve the problem $A_i y^{ts}_i = b_{i}\lo y^{ts - 1}_i\ro$\\
-				postprocess the solution $y^{ts}_i$\\
+				postprocess the solution $y^{ts}_i$ using \Cref{algorithm:limiter}\\
 				evaluate solution $y^{ts}_i$ acceptance criteria\\
 				\eIf{solution acceptance criteria satisfied} {
 					$y^{ts} = y^{ts}_i$\\
@@ -53,7 +53,7 @@ The algorithm looks like this:
 					i = i + 1\\
 				}
 		 }
-			calculate updated value of $\tau$\\
+			calculate updated value of $\tau$ using \Cref{equation:CFLcond}\\
 	 }
 \caption{AMR for time-discretized problems}
 \label{algorithm:AMRFull}

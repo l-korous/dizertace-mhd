@@ -11,8 +11,8 @@ The simple time discretization scheme that we use in \Cref{section:discreteProbl
         \KwData{Solution from the previous time step $y^{ts - 1}$}
 1.Call procedure \Cref{algorithm:singleTimeStep} to obtain $A, b\lo y^{ts - 1}\ro$\\
 2.Solve the problem $Ay^{ts} = b\lo y^{ts - 1}\ro\ $ \# See note below\\
-3.(If necessary) postprocess $y^{ts}$\\
-4.Calculate updated value of $\tau$\\
+3.(If necessary) postprocess $y^{ts}$ using \Cref{algorithm:limiter}\\
+4.Calculate updated value of $\tau$ using \Cref{equation:CFLcond}\\
 	 }
     \caption{Time-stepping procedure}
 \label{algorithm:timeStepping}
