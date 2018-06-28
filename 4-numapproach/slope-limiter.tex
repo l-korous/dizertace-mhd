@@ -11,16 +11,16 @@ The Barth-Jespersen limiter considers the piecewise-linear solution in the form
 \label{slopeLimSln}
 u_h\lo x\ro = u_c + \alpha_e\lo\nabla u\ro_c \cdot \lo x - x_c\ro,\ 0 \leq \alpha_e\leq 1,
 \ee
-obtained using the linear Taylor basis functions (description of this shapeset is given in \cite{KuzminVertex}), where $u_c$ is the cell average on the element $e$, and $\lo\nabla u\ro_c$ is the gradient of the solution on the element $e$.
+obtained using the linear Taylor basis functions (description of this shapeset is given in \cite{KuzminVertex}), where $u_c$ is the cell average on the element $K$, and $\lo\nabla u\ro_c$ is the gradient of the solution on the element $K$.
 \paragraph{}
-The sought parameter $\alpha_e$ is the parameter (correction factor) that determines the maximum admissible slope and is defined as:
+The sought parameter $\alpha_K$ is the parameter (correction factor) that determines the maximum admissible slope and is defined as:
 \be
-\alpha_e = \min_i\left\{\begin{array}{c}
-\min\left\{1, \frac{u_e^{max} - u_c}{u_i - u_c}\right\},\ if\ \ u_i - u_c > 0,\\
+\alpha_K = \min_i\left\{\begin{array}{c}
+\min\left\{1, \frac{u_K^{max} - u_c}{u_i - u_c}\right\},\ if\ \ u_i - u_c > 0,\\
 1,\ \ \ \ \ \  \  \  \   if\ u_i - u_c = 0,\\
-\min\left\{1, \frac{u_e^{min} - u_c}{u_i - u_c}\right\},\ if\ \ u_i - u_c < 0,\end{array}\right.
+\min\left\{1, \frac{u_K^{min} - u_c}{u_i - u_c}\right\},\ if\ \ u_i - u_c < 0,\end{array}\right.
 \ee
-where $u_i = u_c + \lo\nabla u\ro_c \cdot\lo x_i - x_c\ro$ is the unconstrained solution value at the vertex $x_i$, and $u_e^{min}, u_e^{max}$ are the minimum and maximum cell averages of all elements sharing a common face with the element $e$.
+where $u_i = u_c + \lo\nabla u\ro_c \cdot\lo x_i - x_c\ro$ is the unconstrained solution value at the vertex $x_i$, and $u_K^{min}, u_K^{max}$ are the minimum and maximum cell averages of all elements sharing a common face with the element $K$.
 \paragraph{}
 
 However, using this limiting technique, there are two suboptimal behavior features - the bounds for the limited solution are set on one hand too tight - solution values from elements meeting at a vertex but having no common face are not taken into account (they might extend the interval for the admissible correction factor $\alpha_e$, and on the other hand too loose - solution values on elements that share a common face may extend the admissible interval for $\alpha_e$ based on the value at a vertex that does not belong to that particular common face.
@@ -28,11 +28,11 @@ However, using this limiting technique, there are two suboptimal behavior featur
 Both these two problems are solved in the slope limiting technique chosen for this work
 \subsection{Vertex-based limiter}
 \label{sec:vertex}
-Introduced by D. Kuzmin in \cite{KuzminVertex}, the Vertex-based limiter aims at being an improvement over the Barth-Jespersen limiter. It also considers the solution in the form \Cref{slopeLimSln}, but the definition of the correction factor $\alpha_e$ differs:
+Introduced by D. Kuzmin in \cite{KuzminVertex}, the Vertex-based limiter aims at being an improvement over the Barth-Jespersen limiter. It also considers the solution in the form \Cref{slopeLimSln}, but the definition of the correction factor $\alpha_K$ differs:
 
 \be
 \label{vertexBasedAlpha}
-\alpha_e = \min_i\left\{\begin{array}{c}
+\alpha_K = \min_i\left\{\begin{array}{c}
 \min\left\{1, \frac{u_i^{max} - u_c}{u_i - u_c}\right\},\ if\ \ u_i - u_c > 0,\\
 1,\ \ \ \ \  \  \  \  if\ u_i - u_c = 0,\\
 \min\left\{1, \frac{u_i^{min} - u_c}{u_i - u_c}\right\},\ if\ \ u_i - u_c < 0,\end{array}\right.
@@ -42,51 +42,44 @@ where in this case $u_i^{min}, u_i^{min}$ are defined in such a way that for eac
 u_i^{max} = \max\left\{u_c, u_i^{max}\right\},\ \ u_i^{min} = \min\left\{u_c, u_i^{min}\right\}.
 \ee
 This slope limiting technique proves to have all the required attributes from the perspective of this work. The algorithm implementing this technique looks is presented in \Cref{algorithm:limiter}
-TODO algoritmus - tohle je jen placeholder
 
 \begin{algorithm}[H]
-    \# 1 - Loop over elements\\
-    \ForEach{$K^i\in T_h$}{
-       \KwData{Quadrature points $\left\{\bfx^i_1, ..., \bfx^i_{\bfn}\right\}$}
-       \KwData{Jacobian of the mapping $J_{K^i}$ mapping the reference element (unit cube) to the actual element}
-       \KwData{Quadrature weights $\left\{w_1, ..., w_{\bfn}\right\}$}
-                   \# Loop over quadrature points\\
-       \ForEach{$\bfj \in \left\{1, ..., \bfn\right\}$}{
-           \textbf{Set: }$\lo JxW\ro_{\bfj} = J_{K^i} \times w_{\bfj}$\\
-            \# Loop over test functions\\
-        \ForEach{$v\in v_h \lo {K^i} \ro$}{
-       \KwData{$l$ - index of $v$ in the global system, i.e. row in \Cref{Linear3} - \Cref{Linear5}}
-                        \# Loop over basis functions\\
-            \ForEach{$u\in v_h \lo {K^i} \ro$}{
-       \KwData{$m$ - index of $u$ in the global system, i.e. column in \Cref{Linear3}}
-                
-                        $a_{lm}\ \ +=\ \ \lo JxW\ro_{\bfj} \ a_{lmi \bfj}$
-                    }
-
-                $b_{l}\ \ +=\ \ \lo JxW\ro_{\bfj} \ b_{li \bfj}$
-        }                
-        }
-    }
-\ \\
-        \# 2 - Loop over faces\\
-        \ForEach{$\Gamma_{ij}\in T_h$}{
-            \KwData{Quadrature points $\left\{\bfx^{ij}_1, ..., \bfx^{ij}_{\bfn_f}\right\}$}
-            \KwData{Jacobian of the mapping $J_{K^+} = J_{K^-}$ mapping the reference face (unit square) to the actual face, where $K^i, K^j$ are elements adjacent to $\Gamma_{ij}$ if this is an internal face, or $K^i = K^j$ if this is a boundary face.}
-            \KwData{Quadrature weights $\left\{w_1, ..., w_{\bfn_f}\right\}$}
-            \# Loop over quadrature points\\
-            \ForEach{$\bfj_f \in \left\{1, ..., \bfn_f\right\}$}{
-                \textbf{Set: }$\lo JxW\ro_{\bfj_f} = {J_K}^{i} \times w_{\bfj_f}\ $ \# Here it does not matter if we choose $J_{K^i}$ or $J_{K^j}$\\
-                \# Loop over test functions\\
-                \ForEach{$v\in v_h \lo K^i \ro$}{
-                    \KwData{$l$ - index of $v$ in the global system, i.e. row in \Cref{Linear3} - \Cref{Linear5}}
-                    
-                    $b_{l}\ \ +=\ \ \lo JxW\ro_{\bfj_f} \ b^{'}_{lij \bfj_f}$
-                }
-            }
-        }
-\caption{Assembling of the algebraic problem \Cref{Alg}}
+	\# Loop over elements\\
+	\ForEach{$K\in T_h$}{
+		\# Loop over solution components\\
+		\ForEach{$k = 1, ..., 8$}{
+			\# In the rest of the algorithm, $u$ will stand for $u^k$.\\
+			\KwData{Center value of the solution $u_c^K = u\lo x^K_c \ro$ at point $x^K_c$ which is the center of $K$}
+			\KwData{Set of linear basis functions coefficients obtained as:}
+			\# Loop over basis functions for the component $k$\\
+			\ForEach{$v\in \left\{v\in v_h \lo {K} \ro, \text{component of } v = k,\ v \text{ piecewise linear} \right\}$}{
+				\KwData{$l\lo v \ro$ - index of $v$ in the global system, i.e. row in \Cref{Linear3} - \Cref{Linear5}}
+				\KwData{$u_{l\lo v \ro}$ - solution coefficient for $\lo v \ro$}
+			}
+			Set $\alpha_K = 1$\\
+			\# Loop over vertices\\
+			\ForEach{$v_i, i = 1, ..., 8, v_i$ is a vertex of $K$}{
+				\KwData{Vertex value $u_i = u\lo v_i \ro$}
+				\KwData{Set of vertex neighbors $\left\{K^{'}\right\}_i$, where $v_i \in K^{'}$ and $K^{'} \neq K$}
+				\# Loop over elements sharing the vertex $v_i$\\
+				\ForEach{$K^{'}\in \left\{K^{'}\right\}_i$}{
+					\KwData{Center value of the solution $u_c^{K^{'}} = u\lo x^{K^{'}}_c\ro$ at point $x^{K^{'}}_c$ which is the center of $K^{'}$}
+				}
+				Calculate $u^{max}_i = \max\left\{u_i, \max\left\{u_c^{K^{'}}\right\}\right\}$\\
+				Calculate $u_i^{min} = \min\left\{u_i, \min\left\{u_c^{K^{'}}\right\}\right\}$\\
+				Evaluate \Cref{vertexBasedAlpha}, updating $\alpha_K$
+			}
+			\ \\
+			\# Loop over basis functions for the component $k$\\
+			\ForEach{$v\in \left\{v\in v_h \lo {K} \ro, \text{component of } v = k\right\}$}{
+					$u_{l\lo v \ro} = \alpha_K u_{l\lo v \ro}$
+			}
+		}
+	}
+\caption{Limiting the solution using the vertex-based limiter.}
 \label{algorithm:limiter}
 \end{algorithm}
+
 \subsubsection{Comparison of limited and unlimited solution}
 For illustration, the same problem as in \Cref{subsec:numfluxcomp} is considered, which is suitable for illustrating the undershoots and overshoots, as the problem contains a sharp front where this behavior is clearly visible.
 In the next Figures, first several snapshots of an unlimited solution, and then several snapshot of a limited solution are presented. Note that the unlimited solution can't progress beyond a certain point, as the undershoots and overshoots get so large that the density values get to be negative, therefore e.g. calculating its square root needed for the speed of sound evaluation is impossible. Even before that, we get to non-physical regime, and e.g. the energy values start growing beyond limit.
