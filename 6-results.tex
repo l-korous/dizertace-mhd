@@ -197,9 +197,68 @@ and
 \end{align}
 
 \subsubsection{Results}
+The first set of results are from calculations using piecewise-constant elements, on three successively uniformly refined meshes. The meshes used for computations \cref{figure:blastNew01}{figure:blastNew05} contained:
+\begin{itemize}
+\item $100 \times 150$ elements (left)
+\item $200 \times 300$ elements (middle)
+\item $400 \times 600$ elements (right)
+\end{itemize}
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{img//mhd-blast/new/blast,noadapt1.jpg}
+	\caption{Obtained results, $t \approx 0.1$, distribution of $\rho$ (top), with line distribution along bottom-left $\rightarrow$ top-right diagonal (bottom)}
+	\label{figure:blastNew01}
+	\end{center}
+\end{figure}
+\vspace{-8mm}
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{img//mhd-blast/new/blast,noadapt3.jpg}
+	\caption{Obtained results, $t = \approx 0.2$, distribution of $\rho$ (top), with line distribution along bottom-left $\rightarrow$ top-right diagonal (bottom)}
+	\label{figure:blastNew02}
+	\end{center}
+\end{figure}
+\vspace{-8mm}
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{img//mhd-blast/new/blast,noadapt5.jpg}
+	\caption{Obtained results, $t \approx 0.3$, distribution of $\rho$ (top), with line distribution along bottom-left $\rightarrow$ top-right diagonal (bottom)}
+	\label{figure:blastNew03}
+	\end{center}
+\end{figure}
+\vspace{-8mm}
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{img//mhd-blast/new/blast,noadapt14.jpg}
+	\caption{Obtained results, $t = \approx 0.75$, distribution of $\rho$ (top), with line distribution along bottom-left $\rightarrow$ top-right diagonal (bottom)}
+	\label{figure:blastNew03}
+	\end{center}
+\end{figure}
+\vspace{-8mm}
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{img//mhd-blast/new/blast,noadapt18.jpg}
+	\caption{Obtained results, $t \approx 0.95$, distribution of $\rho$ (top), with line distribution along bottom-left $\rightarrow$ top-right diagonal (bottom)}
+	\label{figure:blastNew03}
+	\end{center}
+\end{figure}
+\vspace{-8mm}
+
+It is clearly visible, that the solution is somehow smeared, and the uniform mesh refinements improve the situation, but not greatly, and for a large cost of storage size for storing much more mesh elements.
+\paragraph{}
+In order to amend the situation, and be able to obtain a higher-quality solution with a reasonable number of mesh elements, piecewise-linear basis functions need to be used. Results with piecewise-linear basis functions, on three successively uniformly refined meshes are given in \cref{figure:blastNew11}{figure:blastNew15}. The meshes for these computations contained:
+\begin{itemize}
+\item $100 \times 150$ elements (left)
+\item $200 \times 300$ elements (middle)
+\item $400 \times 600$ elements (right)
+\end{itemize}
 
 
-TODO - moje vysledky Blastu\\
 TODO - moje vysledky Blastu s adaptivitou\\
 
 \subsection{Orszag-Tang vortex}
