@@ -1,7 +1,7 @@
 \section{Overview of the AMR}
-The general schema of any Adaptive Mesh Refinement algorithm is described here:
+The general schema of any Adaptive Mesh Refinement algorithm is described in the algorithm \Cref{algorithm:AMRGen}:
+\ \\
 \begin{algorithm}[H]
-\label{AMRGen}
  \KwData{Mesh $T_0$}
  \KwResult{A mesh $T_n$ and a solution $\bfy_n$ on this mesh satisfying the solution acceptance criteria}
  i = 0\\
@@ -17,8 +17,47 @@ The general schema of any Adaptive Mesh Refinement algorithm is described here:
 	}
  }
  \caption{Generic AMR algorithm}
+\label{algorithm:AMRGen}
 \end{algorithm}
-In \Cref{AMRGen}, \textit{solution acceptance criteria} is usually either spatial error estimate threshold, or number of elements, etc. In the same description, the note that there might be other elements $K \notin T^{r}_i$ refined in order to maintain some desired attributes of the mesh, such as 1-irregularity (the refinement level difference of two elements sharing a common face is at most one), smoothness of mesh (there is e.g. no unrefined elements for which all, or a majority of neighboring elements would be refined), etc.
+In \Cref{algorithm:AMRGen}, \textit{solution acceptance criteria} is usually either spatial error estimate threshold, or number of elements, etc. In the same description, the note that there might be other elements $K \notin T^{r}_i$ refined in order to maintain some desired attributes of the mesh, such as 1-irregularity (the refinement level difference of two elements sharing a common face is at most one), smoothness of mesh (there is e.g. no unrefined elements for which all, or a majority of neighboring elements would be refined), etc.
+An example of several steps of the algorithm (where step number corresponds to the variable $i$ in \Cref{algorithm:AMRGen}, is given in \Cref{figure:amrsimple} below on a sample problem in 2 dimensions.
+
+\begin{figure}[H]
+	\begin{subfigure}[H]{40mm}
+					\includegraphics[width=\textwidth]{img/adapt/sln0.jpg}
+					\caption{AMR step 0 - 100 elements}
+	\end{subfigure}
+	\hspace{7mm}
+	\begin{subfigure}[H]{40mm}
+					\includegraphics[width=\textwidth]{img/adapt/sln1.jpg}
+					\caption{AMR step 1 - 232 elements}
+	\end{subfigure}
+	\hspace{7mm}
+	\begin{subfigure}[H]{40mm}
+					\includegraphics[width=\textwidth]{img/adapt/sln2.jpg}
+					\caption{AMR step 2 - 379 elements}
+	\end{subfigure}
+	\\
+	\begin{subfigure}[H]{40mm}
+					\includegraphics[width=\textwidth]{img/adapt/sln3.jpg}
+					\caption{AMR step 3 - 610 elements}
+	\end{subfigure}
+	\hspace{7mm}
+	\begin{subfigure}[H]{40mm}
+					\includegraphics[width=\textwidth]{img/adapt/sln4.jpg}
+					\caption{AMR step 4 - 1016 elements}
+	\end{subfigure}
+	\hspace{7mm}
+	\begin{subfigure}[H]{40mm}
+					\includegraphics[width=\textwidth]{img/adapt/sln5.jpg}
+					\caption{AMR step 5 - 1364 elements}
+	\end{subfigure}
+		\vspace{3mm}
+	\caption{AMR steps}
+	\label{figure:amrsimple}
+\end{figure}
+
+The benefit of AMR is clear. If we were to discretize the entire domain with elements small enough to capture the solution with the same quality as in the last AMR step, we would end up with $> 40000$ elements, where with AMR, the same is achieved with $< 1400$.
 
 \paragraph{}
 Since we are dealing with evolution equations, it is necessary to specify how the AMR algorithm relates with the non-AMR solution algorithm \Cref{algorithm:timeStepping}. There are several points we need to take into considerations:
@@ -40,7 +79,7 @@ The algorithm looks like this:
 			 \While{true}{
 				call procedure \Cref{algorithm:singleTimeStep} to obtain $A_{i}, b_{i}\lo y^{ts - 1}_{i}\ro$ on the mesh $T^{ts}_i$\\
 				solve the problem $A_i y^{ts}_i = b_{i}\lo y^{ts - 1}_i\ro$\\
-				postprocess the solution $y^{ts}_i$ using \Cref{algorithm:limiter}\\
+				post-process the solution $y^{ts}_i$ using \Cref{algorithm:limiter}\\
 				evaluate solution $y^{ts}_i$ acceptance criteria\\
 				\eIf{solution acceptance criteria satisfied} {
 					$y^{ts} = y^{ts}_i$\\
@@ -59,7 +98,9 @@ The algorithm looks like this:
 \label{algorithm:AMRFull}
 \end{algorithm}
 
-The critical points of the algorithm are
+TODO - tady time dep.
+
+The critical points of the algorithm \Cref{algorithm:AMRFull}are
 \begin{itemize}
 \item solution acceptance criteria evaluation,
 \item identification of subset $T^{r}_i$,
