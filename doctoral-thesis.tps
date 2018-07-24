@@ -35,8 +35,8 @@ Class=LaTeXView
 Document=5-amr\overview.tex
 
 [Frame1_View0,0]
-TopLine=19
-Cursor=1817
+TopLine=89
+Cursor=5675
 
 [Frame2]
 Flags=0
@@ -71,8 +71,8 @@ Class=LaTeXView
 Document=5-amr\refsln.tex
 
 [Frame3_View0,0]
-TopLine=3
-Cursor=1348
+TopLine=51
+Cursor=4220
 
 [Frame4]
 Flags=0
@@ -107,8 +107,8 @@ Class=LaTeXView
 Document=main.tex
 
 [Frame5_View0,0]
-TopLine=3
-Cursor=473
+TopLine=18
+Cursor=960
 
 [Frame6]
 Flags=0
@@ -125,7 +125,7 @@ Class=LaTeXView
 Document=6-results.tex
 
 [Frame6_View0,0]
-TopLine=365
+TopLine=413
 Cursor=18278
 
 [Frame7]
@@ -179,10 +179,10 @@ Class=BibTeXView
 Document=8-bibliography.bib
 
 [Frame9_View0,0]
-TopLine=353
+TopLine=361
 Cursor=12995
 
 [SessionInfo]
 FrameCount=10
-ActiveFrame=3
+ActiveFrame=1
 

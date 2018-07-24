@@ -97,10 +97,17 @@ The algorithm looks like this:
 \caption{AMR for time-discretized problems}
 \label{algorithm:AMRFull}
 \end{algorithm}
+The output of the application of \Cref{algorithm:AMRFull} is presented in \Cref{figure:amrTimedep}.
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.9\textwidth]{img/adapt/timedep/a.jpg}
+		\caption{Solution obtained using AMR in 4 different time steps - $\rho$ distribution in the domain}
+	\label{figure:amrTimedep}
+	\end{center}
+\end{figure}
+\vspace{-4mm}
 
-TODO - tady time dep.
-
-The critical points of the algorithm \Cref{algorithm:AMRFull}are
+The critical points of \Cref{algorithm:AMRFull} are
 \begin{itemize}
 \item solution acceptance criteria evaluation,
 \item identification of subset $T^{r}_i$,
