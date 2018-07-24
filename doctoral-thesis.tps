@@ -11,14 +11,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=32
-NormalPos.right=1969
-NormalPos.bottom=705
+NormalPos.right=2161
+NormalPos.bottom=930
 Class=LaTeXView
-Document=6-results.tex
+Document=4-numapproach\div-free-space.tex
 
 [Frame0_View0,0]
-TopLine=0
-Cursor=1492
+TopLine=7
+Cursor=3281
 
 [Frame1]
 Flags=0
@@ -29,14 +29,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=32
-NormalPos.right=1969
-NormalPos.bottom=705
+NormalPos.right=2161
+NormalPos.bottom=930
 Class=LaTeXView
-Document=5-amr\refsln.tex
+Document=5-amr\overview.tex
 
 [Frame1_View0,0]
-TopLine=0
-Cursor=0
+TopLine=19
+Cursor=1817
 
 [Frame2]
 Flags=0
@@ -47,14 +47,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=32
-NormalPos.right=1969
-NormalPos.bottom=705
+NormalPos.right=2161
+NormalPos.bottom=930
 Class=LaTeXView
-Document=3-mathmodel\model-derivation.tex
+Document=5-amr\dg.tex
 
 [Frame2_View0,0]
-TopLine=78
-Cursor=5163
+TopLine=0
+Cursor=0
 
 [Frame3]
 Flags=0
@@ -65,14 +65,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=32
-NormalPos.right=1969
-NormalPos.bottom=705
+NormalPos.right=2161
+NormalPos.bottom=930
 Class=LaTeXView
-Document=5-amr\dg.tex
+Document=5-amr\refsln.tex
 
 [Frame3_View0,0]
-TopLine=0
-Cursor=0
+TopLine=3
+Cursor=1348
 
 [Frame4]
 Flags=0
@@ -83,14 +83,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=32
-NormalPos.right=1969
-NormalPos.bottom=705
+NormalPos.right=2161
+NormalPos.bottom=930
 Class=LaTeXView
-Document=4-numapproach\triangulation.tex
+Document=commands.tex
 
 [Frame4_View0,0]
-TopLine=0
-Cursor=0
+TopLine=22
+Cursor=935
 
 [Frame5]
 Flags=0
@@ -101,14 +101,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=32
-NormalPos.right=1969
-NormalPos.bottom=705
+NormalPos.right=2161
+NormalPos.bottom=930
 Class=LaTeXView
-Document=4-numapproach\slope-limiter.tex
+Document=main.tex
 
 [Frame5_View0,0]
-TopLine=0
-Cursor=0
+TopLine=3
+Cursor=473
 
 [Frame6]
 Flags=0
@@ -119,14 +119,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=32
-NormalPos.right=1969
-NormalPos.bottom=705
+NormalPos.right=2161
+NormalPos.bottom=930
 Class=LaTeXView
-Document=4-numapproach\performance-vectorization.tex
+Document=6-results.tex
 
 [Frame6_View0,0]
-TopLine=0
-Cursor=1431
+TopLine=365
+Cursor=18278
 
 [Frame7]
 Flags=0
@@ -137,14 +137,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=32
-NormalPos.right=1969
-NormalPos.bottom=705
+NormalPos.right=2161
+NormalPos.bottom=930
 Class=LaTeXView
-Document=1-abstract.tex
+Document=..\..\Users\LK\AppData\Roaming\MiKTeX\2.9\tex\latex\subfigure\subfigure.sty
 
 [Frame7_View0,0]
-TopLine=0
-Cursor=1639
+TopLine=73
+Cursor=4090
 
 [Frame8]
 Flags=0
@@ -155,14 +155,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=32
-NormalPos.right=1969
-NormalPos.bottom=705
+NormalPos.right=2161
+NormalPos.bottom=930
 Class=LaTeXView
-Document=4-numapproach\performance-parallelization.tex
+Document=4-numapproach\slope-limiter.tex
 
 [Frame8_View0,0]
-TopLine=0
-Cursor=642
+TopLine=140
+Cursor=9203
 
 [Frame9]
 Flags=0
@@ -173,106 +173,16 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=32
-NormalPos.right=1969
-NormalPos.bottom=705
-Class=LaTeXView
-Document=5-amr\overview.tex
+NormalPos.right=2161
+NormalPos.bottom=930
+Class=BibTeXView
+Document=8-bibliography.bib
 
 [Frame9_View0,0]
-TopLine=0
-Cursor=0
-
-[Frame10]
-Flags=0
-ShowCmd=1
-MinPos.x=-1
-MinPos.y=-1
-MaxPos.x=-1
-MaxPos.y=-1
-NormalPos.left=4
-NormalPos.top=32
-NormalPos.right=1969
-NormalPos.bottom=705
-Class=LaTeXView
-Document=4-numapproach\numerical-integration.tex
-
-[Frame10_View0,0]
-TopLine=0
-Cursor=0
-
-[Frame11]
-Flags=0
-ShowCmd=1
-MinPos.x=-1
-MinPos.y=-1
-MaxPos.x=-1
-MaxPos.y=-1
-NormalPos.left=4
-NormalPos.top=32
-NormalPos.right=1969
-NormalPos.bottom=705
-Class=LaTeXView
-Document=4-numapproach\dg.tex
-
-[Frame11_View0,0]
-TopLine=0
-Cursor=0
-
-[Frame12]
-Flags=0
-ShowCmd=1
-MinPos.x=-1
-MinPos.y=-1
-MaxPos.x=-1
-MaxPos.y=-1
-NormalPos.left=4
-NormalPos.top=32
-NormalPos.right=1969
-NormalPos.bottom=705
-Class=LaTeXView
-Document=4-numapproach\time-stepping.tex
-
-[Frame12_View0,0]
-TopLine=0
-Cursor=1100
-
-[Frame13]
-Flags=0
-ShowCmd=1
-MinPos.x=-1
-MinPos.y=-1
-MaxPos.x=-1
-MaxPos.y=-1
-NormalPos.left=4
-NormalPos.top=32
-NormalPos.right=1969
-NormalPos.bottom=705
-Class=LaTeXView
-Document=4-numapproach\algebraic-formulation.tex
-
-[Frame13_View0,0]
-TopLine=0
-Cursor=0
-
-[Frame14]
-Flags=0
-ShowCmd=1
-MinPos.x=-1
-MinPos.y=-1
-MaxPos.x=-1
-MaxPos.y=-1
-NormalPos.left=4
-NormalPos.top=32
-NormalPos.right=1969
-NormalPos.bottom=705
-Class=LaTeXView
-Document=0-titlepage.tex
-
-[Frame14_View0,0]
-TopLine=0
-Cursor=0
+TopLine=353
+Cursor=12995
 
 [SessionInfo]
-FrameCount=15
-ActiveFrame=0
+FrameCount=10
+ActiveFrame=3
 

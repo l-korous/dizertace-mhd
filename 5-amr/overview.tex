@@ -112,16 +112,22 @@ For the last two points, we shall consider a function $r$
 r:\ T^{ts}_i \rightarrow [0, +\infty),
 \ee
 which shall be called \textit{refinement indicator}, and the set $T^{r}_i = \left\{K^{r}\right\}$ shall be then defined as a set of all such elements for which one of these criteria are satisfied:
-\begin{itemize}
-	\item $r\lo K^{r}\ro > \alpha \cdot \max\left\{r\lo K\ro\ |\ K \in T^{ts}_i\right\}$, or
-	\item $r\lo K^{r}\ro > \beta \cdot \sum\left\{r\lo K\ro\ |\ K \in T^{ts}_i\right\}$.
-\end{itemize}
+\be
+	\label{refIndicatorValues}
+	r\lo K^{r}\ro > \alpha \cdot \max\left\{r\lo K\ro\ |\ K \in T^{ts}_i\right\} \text{, or}
+\ee
+\be
+	r\lo K^{r}\ro > \beta \cdot \sum\left\{r\lo K\ro\ |\ K \in T^{ts}_i\right\}.
+\ee
 
 The set $T^{c}_i = \left\{K^{c}\right\}$ shall be defined similarly as
-\begin{itemize}
-	\item $r\lo K^{c}\ro < \gamma \cdot \max\left\{r\lo K\ro\ |\ K \in T^{ts}_i\right\}$, or
-	\item $r\lo K^{c}\ro < \delta \cdot \sum\left\{r\lo K\ro\ |\ K \in T^{ts}_i\right\}$.
-\end{itemize}
+\be
+	r\lo K^{c}\ro < \gamma \cdot \max\left\{r\lo K\ro\ |\ K \in T^{ts}_i\right\} \text{, or}
+\ee
+\be
+	\label{refIndicatorValuesEnd}
+	r\lo K^{c}\ro < \delta \cdot \sum\left\{r\lo K\ro\ |\ K \in T^{ts}_i\right\}.
+\ee
 
 Note that the parameters $0 < \gamma \leq \alpha < 1,\ 0 < \delta \leq \beta < 1$ are artificial, and do not affect the overall solution quality (as the solution acceptance criteria has to be met independently of choices of their values). Nevertheless, the choices may affect performance - e.g. for a high $\alpha, \beta$, many steps are needed in order to satisfy the solution acceptance criteria, and on the other hand, if values are too low, there is an unnecessary high number of degrees of freedom that do not contribute substantially to the reduction of the solution error.
 \paragraph{}

@@ -3,35 +3,72 @@ As the aim of this work is to prepare a universally usable solver for MHD proble
 \paragraph{}
 The reference solution approach is not only problem, but also equation (physics) independent, which is truly invaluable for many types of physical problems, even so for multi-physics coupled problems, such as MHD.
 \subsection{Algorithm}
-Algorithm, given in \Cref{AMRRef} is accompanied by an example in \Crefrange{figure:amrRef1}{figure:amrRef16}:\ \\
+Algorithm, given in \Cref{algorithm:AMRRef} is accompanied by an example in \Crefrange{figure:amrRef1}{figure:amrRef4}:\ \\
 \begin{algorithm}[H]
-\label{AMRRef}
- \KwData{Mesh $T_0$}
- \KwResult{A mesh $T_n$ and a solution $\bfy_n$ on this mesh satisfying the solution acceptance criteria}
+\label{algorithm:AMRRef}
+ \KwData{Pair of meshes - fine mesh $T_0^{f}$, and coarse mesh $T_0^{c}$ - the fine mesh being one layer of refinement finer than the coarse one.}
+ \KwData{Solution acceptance criteria in the form of threshold $0 < \alpha < 1$ representing the relative error estimate.}
+ \KwIn{This condition translates to: $\frac{\sum_{K^j \in T_i^c} ||\bfy_i - \bfy_i^c||_{L^2\lo K^j\ro}}{\sum_{K^j \in T_i^c} ||\bfy_i^c||_{L^2\lo K^j\ro}} < \alpha$, where $\bfy_i^c$ is a projection of $\bfy_i$ onto the coarse space.}
+\KwResult{A fine mesh $T_n^{f}$ and a solution $\bfy_n$ on this mesh satisfying the solution acceptance criteria}
+\KwIn{In order to be sure that we will converge towards an acceptable solution, we need to define the refinement indicator (see \Cref{refinementIndicator}) in a way that the elements selected for refinement are those that contribute to the relative error (left hand side of the equation for the acceptance criteria) the most. \\ This means that the refinement indicator is defined as $r\lo K\ro = \frac{||\bfy_i - \bfy_i^c||_{L^2\lo K\ro}}{||\bfy_i^c||_{L^2\lo K\ro}}$.}
  i = 0\\
  \While{true}{
-  obtain solution $\bfy_i$ on $T_i$\\
-	evaluate solution $\bfy_i$ acceptance criteria\\
-	\eIf{solution acceptance criteria satisfied} {
+  obtain solution $\bfy_i$ on $T_i^{f}$\\
+  project $\bfy_i$ onto $T_i^{c}$, obtaining coarse projection $\bfy_i^c$\\
+	evaluate $||\bfy_i - \bfy_i^c||_{L^2\lo K\ro},\, K \in T_i^c$\\
+	\eIf{$\sum_{K^j \in T_i^c} ||\bfy_i - \bfy_i^c||_{L^2\lo K^j\ro} < \alpha$ satisfied} {
 		return\\
    } {
-		identify subset $T^{r}_i$ of all elements $K \in T_i$ to be refined, $T^{r}_i \subseteq T_i$\\
-		obtain $T_{i+1}$ by refining (at least) all $K \in T^{r}_i$\\
+		identify subset $T^{r}_i$ of all elements $K \in T_i^c$ to be refined, $T^{r}_i \subseteq T_i^c$ in such a way that for some $0 < \alpha < 1$ (see \Cref{refIndicatorValues}) we define the subset $T^{r}_i$ as : $T^{r}_i = \left\{K \in T_i^c : ||\bfy_i - \bfy_i^c||_{L^2\lo K\ro} > \alpha \max_{K^{'} \in T_i^c} ||\bfy_i - \bfy_i^c||_{L^2\lo K^{'}\ro} \right\}$\\
+		obtain $T_{i+1}^c$ by refining (at least) all $K \in T^{r}_i$\\
+		obtain $T_{i+1}^f$ by uniformly refining $T_{i+1}^c$\\
 		i = i + 1\\
 	}
  }
- \caption{Generic AMR algorithm}
+ \caption{Reference solution AMR algorithm}
 \end{algorithm}
+In figures \Crefrange{figure:amrRef1}{figure:amrRef4}, several AMR steps are presented, showing how the \Cref{algorithm:AMRRef} works in practice. The results are taken from \cite{diplomka}. The error $||\bfy_i - \bfy_i^c||_{L^2\lo K\ro},\, K \in T_i^c$\\ is shown in the top-right corner, and the two meshes - $T_0^{c}$ and $T_n^{f}$ and - at the bottom (left and right). The color of mesh elements corresponds to varying polynomial degree of basis functions on that element.
 
 \begin{figure}[H]
 	\begin{center}
-%		\includegraphics[width=0.92\textwidth]{img/mhd-blast/new/blast,1noadapt18.jpg}
-		\caption{Fine solution on mesh }
+		\includegraphics[width=0.92\textwidth]{img/adapt/ref/1.jpg}
+		\caption{AMR Step 1, fine solution (top left), coarse mesh (bottom left), fine mesh (bottom right), element-wise error (top right)}
 	\label{figure:amrRef1}
 	\end{center}
 \end{figure}
 \vspace{-4mm}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.92\textwidth]{img/adapt/ref/2.jpg}
+		\caption{AMR Step 2, fine solution (top left), coarse mesh (bottom left), fine mesh (bottom right), element-wise error (top right)}
+	\label{figure:amrRef2}
+	\end{center}
+\end{figure}
+\vspace{-4mm}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.92\textwidth]{img/adapt/ref/3.jpg}
+		\caption{AMR Step 3, fine solution (top left), coarse mesh (bottom left), fine mesh (bottom right), element-wise error (top right)}
+	\label{figure:amrRef3}
+	\end{center}
+\end{figure}
+\vspace{-4mm}
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.92\textwidth]{img/adapt/ref/4.jpg}
+		\caption{AMR Step 4, fine solution (top left), coarse mesh (bottom left), fine mesh (bottom right), element-wise error (top right)}
+	\label{figure:amrRef4}
+	\end{center}
+\end{figure}
+\vspace{-4mm}
 
-
-TODO - add outputs (Hermes / deal)
-TODO - ukazat na 2d prikladu z Hermesu co to je referencni reseni, co to je ||zprojektovane - presne|| (v dealu?), co to je tohle bez normy, zminka o distribuovanosti, ze musim napocitat nejaky thresholdy mapReducem, atd.
+\subsection{Implementation notes}
+Regardless of whether the Reference solution-based AMR, or AMR based on another solution criteria and refinement indicator is used, a necessary implementation aspect is the iterative approach towards obtaining an acceptable solution - this applies both to \Cref{algorithm:AMRRef} as well as \Cref{algorithm:AMRGen} - in both cases these iterations are handled via a $While$ loop with the variable $i$.
+\paragraph{}
+In order to satisfy the solution acceptance criteria, and possibly some other technical criteria (minimum and maximum number of degrees of freedom for example), care must be taken in the sub-step (again, present in both presented algorithms) of identifying the elements for refinement (the set $T^{r}_i$). The way this set is constructed in \Crefrange{refIndicatorValues}{refIndicatorValuesEnd} assumes the ability to calculate either $\max\left\{r\lo K\ro\ |\ K \in T^{ts}_i\right\}$, or $\sum\left\{r\lo K\ro\ |\ K \in T^{ts}_i\right\}$, prior to identifying the set $T^{r}_i$. This however, in a distributed computation, constitutes a map-reduce problem of the following nature:
+\begin{enumerate}
+\item On each processor separately, calculate the local contribution
+\item On the master processor (rank \#0), collect all local contribution
+\item On the master processor calculate the result, distribute it to all processors
+\item On each processor, use the global result to identify the local contribution to the set $T^{r}_i$
+\end{enumerate}
