@@ -1,2 +1,23 @@
 \subsection{Distribution}
-TODO - jeste neco tady jineho nez u distribuovane triangulace? Mozna o MPI, o posilani dat, a pak muzu popsat zelezo jaky mam k dispozici - condor, oasu, metacentrum
+As discussed in \Cref{section:ditributedTria}, the \textit{domain decomposition} approach is taken to overcome the physical limitations (CPU physical size, RAM capacity, ...) of a single machine with shared memory.
+\paragraph{}
+This approach has several aspects, that are worth mentioning. The entire process of discretization of MHD equations (as well as any other system of PDEs) eventually leads to solving large (sparse) systems of linear equations, and then interpretation of the solution in terms of a global (defined on entire $\Omega$) function - that is a linear combination of the global basis functions with the solution of the linear problem being the coefficients of this linear combination. From this it follows, that distributing only the triangulation would not by itself lead to radical increase of the size of problems we can tackle, there are other points where the algorithms employed need to take distribution of data among processors into account:
+\begin{enumerate}
+	\item
+		Distributed matrix and right hand side
+		\begin{itemize}
+			\item It is necessary for each processor to be able to utilize the memory on the node it physically belongs to when writing values of calculated integrals into the algebraic structure (see steps $a_{lm}\ +=...$, $b_{l}\ +=...$ of \Cref{algorithm:singleTimeStep}).
+			\item Distribution of the matrix is actually very important from the memory capacity perspective. It is typically the largest data structure (together with preconditioner) used in the entire implementation - regardless whether the used method is FEM, DGFEM, or Finite Volumes for example.
+		\end{itemize}
+	\item
+		Distributed algebraic solver
+	When the algebraic structures (the matrix and the right hand side) are completed, the sought solution must again be sought in a distributed manner, otherwise the added cost would be transferring algebraic data from all processors to a common one, where the solution would be sought. This is, however, a theoretical possibility, as the data structures used in the solution of the algebraic problem (decompositions, preconditioners, ...) are typically too large to be stored on a single processor anyway.
+	\item
+		Distributed solution
+		\begin{itemize}
+			\item Although it is quite obvious, it is noteworthy that as the algebraic structures are distributed, and so is the solution of the algebraic problem, the actual solution is again, distributed according to the domain decomposition.
+			\item The distributed solution is the data structure that is most important from the perspective of the \textit{ghost cells} - illustrated in \Cref{figure:ghost}, where for the distributed discontinuous Galerkin method, we need to be able to access the distributed solution values from all neighboring elements when performing numerical integration \Cref{singleNumIntBface}.
+		\end{itemize}
+\end{enumerate}
+\subsubsection{Message Passing Interface and deal.II}
+For all distributed computing purposes in this work, deal.II implementation of the Message Passing Interface (MPI) was used. MPI is a specification for a standard library for message passing for the purposes of distributed computing, and was originally introduced in \cite{mpi}. The library deal.II (\cite{deal}) offers wrappers for low-level MPI functions, that are utilizable in the implementation of the methods of this work.
