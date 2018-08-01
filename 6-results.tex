@@ -4,7 +4,7 @@ In this section, results from the computation using the implemented software are
 In most cases, we are interested in the distribution of plasma density $\rho$ and the magnetic field $B$ in the domain.
 
 \section{Benchmarks}
-
+\label{sec:benchmarks}
 The benchmarks presented in this Section do not have an exact analytical solution, but the formation of waves and discontinuities is well studied, and benchmarking is usually performed on the basis of comparing the structure and presence of non-physical attributes.
 \subsection{Hardware specification}
 For all following benchmarks, the setup described below was used. The computational mesh $T_h$ was formed in all cases by rectangular hexahedra.
@@ -431,6 +431,7 @@ p\lo\bfx, t_0\ro & = \beta\ \text{everywhere}\\
 \bfB\lo\bfx, t_0\ro & \bfB_{in}\lo\bfx, t_0\ro + \bfB_{ext}\lo\bfx, t_0\ro,
 \end{align}
 where $t_0 = 0$, and the equations for the magnetic field of the flux rope $\bfB_{in}\lo\bfx, t_0\ro$, magnetic field created by the (artificial) magnetic charges $\bfB_{ext}\lo\bfx, t_0\ro$ are the same as in equations (3) and (4) in \cite{miraClanek}.
+\subsection{Boundary conditions}
 The model of equilibrium is equipped with these boundary conditions for density $\rho$, pressure $p$, and velocity $\bfv$:
 \begin{align}
 \frac{\partial \rho}{\partial \bfn} & = 0\ \text{everywhere},\\
@@ -440,12 +441,9 @@ The model of equilibrium is equipped with these boundary conditions for density 
 \end{align}
 where the last equations represents the fixed ends of the flux rope on Sun's surface.
 The conditions for the magnetic field are more difficult to set, as we need to make sure that $\nabla \cdot \bfB = 0$ also for the magnetic field across the boundary.
-\subsection{Boundary condition}
 One way to achieve this is to set:
 \begin{align}
 \frac{\partial B_{t_{1,2}}}{\partial \bfn} & = 0,\\
 \frac{\partial B_n}{\partial \bfn} & = -\sum_{i = 1, 2}\frac{\partial B_{t_{i}}}{\partial \bft_{i}},
 \end{align}
 where $\bfn$ is the normal direction, $\bft_{i}, i = 1, 2$ are the two tangential directions, and $B_n$, and $B_{t_{1,2}}$ stands for the normal, and two tangential components of the magnetic field $\bfB$. Also, $U$ is calculated from the above so that the relation \Cref{presU} holds.
-
-

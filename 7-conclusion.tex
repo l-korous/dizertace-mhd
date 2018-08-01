@@ -1,39 +1,35 @@
 \chapter{Conclusion, outlook}
-Further work will focus on real-world industrial and astrophysical problems, mainly study of the magnetic field reconnection - \citep{reconnection}, and other phenomena occurring both in solar physics and in industrial applications of plasma flow.
-Before the implemented software package is ready to be used for solution of such problems, it needs to be improved in several ways - first, the benchmark shown in this work clearly showed, that a more stable numerical scheme needs to be implemented. Second, the performance needs to be tweaked by the use of distributed computations. This will need to employ some of the following techniques:
+As for the mathematical, numerical, and technical (software) parts for such tool to be delivered, all problems that were to be solved, such as
 \begin{itemize}
-	\item Second-order scheme for the discretization of the time derivative
-	\item Adaptive algorithm for the discretization of the time derivative
-	\item Shock-capturing for high-order DG scheme to prevent non-physical oscillations
-	\item Adaptive algorithm for the discretization of the space derivatives communication
-	\item A specific shapeset of basis and test functions based on Taylor expansions.
+	\item Adaptive algorithm for the discretization of the time derivative (through CFL condition, see \Cref{equation:CFLcond}),
+	\item Shock-capturing for high-order DG scheme to prevent non-physical oscillations (through Vertex-based limiter, see \Cref{algorithm:limiter}),
+	\item Adaptive algorithm for the discretization of the space derivatives (through AMR, entire \Cref{chapter:amr}),
+	\item A specific shapeset of basis and test functions based on Taylor expansions (through \Cref{sec:divFreeSpace}),
+\end{itemize}
+have been solved, and moreover performance level meets the needs of the use cases. All this has been shown on benchmark problems (see {sec:benchmarks}), as well as real-world Titov-Demoulin-based simulation.
+\paragraph{}
+Of course, much can be improved upon, for example:
+\begin{itemize}
+	\item Second-order scheme for the discretization of the time derivative,
+	\item Adaptive algorithm for the discretization of the time derivative,
+	\item Caching of values that are necessary in multiple spaces of the algorithm (utilizing the RAM),
+	\item Further use of vectorization for evaluation of integral quantities,
+\end{itemize}
+but the original goal of preparing an easy-to-use, easy-to-extend, and well programmed, and tested software package, has been achieved:
+\begin{itemize}
+\item The code is able to utilize large-scale clusters through implementation being based on Message Passing Interface (MPI),
+\item The code is publicly available, and well documented - by following the schematics of the used numerical methods, as well as using clear naming conventions in the object model of the program,
+\item The code is quite ready for addition of new tests, new benchmarks, new examples, as well as easy parametrization of the existing ones.
 \end{itemize}
 
-After the implementation is stable for the benchmark presented here, and as well as additional benchmarks (such as Orszag-Tang Vortex - \citep{vortex}), next steps are distributed calculation of larger real-world problems and further work on performance improvements. Performance improvements will include some of the following:
+\section{Outloook}
+Further work will focus on real-world astrophysical problems, where the Titov-Demoulin-based simulations, although all mathematical and numerical apparatus is in place, still need work to satisfy the goal of being reliable and all-purpose tool for astrophysicists. Further work will focus on incorporating additional relevant physical phenomena - mainly study of the magnetic field reconnection - \citep{reconnection}, and other phenomena occurring both in solar physics and in industrial applications of plasma flow.
+
+To sum up next steps with the already finished toolset, these are the logical next steps:
 \begin{itemize}
-	\item Caching of values that are necessary in multiple spaces of the algorithm (utilizing the RAM)
-	\item Further use of vectorization for evaluation of integral quantities
-	\item Distributed computation using the Message Passing Interface
-	\item Optimal selection of both solver, and preconditioner for the solution of the resulting algebraic problems
+\item Replicate fully the results of \cite{miraClanek}, including all parameters, and boundary condition specifics,
+\item Run much more detailed simulation over a larger domain for a longer time, to be able to inspect the destructive behavior of the astrophysical event on small scales,
+\item Continuously improve the performance of the code, fix issues as they are discovered, and extend the implemented set of numerical schemes,
+\item Add additional relevant physics phenomena - resistivity, magnetic field reconnection, possibly relativistic effects,
+\item Get in touch with other possible users of the implemented software to enrich the set of possible use cases.
 \end{itemize}
-
-Step after that is adding of additional physics into the implementation, mainly in the form of magnetic reconnection models. From the implementation point of view, additional physics usually implies extending the matrix assembly routines by evaluating more physical quantities, possibly in a different setup (e.g. point values, particle-based quantities, etc.), or either post-processing or iterating the results in order to add some new rules and relations that must hold for the solution.
-\\\\\
-Plan of work:
-\begin{table}[h!]
-	\centering
-	\begin{tabular}{||c|p{5cm}||} 
-		\hline		\hline
-		Quarter & Activities \\
-		\hline\hline
-		Q2/2016 & Stabilize the algorithm, achieve both stable, reliable, and fast calculation of 2 - 3 benchmarks\\
-		\hline
-		Q3/2016 &  Implementing more numerical fluxes, performance improvements \\
-		\hline
-		Q4/2016 & Adding physics (e.g. magnetic reconnection), start with real-world problems  \\
-		\hline
-		Q1+Q2/2017 & Distributed computations, adaptive algorithms \\
-		\hline		\hline
-	\end{tabular}
-\end{table}
-
