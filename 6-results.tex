@@ -404,15 +404,15 @@ Results obtained in the implemented software are presented in \Cref{figure:myOt1
 \vspace{-3mm}
 
 \section{Flux tube eruption model}
-This model is based on the original Titov-Demoulin model from \cite{td}, as used in \cite{miraClanek}.
-
+This model is based on the original Titov-Demoulin model from \cite{td}, as used in \cite{miraClanek}, where the geometrical proportions, and equilibrium conditions are taken from \cite{td}.
+\subsection{Problem parameters}
 The model parameters are as follows. Note that $k_B$ is the Boltzmann constant $k_B = 1.38064852 \times 10^{-23} \frac{\mathrm{J}}{\mathrm{K}}$, $m_p$ is the plasma mass, and $g$ gravitational acceleration. Parameter values read
 \begin{align}
 \nonumber \beta & =  0.05\ \ \ \ ...\ \text{Plasma beta},\\
 \nonumber L_G & =  2\ k_B \frac{T_{ext}}{\lo m_p g \ro} = 1.2 \times 10^8 \left[\text{m}\right],\\
 \nonumber L_G & =  20 \ \ \ \ ...\ \text{Coronal height scale in dimension-less units},\\
 \nonumber N_t & = 5\ \ \ \ ...\ \text{Torus winding number},\\
-\nonumber R & = 4\ \ \ \ ...\ \text{Torus major radius},\\
+\nonumber R & = 3\ \ \ \ ...\ \text{Torus major radius},\\
 \nonumber L & = 1.5\ \ \ \ ...\ \text{Magnetic charge separation distance},\\
 \nonumber d & =  1.5\ \ \ \ ...\ \text{Geometrical factor},\\
 \nonumber q & =  \frac{\ln\lo 8 e^{-5/4} R\ro}{4} N_t \lo\frac{L}{R}\ro^2\left[1 + \lo\frac{R}{L}\ro^2\right]^{3/2},\\
@@ -420,10 +420,32 @@ The model parameters are as follows. Note that $k_B$ is the Boltzmann constant $
 \nonumber H & = 2\ \frac{N_t^2}{R^2}\ \ \ \ ...\ \text{"Helicity" factor inside tho loop},\\
 \nonumber \frac{ T_{ext} }{T_{in}} & =  10\ \ \ \ ...\ \text{Coronal/prominence temperature ratio}.\\
 \end{align}
-The domain $\Omega$ is taken as $\left[-2.5, 2.5\right] \times \left[-5, 5\right] \times \left[0, 5\right]$, and the model is equipped with boundary conditions:
+The domain $\Omega$ is taken as $\left[-2.5, 2.5\right] \times \left[-5, 5\right] \times \left[0, 5\right]$.
+\subsection{Initial condition}
+The model is equipped with an initial condition:
 \begin{align}
-... & = \Gamma_{ij} \text{on the left, right, front, back, and top boundary},\ z > 0,\\
-... & = \Gamma_{ij} \text{on the bottom boundary},\ z = 0.
+\rho\lo\bfx, t_0\ro & = \mathrm{exp}\lo\frac{-z}{\frac{ T_{ext} }{T_{in}}L_G}\ro,\ \bfx\ \text{inside the torus}\\
+\rho\lo\bfx, t_0\ro & = \frac{ T_{in} }{T_{ext}} \mathrm{exp}\lo\frac{-z}{L_G}\ro,\ \bfx\ \text{outside the torus}\\
+p\lo\bfx, t_0\ro & = \beta\ \text{everywhere}\\
+\bfv\lo\bfx, t_0\ro & = 0\ \text{everywhere}\\
+\bfB\lo\bfx, t_0\ro & \bfB_{in}\lo\bfx, t_0\ro + \bfB_{ext}\lo\bfx, t_0\ro,
 \end{align}
-TODO add proper description of the example
-TODO add comparison with the article
+where $t_0 = 0$, and the equations for the magnetic field of the flux rope $\bfB_{in}\lo\bfx, t_0\ro$, magnetic field created by the (artificial) magnetic charges $\bfB_{ext}\lo\bfx, t_0\ro$ are the same as in equations (3) and (4) in \cite{miraClanek}.
+The model of equilibrium is equipped with these boundary conditions for density $\rho$, pressure $p$, and velocity $\bfv$:
+\begin{align}
+\frac{\partial \rho}{\partial \bfn} & = 0\ \text{everywhere},\\
+\frac{\partial p}{\partial \bfn} & = 0\ \text{everywhere},\\
+\frac{\partial \bfv}{\partial \bfn} & = 0\ \text{on the left, right, front, back, and top boundary},\ z > 0,\\
+\bfv & = 0\ \text{on the bottom boundary},\ z = 0,\\
+\end{align}
+where the last equations represents the fixed ends of the flux rope on Sun's surface.
+The conditions for the magnetic field are more difficult to set, as we need to make sure that $\nabla \cdot \bfB = 0$ also for the magnetic field across the boundary.
+\subsection{Boundary condition}
+One way to achieve this is to set:
+\begin{align}
+\frac{\partial B_{t_{1,2}}}{\partial \bfn} & = 0,\\
+\frac{\partial B_n}{\partial \bfn} & = -\sum_{i = 1, 2}\frac{\partial B_{t_{i}}}{\partial \bft_{i}},
+\end{align}
+where $\bfn$ is the normal direction, $\bft_{i}, i = 1, 2$ are the two tangential directions, and $B_n$, and $B_{t_{1,2}}$ stands for the normal, and two tangential components of the magnetic field $\bfB$. Also, $U$ is calculated from the above so that the relation \Cref{presU} holds.
+
+
