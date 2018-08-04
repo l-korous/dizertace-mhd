@@ -1,5 +1,5 @@
 \section{Algebraic formulation}
-Last step in the DG method discretization is to transform the system of equations \Cref{DiscretizedFull} into a system of linear algebraic equations at every time step $t_k$ and obtain the solution at this time step as the solution of this linear algebraic system.
+Last step in the DG method discretization is to transform the system of equations \cref{DiscretizedFull} into a system of linear algebraic equations at every time step $t_k$ and obtain the solution at this time step as the solution of this linear algebraic system.
 \paragraph{}
 First, we rearrange the system in the following manner:
 \begin{align}
@@ -27,9 +27,9 @@ b & =  \left\{b_{l}\right\}_{l = 1}^{l = L},\\
 y & =  \left\{y_{l}\right\}_{l = 1}^{l = L},
 \label{Linear5}
 \end{align}
-and rewriting \Cref{RewrittenLinearSystem} using \Cref{Linear1} - \Cref{Linear5}, we come to the \textit{fully discrete algebraic problem at time instance $t_{k+1}$}:
+and rewriting \cref{RewrittenLinearSystem} using \cref{Linear1} - \cref{Linear5}, we come to the \textit{fully discrete algebraic problem at time instance $t_{k+1}$}:
 \be
 \label{Alg} Ay = b,
 \ee
 whose well-posedness, and other attributes that allow for a successful solution of this system, come from the properties of the DG method.
-Now if we solve the system \Cref{Alg}, and obtain the solution vector $y$, we are able to reconstruct the discrete solution ${\mrPsi_h}^{k+1} \in \left[V_h\right]^8$ using the relation \Cref{Coeffs}.
+Now if we solve the system \cref{Alg}, and obtain the solution vector $y$, we are able to reconstruct the discrete solution ${\mrPsi_h}^{k+1} \in \left[V_h\right]^8$ using the relation \cref{Coeffs}.

@@ -8,9 +8,9 @@ In most cases, we are interested in the distribution of plasma density $\rho$ an
 The benchmarks presented in this Section do not have an exact analytical solution, but the formation of waves and discontinuities is well studied, and benchmarking is usually performed on the basis of comparing the structure and presence of non-physical attributes.
 \subsection{Hardware specification}
 For all following benchmarks, the setup described below was used. The computational mesh $T_h$ was formed in all cases by rectangular hexahedra.
-The value of the time step $\tau$ used was set according to the CFL condition (\Cref{section:CFL}).
-The Taylor basis functions (see \cite{KuzminVertex}) and Divergence-free basis functions (\Cref{tbl:divFreeBasis}) of order $0$ (piecewise constant functions) and $1$ (piecewise linear functions) were used.
-Where appropriate (for piecewise linear basis functions), the slope limiting technique from \Cref{sec:vertex} was used.
+The value of the time step $\tau$ used was set according to the CFL condition (\cref{section:CFL}).
+The Taylor basis functions (see \cite{KuzminVertex}) and Divergence-free basis functions (\cref{tbl:divFreeBasis}) of order $0$ (piecewise constant functions) and $1$ (piecewise linear functions) were used.
+Where appropriate (for piecewise linear basis functions), the slope limiting technique from \cref{sec:vertex} was used.
 Illustration of the obtained results follows below - these results were obtained using one node of the department's computational cluster with these parameters:
 \begin{itemize}
     \item CPU: Intel(R) Xeon(R) CPU E5-2680 v3 @ 2.50GHz,
@@ -39,11 +39,11 @@ p\lo\bfx, t = 0\ro & =  p_0\lo\bfx, t\ro,\\ \nonumber
 \bfB_2\lo\bfx, t = 0\ro & =  100,\\ \nonumber
 \bfB_3\lo\bfx, t = 0\ro & =  0.
 \end{align}
-Total energy is calculated using \Cref{magU}, \Cref{kinU}, \Cref{presU}.
+Total energy is calculated using \cref{magU,kinU,presU}.
 The domain $\Omega$ is a square, with scaling quite arbitrarily used in the papers. In the case of \cite{blast1}, $\Omega = [0, 1] \times [0, 1]$, in this work it is $\Omega = [-0.25, 0.25] \times [-0.25, 0.25]$.
 
-It is obvious from the initial setup, that the example is true to its name, and it is in fact a blast of the over-pressured area $\left|\bfx\right| < 0.1$, where pressure $p$ is 100$\times$ larger than elsewhere in the domain. This setup is completed with simple outflow boundary condition \Cref{bcoutdef}.
-In the next figures, the solution as presented in \cite{blast1} is compared to the solution obtained with the approach described in this work. Note that the solution from \cite{blast1} needed to have the axes transformed $\lo x\rightleftharpoons y\ro$ with respect to the original paper. The figure \Cref{figure:blastOldRef} is taken from the article \cite{blast1} from the page 33. Unfortunately the paper does not specify the precise time at which the snapshots are taken.
+It is obvious from the initial setup, that the example is true to its name, and it is in fact a blast of the over-pressured area $\left|\bfx\right| < 0.1$, where pressure $p$ is 100$\times$ larger than elsewhere in the domain. This setup is completed with simple outflow boundary condition \cref{bcoutdef}.
+In the next figures, the solution as presented in \cite{blast1} is compared to the solution obtained with the approach described in this work. Note that the solution from \cite{blast1} needed to have the axes transformed $\lo x\rightleftharpoons y\ro$ with respect to the original paper. The figure \cref{figure:blastOldRef} is taken from the article \cite{blast1} from the page 33. Unfortunately the paper does not specify the precise time at which the snapshots are taken.
 
 \begin{figure}[H]
 \centering
@@ -99,18 +99,18 @@ In the next figures, the solution as presented in \cite{blast1} is compared to t
 	\end{center}
 \end{figure}
 \vspace{-5mm}
-The solution in \Cref{figure:blastOldMy4}, \Cref{figure:blastOldMy5}  is apparently almost identical to that in \Cref{figure:blastOldRef}. To demonstrate the distributed nature of the computation, in \Cref{figure:subdomainsBlastOld}, color-mapping of elements $K \in T$ to processors owning the particular element is presented (see \Cref{section:ditributedTria} for details). Note that there were $48$ processors used for the computation.
+The solution in \cref{figure:blastOldMy4,figure:blastOldMy5}  is apparently almost identical to that in \cref{figure:blastOldRef}. To demonstrate the distributed nature of the computation, in \cref{figure:subdomainsBlastOld}, color-mapping of elements $K \in T$ to processors owning the particular element is presented (see \cref{section:ditributedTria} for details). Note that there were $48$ processors used for the computation.
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[width=0.5\textwidth]{img/mhd-blast/old/subdomain.jpg}
-	\caption{Color-mapping of elements to processors for the computation of \Crefrange{figure:blastOldMy1}{figure:blastOldMy5}}
+		\includegraphics[width=0.65\textwidth]{img/mhd-blast/old/subdomain.jpg}
+	\caption{Color-mapping of elements to processors for the computation of \crefrange{figure:blastOldMy1}{figure:blastOldMy5}}
 	\label{figure:subdomainsBlastOld}
 	\end{center}
 \end{figure}
 \vspace{-5mm}
 
-This however, was a static calculation with 200 mesh elements in the $x-$ and $y-$ dimensions. In order to see how the AMR (see \Cref{chapter:amr}) performs, the same computation was performed in adaptive setup. Starting from a very coarse mesh of 10 elements in both dimensions, the evolving mesh and its distribution to processors are shown in \Crefrange{figure:blastOldMyAdapt1}{figure:blastOldMyAdapt6} - the distribution to processors on the left, the mesh elements on the right.
+This however, was a static calculation with 200 mesh elements in the $x-$ and $y-$ dimensions. In order to see how the AMR (see \cref{chapter:amr}) performs, the same computation was performed in adaptive setup. Starting from a very coarse mesh of 10 elements in both dimensions, the evolving mesh and its distribution to processors are shown in \crefrange{figure:blastOldMyAdapt1}{figure:blastOldMyAdapt6} - the distribution to processors on the left, the mesh elements on the right.
 
 \begin{figure}[H]
 	\begin{center}
@@ -170,7 +170,7 @@ This however, was a static calculation with 200 mesh elements in the $x-$ and $y
 \label{sec:blastNew}
 An extended version of the benchmark has been used in \cite{blastNew1}, \cite{athenaBlast}, and a similar problem was used also in \cite{blastNew2} - the description of the benchmark is also available at:\url{http://www.astro.princeton.edu/~jstone/Athena/tests/blast/blast.html}.
 In this version, the domain dimensions are set as a rectangle: $\Omega = [-0.5, 0.5] \times [-0.75, 0.75]$.
-The initial conditions are a little different than in the case of \Cref{mhdBlastOld}, and read:
+The initial conditions are a little different than in the case of \cref{mhdBlastOld}, and read:
 \begin{align}
 \label{mhdBlastNew}
 \gamma & =  5 / 3\\ \nonumber
@@ -185,7 +185,7 @@ p\lo\bfx, t = 0\ro & =  p_0\lo\bfx, t\ro,\\ \nonumber
 \bfB_2\lo\bfx, t = 0\ro & =  \frac{1}{\sqrt{2}},\\ \nonumber
 \bfB_3\lo\bfx, t = 0\ro & =  0,
 \end{align}
-with periodic boundary conditions on the top-bottom, and left-right parts of the boundary. That is, with respect to \Cref{periodicMapping}, the two pairs $\Gamma_1, \Gamma_2, \Gamma_1^{'}, \Gamma_2^{'}$ are specified as follows:
+with periodic boundary conditions on the top-bottom, and left-right parts of the boundary. That is, with respect to \cref{periodicMapping}, the two pairs $\Gamma_1, \Gamma_2, \Gamma_1^{'}, \Gamma_2^{'}$ are specified as follows:
 \begin{align}
 \Gamma_1 & = \left\{-0.5\right\} \times [-0.75, 0.75],\\
 \Gamma_2 & = \left\{0.5\right\} \times [-0.75, 0.75],
@@ -196,10 +196,10 @@ and
 \Gamma_2^{'} & = [-0.5, 0.5] \times \left\{0.75\right\}.
 \end{align}
 
-The solution image taken from \cite{blastNew1} is for comparison in \Cref{figure:blastRef}.
+The solution image taken from \cite{blastNew1} is for comparison in \cref{figure:blastRef}.
 
 \subsubsection{Results}
-The first set of results are from calculations using piecewise-constant elements, on three successively uniformly refined meshes. The meshes used for computations \Crefrange{figure:blastNew01}{figure:blastNew06} contained:
+The first set of results are from calculations using piecewise-constant elements, on three successively uniformly refined meshes. The meshes used for computations \crefrange{figure:blastNew01}{figure:blastNew06} contained:
 \begin{itemize}
 \item $100 \times 150$ elements (left)
 \item $200 \times 300$ elements (middle)
@@ -262,10 +262,10 @@ The first set of results are from calculations using piecewise-constant elements
 
 It is clearly visible, that the solution is somehow smeared, and the uniform mesh refinements improve the situation, but not greatly, and for a large cost of storage size for storing much more mesh elements.
 \paragraph{}
-In order to amend the situation, and be able to obtain a higher-quality solution with a reasonable number of mesh elements, piecewise-linear basis functions need to be used. Results with piecewise-linear basis functions, on three successively uniformly refined meshes are given in \Crefrange{figure:blastNew11}{figure:blastNew16}. The meshes for these computations contained:
+In order to amend the situation, and be able to obtain a higher-quality solution with a reasonable number of mesh elements, piecewise-linear basis functions need to be used. Results with piecewise-linear basis functions, on three successively uniformly refined meshes are given in \crefrange{figure:blastNew11}{figure:blastNew16}. The meshes for these computations contained:
 \begin{itemize}
 \item $50 \times 75$ elements (left)
-\item $100 \times 200$ elements (middle)
+\item $100 \times 150$ elements (middle)
 \item $200 \times 300$ elements (right)
 \end{itemize}
 
@@ -323,7 +323,7 @@ In order to amend the situation, and be able to obtain a higher-quality solution
 \end{figure}
 \vspace{-4mm}
 
-Now, the solution with piecewise-linear functions is of much higher quality and the solution snapshots displayed in \Cref{figure:blastFinal} are practically identical (and even more detailed) as the solution from \cite{blastNew1} in \Cref{figure:blastRef}. Of course, this comes at a price of increased number of degrees of freedom, and associated increase in the storage size requirements, as well as the computation time, with respect to the solution with piecewise-constant basis functions.
+Now, the solution with piecewise-linear functions is of much higher quality and the solution snapshots displayed in \cref{figure:blastFinal} are practically identical (and even more detailed) as the solution from \cite{blastNew1} in \cref{figure:blastRef}. Of course, this comes at a price of increased number of degrees of freedom, and associated increase in the storage size requirements, as well as the computation time, with respect to the solution with piecewise-constant basis functions.
 
 \begin{figure}[H]
 	\begin{center}
@@ -342,6 +342,109 @@ Now, the solution with piecewise-linear functions is of much higher quality and 
 \end{figure}
 \vspace{-4mm}
 
+\subsubsection{AMR for MHD Blast - extended version}
+One can see, that for the finest mesh of $200\times300$ elements, the solution obtained shows very detailed features, and is arguably of even higher quality than the reference one from \cite{blastNew1}. However, the calculation needs
+\be
+200 \times 300\ = 60000\ \text{elements},
+\ee
+where each element contains $4$ basis functions for each of $\rho, p, \pi_1, \pi_2, \pi_3$, and $11$ basis functions for $\bfB$, that is $31$ basis functions per element, in total $60000 \times 31 = 1860000$ degrees of freedom (DOFs). This number can be decreased, while keeping the same (or even higher) solution quality, with AMR - as illustrated in \crefrange{figure:amrBlast1}{figure:amrBlast8} below. On each of \crefrange{figure:amrBlast1}{figure:amrBlast8}, the solution is displayed on the left, the adapted mesh in the middle, and the owning processor of a chunk of elements on the right. Note that there were $96$ processors used for the computation.
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{img/mhd-blast/new/adapt-full0.jpg}
+	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 0.5e-1$.}
+	\label{figure:amrBlast1}
+	\end{center}
+\end{figure}
+\vspace{-4mm}
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{img/mhd-blast/new/adapt-full1.jpg}
+	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 5e-1$.}
+	\label{figure:amrBlast2}
+	\end{center}
+\end{figure}
+\vspace{-4mm}
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{img/mhd-blast/new/adapt-full2.jpg}
+	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 1.5e-1$.}
+	\label{figure:amrBlast3}
+	\end{center}
+\end{figure}
+\vspace{-4mm}
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{img/mhd-blast/new/adapt-full3.jpg}
+	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 2e-1$.}
+	\label{figure:amrBlast4}
+	\end{center}
+\end{figure}
+\vspace{-4mm}
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{img/mhd-blast/new/adapt-full6.jpg}
+	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 3.5e-1$.}
+	\label{figure:amrBlast5}
+	\end{center}
+\end{figure}
+\vspace{-4mm}
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{img/mhd-blast/new/adapt-full10.jpg}
+	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 5.5e-1$.}
+	\label{figure:amrBlast6}
+	\end{center}
+\end{figure}
+\vspace{-4mm}
+
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{img/mhd-blast/new/adapt-full13.jpg}
+	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 7e-1$.}
+	\label{figure:amrBlast7}
+	\end{center}
+\end{figure}
+\vspace{-4mm}
+
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{img/mhd-blast/new/adapt-full16.jpg}
+	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 8.5e-1$.}
+	\label{figure:amrBlast8}
+	\end{center}
+\end{figure}
+\vspace{-4mm}
+In the \cref{table:meshElems}, mesh elements counts for all the displayed snapshots are given. Note that, as described in \cref{algorithm:AMRFull}, the number of elements constantly evolves.
+
+\begin{table}
+    \begin{tabular}
+		{ | l | l | p{5cm} |}
+		\hline
+    \textbf{Time step} & \textbf{Number of mesh elements} & \textbf{Number of DOFs} \\
+		\hline
+    $t\approx 0.5e-1$ & 5880 & 182280  \\ \hline
+    $t\approx 1e-1$ & 7332 & 227292  \\ \hline
+    $t\approx 1.5e-1$ & 8649 & 268119  \\ \hline
+    $t\approx 2e-1$ & 10044 & 311364  \\ \hline
+    $t\approx 3.5e-1$ & 14013 & 434403  \\ \hline
+    $t\approx 5.5e-1$ & 16578  & 513918 \\ \hline
+    $t\approx 7e-1$ & 17192 & 532952  \\ \hline
+    $t\approx 8.5e-1$ & 18708 & 579948  \\ \hline
+    \end{tabular}
+	\caption{Mesh elements and DOFs counts for snapshots displayed in \crefrange{figure:amrBlast1}{figure:amrBlast8}}
+\label{table:meshElems}
+\end{table}
+
+From \cref{table:meshElems}, it is cleary visible, that even for such a complex, and seemingly chaotic example, the AMR approach can cut down the number of mesh elements / DOFs radically, by 70-90 \%, while achieving comparable results. 
+
 \subsection{Orszag-Tang vortex}
 This problem was first described in \cite{vortex} and has been extensively used as a benchmark for 2- and 3- dimensional MHD code (\cite{blast0}, \cite{blast1}, \cite{honzaFem}, \cite{otnew}, and many others). It is a simple model of the evolution of MHD turbulence including interactions between the several shock waves that appear. The Orszag-Tang system is defined by the initial conditions:
 \begin{align}
@@ -359,9 +462,9 @@ p\lo\bfx, t = 0\ro & =  p_0,\\ \nonumber
 \bfB_3\lo\bfx, t = 0\ro & =  0,\\ \nonumber
 U\lo\bfx, t = 0\ro & =  \frac{p_0}{\gamma - 1} + U_m\lo\bfx, t\ro + U_k\lo\bfx, t\ro,
 \end{align}
-where the last term is an application of \Cref{magU}, \Cref{kinU}, \Cref{presU}. The domain $\Omega$ is set as $\Omega = [0, 1] \times [0, 1]$ and the problem is equipped with periodic boundary conditions on the top-bottom, and left-right parts of the boundary, similarly as in \Cref{sec:blastNew}. This configuration is strongly unstable, leading to a wide spectrum of propagating MHD modes and shock waves.
+where the last term is an application of \cref{magU,kinU,presU}. The domain $\Omega$ is set as $\Omega = [0, 1] \times [0, 1]$ and the problem is equipped with periodic boundary conditions on the top-bottom, and left-right parts of the boundary, similarly as in \cref{sec:blastNew}. This configuration is strongly unstable, leading to a wide spectrum of propagating MHD modes and shock waves.
 \paragraph{}
-As before, in order to compare with reference papers, figures are presented from these papers - see \Cref{figure:otRef}. The images are taken from pages 30 (\cite{blast1}), and 20/282 (\cite{blast0}) respectively. All are taken at $t = 0.5$.
+As before, in order to compare with reference papers, figures are presented from these papers - see \cref{figure:otRef}. The images are taken from pages 30 (\cite{blast1}), and 20/282 (\cite{blast0}) respectively. All are taken at $t = 0.5$.
 
 \begin{figure}[H]
 \centering
@@ -373,7 +476,7 @@ As before, in order to compare with reference papers, figures are presented from
 \label{figure:otRef}
 \end{figure}
 
-Results obtained in the implemented software are presented in \Cref{figure:myOt1}{figure:myOt3}. The result on \Cref{figure:myOt3} on the right is obviously in almost exact accordance with \Cref{figure:otRef}.
+Results obtained in the implemented software are presented in \crefrange{figure:myOt1}{figure:myOt3}. The result on \cref{figure:myOt3} on the right is obviously in almost exact accordance with \cref{figure:otRef}.
 
 \begin{figure}[H]
 \centering
@@ -402,6 +505,8 @@ Results obtained in the implemented software are presented in \Cref{figure:myOt1
 \label{figure:myOt3}
 \end{figure}
 \vspace{-3mm}
+
+As noted above these figures, the resolution of all present shocks and discontinuities is very high, and is accordance with the reference results (\cref{figure:otRef}) in \cite{blast1}, and \cite{blast0}.
 
 \section{Flux tube eruption model}
 This model is based on the original Titov-Demoulin model from \cite{td}, as used in \cite{miraClanek}, where the geometrical proportions, and equilibrium conditions are taken from \cite{td}.
@@ -446,4 +551,5 @@ One way to achieve this is to set:
 \frac{\partial B_{t_{1,2}}}{\partial \bfn} & = 0,\\
 \frac{\partial B_n}{\partial \bfn} & = -\sum_{i = 1, 2}\frac{\partial B_{t_{i}}}{\partial \bft_{i}},
 \end{align}
-where $\bfn$ is the normal direction, $\bft_{i}, i = 1, 2$ are the two tangential directions, and $B_n$, and $B_{t_{1,2}}$ stands for the normal, and two tangential components of the magnetic field $\bfB$. Also, $U$ is calculated from the above so that the relation \Cref{presU} holds.
+where $\bfn$ is the normal direction, $\bft_{i}, i = 1, 2$ are the two tangential directions, and $B_n$, and $B_{t_{1,2}}$ stands for the normal, and two tangential components of the magnetic field $\bfB$. Also, $U$ is calculated from the above so that the relation \cref{presU} holds.
+

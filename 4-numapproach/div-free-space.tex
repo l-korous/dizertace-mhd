@@ -1,8 +1,8 @@
 \section{Divergence-free FE space}
 \label{sec:divFreeSpace}
-The divergence-free constraint of the magnetic field, $\bfB = 0$ (Gauss's law) is not enforced by the solution definition \Cref{weakSlnDef}. Therefore, we need to perform additional work to be sure that we do not have a non-physical solution in the sense that the constraint is not satisfied.
+The divergence-free constraint of the magnetic field, $\bfB = 0$ (Gauss's law) is not enforced by the solution definition \cref{weakSlnDef}. Therefore, we need to perform additional work to be sure that we do not have a non-physical solution in the sense that the constraint is not satisfied.
 \paragraph{}
-There are two often used approaches to handle this problem - the Constraint-Transport (CT) method, and divergence cleaning. The first one is not suitable for this work, as it constraints the triangulation in such a way, that implementing Adaptive Mesh Refinement would be very complicated, if possible at all. The second approach, the divergence cleaning methods need additional postprocessing step which may be omitted for the sake of calculation efficiency. The approach taken in this work is to replace the standard FE space  \Cref{feSpaceDef} with basis functions \Cref{feSpaceBasis} for the magnetic field part ($B$) with a vector-valued (3-dimensional) space $V_h^B$ of functions that have exactly
+There are two often used approaches to handle this problem - the Constraint-Transport (CT) method, and divergence cleaning. The first one is not suitable for this work, as it constraints the triangulation in such a way, that implementing Adaptive Mesh Refinement would be very complicated, if possible at all. The second approach, the divergence cleaning methods need additional postprocessing step which may be omitted for the sake of calculation efficiency. The approach taken in this work is to replace the standard FE space  \cref{feSpaceDef} with basis functions \cref{feSpaceBasis} for the magnetic field part ($B$) with a vector-valued (3-dimensional) space $V_h^B$ of functions that have exactly
 \be
 \nabla \cdot \mrvh^B = 0,\ \ \mrvh^B\in V_h^B,
 \ee
@@ -33,6 +33,6 @@ The basis of space $V_h^B$ for piecewise-linear functions can be selected in sev
 		\caption{Divergence-free space basis}
 	\label{tbl:divFreeBasis}
 \end{table}
-In \Cref{tbl:divFreeBasis}, it is obvious that only one function actually has more nonzero components.
+In \cref{tbl:divFreeBasis}, it is obvious that only one function actually has more nonzero components.
 \paragraph{}
-In what follows, the notation $\left[V_h\right]^8$ used before will be used for the space where the last three components are replaced by $V_h^B$. Note that there are some technicalities with respect to the usage of $V_h^B$ needed to be handled in computation, e.g. in \Cref{vertexBasedAlpha}, or later in \Cref{Final_Integration_Fn}, \Cref{Final_Integration_Fn_b} that we do not explicitly attend to.
+In what follows, the notation $\left[V_h\right]^8$ used before will be used for the space where the last three components are replaced by $V_h^B$. Note that there are some technicalities with respect to the usage of $V_h^B$ needed to be handled in computation, e.g. in \cref{vertexBasedAlpha}, or later in \cref{Final_Integration_Fn,Final_Integration_Fn_b} that we do not explicitly attend to.

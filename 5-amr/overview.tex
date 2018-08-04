@@ -1,5 +1,5 @@
 \section{Overview of the AMR}
-The general schema of any Adaptive Mesh Refinement algorithm is described in the algorithm \Cref{algorithm:AMRGen}:
+The general schema of any Adaptive Mesh Refinement algorithm is described in the algorithm \cref{algorithm:AMRGen}:
 \ \\
 \begin{algorithm}[H]
  \KwData{Mesh $T_0$}
@@ -19,8 +19,8 @@ The general schema of any Adaptive Mesh Refinement algorithm is described in the
  \caption{Generic AMR algorithm}
 \label{algorithm:AMRGen}
 \end{algorithm}
-In \Cref{algorithm:AMRGen}, \textit{solution acceptance criteria} is usually either spatial error estimate threshold, or number of elements, etc. In the same description, the note that there might be other elements $K \notin T^{r}_i$ refined in order to maintain some desired attributes of the mesh, such as 1-irregularity (the refinement level difference of two elements sharing a common face is at most one), smoothness of mesh (there is e.g. no unrefined elements for which all, or a majority of neighboring elements would be refined), etc.
-An example of several steps of the algorithm (where step number corresponds to the variable $i$ in \Cref{algorithm:AMRGen}, is given in \Cref{figure:amrsimple} below on a sample problem in 2 dimensions.
+In \cref{algorithm:AMRGen}, \textit{solution acceptance criteria} is usually either spatial error estimate threshold, or number of elements, etc. In the same description, the note that there might be other elements $K \notin T^{r}_i$ refined in order to maintain some desired attributes of the mesh, such as 1-irregularity (the refinement level difference of two elements sharing a common face is at most one), smoothness of mesh (there is e.g. no unrefined elements for which all, or a majority of neighboring elements would be refined), etc.
+An example of several steps of the algorithm (where step number corresponds to the variable $i$ in \cref{algorithm:AMRGen}, is given in \cref{figure:amrsimple} below on a sample problem in 2 dimensions.
 
 \begin{figure}[H]
 	\begin{subfigure}[H]{40mm}
@@ -60,7 +60,7 @@ An example of several steps of the algorithm (where step number corresponds to t
 The benefit of AMR is clear. If we were to discretize the entire domain with elements small enough to capture the solution with the same quality as in the last AMR step, we would end up with $> 40000$ elements, where with AMR, the same is achieved with $< 1400$.
 
 \paragraph{}
-Since we are dealing with evolution equations, it is necessary to specify how the AMR algorithm relates with the non-AMR solution algorithm \Cref{algorithm:timeStepping}. There are several points we need to take into considerations:
+Since we are dealing with evolution equations, it is necessary to specify how the AMR algorithm relates with the non-AMR solution algorithm \cref{algorithm:timeStepping}. There are several points we need to take into considerations:
 \begin{itemize}
 	\item slope limiting as a postprocessing step after the solution must not be omitted in case of higher-order (e.g. linear) basis functions
 	\item the solution needs to be transferred to the refined mesh in order to be able to assemble the matrix and the right-hand side on the refined mesh in the next adaptivity iteration
@@ -77,9 +77,9 @@ The algorithm looks like this:
 			\KwData{Solution from the previous time step $y^{ts - 1}$ expressed on the mesh $T^{ts}_0$}
 			 i = 0\\
 			 \While{true}{
-				call procedure \Cref{algorithm:singleTimeStep} to obtain $A_{i}, b_{i}\lo y^{ts - 1}_{i}\ro$ on the mesh $T^{ts}_i$\\
+				call procedure \cref{algorithm:singleTimeStep} to obtain $A_{i}, b_{i}\lo y^{ts - 1}_{i}\ro$ on the mesh $T^{ts}_i$\\
 				solve the problem $A_i y^{ts}_i = b_{i}\lo y^{ts - 1}_i\ro$\\
-				post-process the solution $y^{ts}_i$ using \Cref{algorithm:limiter}\\
+				post-process the solution $y^{ts}_i$ using \cref{algorithm:limiter}\\
 				evaluate solution $y^{ts}_i$ acceptance criteria\\
 				\eIf{solution acceptance criteria satisfied} {
 					$y^{ts} = y^{ts}_i$\\
@@ -92,12 +92,12 @@ The algorithm looks like this:
 					i = i + 1\\
 				}
 		 }
-			calculate updated value of $\tau$ using \Cref{equation:CFLcond}\\
+			calculate updated value of $\tau$ using \cref{equation:CFLcond}\\
 	 }
 \caption{AMR for time-discretized problems}
 \label{algorithm:AMRFull}
 \end{algorithm}
-The output of the application of \Cref{algorithm:AMRFull} is presented in \Cref{figure:amrTimedep}.
+The output of the application of \cref{algorithm:AMRFull} is presented in \cref{figure:amrTimedep}.
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=0.9\textwidth]{img/adapt/timedep/a.jpg}
@@ -107,7 +107,7 @@ The output of the application of \Cref{algorithm:AMRFull} is presented in \Cref{
 \end{figure}
 \vspace{-4mm}
 
-The critical points of \Cref{algorithm:AMRFull} are
+The critical points of \cref{algorithm:AMRFull} are
 \begin{itemize}
 \item solution acceptance criteria evaluation,
 \item identification of subset $T^{r}_i$,

@@ -1,6 +1,6 @@
 \section{Weak formulation of the problem}
-The DG method is defined by first considering the weak formulation of the equations \Cref{conservativeGeneric} obtained by multiplying the equations at every time instance $t$ by a (vector-valued) test function $\mrv\in W_t$, where $W_t$ is a suitable space of (vector-valued) functions $W_t = \lo W_1, ..., W_8\ro$, integrating over the space domain $\Omega_{t}$, and performing integration by parts.
-We start with multiplying \Cref{conservativeGeneric} by a test function:
+The DG method is defined by first considering the weak formulation of the equations \cref{conservativeGeneric} obtained by multiplying the equations at every time instance $t$ by a (vector-valued) test function $\mrv\in W_t$, where $W_t$ is a suitable space of (vector-valued) functions $W_t = \lo W_1, ..., W_8\ro$, integrating over the space domain $\Omega_{t}$, and performing integration by parts.
+We start with multiplying \cref{conservativeGeneric} by a test function:
 \be
 \pds{\mrPsi}{t} \mrv + \lo\nabla \cdot \mrF\lo\mrPsi\ro\ro \mrv = \mrS \mrv,
 \ee
@@ -18,19 +18,19 @@ Now without going into detail, we can conclude, that a suitable space $W$ would 
 \be
 \label{Sobolev} W_t = \left[H^{1}\lo\Omega_t\ro\right]^8,
 \ee
-and we shall look for a solution to the \Cref{WeakFinal} in the same space $W_t$ at every time instance $t$. We shall not relax the requirement for continuity of time-derivatives we imposed for the \textit{hard solution} \Cref{HardSln} for reasons discussed later, and we arrive at the following Bochner space in which we are looking for a weak solution of \Cref{conservativeGeneric}:
+and we shall look for a solution to the \cref{WeakFinal} in the same space $W_t$ at every time instance $t$. We shall not relax the requirement for continuity of time-derivatives we imposed for the \textit{hard solution} \cref{HardSln} for reasons discussed later, and we arrive at the following Bochner space in which we are looking for a weak solution of \cref{conservativeGeneric}:
 \be
 \label{Bochner} W = C^{1}\lo\lo0, T\ro, W_t\ro.
 \ee
 
-To sum up we can define the \textit{weak solution $\mrPsi = \mrPsi\lo(t, \bfx\ro)$} of MHD equations \Cref{conservativeGeneric} as
+To sum up we can define the \textit{weak solution $\mrPsi = \mrPsi\lo(t, \bfx\ro)$} of MHD equations \cref{conservativeGeneric} as
 
 \begin{table}[H]
     \centering
     \begin{tabular}{ |c|l| } 
         \hline
-		$\mrPsi\lo(t, \bfx\ro) \in W$ defined in \Cref{Bochner}.\\
-    \Cref{WeakFinal} holds for all $t\in\lo0, T\ro$, and all $\mrv\in W_t$.\\
+		$\mrPsi\lo(t, \bfx\ro) \in W$ defined in \cref{Bochner}.\\
+    \cref{WeakFinal} holds for all $t\in\lo0, T\ro$, and all $\mrv\in W_t$.\\
     $\mrPsi\lo0, \bfx\ro = \Pi \mrPsi^0\lo\bfx\ro$.\\
         \hline
     \end{tabular}
@@ -38,4 +38,4 @@ To sum up we can define the \textit{weak solution $\mrPsi = \mrPsi\lo(t, \bfx\ro
 	\label{weakSlnDef}
 \end{table}
 
-In \Cref{weakSlnDef}, $\Pi$ is a projection of the initial condition $\mrPsi^0$ onto $W_0$.
+In \cref{weakSlnDef}, $\Pi$ is a projection of the initial condition $\mrPsi^0$ onto $W_0$.

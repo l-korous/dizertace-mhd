@@ -28,7 +28,7 @@ However, using this limiting technique, there are two suboptimal behavior featur
 Both these two problems are solved in the slope limiting technique chosen for this work
 \subsection{Vertex-based limiter}
 \label{sec:vertex}
-Introduced by D. Kuzmin in \cite{KuzminVertex}, the Vertex-based limiter aims at being an improvement over the Barth-Jespersen limiter. It also considers the solution in the form \Cref{slopeLimSln}, but the definition of the correction factor $\alpha_K$ differs:
+Introduced by D. Kuzmin in \cite{KuzminVertex}, the Vertex-based limiter aims at being an improvement over the Barth-Jespersen limiter. It also considers the solution in the form \cref{slopeLimSln}, but the definition of the correction factor $\alpha_K$ differs:
 
 \be
 \label{vertexBasedAlpha}
@@ -41,7 +41,7 @@ where in this case $u_i^{min}, u_i^{min}$ are defined in such a way that for eac
 \be
 u_i^{max} = \max\left\{u_c, u_i^{max}\right\},\ \ u_i^{min} = \min\left\{u_c, u_i^{min}\right\}.
 \ee
-This slope limiting technique proves to have all the required attributes from the perspective of this work. The algorithm implementing this technique looks is presented in \Cref{algorithm:limiter}
+This slope limiting technique proves to have all the required attributes from the perspective of this work. The algorithm implementing this technique looks is presented in \cref{algorithm:limiter}
 
 \begin{algorithm}[H]
 	\# Loop over elements\\
@@ -53,7 +53,7 @@ This slope limiting technique proves to have all the required attributes from th
 			\KwData{Set of linear basis functions coefficients obtained as:}
 			\# Loop over basis functions for the component $k$\\
 			\ForEach{$v_1^k := v\in \left\{v\in v_h \lo {K} \ro, \text{component of } v = k,\ v \text{ piecewise linear} \right\}$}{
-				\KwData{$l\lo v \ro$ - index of $v$ in the global system, i.e. row in \Cref{Linear3} - \Cref{Linear5}}
+				\KwData{$l\lo v \ro$ - index of $v$ in the global system, i.e. row in \cref{Linear3} - \cref{Linear5}}
 				\KwData{$u_{l\lo v \ro}$ - solution coefficient for $\lo v \ro$}
 			}
 			Set $\alpha_K = 1$\\
@@ -67,7 +67,7 @@ This slope limiting technique proves to have all the required attributes from th
 				}
 				Calculate $u^{max}_i = \max\left\{u_i, \max\left\{u_c^{K^{'}}\right\}\right\}$\\
 				Calculate $u_i^{min} = \min\left\{u_i, \min\left\{u_c^{K^{'}}\right\}\right\}$\\
-				Evaluate \Cref{vertexBasedAlpha}, updating $\alpha_K$
+				Evaluate \cref{vertexBasedAlpha}, updating $\alpha_K$
 			}
 			\ \\
 			\# Loop over basis functions for the component $k$\\
@@ -81,7 +81,7 @@ This slope limiting technique proves to have all the required attributes from th
 \end{algorithm}
 
 \subsubsection{Comparison of limited and unlimited solution}
-For illustration, the same problem as in \Cref{subsec:numfluxcomp} is considered, which is suitable for illustrating the undershoots and overshoots, as the problem contains a sharp front where this behavior is clearly visible.
+For illustration, the same problem as in \cref{subsec:numfluxcomp} is considered, which is suitable for illustrating the undershoots and overshoots, as the problem contains a sharp front where this behavior is clearly visible.
 In the next Figures, first several snapshots of an unlimited solution, and then several snapshot of a limited solution are presented. Note that the unlimited solution can't progress beyond a certain point, as the undershoots and overshoots get so large that the density values get to be negative, therefore e.g. calculating its square root needed for the speed of sound evaluation is impossible. Even before that, we get to non-physical regime, and e.g. the energy values start growing beyond limit.
 \begin{figure}[H]
 		\begin{center}
