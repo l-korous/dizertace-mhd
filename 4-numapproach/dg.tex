@@ -124,20 +124,20 @@ where
 \end{align}
 with two states
 \begin{align}
-\mrU_L & =  \lo\rho_L, {\pi_1}_L, {\pi_2}_L, {\pi_3}_L, {U}_L, {B_2}_L, {B_3}_L \ro
+\mrU_L & =  \lo\rho_L, {\pi_1}_L, {\pi_2}_L, {\pi_3}_L, {U}_L, {B_2}_L, {B_3}_L \ro,\\
 \mrU_R & =  \lo\rho_R, {\pi_1}_R, {\pi_2}_R, {\pi_3}_R, {U}_R, {B_2}_R, {B_3}_R \ro,
 \end{align}
 and where due to the divergence free condition $\nabla\cdot \bfB = 0$ of the magnetic field), $B_1$ is given as constant.
 \paragraph{}
-These equations (\cref{Riemann}) have seven eigenvalues which correspond to two Alfve'n waves ($\lambda_{2, 6}$), two slow magneto-acoustic waves ($\lambda_{3, 5}$), and two fast magneto-acoustic waves ($\lambda_{1, 7}$), and one entropy wave ($\lambda_{4}$):
+The \cref{Riemann} has seven eigenvalues which correspond to two Alfve'n waves ($\lambda_{2, 6}$), two slow magneto-acoustic waves ($\lambda_{3, 5}$), and two fast magneto-acoustic waves ($\lambda_{1, 7}$), and one entropy wave ($\lambda_{4}$):
 \begin{align}
-\lambda_{1} = \bfu_x - c_f,\\
-\lambda_{2} = \bfu_x - c_a,\\
-\lambda_{3} = \bfu_x - c_s,\\
-\lambda_{4} = \bfu_x,\\
-\lambda_{5} = \bfu_x + c_s,\\
-\lambda_{6} = \bfu_x + c_a,\\
-\lambda_{7} = \bfu_x + c_f,
+\lambda_{1} & = \bfu_x - c_f,\\
+\lambda_{2} & = \bfu_x - c_a,\\
+\lambda_{3} & = \bfu_x - c_s,\\
+\lambda_{4} & = \bfu_x,\\
+\lambda_{5} & = \bfu_x + c_s,\\
+\lambda_{6} & = \bfu_x + c_a,\\
+\lambda_{7} & = \bfu_x + c_f,
 \end{align}
 where $c_a = \sqrt{\frac{B_1^2}{rho}}$, $c_{s, f} = \left\{\frac{\gamma p + |B|^2 \mp \sqrt{\left(\gamma p + |B|^2\right)^{\frac12} - 4\gamma p B_1^2}}{2\rho}\right\}^{\frac12}$.
 \paragraph{}
@@ -281,7 +281,7 @@ For the comparison, a simple version of the benchmark described in \cref{sec:bla
 	
 There are a few observations from all the triplets of Figures:
 \begin{itemize}
-\item The Lax-Friedrichs flux is very sensitive to the choice of $\alpha$, for $\alpha = 1.2$, the solution is too diffusive,
+\item The Lax-Friedrichs flux is very sensitive to the choice of $\alpha$, for $\alpha = 1.2$ and higher, the solution becomes too diffusive,
 \item The 'ideal' Lax-Friedrichs flux where $\alpha = 0.5$ is quantitatively and qualitatively very close to the HLLD flux.
 \end{itemize}
 The second observation could lead us to the conclusion that the Lax-Friedrichs flux, being simple to implement, is superior to HLLD which is quite complex. Unfortunately, as shown e.g. in \cite{lfunstable}, the Lax-Friedrichs flux is not stable enough to be used for arbitrary problem setup, also when handling solution with discontinuities, it is very dissipative \cite{lfdisc}.
