@@ -1,7 +1,7 @@
 \chapter{Results}
 In this section, results from the computation using the implemented software are presented. There are two classical benchmarks for 3-dimensional MHD equations, namely the MHD Blast \cite{blast1}, \cite{blast2}, and the Orszag-Tang vortex \cite{vortex}. And then the main section of this work contains results from the flux tube eruption model on and above the Sun's surface.
 \paragraph{}
-In most cases, we are interested in the distribution of plasma density $\rho$ and the magnetic field $B$ in the domain.
+In most cases, we are interested in the distribution of plasma density $\rho$ and the magnetic field $B$ in the domain $\Omega$.
 
 \section{Benchmarks}
 \label{sec:benchmarks}
@@ -115,7 +115,7 @@ This however, was a static calculation with 200 mesh elements in the $x-$ and $y
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=0.87\textwidth]{img/mhd-blast/old/mya1.jpg}
-	\caption{Obtained results, initial state, distribution of $\rho$ with highlighted elements (right) and distribution of elements to processors (left)}
+	\caption{Obtained results, initial state, distribution of $\rho$ on elements in $T\lo\Omega\ro$ (right) and distribution of these elements to processors (left)}
 	\label{figure:blastOldMyAdapt1}
 	\end{center}
 \end{figure}
@@ -124,7 +124,7 @@ This however, was a static calculation with 200 mesh elements in the $x-$ and $y
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=0.87\textwidth]{img/mhd-blast/old/mya2.jpg}
-	\caption{Obtained results, $t = 5\times 10^{-3}$, distribution of $\rho$ with highlighted elements (right) and distribution of elements to processors (left)}
+	\caption{Obtained results, $t = 5\times 10^{-3}$, distribution of $\rho$ on elements in $T\lo\Omega\ro$ (right) and distribution of these elements to processors (left)}
 	\label{figure:blastOldMyAdapt2}
 	\end{center}
 \end{figure}
@@ -133,7 +133,7 @@ This however, was a static calculation with 200 mesh elements in the $x-$ and $y
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=0.87\textwidth]{img/mhd-blast/old/mya3.jpg}
-	\caption{Obtained results, $t = 10\times 10^{-3}$, distribution of $\rho$ with highlighted elements (right) and distribution of elements to processors (left)}
+	\caption{Obtained results, $t = 10\times 10^{-3}$, distribution of $\rho$ on elements in $T\lo\Omega\ro$ (right) and distribution of these elements to processors (left)}
 	\label{figure:blastOldMyAdapt3}
 	\end{center}
 \end{figure}
@@ -142,7 +142,7 @@ This however, was a static calculation with 200 mesh elements in the $x-$ and $y
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=0.87\textwidth]{img/mhd-blast/old/mya4.jpg}
-	\caption{Obtained results, $t = 15\times 10^{-3}$, distribution of $\rho$ with highlighted elements (right) and distribution of elements to processors (left)}
+	\caption{Obtained results, $t = 15\times 10^{-3}$, distribution of $\rho$ on elements in $T\lo\Omega\ro$ (right) and distribution of these elements to processors (left)}
 	\label{figure:blastOldMyAdapt4}
 	\end{center}
 \end{figure}
@@ -151,7 +151,7 @@ This however, was a static calculation with 200 mesh elements in the $x-$ and $y
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=0.87\textwidth]{img/mhd-blast/old/mya5.jpg}
-	\caption{Obtained results, $t = 20\times 10^{-3}$, distribution of $\rho$ with highlighted elements (right) and distribution of elements to processors (left)}
+	\caption{Obtained results, $t = 20\times 10^{-3}$, distribution of $\rho$ on elements in $T\lo\Omega\ro$ (right) and distribution of these elements to processors (left)}
 	\label{figure:blastOldMyAdapt5}
 	\end{center}
 \end{figure}
@@ -160,7 +160,7 @@ This however, was a static calculation with 200 mesh elements in the $x-$ and $y
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=0.87\textwidth]{img/mhd-blast/old/mya6.jpg}
-	\caption{Obtained results, $t = 25\times 10^{-3}$, distribution of $\rho$ with highlighted elements (right) and distribution of elements to processors (left)}
+	\caption{Obtained results, $t = 25\times 10^{-3}$, distribution of $\rho$ on elements in $T\lo\Omega\ro$ (right) and distribution of these elements to processors (left)}
 	\label{figure:blastOldMyAdapt6}
 	\end{center}
 \end{figure}
@@ -178,7 +178,7 @@ p_0\lo\bfx, t\ro & =  10\ \ \text{for}\ \left|\bfx\right| < 0.1\\ \nonumber
 p_0\lo\bfx, t\ro & =  0.1\ \ \text{for}\ \left|\bfx\right| \geq 0.1\\ \nonumber
 \rho\lo\bfx, t = 0\ro & =  1,\\ \nonumber
 p\lo\bfx, t = 0\ro & =  p_0\lo\bfx, t\ro,\\ \nonumber
-\bfu_1\lo\bfx, t = 0\ro & =  0,\\ \nonumber
+\bfu_1\lo\bfx, t = 0\ro & =  0,\\ \nonumber	
 \bfu_2\lo\bfx, t = 0\ro & =  0,\\ \nonumber
 \bfu_3\lo\bfx, t = 0\ro & =  0,\\ \nonumber
 \bfB_1\lo\bfx, t = 0\ro & =  \frac{1}{\sqrt{2}},\\ \nonumber
@@ -329,7 +329,7 @@ Now, the solution with piecewise-linear functions is of much higher quality and 
 	\begin{center}
 		\includegraphics[width=0.8\textwidth]{img/mhd-blast/new/ref.jpg}
 	\caption{Reference solution, $\rho$ distribution, $t \approx 0.2$ (left), $t \approx 1.0$ (right), from \cite{blastNew1}}
-	\label{figure:blastFinal}
+	\label{figure:blastRef}
 	\end{center}
 \end{figure}
 \vspace{-6mm}

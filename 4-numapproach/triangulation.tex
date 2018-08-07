@@ -2,7 +2,9 @@
 \label{section:triangulation}
 We start with leaving the time-derivative untouched, and focus on the discretization in space for now - we are performing a \textit{space semidiscretization}.
 \paragraph{}
-First step in the process of the discretization is to divide the computational domain $\overline{\Omega}$ into a finite number of subsets with properties described below. These subsets form the set, further denoted by $ T_h$, called the \textit{triangulation or mesh of the domain $\Omega$}. Please note that the terms \textit{triangulation} and \textit{mesh} shall be used in the text interchangeably. The parameter $h>0$ of the triangulation usually represents maximum of diameters of all elements $K\in T_h$. The elements $K\in T_h$ are in the context of the finite volume method called $finite\ volumes$.
+First step in the process of the discretization is to divide the computational domain $\overline{\Omega}$ into a finite number of subsets with properties described below. These subsets form the set, further denoted by $T_h$, called the \textit{triangulation or mesh of the domain $\Omega$}. The index $h$ will be dropped when either $h$ is irrelevant, or when dealing with mesh refinement - see \cref{chapter:amr}, also when needed the domain which the triangulation approximates will be noted as $T_h\lo\Omega\ro$, or $T\lo\Omega\ro$.
+\paragraph{}
+Please note that the terms \textit{triangulation} and \textit{mesh} shall be used in the text interchangeably (another synonym is a \textit{grid}). The parameter $h>0$ of the triangulation usually represents maximum of diameters of all elements $K\in T_h$. The elements $K\in T_h$ are in the context of the finite volume method called $finite\ volumes$.
 \\\ \\Properties of $T_h$:
 \begin{enumerate}
     \item Each $K\in T_h$ is closed and connected with its interior $K^{\circ}\neq\emptyset$.
