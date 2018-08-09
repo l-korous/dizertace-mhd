@@ -1,10 +1,10 @@
 \chapter{Conclusion, outlook}
 As for the mathematical, numerical, and technical (software) parts for such tool to be delivered, all problems that were to be solved, such as
 \begin{itemize}
-	\item Adaptive algorithm for the discretization of the time derivative (through CFL condition, see \cref{equation:CFLcond}),
 	\item Shock-capturing for high-order DG scheme to prevent non-physical oscillations (through Vertex-based limiter, see \cref{algorithm:limiter}),
 	\item Adaptive algorithm for the discretization of the space derivatives (through AMR, entire \cref{chapter:amr}),
 	\item A specific shapeset of basis and test functions based on Taylor expansions (through \cref{sec:divFreeSpace}),
+	\item Adaptive algorithm for the discretization of the time derivative (through CFL condition, see \cref{equation:CFLcond}),
 \end{itemize}
 have been solved, and moreover performance level meets the needs of the use cases. All this has been shown on benchmark problems (see {sec:benchmarks}), as well as real-world Titov-Demoulin-based simulation.
 \paragraph{}

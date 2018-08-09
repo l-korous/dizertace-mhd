@@ -496,7 +496,7 @@ As before, in order to compare with reference papers, figures are presented from
 \label{figure:otRef}
 \end{figure}
 
-Results obtained in the implemented software are presented in \crefrange{figure:myOt1}{figure:myOt7}. The result on \cref{figure:myOt7} is obviously in almost exact accordance with \cref{figure:otRef}.
+Results obtained in the implemented software are presented in \crefrange{figure:myOt1}{figure:myOt7}. The result on \cref{figure:myOt7} is obviously in almost exact accordance with \cref{figure:otRef}. Also, similar number of elements was used - $200$ in the computation in the implemented software, and $192$ in the reference computation.
 
 \begin{figure}[H]
 	\centering
@@ -582,6 +582,7 @@ The domain $\Omega$ is taken as $\left[-2.5, 2.5\right] \times \left[-5, 5\right
 \subsection{Initial condition}
 The model is equipped with an initial condition:
 \begin{align}
+\label{tdIc}
 \rho\lo\bfx, t_0\ro & = \mathrm{exp}\lo\frac{-z}{\frac{ T_{ext} }{T_{in}}L_G}\ro,\ \bfx\ \text{inside the torus}\\
 \rho\lo\bfx, t_0\ro & = \frac{ T_{in} }{T_{ext}} \mathrm{exp}\lo\frac{-z}{L_G}\ro,\ \bfx\ \text{outside the torus}\\
 p\lo\bfx, t_0\ro & = \beta\ \text{everywhere}\\
@@ -606,3 +607,70 @@ One way to achieve this is to set:
 \end{align}
 where $\bfn$ is the normal direction, $\bft_{i}, i = 1, 2$ are the two tangential directions, and $B_n$, and $B_{t_{1,2}}$ stands for the normal, and two tangential components of the magnetic field $\bfB$. Also, $U$ is calculated from the above so that the relation \cref{presU} holds.
 
+\subsection{AMR Results}
+This case is very sensitive to the correct representation of the rotation of the magnetic field ($\nabla \times \bfB$). It is therefore very important to capture the areas in $\Omega$ with rapid changes in this quantity with sufficient detail.
+In order to do that, one must start already with capturing details of the initial condition.
+In \crefrange{figure:myTd1}{figure:myTd6}, several AMR steps are shown, capturing the initial condition (\cref{tdIc}). In each of the images, $\nabla\times\bfB$ distribution in $\Omega$ is shown in the following manner:
+\begin{itemize}
+\item yz-plane at $y = 0$ (top left),
+\item xz-plane at $y=0$ (top right),
+\item xy-plane at $z=0$ (bottom right),
+\item part of $\Omega$ with $\nabla\times\bfB > \eta$ for some small $\eta$ representing a negligible value (bottom left).
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{img/td/td1.jpg}
+\vspace{-2mm}
+\caption{AMR step 3, 2840 cells}
+\label{figure:myTd1}
+\end{figure}
+\vspace{-2mm}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{img/td/td2.jpg}
+\vspace{-2mm}
+\caption{AMR step 5, 5801 cells}
+\label{figure:myTd2}
+\end{figure}
+\vspace{-2mm}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{img/td/td3.jpg}
+\vspace{-2mm}
+\caption{AMR step 7, 14691 cells}
+\label{figure:myTd3}
+\end{figure}
+\vspace{-2mm}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{img/td/td4.jpg}
+\vspace{-2mm}
+\caption{AMR step 9, 50090 cells}
+\label{figure:myTd4}
+\end{figure}
+\vspace{-2mm}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{img/td/td5.jpg}
+\vspace{-2mm}
+\caption{AMR step 11, 119257 cells}
+\label{figure:myTd5}
+\end{figure}
+\vspace{-2mm}
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{img/td/td6.jpg}
+\vspace{-2mm}
+\caption{AMR step 15, 142147 cells}
+\label{figure:myTd6}
+\end{figure}
+\vspace{-2mm}
+
+From \crefrange{figure:myTd1}{figure:myTd6}, it is quite clear, that the AMR approach very well resolves the distribution of the magnetic field rotation. It is also very clear, that for a full 3-dimensional real world cases, the number of elements needed in the triangulation $T$ will get much higher than in the case of 2-dimensional benchmarks. Without the use of AMR, this number would be unbearable. It would be unbearable as well, should distributed computing through MPI were not employed.
