@@ -1,5 +1,5 @@
 \section{Time-stepping and linearization}
-
+Since the equations in question are evolution equations (they contain the time derivative), the time stepping need to be somehow tackled. And since the equations are nonlinear, to avoid the necessity of using an (iterative) nonlinear solver for each time step, an explicit time-stepping, leading to a linearization of these equations is preferred.
 \subsection{Time-stepping}
 The simple time discretization scheme that we use in \cref{section:discreteProblem} allows us to simply implement the time-stepping in the following fashion:\\
 \begin{algorithm}[H]

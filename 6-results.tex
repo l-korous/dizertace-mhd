@@ -15,11 +15,11 @@ Illustration of the obtained results follows below - these results were obtained
 \begin{itemize}
     \item CPU: Intel(R) Xeon(R) CPU E5-2680 v3 @ 2.50GHz,
     \item \# of Cores: 48 per node (nodes 1, 2), 16 per node (nodes 3, 4),
-    \item Vectorization support: AVX2,
-    \item Parallelization implemented: Intel TBB,
-    \item Distributed calculation implemented: OpenMPI,
     \item RAM: 512 GB,
-    \item C/C++ Compiler: GNU gcc 5.4.0 .
+    \item C/C++ Compiler: GNU gcc 5.4.0,
+		\item Vectorization support: AVX2,
+    \item Parallelization implemented: Intel TBB,
+    \item Distributed calculation implemented: OpenMPI.
 \end{itemize}
 
 \subsection{MHD Blast}
@@ -40,10 +40,10 @@ p\lo\bfx, t = 0\ro & =  p_0\lo\bfx, t\ro,\\ \nonumber
 \bfB_3\lo\bfx, t = 0\ro & =  0.
 \end{align}
 Total energy is calculated using \cref{magU,kinU,presU}.
-The domain $\Omega$ is a square, with scaling quite arbitrarily used in the papers. In the case of \cite{blast1}, $\Omega = [0, 1] \times [0, 1]$, in this work it is $\Omega = [-0.25, 0.25] \times [-0.25, 0.25]$.
+The domain $\Omega$ is a square, with scaling quite arbitrarily used in the papers. In the case of \cite{blast1}, $\Omega = [0, 1] \times [0, 1]$, in this work it is $\Omega = [-0.5, 0.5] \times [-0.5, 0.5]$.
 
 It is obvious from the initial setup, that the example is true to its name, and it is in fact a blast of the over-pressured area $\left|\bfx\right| < 0.1$, where pressure $p$ is 100$\times$ larger than elsewhere in the domain. This setup is completed with simple outflow boundary condition \cref{bcoutdef}.
-In the next figures, the solution as presented in \cite{blast1} is compared to the solution obtained with the approach described in this work. Note that the solution from \cite{blast1} needed to have the axes transformed $\lo x\rightleftharpoons y\ro$ with respect to the original paper. The figure \cref{figure:blastOldRef} is taken from the article \cite{blast1} from the page 33. Unfortunately the paper does not specify the precise time at which the snapshots are taken.
+In the next figures, the solution as presented in \cite{blast1} is compared to the solution obtained with the approach described in this work. Note that the solution from \cite{blast1} needed to have the axes transformed $\lo x\rightleftharpoons y\ro$ with respect to the original paper. The \cref{figure:blastOldRef} is taken from the article \cite{blast1} from the page 33. Unfortunately the paper does not specify the precise time at which the snapshots are taken.
 
 \begin{figure}[H]
 \centering
@@ -58,7 +58,7 @@ In the next figures, the solution as presented in \cite{blast1} is compared to t
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=0.93\textwidth]{img/mhd-blast/old/mynew1.jpg}
-	\caption{Obtained results, $t = 1\times 10^{-3}$, density(left), magnetic energy(right)}
+	\caption{Obtained results, $t = 10^{-3}$, density(left), magnetic energy(right)}
 	\label{figure:blastOldMy1}
 	\end{center}
 \end{figure}
@@ -67,7 +67,7 @@ In the next figures, the solution as presented in \cite{blast1} is compared to t
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=0.93\textwidth]{img/mhd-blast/old/mynew2.jpg}
-	\caption{Obtained results, $t = 6\times 10^{-3}$, density(left), magnetic energy(right)}
+	\caption{Obtained results, $t = 6\cdot 10^{-3}$, density(left), magnetic energy(right)}
 	\label{figure:blastOldMy2}
 	\end{center}
 \end{figure}
@@ -76,7 +76,7 @@ In the next figures, the solution as presented in \cite{blast1} is compared to t
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=0.93\textwidth]{img/mhd-blast/old/mynew3.jpg}
-	\caption{Obtained results, $t = 11\times 10^{-3}$, density(left), magnetic energy(right)}
+	\caption{Obtained results, $t = 11\cdot 10^{-3}$, density(left), magnetic energy(right)}
 	\label{figure:blastOldMy3}
 	\end{center}
 \end{figure}
@@ -85,7 +85,7 @@ In the next figures, the solution as presented in \cite{blast1} is compared to t
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=0.93\textwidth]{img/mhd-blast/old/mynew4.jpg}
-	\caption{Obtained results, $t = 16\times 10^{-3}$, density(left), magnetic energy(right)}
+	\caption{Obtained results, $t = 16\cdot 10^{-3}$, density(left), magnetic energy(right)}
 	\label{figure:blastOldMy4}
 	\end{center}
 \end{figure}
@@ -94,7 +94,7 @@ In the next figures, the solution as presented in \cite{blast1} is compared to t
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=0.93\textwidth]{img/mhd-blast/old/mynew5.jpg}
-	\caption{Obtained results, $t = 23\times 10^{-3}$, density(left), magnetic energy(right)}
+	\caption{Obtained results, $t = 23\cdot 10^{-3}$, density(left), magnetic energy(right)}
 	\label{figure:blastOldMy5}
 	\end{center}
 \end{figure}
@@ -103,7 +103,7 @@ The solution in \cref{figure:blastOldMy4,figure:blastOldMy5}  is apparently almo
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[width=0.65\textwidth]{img/mhd-blast/old/subdomain.jpg}
+		\includegraphics[width=0.75\textwidth]{img/mhd-blast/old/subdomain.jpg}
 	\caption{Color-mapping of elements to processors for the computation of \crefrange{figure:blastOldMy1}{figure:blastOldMy5}}
 	\label{figure:subdomainsBlastOld}
 	\end{center}
@@ -124,7 +124,7 @@ This however, was a static calculation with 200 mesh elements in the $x-$ and $y
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=0.87\textwidth]{img/mhd-blast/old/mya2.jpg}
-	\caption{Obtained results, $t = 5\times 10^{-3}$, distribution of $\rho$ on elements in $T\lo\Omega\ro$ (right) and distribution of these elements to processors (left)}
+	\caption{Obtained results, $t = 5\cdot 10^{-3}$, distribution of $\rho$ on elements in $T\lo\Omega\ro$ (right) and distribution of these elements to processors (left)}
 	\label{figure:blastOldMyAdapt2}
 	\end{center}
 \end{figure}
@@ -133,7 +133,7 @@ This however, was a static calculation with 200 mesh elements in the $x-$ and $y
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=0.87\textwidth]{img/mhd-blast/old/mya3.jpg}
-	\caption{Obtained results, $t = 10\times 10^{-3}$, distribution of $\rho$ on elements in $T\lo\Omega\ro$ (right) and distribution of these elements to processors (left)}
+	\caption{Obtained results, $t = 1\cdot 10^{-2}$, distribution of $\rho$ on elements in $T\lo\Omega\ro$ (right) and distribution of these elements to processors (left)}
 	\label{figure:blastOldMyAdapt3}
 	\end{center}
 \end{figure}
@@ -142,7 +142,7 @@ This however, was a static calculation with 200 mesh elements in the $x-$ and $y
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=0.87\textwidth]{img/mhd-blast/old/mya4.jpg}
-	\caption{Obtained results, $t = 15\times 10^{-3}$, distribution of $\rho$ on elements in $T\lo\Omega\ro$ (right) and distribution of these elements to processors (left)}
+	\caption{Obtained results, $t = 15\cdot 10^{-3}$, distribution of $\rho$ on elements in $T\lo\Omega\ro$ (right) and distribution of these elements to processors (left)}
 	\label{figure:blastOldMyAdapt4}
 	\end{center}
 \end{figure}
@@ -151,7 +151,7 @@ This however, was a static calculation with 200 mesh elements in the $x-$ and $y
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=0.87\textwidth]{img/mhd-blast/old/mya5.jpg}
-	\caption{Obtained results, $t = 20\times 10^{-3}$, distribution of $\rho$ on elements in $T\lo\Omega\ro$ (right) and distribution of these elements to processors (left)}
+	\caption{Obtained results, $t = 2\cdot 10^{-2}$, distribution of $\rho$ on elements in $T\lo\Omega\ro$ (right) and distribution of these elements to processors (left)}
 	\label{figure:blastOldMyAdapt5}
 	\end{center}
 \end{figure}
@@ -160,7 +160,7 @@ This however, was a static calculation with 200 mesh elements in the $x-$ and $y
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=0.87\textwidth]{img/mhd-blast/old/mya6.jpg}
-	\caption{Obtained results, $t = 25\times 10^{-3}$, distribution of $\rho$ on elements in $T\lo\Omega\ro$ (right) and distribution of these elements to processors (left)}
+	\caption{Obtained results, $t = 25\cdot 10^{-3}$, distribution of $\rho$ on elements in $T\lo\Omega\ro$ (right) and distribution of these elements to processors (left)}
 	\label{figure:blastOldMyAdapt6}
 	\end{center}
 \end{figure}
@@ -365,7 +365,7 @@ where each element contains $4$ basis functions for each of $\rho, p, \pi_1, \pi
 	\begin{center}
 		\includegraphics[width=0.95\textwidth]{img/mhd-blast/new/adapt-full0.jpg}
 \vspace{-3mm}
-	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 0.5e-1$.}
+	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 0.05$.}
 	\label{figure:amrBlast1}
 	\end{center}
 \end{figure}
@@ -375,7 +375,7 @@ where each element contains $4$ basis functions for each of $\rho, p, \pi_1, \pi
 	\begin{center}
 		\includegraphics[width=0.95\textwidth]{img/mhd-blast/new/adapt-full1.jpg}
 \vspace{-3mm}
-	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 5e-1$.}
+	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 0.1$.}
 	\label{figure:amrBlast2}
 	\end{center}
 \end{figure}
@@ -385,7 +385,7 @@ where each element contains $4$ basis functions for each of $\rho, p, \pi_1, \pi
 	\begin{center}
 		\includegraphics[width=0.95\textwidth]{img/mhd-blast/new/adapt-full2.jpg}
 \vspace{-3mm}
-	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 1.5e-1$.}
+	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 0.15$.}
 	\label{figure:amrBlast3}
 	\end{center}
 \end{figure}
@@ -395,7 +395,7 @@ where each element contains $4$ basis functions for each of $\rho, p, \pi_1, \pi
 	\begin{center}
 		\includegraphics[width=0.95\textwidth]{img/mhd-blast/new/adapt-full3.jpg}
 \vspace{-3mm}
-	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 2e-1$.}
+	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 0.2$.}
 	\label{figure:amrBlast4}
 	\end{center}
 \end{figure}
@@ -405,7 +405,7 @@ where each element contains $4$ basis functions for each of $\rho, p, \pi_1, \pi
 	\begin{center}
 		\includegraphics[width=0.95\textwidth]{img/mhd-blast/new/adapt-full6.jpg}
 \vspace{-3mm}
-	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 3.5e-1$.}
+	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 0.35$.}
 	\label{figure:amrBlast5}
 	\end{center}
 \end{figure}
@@ -415,7 +415,7 @@ where each element contains $4$ basis functions for each of $\rho, p, \pi_1, \pi
 	\begin{center}
 		\includegraphics[width=0.95\textwidth]{img/mhd-blast/new/adapt-full10.jpg}
 \vspace{-3mm}
-	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 5.5e-1$.}
+	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 0.55$.}
 	\label{figure:amrBlast6}
 	\end{center}
 \end{figure}
@@ -426,7 +426,7 @@ where each element contains $4$ basis functions for each of $\rho, p, \pi_1, \pi
 	\begin{center}
 		\includegraphics[width=0.95\textwidth]{img/mhd-blast/new/adapt-full13.jpg}
 \vspace{-3mm}
-	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 7e-1$.}
+	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 0.7$.}
 	\label{figure:amrBlast7}
 	\end{center}
 \end{figure}
@@ -437,7 +437,7 @@ where each element contains $4$ basis functions for each of $\rho, p, \pi_1, \pi
 	\begin{center}
 		\includegraphics[width=0.95\textwidth]{img/mhd-blast/new/adapt-full16.jpg}
 \vspace{-3mm}
-	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 8.5e-1$.}
+	\caption{Obtained $\rho$ distribution, mesh elements, and their owning processor. Time $t\approx 0.85$.}
 	\label{figure:amrBlast8}
 	\end{center}
 \end{figure}
@@ -450,14 +450,14 @@ In the \cref{table:meshElems}, mesh elements counts for all the displayed snapsh
 		\hline
     \textbf{Time step} & \textbf{Number of mesh elements} & \textbf{Number of DOFs} \\
 		\hline
-    $t\approx 0.5e-1$ & 5880 & 182280  \\ \hline
-    $t\approx 1e-1$ & 7332 & 227292  \\ \hline
-    $t\approx 1.5e-1$ & 8649 & 268119  \\ \hline
-    $t\approx 2e-1$ & 10044 & 311364  \\ \hline
-    $t\approx 3.5e-1$ & 14013 & 434403  \\ \hline
-    $t\approx 5.5e-1$ & 16578  & 513918 \\ \hline
-    $t\approx 7e-1$ & 17192 & 532952  \\ \hline
-    $t\approx 8.5e-1$ & 18708 & 579948  \\ \hline
+    $t\approx 0.05$ & 5880 & 182280  \\ \hline
+    $t\approx 0.1$ & 7332 & 227292  \\ \hline
+    $t\approx 0.15$ & 8649 & 268119  \\ \hline
+    $t\approx 0.2$ & 10044 & 311364  \\ \hline
+    $t\approx 0.35$ & 14013 & 434403  \\ \hline
+    $t\approx 0.55$ & 16578  & 513918 \\ \hline
+    $t\approx 0.7$ & 17192 & 532952  \\ \hline
+    $t\approx 0.85$ & 18708 & 579948  \\ \hline
     \end{tabular}
 	\caption{Mesh elements and DOFs counts for snapshots displayed in \crefrange{figure:amrBlast1}{figure:amrBlast8}}
 \label{table:meshElems}
@@ -565,19 +565,19 @@ As noted above these figures, the resolution of all present shocks and discontin
 This model is based on the original Titov-Demoulin model from \cite{td}, as used in \cite{miraClanek}, where the geometrical proportions, and equilibrium conditions are taken from \cite{td}.
 \subsection{Problem parameters}
 The model parameters are as follows. Note that $k_B$ is the Boltzmann constant $k_B = 1.38064852 \times 10^{-23} \frac{\mathrm{J}}{\mathrm{K}}$, $m_p$ is the plasma mass, and $g$ gravitational acceleration. Parameter values read
-\begin{align}
-\nonumber \beta & =  0.05\ \ \ \ ...\ \text{Plasma beta},\\
-\nonumber L_G & =  2\ k_B \frac{T_{ext}}{\lo m_p g \ro} = 1.2 \times 10^8 \left[\text{m}\right],\\
-\nonumber L_G & =  20 \ \ \ \ ...\ \text{Coronal height scale in dimension-less units},\\
-\nonumber N_t & = 5\ \ \ \ ...\ \text{Torus winding number},\\
-\nonumber R & = 3\ \ \ \ ...\ \text{Torus major radius},\\
-\nonumber L & = 1.5\ \ \ \ ...\ \text{Magnetic charge separation distance},\\
-\nonumber d & =  1.5\ \ \ \ ...\ \text{Geometrical factor},\\
-\nonumber q & =  \frac{\ln\lo 8 e^{-5/4} R\ro}{4} N_t \lo\frac{L}{R}\ro^2\left[1 + \lo\frac{R}{L}\ro^2\right]^{3/2},\\
-\nonumber q & \approx \text{Normalised magnetic charge corresponding to global equilibrium},\\
-\nonumber H & = 2\ \frac{N_t^2}{R^2}\ \ \ \ ...\ \text{"Helicity" factor inside tho loop},\\
-\nonumber \frac{ T_{ext} }{T_{in}} & =  10\ \ \ \ ...\ \text{Coronal/prominence temperature ratio}.\\
-\end{align}
+\begin{table}[H]
+\begin{tabular}{llp{6cm}}
+$\beta$ & $0.05$ & Plasma beta \\
+$L_G$ & $2\ k_B \frac{T_{ext}}{\lo m_p g \ro} = 1.2 \times 10^8 \left[\text{m}\right] = 20$ & Coronal height scale in dimension-less units \\
+$N_t$ & $5$ & Torus winding number \\
+$R$ & $3$ & Torus major radius \\
+$L$ & $1.5$ & Magnetic charge separation distance \\
+$d$ & $1.5$ & Geometrical factor \\
+$q$ & $\frac{\ln\lo 8 e^{-5/4} R\ro}{4} N_t \lo\frac{L}{R}\ro^2\left[1 + \lo\frac{R}{L}\ro^2\right]^{3/2}$ & Normalised magnetic charge corresponding to global equilibrium \\
+$H$ & $2\ \frac{N_t^2}{R^2}$ & "Helicity" factor inside tho loop \\
+$\frac{ T_{ext} }{T_{in}}$ & $10$  & Coronal/prominence temperature ratio
+\end{tabular}
+\end{table}
 The domain $\Omega$ is taken as $\left[-2.5, 2.5\right] \times \left[-5, 5\right] \times \left[0, 5\right]$.
 \subsection{Initial condition}
 The model is equipped with an initial condition:
@@ -587,7 +587,7 @@ The model is equipped with an initial condition:
 \rho\lo\bfx, t_0\ro & = \frac{ T_{in} }{T_{ext}} \mathrm{exp}\lo\frac{-z}{L_G}\ro,\ \bfx\ \text{outside the torus}\\
 p\lo\bfx, t_0\ro & = \beta\ \text{everywhere}\\
 \bfv\lo\bfx, t_0\ro & = 0\ \text{everywhere}\\
-\bfB\lo\bfx, t_0\ro & \bfB_{in}\lo\bfx, t_0\ro + \bfB_{ext}\lo\bfx, t_0\ro,
+\bfB\lo\bfx, t_0\ro & = \bfB_{in}\lo\bfx, t_0\ro + \bfB_{ext}\lo\bfx, t_0\ro,
 \end{align}
 where $t_0 = 0$, and the equations for the magnetic field of the flux rope $\bfB_{in}\lo\bfx, t_0\ro$, magnetic field created by the (artificial) magnetic charges $\bfB_{ext}\lo\bfx, t_0\ro$ are the same as in equations (3) and (4) in \cite{miraClanek}.
 \subsection{Boundary conditions}
