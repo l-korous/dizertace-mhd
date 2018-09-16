@@ -7,7 +7,7 @@ As for the mathematical, numerical, and technical (software) parts for such tool
 	\item Adaptive algorithm for the discretization of the time derivative (through CFL condition, see \cref{equation:CFLcond}),
 \end{itemize}
 have been solved, and moreover performance level meets the needs of the use cases. All this has been shown on benchmark problems (see \cref{sec:benchmarks}), as well as real-world Titov-Demoulin-based simulation.
-\paragraph{}
+\textit{}
 Of course, much can be improved upon, for example:
 \begin{itemize}
 	\item Second-order scheme for the discretization of the time derivative,
@@ -22,7 +22,7 @@ but the original goal of preparing an easy-to-use, easy-to-extend, and well prog
 \item The code is quite ready for addition of new tests, new benchmarks, new examples, as well as easy parametrization of the existing ones.
 \end{itemize}
 
-\section{Outloook}
+\section*{Outloook}
 Further work will focus on real-world astrophysical problems, where the Titov-Demoulin-based simulations, although all mathematical and numerical apparatus is in place, still need work to satisfy the goal of being reliable and all-purpose tool for astrophysicists. Further work will focus on incorporating additional relevant physical phenomena - mainly study of the magnetic field reconnection - \citep{reconnection}, and other phenomena occurring both in solar physics and in industrial applications of plasma flow.
 
 To sum up next steps with the already finished toolset, these are the logical next steps:
@@ -34,50 +34,52 @@ To sum up next steps with the already finished toolset, these are the logical ne
 \item Get in touch with other possible users of the implemented software to enrich the set of possible use cases.
 \end{itemize}
 
+\newpage
 \section*{Own publications}
 This Section lists all publications of the author.
 \subsection*{Journals with Impact Factor}
-\paragraph{Scale separation in fast hierarchical solvers for discontinuous Galerkin methods}\ \\
-Vadym Aizinger, Dmitri Kuzmin, Lukas Korous\\
-September 2015, Applied Mathematics and Computation 266:838-849\\
-DOI: 10.1016/j.amc.2015.05.047\\
+\begin{enumerate}[label={[\arabic*]}]
+\item
+Vadym Aizinger, Dmitri Kuzmin, Lukas Korous, \textit{Scale separation in fast hierarchical solvers for discontinuous Galerkin methods}, September 2015, Applied Mathematics and Computation 266:838-849, DOI: 10.1016/j.amc.2015.05.047
 
-\paragraph{An adaptive hp-DG method with dynamically-changing meshes for non-stationary compressible Euler equations}\ \\
-Lukas Korous, Pavel Solin\\
-May 2012, COMPUTING, 95,1,425-444\\
-DOI: 10.1007/s00607-012-0257-1\\
+\item
+Lukas Korous, Pavel Solin, \textit{An adaptive hp-DG method with dynamically-changing meshes for non-stationary compressible Euler equations}, May 2012, COMPUTING, 95,1,425-444, DOI: 10.1007/s00607-012-0257-1
 
-\paragraph{Hermes2D, a C++ library for rapid development of adaptive hp-FEM and hp-DG solvers}\ \\
-Pavel Solin, Lukas Korous, Pavel Kus\\
-November 2014, Journal of Computational and Applied Mathematics 270:152-165\\
-DOI: 10.1016/j.cam.2014.02.007\\
+\item
+Pavel Solin, Lukas Korous, Pavel Kus, \textit{Hermes2D, a C++ library for rapid development of adaptive hp-FEM and hp-DG solvers}, November 2014, Journal of Computational and Applied Mathematics 270:152-165, DOI: 10.1016/j.cam.2014.02.007
 
-\paragraph{Three anisotropic benchmark problems for adaptive finite element methods}\ \\
-Pavel Solin, Ondrej Certik, Lukas Korous\\
-March 2013, Applied Mathematics and Computation 219(13):-\\
-DOI: 10.1016/j.amc.2010.12.080\\
+\item
+Pavel Solin, Ondrej Certik, Lukas Korous, \textit{Three anisotropic benchmark problems for adaptive finite element methods}, March 2013, Applied Mathematics and Computation 219(13), DOI: 10.1016/j.amc.2010.12.080
 
-\paragraph{Solving a suite of NIST benchmark problems for adaptive FEM with the Hermes library}\ \\
-Zhonghua Ma, Lukas Korous, Erick Santiago\\
-December 2012, Journal of Computational and Applied Mathematics 236(18):4846-4861\\
-DOI: 10.1016/j.cam.2012.02.004\\
+\item
+Zhonghua Ma, Lukas Korous, Erick Santiago, \textit{Solving a suite of NIST benchmark problems for adaptive FEM with the Hermes library}, December 2012, Journal of Computational and Applied Mathematics 236(18):4846-4861, DOI: 10.1016/j.cam.2012.02.004
 
-\paragraph{Space-time adaptive hp-FEM for problems with traveling sharp fronts}\ \\
-Pavel Solin, Lukas Korous\\
-May 2012, Computing 95(1)\\
-DOI: 10.1007/s00607-012-0243-7\\
+\item
+Pavel Solin, Lukas Korous, \textit{Space-time adaptive hp-FEM for problems with traveling sharp fronts}, May 2012, Computing 95(1), DOI: 10.1007/s00607-012-0243-7
 
-\paragraph{Adaptive higher-order finite element methods for transient PDE problems based on embedded higher-order implicit Runge-Kutta methods}\ \\
-Pavel Solin, Lukas Korous\\
-February 2012, Journal of Computational Physics 231(4):1635-1649\\
-DOI: 10.1016/j.jcp.2011.10.023\\
+\item
+Pavel Solin, Lukas Korous, Adaptive higher-order finite element methods for transient PDE problems based on embedded higher-order implicit Runge-Kutta methods, February 2012, Journal of Computational Physics 231(4):1635-1649, DOI: 10.1016/j.jcp.2011.10.023
+\end{enumerate}
 
 \subsection*{Conference papers}
-\paragraph{Higher-Order Eggshell Method for Computation of Forces Acting on Ferromagnetic Bodies}\ \\
-I. Dolezel, Lukas Korous, Pavel Karban, F. Mach\\
-January 2014, Conference: 9th IET International Conference on Computation in Electromagnetics (CEM 2014)\\
-DOI: 10.1049/cp.2014.0188\\
 
-\paragraph{Adaptive hp-DG Method for Nonstationary Compressible Euler Equations}\ \\
-Korous Lukas\\
-Elektrotechnika a informatika 2012. Part 1., Elektrotechnika,53-56\\
+\begin{enumerate}[label={[\arabic*]}]
+\item 
+Lukas Korous, Pavel Karban, \textit{Distributed Implicit Discontinuous Galerkin MHD Solver}, COMPUMAG 2017, Daejeon, Korea
+	
+\item
+Ivo Dolezel, Lukas Korous, Pavel Karban, Frantisek Mach, \textit{Higher-Order Eggshell Method for Computation of Forces Acting on Ferromagnetic Bodies}, January 2014, Conference: 9th IET International Conference on Computation in Electromagnetics (CEM 2014), DOI: 10.1049/cp.2014.0188
+
+\item
+Korous Lukas, \textit{Adaptive hp-DG Method for Nonstationary Compressible Euler Equations}, Elektrotechnika a informatika 2012. Part 1., Elektrotechnika,53-56
+\end{enumerate}
+
+\subsection*{Software}
+
+\begin{enumerate}[label={[\arabic*]}]
+\item
+Lukas Korous, Pavel Solin, Milan Hanus, Jakub Cerveny, \textit{The library for physical fields modelling using hp-adaptive finite element method Hermes2D}
+
+\item
+Lukas Korous, Pavel Solin, Pavel Kus, David Andr, \textit{Library for physical fields modelling in three dimensional space using hp-adaptive FEM Hermes3D}
+\end{enumerate}
